@@ -66,16 +66,27 @@ def global_rules(world):
     set_rule(world.get_location('Canyon Business Scrub'), lambda state: state.has('Ocean Title Deed'))
     set_rule(world.get_location('Song From Mask Salesman'), lambda state: state.has('Ocarina of Time'))
     set_rule(world.get_location('Remove the Cursed Mask'), lambda state: state.has('Ocarina of Time'))
-    set_rule(world.get_location('Tunnel Balloon From Observatory'), lambda state: (state.has('Bow') and state.form('Human')) or (state.form('Deku') and state.has('Magic Meter')))
-    set_rule(world.get_location('Tunnel Balloon From ECT'), lambda state: (state.has('Bow') and state.form('Human')) or (state.form('Deku') and state.has('Magic Meter')))
+    set_rule(world.get_location('Tunnel Balloon From Observatory'), lambda state: (state.has('Bow') and state.form('Human')) or (state.form('Deku') and state.has('Magic Meter')) or state.form('Zora'))
+    set_rule(world.get_location('Tunnel Balloon From ECT'), lambda state: (state.form('Human') and (state.has('Bow') or state.has('Hookshot'))) or (state.form('Deku') and state.has('Magic Meter')) or state.form('Zora'))
+    # @Vlix
+    # that's right, zora link should be able to slice it, good call
+    # other human items, hmm... hookshot probly? maybe bombs? lol that'd be a pain; yeah we'll have to do some testing
+    # to see what can be used there (hookshot makes a lot of sense though, I'll add that for now)
+
     # RevelationOrange started adding rules here (plus a few changes in rules above)
     # location names used are mostly guesses and can absolutely be changed later
     # item names used are also guesses, as are some state function names probly
     # location names may be longer than necessary so as to be descriptive, like we can change 'South Clock Town Hookshot
     # Ledge Rupee Chest' if we want lol
-    set_rule(world.get_location('Clock Tower Platform HP'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can_reach(world.get_location('Clock Town Business Scrub')))
-    set_rule(world.get_location('Festival Tower Rupee Chest'), lambda state: state.has('Hookshot') or state.can_reach(world.get_location('Clock Town Business Scrub')))
-    set_rule(world.get_location('South Clock Town Hookshot Ledge Rupee Chest'), lambda state: state.has('Hookshot'))
+
+    set_rule(world.get_location('Clock Tower Platform HP'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or (state.form('Deku') and state.can_reach(world.get_location('Clock Town Business Scrub'))))
+    # @Vlix
+    # oh dang, goron link can't just hop up that small ledge? or maybe he doesn't even fit on it, heh
+    # gotta test to see ways of getting on there
+    # ah, just thought of adding deku form as I was reading through, nice lol
+
+    set_rule(world.get_location('Festival Tower Rupee Chest'), lambda state: (state.has('Hookshot') and state.form('Human')) or (state.form('Deku') and state.can_reach(world.get_location('Clock Town Business Scrub'))))
+    set_rule(world.get_location('South Clock Town Hookshot Ledge Rupee Chest'), lambda state: state.has('Hookshot') and state.form('Human'))
     set_rule(world.get_location('Bremen Mask From Guru Guru'), lambda state: state.form('Human'))
     set_rule(world.get_location('Rosa Sisters HP'), lambda state: state.has('Kamaro Mask'))
 
@@ -86,38 +97,48 @@ def global_rules(world):
     # I don't know that this item matters at all or if we should even have a spot for it
     # but we can if we want, you get it the same way you get the code in the first cycle, you just have to be human to
     # get the actual notebook from them I think
-    set_rule(world.get_location('Bomber Notebook'), lambda state: state.has('Magic Meter') and state.form('Deku') and state.form('Human'))
+    set_rule(world.get_location('Bomber Notebook'), lambda state: state.can_reach('pop HCT baloon') and state.form('Human'))
+    # the can_reach here is pseudocode really, we can either make this explicit or have a function in base classes that
+    # essentially does the same thing
 
     # since getting the blast mask just involves slashing sakon, it might be possible to get it with other forms? like
     # maybe zora? probly not goron though
     # also you might need to be link to talk to the lady after, so maybe it is only human
-    set_rule(world.get_location('Blast Mask'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Blast Mask'), lambda state: state.form('Human') or state.form('Zora'))
 
-    set_rule(world.get_location('North Clock Town Tree HP'), lambda state: True)
+    set_rule(world.get_location('North Clock Town Tree HP'), lambda state: state.form('Human') or state.form('Zora'))
+    # I thought deku could get this for some reason
+    # also lol of course goron can't, shoulda known
+
     set_rule(world.get_location('Tingle Clock Town Map'), lambda state: True)
     set_rule(world.get_location('Tingle Woodfall Map'), lambda state: True)
     set_rule(world.get_location('Keaton HP'), lambda state: state.has('Keaton Mask'))
 
     # I need to figure out all the actual requirements for this, including tricks, so this one is tentative
     # also the trick names are guesses for sure
-    set_rule(world.get_location('East Clock Town 100 Rupee Chest'), lambda state: state.form('Human') or state.can('Goron Boost') or state.can('Gainer'))
+    set_rule(world.get_location('East Clock Town 100 Rupee Chest'), lambda state: state.form('Human') or state.can('Goron Boost') or state.can('Gainer') or state.form('Zora'))
 
-    set_rule(world.get_location('Ocarina of Time'), lambda state: (state.form('Deku') and state.has('Magic Meter')) or (state.has('Bow') and state.form('Human')))
+    set_rule(world.get_location('Ocarina of Time'), lambda state: (state.form('Deku') and state.has('Magic Meter')) or (state.has('Bow') and state.form('Human')) or state.form('Zora'))
     set_rule(world.get_location('All Night mask'), lambda state: state.form('Human') and state.has('Giants Wallet'))
-    set_rule(world.get_location('Bigger Bomb Bag'), lambda state: state.has('Giants Wallet'))
+    set_rule(world.get_location('Bigger Bomb Bag'), lambda state: state.has('Giants Wallet') and state.has('Bomb Mask'))
 
     # you might not need to be human to get this, but I'd bet the shop owner won't sell to other forms, at least deku
-    set_rule(world.get_location('Bomb Bag'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Bomb Bag'), lambda state: True)
+    # this can be tested easily
 
     set_rule(world.get_location('Sword School HP'), lambda state: state.form('Human'))
 
     # i swear this should be an optional trick, it's so hard without the bunny hood lol
-    set_rule(world.get_location('Postman Game HP'), lambda state: state.can('Time ten') or state.has('Bunny Hood'))
+    set_rule(world.get_location('Postman Game HP'), lambda state: True)
+    # sigh alright we'll make this open lol
 
     set_rule(world.get_location('Deku Scrub Playground HP'), lambda state: state.form('Deku'))
     set_rule(world.get_location('Great Fairy Mask'), lambda state: True)
     set_rule(world.get_location('Clock Town Maze Minigame HP'), lambda state: state.form('Goron'))
-    set_rule(world.get_location('Bomber Hideout 100 Rupee Chest'), lambda state: state.has('Bomber Code') and (state.has('Bomb Bag') or state.has('Blast Mask')))
+    set_rule(world.get_location('Bomber Hideout 100 Rupee Chest'), lambda state: state.has('Bomb Bag') or state.has('Blast Mask'))
+    # oh duh, these checks are strictly for once you're already there
+
+    set_rule(world.get_location(''), lambda state: state)
     # set_rule(world.get_location(''), lambda state: state)
 
 # ooh ooh
