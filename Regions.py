@@ -5,10 +5,11 @@ from BaseClasses import Region, Location, Entrance, RegionType
 def create_regions(world):
 
     world.regions = [
+        create_ow_region('Beginning',[], ['Cursed Underground']),
+        create_interior_region('Deku Flower Tutorial Area', ['First Nuts'], []),
         create_interior_region('Clock Tower',
             ['Remove the Cursed Mask', 'Song from HMS'],
             ['Clock Tower Exit', 'Clock Tower Twisted Hallway']),
-        create_interior_region('Prologue Room', ['First Nuts']),
 
         create_ow_region('South Clock Town',
             ['SCT 20 Rupee Chest', 'SCT 50 Rupee Chest',
@@ -50,7 +51,7 @@ def create_regions(world):
             ['Curiosity Shop', 'Trading Post', 'Bomb Shop',
             'Post Office', 'Lottery Shop', 'Swordsmans School',
              'Clock Town West Gate', 'WCT Top Exit to SCT', 'WCT Bottom Exit to SCT']),
-        create_ow_region('Mailbox', ['Deliver Letter to Kafei'])
+        create_ow_region('Mailbox', ['Deliver Letter to Kafei', 'Mailbox HP']),
         create_interior_region('Curiosity Shop', ['Buying The Overpriced Mask'], ['Curiosity Shop Exit']),
         create_interior_region('Trading Post', [], ['Trading Post Exit']),
         create_interior_region('Bomb Shop', ['Buy Bomb Bag', 'Buy Bigger Bomb Bag'], ['Bomb Shop Exit']),
@@ -63,7 +64,7 @@ def create_regions(world):
             'Tingle Woodfall Map', 'Foil Sakon'],
             ['GF Clock Town', 'Deku Playground', 'Clock Town North Gate',
             'NCT Exit to SCT', 'NCT Exit to ECT', 'North Mailbox']),
-        create_interior_region('GF Clock Town', ['Clock Town GF Reward'], ['Clock Town']),
+        create_interior_region('Clock Town Fairy Shrine', ['Clock Town GF Reward'], ['Clock Town']),
         create_interior_region('Deku Playground', ['Deku Challenge Day 1', 'Deku Challenge Day 2', 'Deku Challenge Day 3', 'Master of the Deku Playground'], ['Clock Town']),
 
         create_ow_region('Laundry Pool',
@@ -73,16 +74,27 @@ def create_regions(world):
 
         create_ow_region('Termina Field',
             ['Learn Kamaros Dance', 'TF Chest In The Grass', 'TF Chest On A Stump'],
-            ['Path To Mountain Village', 'Path To Southern Swamp',
-            'Path To Great Bay', 'Path To Great Bay', 'Path To Ikana',
+            ['Termina Field to Swamp', 'South Gate to Clock Town',
+            'Mountain Icicles', 'North Gate to Clock Town',
+            'Great Bay Gate', 'West Gate to Clock Town',
+            'Termina Field to Ikana', 'East Gate to Clock Town',
             'Sleeping Peahat Grotto', 'Bees In A Pond Grotto',
             'Swamp Gossips', 'Mountain Gossips', 'Ocean Gossips',
-            'Canyon Gossips', 'Dodongo Grotto']),
+            'Canyon Gossips', 'Dodongo Grotto', 'Milk Road']),
 
         create_ow_region('Path to Swamp', ['Bat Guarded Tree Treasure'], ['Termina Field', 'Swamp Shooting Gallery', 'Southern Swamp']),
         create_ow_region('Southern Swamp', ['Swamp Tourist Roof Love'], ['Lost Woods', 'Potion Shop', 'Swamp Big Octo', 'Tourist Centre Big Octo', 'Swamp Tourist Cenre']),
         create_interior_region('Swamp Tourist Centre', ['Swamp Tourist Free Product', 'Pictograph Contest Winner'], ['Boat Ride', 'Southern Swamp']),
         create_ow_region('Boat Ride', None, ['Poison Swamp']),
+        create_ow_region('Poison Swamp', [], ['Deku Palace', 'Swamp Spider House Entrance']),
+        create_interior_region('Swamp Spider House'),
+        create_ow_region('Deku Palace', ['Deku Palace HP'], ['Deku Palace Back Entrance', 'Deku Palace Chamber Entrance']),
+        create_interior_region('Deku Palace Royal Chamber'),
+        create_interior_region('Deku Palace Shrine'),
+        create_interior_region('Woodfall',
+            [],
+            []),
+
         create_ow_region('Woodfall Owl Platform', [], ['Woodfall Temple Entrance', 'GF Woodfall', 'Woodfall']),
 
         create_dungeon_region('Woodfall Temple Lobby',
@@ -97,13 +109,51 @@ def create_regions(world):
         create_dungeon_region('Woodfall Temple Dark Puff Gauntlet',
             [],
             ['Woodfall Temple '])
-        create_interior_region('GF Woodfall', ['Woodfall GF Reward'], ['Woodfall']),
+        create_interior_region('Woodfall Fairy Shrine', ['Woodfall GF Reward'], ['Woodfall']),
 
-        create_interior_region('GF Snowhead', ['Snowhead GF Reward'], ['Snowhead Spire']),
+        create_ow_region('Path to Mountain Village South'),
+        create_ow_region('Path to Mountain Village North'),
+        create_ow_region('Mountain Village'),
+        create_ow_region('Path to Goron Village'),
+        create_ow_region('Outside Goron Village'),
+        create_interior_region('Lens of Truth Cave'),
+        create_interior_region('Goron Village'),
+        create_interior_region('Goron Shrine'),
+        create_ow_region('Path to Snowhead'),
+        create_ow_region('Snowhead'),
+        create_interior_region('Snowhead Fairy Shrine', ['Snowhead GF Reward'], ['Snowhead Spire']),
 
-        create_interior_region('GF Great Bay', ['Great Bay GF Reward'], ['Great Bay Fairy Ledge']),
+        create_ow_region('Great Bay Coast'),
+        create_interior_region('Fisherman Hut'),
+        create_interior_region('Oceanside Spider House'),
+        create_interior_region('Marine Research Lab'),
+        create_ow_region('Pirate Fortress'),
+        create_interior_region('Pinnacle Rock'),
+        create_ow_region('Zora Cape'),
+        create_interior_region('Zora Hall'),
+        create_interior_region('Zora Shop'),
+        create_interior_region('Zora Hall Drummer Room'),
+        create_interior_region('Zora Hall Lulu Room'),
+        create_interior_region('Zora Hall Bassist Room'),
+        create_interior_region('Zora Hall Pianist Room'),
+        create_interior_region('Waterfall Rapids', ['Beaver Bottle', 'Beaver HP']),
+        create_interior_region('Great Bay Fairy Shrine', ['Great Bay GF Reward'], ['Great Bay Fairy Ledge']),
 
-        create_interior_region('GF Stone Tower', ['Stone Tower GF Reward'], ['Ikana Canyon'])
+        create_ow_region('Path to Ikana'),
+        create_ow_region('Ikana Graveyard', ['Captains Chest'],
+            ['SoS Grave Grotto', 'HP Grave Grotto', 'Dampe Grave Grotto', 'Dampe Door']),
+        create_interior_region('Dampe Grave'),
+        create_grotto_region('Storms Grave'),
+        create_grotto_region('Heart Piece Grave'),
+        create_interior_region('Sakon Hideout'),
+        create_interior_region('Secret Shrine'),
+        create_interior_region('Poe Sister House'),
+        create_interior_region('Spoop Cave'),
+        create_interior_region('Music Box House'),
+        create_interior_region('Bottom of the Well'),
+        create_ow_region('Ikana Castle'),
+        create_ow_region('Stone Tower'),
+        create_interior_region('Stone Tower Fairy Shrine', ['Stone Tower GF Reward'], ['Ikana Canyon'])
     ]
     world.intialize_regions()
 
