@@ -295,7 +295,7 @@ class CollectionState(object):
         return len([pritem for pritem in self.prog_items if pritem == item])
 
     def can_blast(self):
-        return self.has('Bomb Bag') or self.has('Blast Mask')
+        return self.form('Human') and (self.has('Bomb Bag') or self.has('Blast Mask'))
 
     def has_bottle(self):
         return (self.has('Bottle') or self.has('Bottle with Milk') or self.has('Bottle with Gold Dust') or self.has('Bottle with Red Potion') or self.has('Bottle with Chateau Romani'))
@@ -306,6 +306,21 @@ class CollectionState(object):
     def has_hearts(self, count):
         # Warning: This only considers items that are marked as advancement items
         return self.heart_count() >= count
+
+    def has_paper(self):
+        paper_list = ['Town Title Deed', 'Swamp Title Deed', 'Mountain Title Deed', 'Ocean Title Deed',
+                      'Letter to Mama', 'Letter to Anju']  # and various, MANY others
+        for p in paper_list:
+            if self.has(p):
+                return True
+        return False
+
+    # consider: can_wear(mask_name), rather than just using has(item)
+    # would do a check to see if you have the mask and can do human form
+
+    def can_pop_balloon(self):
+        # todo: test for other ways of popping balloons (in the air)
+        return self.form('Zora') or (self.form('Deku') and self.has('Magic Meter')) or (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
 
     def heart_count(self):
         # Warning: This only considers items that are marked as advancement items
