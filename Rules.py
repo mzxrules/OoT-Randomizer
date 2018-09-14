@@ -156,7 +156,7 @@ def global_rules(world):
     set_rule(world.get_location('Keaton HP'), lambda state: state.has('Keaton Mask') and state.form('Human'))
     set_rule(world.get_location('Deku Scrub Playground HP'), lambda state: state.form('Deku'))
 
-    set_rule(world.get_location('Great Fairy Mask'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Great Fairy Mask'), lambda state: state.has('Deku Mask'))
     # actually, the great fairy stuff probly needs to be tested
     # what she gives to what forms, what she gives in first vs other cycles
     # because right now we have rules set for 'Clock Town GF Reward', 'Great Fairy Mask', and 'Magic from NCT Great Fairy' lol
