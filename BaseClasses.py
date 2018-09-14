@@ -3,36 +3,66 @@ from enum import Enum, unique
 import logging
 from collections import OrderedDict
 
-
+"""
+Creates the world we're gonna start with and which will be populated.
+Contains the following:
+  - All settings/flags set as options
+  - The state to track what has been collected
+  - Locations
+  - Entrances
+  - Regions
+We might need a better name for Locations/Regions/Entrances,
+because they're all words that mean "places" while describing very
+different things.
+"""
 class World(object):
 
-    def __init__(self, moon, open_ocarina, shuffle_owls, place_dungeon_items, check_beatable_only, hints):
-        self.shuffle = 'vanilla'
-        self.moon = moon
-        self.dungeons = []
-        self.regions = []
-        self.itempool = []
-        self.seed = None
-        self.state = CollectionState(self)
-        self._cached_locations = None
-        self._entrance_cache = {}
-        self._region_cache = {}
-        self._entrance_cache = {}
-        self._location_cache = {}
-        self.required_locations = []
+"""
+`moon` -> settings on which of the "beatable" settings is set,
+          like Ganon's bridge in OoT being beatable 'vanilla',
+          or 'all medallions' etc.
+`open_*` -> flags as settings to be set as options in OoT
+`place_dungeon_items` -> if False, wouldn't add dungeon items (map and compass)
+`check_beatable_only` -> if True, would only require game to be beatable
+                         if False, would require game to be completable.
+`hints` -> option to set stones to give hints or not
+"""
+    def __init__( self
+                , moon
+                , open_ocarina
+                , shuffle_owls
+                , place_dungeon_items
+                , check_beatable_only
+                , hints):
+        self.shuffle = 'vanilla' # option for entrance shuffle
+        self.moon = moon         # beatable requirement option
+        self.dungeons = []       # contains dungeons for dungeon item pools
+        self.regions = []        # contains all regions
+        self.itempool = []       # items to be placed
+        self.seed = None         # the random seed number
+        self.state = CollectionState(self) # collection tracking state
+        self._cached_locations = None # internally used by `get_locations`
+        self._entrance_cache = {} # internally used by `get_entrance`
+        self._region_cache = {}  # internally used by `get_region`
+        self._location_cache = {} # internally used by `get_location`
+        self.required_locations = [] # used for statistical analysis (`create_playthrough`)
         self.check_beatable_only = check_beatable_only
         self.place_dungeon_items = place_dungeon_items
         self.open_ocarina = open_ocarina
         self.shuffle_owls = shuffle_owls
         self.hints = hints
-        self.keysanity = False
-        self.can_take_damage = True
-        self.spoiler = Spoiler(self)
+        self.keysanity = False   # option for keysanity
+        self.can_take_damage = True # isn't actually used anywhere???
+        self.spoiler = Spoiler(self) # object to create spoiler log
 
+    # Makes the world fetchable from all regions
     def intialize_regions(self):
         for region in self.regions:
             region.world = self
 
+    # Checks if `regionname` is actually a Region
+    # If not, will try to find that name in `World.regions`
+    # and cache it to be easily fetched later in `_regions_cache`
     def get_region(self, regionname):
         if isinstance(regionname, Region):
             return regionname
@@ -45,6 +75,7 @@ class World(object):
                     return region
             raise RuntimeError('No such region %s' % regionname)
 
+    # Similar to `get_region` but for Entrances
     def get_entrance(self, entrance):
         if isinstance(entrance, Entrance):
             return entrance
@@ -58,6 +89,7 @@ class World(object):
                         return exit
             raise RuntimeError('No such entrance %s' % entrance)
 
+    # Similar to `get_region` but for Locations
     def get_location(self, location):
         if isinstance(location, Location):
             return location
