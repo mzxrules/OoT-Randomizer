@@ -106,12 +106,12 @@ def global_rules(world):
     set_rule(world.get_location('Rosa Sisters HP'), lambda state: state.has('Kamaro Mask') and state.form('Human'))
 
     # you might not need to be human to get this, but I'd bet the shop owner won't sell to other forms, at least deku
-    set_rule(world.get_location('Bomb Bag'), lambda state: True)
+    # set_rule(world.get_location('Bomb Bag'), lambda state: True)
     # this can be tested easily
 
     # obviously, this and similar 'tests' might not be necessary at all
-    set_rule(world.get_location('Adult Wallet from bank'), lambda state: True)
-    set_rule(world.get_location('Bank HP'), lambda state: True)
+    # set_rule(world.get_location('Adult Wallet from bank'), lambda state: True)
+    # set_rule(world.get_location('Bank HP'), lambda state: True)
 
     set_rule(world.get_location('Big Bomb Bag'), lambda state: state.form('Human') or state.form('Zora') or state.has('Adult Wallet'))
     # adult wallet is a req because if you don't rescue the old lady from sakon, the big bomb bag shows up in the
@@ -120,7 +120,7 @@ def global_rules(world):
     set_rule(world.get_location('Sword School HP'), lambda state: state.form('Human'))
 
     # i swear this should be an optional trick, it's so hard without the bunny hood lol
-    set_rule(world.get_location('Postman Game HP'), lambda state: True)
+    # set_rule(world.get_location('Postman Game HP'), lambda state: True)
     # sigh alright we'll make this open lol
 
     set_rule(world.get_location('All Night mask'), lambda state: (state.form('Human') or state.form('Zora')) and state.has('Giants Wallet'))
@@ -134,7 +134,7 @@ def global_rules(world):
     # get the actual notebook from them I think
     set_rule(world.get_location('Bomber Notebook'), lambda state: state.can_pop_balloon() and state.form('Human'))
 
-    set_rule(world.get_location('Bomber Code'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Bomber Code'), lambda state: state.can_pop_balloon() and (state.form('Human') or state.form('Deku')))
     # set_rule(world.get_location('Bomber Code'), lambda state: state.has('Magic Meter') and state.form('Deku'))
     # for the bomber code, it's essentially only can_reach('pop NCT balloon'), you don't need to be human
     # you know, for the popping the balloon test, that might just be a general state.can('pop balloon')
@@ -162,7 +162,7 @@ def global_rules(world):
     # because right now we have rules set for 'Clock Town GF Reward', 'Great Fairy Mask', and 'Magic from NCT Great Fairy' lol
     # todo: test great fairy rewards
 
-    set_rule(world.get_location('Magic from NCT Great Fairy'), lambda state: state.form('Deku'))
+    # set_rule(world.get_location('Magic from NCT Great Fairy'), lambda state: state.form('Deku'))
     # I'll have to test how this happens, I haven't played in so long
     # first cycle she gives you magic because you're stuck as deku, afterwards she gives you the mask because you're human
     # right?
@@ -187,14 +187,12 @@ def global_rules(world):
     set_rule(world.get_location('Clock Town Shooting Gallery Quiver Prize'), lambda state: state.has('Bow') and state.form('Human'))
     set_rule(world.get_location('Clock Town Shooting Gallery HP Prize'), lambda state: state.has('Bow') and state.form('Human'))
 
-    set_rule(world.get_location('Kafei Mask'), lambda state: state.form('Human'))
-    # I don't actually know what forms allow you to get this mask; I know you just have to talk to someone
-    # todo: test requirements to get kafei's mask
+    set_rule(world.get_location('Kafei Mask'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora'))
 
     # 2 silver rupee chests in the stock pot in, jeez I forgot about these if I ever even knew about them
-    set_rule(world.get_location('Your Room Rupee Chest'), lambda state: True)
+    # set_rule(world.get_location('Your Room Rupee Chest'), lambda state: True)
     # is human the only form where you get the key? I forget, but I think that's all you need to get this chest
-    set_rule(world.get_location('Anju Room Rupee Chest'), lambda state: True)
+    # set_rule(world.get_location('Anju Room Rupee Chest'), lambda state: True)
     # for this one, you just need to be able to get inside the inn after midnight on day 3
     # so either the room key or the deku flower
     # and these musings only apply to getting INTO these rooms, so the tests here are open
