@@ -1,0 +1,5 @@
+don't randomize:
+Pendant, Letter
+
+make Letter available before 2nd day
+make Pendant available before 2nd Night

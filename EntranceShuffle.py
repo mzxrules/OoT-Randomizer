@@ -97,7 +97,10 @@ mandatory_connections = [ ('Cursed Underground', 'Clock Tower'),
                                                 ('North Mailbox', 'Mailbox'),
                                                 ('Tunnel Balloon From Observatory', 'Bomber Tunnel'),
                                                 ('Tunnel Balloon From ECT', 'Astral Observatory'),
-                                                ('Mountain Icicles', 'Path to Mountain Village'),
+                                                ('Termina Field North Exit', 'Path to Mountain Village South'),
+                                                ('Termina Field From Mountain', 'Termina Field'),
+                                                ('Mountain Snowball Block', 'Path to Mountain Village North'),
+                                                ('Mountain Snowball Block Backwards', 'Path to Mountain Village South'),
                                                 ('Great Bay Gate', 'Great Bay Coast'),
                         ]
 
@@ -165,6 +168,10 @@ default_connections = [('Clock Tower Exit', 'South Clock Town'),
 
                                         ('GF Woodfall', 'Woodfall Fairy Shrine'),
 
+                                        ('Mountain Icicles', 'Path to Mountain Village South'),
+                                        ('Mountain Icicles Backwards', 'Path to Mountain Village South'),
+                                        ('Mountain Village Entrance', 'Mountain Village'),
+                                        (''),
                                         ('GF Snowhead', 'Snowhead Fairy Shrine'),
 
                                         ('GF Great Bay', 'Great Bay Fairy Shrine'),
