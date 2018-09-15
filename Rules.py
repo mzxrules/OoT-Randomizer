@@ -160,7 +160,6 @@ def global_rules(world):
     # actually, the great fairy stuff probly needs to be tested
     # what she gives to what forms, what she gives in first vs other cycles
     # because right now we have rules set for 'Clock Town GF Reward', 'Great Fairy Mask', and 'Magic from NCT Great Fairy' lol
-    # todo: test great fairy rewards
 
     # set_rule(world.get_location('Magic from NCT Great Fairy'), lambda state: state.form('Deku'))
     # I'll have to test how this happens, I haven't played in so long
@@ -218,6 +217,49 @@ def global_rules(world):
     # but it also probably means setting rules for these items and having locations for them
     # which means we'd have to have some kind of marker for them so they don't get mixed in to the pool
     # possibly issue in the future, just something to note for now
+
+
+    ### TERMINA FIELD
+    set_rule(world.get_location('Kamaro Mask'), lambda state: state.form('Human'))
+    # so you have to be able to jump to their platform, which rules out goron and probably deku?
+    # (actually maybe not if the goron can do some weird trick or something)
+    # dunno if there's a form requirement when you actually talk to them, but I'm gonna assume human for now
+    # todo: test form requirements
+
+    # set_rule(world.get_location('Moons Tear'), lambda state: True)
+    # pretty sure this is just open, even the deku can use the telescope
+
+    set_rule(world.get_location('4 Gossip Stone HP'), lambda state: (state.can_blast() or state.form('Goron'))
+        and (state.has('Sonata of Awakening') or state.has('Goron Lullaby') or state.has('New Wave Bossa Nova'))
+        and (state.form('Deku') or state.form('Goron') or state.form('Zora')))
+
+    set_rule(world.get_location('Termina Field Peahat Grotto HP'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora'))
+    # how many ways to kill a peahat? lol
+    # for now I'm gonna assume deku can't, but everyone else can
+
+    # set_rule(world.get_location('Termina Field Dodongo Grotto HP'), lambda state: True)
+    # ways to kill a dodongo? might be anyone actually
+
+    set_rule(world.get_location('Termina Field Business Scrub Grotto HP'), lambda state: state.has('Adult Wallet'))
+    # giving the moon's tear to the scrub is part of the connection requirement to get to the grotto, but once there
+    # you just need the adult's wallet
+
+    set_rule(world.get_location('Termina Field Beehive Grotto HP'), lambda state: (state.can_blast() or state.form('Goron'))
+                                                                                  and state.has('Bow') and state.form('Zora'))
+    # boulder to get through, then shoot the bees, then drop to the bottom of the pool as zora
+    # actually shooting the bees might be possible as zora
+    # todo: test this hp
+
+    # set_rule(world.get_location('Termina Field Freestanding 20 Rupee Chest'), lambda state: True)
+    # set_rule(world.get_location('Termina Field Deku Baba Pit 20 Rupee Chest'), lambda state: True)
+    set_rule(world.get_location('Termina Field Hookshot Stump 20 Rupee Chest'), lambda state: state.has('Hookshot') and state.form('Human'))
+
+    # set_rule(world.get_location(''), lambda state: state)
+    # apparently if you look at some guys standing in the field through the telescope, there will be pits where they
+    # each were? dunno what's in them, but we might need to record those
+
+    # set_rule(world.get_location('Termina Field East Pillar Bombchu Pit'), lambda state: True)
+    # it's an open check once you're there, you just need a bottle, bean, water, and be able to jump to it from the bean
 
     # set_rule(world.get_location(''), lambda state: state)
 
