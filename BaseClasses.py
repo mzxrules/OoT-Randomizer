@@ -61,8 +61,9 @@ class World(object):
             region.world = self
 
     # Checks if `regionname` is actually a Region
-    # If not, will try to find that name in `World.regions`
-    # and cache it to be easily fetched later in `_regions_cache`
+    # If not, will try to find that name in `World.regions` if
+    # you only gave the name of the Region and cache it to
+    # be easily fetched later in `_regions_cache`
     def get_region(self, regionname):
         if isinstance(regionname, Region):
             return regionname
@@ -103,6 +104,14 @@ class World(object):
                         return r_location
         raise RuntimeError('No such location %s' % location)
 
+    '''
+    Create the CollectionState.
+    Goes through all items and collects all advancement items
+    and keys into `.prog_items` of the CollectionState.
+
+    Also does `sweep_for_events`
+    and `clear_cache_unreachable` before returning the CollectionState.
+    '''
     def get_all_state(self, keys=False):
         ret = CollectionState(self)
 
@@ -120,11 +129,16 @@ class World(object):
         ret.clear_cached_unreachable()
         return ret
 
+    # Returns all items already placed and the ones still to be placed.
+    # so basically, all items.
     def get_items(self):
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
+    # Takes an item(name?) and gives the location(s) where
+    # that item can be found.
     def find_items(self, item):
         return [location for location in self.get_locations() if location.item is not None and location.item.name == item]
+
 
     def push_item(self, location, item, collect=True):
         if not isinstance(location, Location):
@@ -140,6 +154,8 @@ class World(object):
         else:
             raise RuntimeError('Cannot assign item %s to location %s.' % (item, location))
 
+    # Initializes all locations found in the provided World.regions
+    # into `_cached_locations` and returns all locations.
     def get_locations(self):
         if self._cached_locations is None:
             self._cached_locations = []
@@ -147,9 +163,11 @@ class World(object):
                 self._cached_locations.extend(region.locations)
         return self._cached_locations
 
+    # Like it says, returns all item locations that aren't filled yet
     def get_unfilled_locations(self):
         return [location for location in self.get_locations() if location.item is None]
 
+    # Like above, but returns the ones that ARE filled already.
     def get_filled_locations(self):
         return [location for location in self.get_locations() if location.item is not None]
 
