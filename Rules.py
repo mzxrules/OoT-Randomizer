@@ -149,8 +149,8 @@ def global_rules(world):
     # I thought deku could get this for some reason
     # also lol of course goron can't, shoulda known
 
-    set_rule(world.get_location('Tingle Clock Town Map'), lambda state: state.can_pop_balloon())
-    set_rule(world.get_location('Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Clock Town Tingle Clock Town Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Clock Town Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
     # it's not the same balloon as for bombers, but the same checks apply
 
     set_rule(world.get_location('Keaton HP'), lambda state: state.has('Keaton Mask') and state.form('Human'))
@@ -184,7 +184,7 @@ def global_rules(world):
 
     set_rule(world.get_location('Honey and Darling HP'), lambda state: state.has('Bomb Bag') and state.has('Bow') and state.form('Human'))
     set_rule(world.get_location('Clock Town Shooting Gallery Quiver Prize'), lambda state: state.has('Bow') and state.form('Human'))
-    set_rule(world.get_location('Clock Town Shooting Gallery HP Prize'), lambda state: state.has('Bow') and state.form('Human'))
+    set_rule(world.get_location('Clock Town Shooting Gallery HP Prize'), lambda state: (state.form('Human') and state.has('Bow')) or state.options('NoHardestArchery'))
 
     set_rule(world.get_location('Kafei Mask'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora'))
 
@@ -261,6 +261,72 @@ def global_rules(world):
     # set_rule(world.get_location('Termina Field East Pillar Bombchu Pit'), lambda state: True)
     # it's an open check once you're there, you just need a bottle, bean, water, and be able to jump to it from the bean
 
+
+    ### SOUTHERN SWAMP
+
+    ## Path to Swamp
+    set_rule(world.get_location('Path to Swamp Bat Tree HP'), lambda state: state.can_pop_balloon())
+    # the req for this is just to make it up the tree without getting knocked off by the birds, so unless there's some
+    # way of cheesing the birds I don't know about, you just have to be able to kill them
+    # ...you know, birds are just balloons that try to kill you tbh
+
+    set_rule(world.get_location('Swamp Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Swamp Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
+    # I can't actually remember the two maps tingle sells, I'll have to just go check that
+
+    # set_rule(world.get_location('Path to Swamp 20 Rupee Pit'), lambda state: True)
+    # there's apparently 20 rupees in a pit, it's probly just open, but I need to play again to check the details
+
+    set_rule(world.get_location('Swamp Shooting Gallery Quiver Prize'), lambda state: state.form('Human') and state.has('Bow'))
+    set_rule(world.get_location('Swamp Shooting Gallery HP Prize'), lambda state: (state.form('Human') and state.has('Bow')) or state.options('NoHardestArchery'))
+
+    ## Southern Swamp
+    set_rule(world.get_location('HP Above Tourist Centre'), lambda state: state.can_reach(world.get_location('Swamp Business Scrub')) or state.can('SomeWeirdGoronTrickIDunno'))
+    # set_rule(world.get_location('Bottle From Kotate'), lambda state: True)
+
+    # swamp tourist center
+    set_rule(world.get_location('Pictograph Box'), lambda state: state.has('Saved Koume'))
+
+    # set_rule(world.get_location('Picto Game HP'), lambda state: True)
+    # I think this check is just open, unless some forms can't use the picto box lol
+
+    # set_rule(world.get_location('Learn Song of Soaring'), lambda state: True)
+    # as far as I know, no matter what once you're in this area, you still need to use the deku flowers to get across
+    # to the spot where you learn the song
+    # actually... you can get to the spot from the outside woodfall zone
+    # ok so here's what's up, it's an open check, but it's in its own logical region; the lower part of this area is
+    # its own region with an exit to the top region /before/ the check, using that trick that lets you grab that ledge,
+    # then there's an exit from that region to the region with the learn spot gated by using the deku flowers
+    # that logical region has exits to the outside woodfall area (which has an open exit back to here) and down to the
+    # bottom of the area (since you can just drop down whenever)
+    # (I could be wrong about it being an open check tho, not sure what form requirements exist for the owl to teach it)
+
+    ## Deku Palace
+    # set_rule(world.get_location('Deku Palace Garden HP'), lambda state: True)
+
+    set_rule(world.get_location('Learn Sonata of Awakening'), lambda state: state.form('Human') and state.form('Deku'))
+    # probly need to test the reqs for this, but apparently you need to talk to the monkey as link and then show him an
+    # instrument that isn't the ocarina to learn it? I dunno
+    # todo: test requirements for this
+
+    ## Swamp Spider House
+    # oh god, so many spots
+    # lots of them are probly just open though
+    # I'mma get to this later, I'll do both the spider houses together
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Outside Woodfall Area
+    set_rule(world.get_location('Outside Woodfall 20 Rupee Chest'), lambda state: state.form('Deku')
+                                                or (state.health(5) and (state.form('Human') or state.form('Zora'))))
+    # I think you can get to this one by toughing out the poison water as well as just being deku
+    # todo: test ways to get to this chest
+    # p sure goron just can't get it lol
+
+    set_rule(world.get_location('Outside Woodfall 5 rupees'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Outside Woodfall HP'), lambda state: state.form('Deku'))
+
+
+    ### WOODFALL TEMPLE
     # set_rule(world.get_location(''), lambda state: state)
 
 # ooh ooh
