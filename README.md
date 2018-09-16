@@ -1,6 +1,6 @@
 # OoTRandomizer
 
-Documentation for the core features of the randomizer from which this was forked can be found here: <https://github.com/AmazingAmpharos/OoT-Randomizer/blob/dev/README.md>
+Documentation for the core features of the randomizer from which this was forked can be found here: <https://github.com/AmazingAmpharos/OoT-Randomizer/blob/Dev/README.md>
 
 # Notable Changes on this fork
 
