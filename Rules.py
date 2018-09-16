@@ -286,6 +286,8 @@ def global_rules(world):
 
     # swamp tourist center
     set_rule(world.get_location('Pictograph Box'), lambda state: state.has('Saved Koume'))
+    # swamp tourist center clean water
+    set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: state.can_use('Bow'))
 
     # set_rule(world.get_location('Picto Game HP'), lambda state: True)
     # I think this check is just open, unless some forms can't use the picto box lol
@@ -309,6 +311,12 @@ def global_rules(world):
     # instrument that isn't the ocarina to learn it? I dunno
     # todo: test requirements for this
 
+    # post woodfall, butler race
+    set_rule(world.get_location('Mask of Scents'), lambda state: state.form('Human'))
+    # you know, I have no idea what the actual requirements are to do this lol
+    # once you can get here, you can attempt the race, but I figure goron can't do it, zora probly not
+    # so it's human and/or deku? todo: figure this out lol
+
     ## Swamp Spider House
     # oh god, so many spots
     # lots of them are probly just open though
@@ -316,8 +324,8 @@ def global_rules(world):
     # set_rule(world.get_location(''), lambda state: state)
 
     ## Outside Woodfall Area
-    set_rule(world.get_location('Outside Woodfall 20 Rupee Chest'), lambda state: state.form('Deku')
-                                                or (state.health(5) and (state.form('Human') or state.form('Zora'))))
+    set_rule(world.get_location('Outside Woodfall 20 Rupee Chest'),
+             lambda state: state.form('Deku') or (state.has_hearts(5) and (state.form('Human') or state.form('Zora'))))
     # I think you can get to this one by toughing out the poison water as well as just being deku
     # todo: test ways to get to this chest
     # p sure goron just can't get it lol
@@ -327,6 +335,85 @@ def global_rules(world):
 
 
     ### WOODFALL TEMPLE
+
+    ## Lobby
+    set_rule(world.get_location('WF Stray Fairy Entrance'), lambda state: state.stray_fairy_req())
+    # not sure what forms can get this aside from human, but basically if you require the GFMask to get fairies, checks
+    # are done, otherwise you have to get to this fairy however you like, which... I think it's right by the entrance,
+    # so it should be possible with anyone? unless it's like just below the entrance, in which case we have to see
+    # which forms can get to it and require those regardless
+
+    set_rule(world.get_location('WF Stray Fairy Lobby Chest'), lambda state: state.form('Deku') and state.stray_fairy_req())
+    # I /think/ the one you get from the chest can be picked up without the mask? we may want to have an option to
+    # require the mask to pick up any of the fairies, because damn it makes it a lot easier, heh
+
+    ## First Floor
+    set_rule(world.get_location('WF Stray Fairy Central Room Deku Baba'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Central Room SW Corner'),
+             lambda state: (state.form('Deku') or (state.has_hearts(4) and (state.form('Human') or state.form('Zora'))))
+                           and state.stray_fairy_req())
+    # this actually might have to be changed later on depending on if we split this room into logical regions
+    # since I'm pretty sure it's easier to get to this fairy from the top section, heh
+
+    set_rule(world.get_location('WF Stray Fairy Elevator Flower Room'),
+             lambda state: state.can_pop_balloon() and (state.form('Deku') or state.has('Great Fairy Mask')) and state.stray_fairy_req())
+    # ugh, there's kind of a lot to this one, if you can pop a balloon, then you still need a way to retrieve the fairy
+    # that can be either with the deku flowers or with the GFMask, even when the mask isn't required for any particular stray fairy
+    # seems kind of weird to add it on to this check, but if you don't, then it's just 3 things ANDed, one of which is
+    # the deku form, and there are certainly ways to get this SF without requiring the deku form
+
+    set_rule(world.get_location('WF Elevator Flower Room Key Chest'), lambda state: state.form('Deku'))
+    # zora might be tall enough to run through the poison water and climb up? not sure, should test
+    # todo: test ways to get to this key chest
+
+    set_rule(world.get_location('WF Map Chest'),
+             lambda state: state.form('Deku') or state.can_use('Bomb Bag') or state.form('Goron'))
+    # possibly the blast mask can be used as well? in which case just change this to can_blast()
+
+    ## Push Block Bridge Room
+    set_rule(world.get_location('WF Stray Fairy Push Block Room Hive'),
+             lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Push Block Room Skulltula'), lambda state: state.stray_fairy_req())
+    # I /think/ any form can kill a skulltula? maybe test this
+
+    set_rule(world.get_location('WF Stray Fairy Push Block Room Underwater'),
+             lambda state: state.stray_fairy_req()
+                and ((state.form('Human') or state.form('Zora')) and (state.swamp_cleaned() or state.has_hearts(6))))
+    set_rule(world.get_location('WF Compass Chest'),
+             lambda state: state.form('Zora')
+                           or (state.form('Deku') and state.has('Magic Meter'))
+                           or (state.form('Human') and state.can_pop_balloon()))
+
+    ## Dark Puff Gauntlet
+    set_rule(world.get_location('WF Stray Fairy Dark Puffs'), lambda state: state.stray_fairy_req())
+    # I'm pretty sure any form can kill the puffs, the only one that would be hard is goron lol
+
+    ## Second Floor
+    set_rule(world.get_location('WF Stray Fairy Central Room Upper Bubble'),
+             lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Central Room Upper Switch Chest'),
+             lambda state: state.stray_fairy_req() and state.form('Deku'))
+    set_rule(world.get_location('WF Bow Chest'), lambda state: state.can_kill_lizalfos())
+    set_rule(world.get_location('WF Boss Key Chest'), lambda state: state.can_kill_gekkos())
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Pre-Boss Room
+    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Alcoves 1'), lambda state: state.stray_fairy_req() and state.form('Deku'))
+    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Alcoves 2'), lambda state: state.stray_fairy_req() and state.form('Deku'))
+    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Alcoves 3'), lambda state: state.stray_fairy_req() and state.form('Deku'))
+    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Bubble'),
+             lambda state: state.stray_fairy_req() and state.can_pop_balloon()
+                           and state.form('Deku') and state.can_use('Great Fairy Mask'))
+    # this one might just hard require the GFMask, not sure how to get to it at all
+
+    ## Boss: Odolwa
+    set_rule(world.get_location('Odolwas Remains'), lambda state: state.can_use('Bow'))
+    # todo: figure out all the ways to kill odolwa
+    # you probly hard need to use the bow, which means most other checks aren't needed
+    # but yeah, gotta figure out all the ways to beat this
+
+    ## Post Odolwa Princess Room
+    set_rule(world.get_location('Woodfall Princess'), lambda state: state.can_use('Bottle'))
     # set_rule(world.get_location(''), lambda state: state)
 
 # ooh ooh

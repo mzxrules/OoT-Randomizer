@@ -318,6 +318,27 @@ class CollectionState(object):
     # consider: can_wear(mask_name), rather than just using has(item)
     # would do a check to see if you have the mask and can do human form
 
+    def stray_fairy_req(self):
+        return (self.has('Great Fairy Mask') and self.form('Human')) or not self.options('ReqGFMask')
+
+    def can_kill_lizalfos(self):
+        # I figure they use lizalfos as a miniboss enough that this is a check worth abstracting
+        # I imagine deku can't deal with them, goron /probably/ can? to test, easy enough to chance later
+        return self.form('Human') or self.form('Zora') or self.form('Goron')
+
+    def can_kill_gekkos(self):
+        # same as with lizalfos, it's common enough
+        # I wonder, can zora hit with their blades in place of the bow? or hookshot maybe?
+        return (self.form('Deku') or self.can_use('Bomb Bag')) and (self.can_use('Bow'))
+
+    def can_use(self, item):
+        human_items = ['']
+        # yeah, just write this out at some point
+        # all mask (aside from transform ones), plus bombs etc.
+        if item in human_items:
+            return self.form('Human') and self.has(item)
+        return self.has(item)
+
     def can_pop_balloon(self):
         # todo: test for other ways of popping balloons (in the air)
         return self.form('Zora') or (self.form('Deku') and self.has('Magic Meter')) or (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
