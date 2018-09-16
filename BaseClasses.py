@@ -332,9 +332,9 @@ class CollectionState(object):
         return (self.form('Deku') or self.can_use('Bomb Bag')) and (self.can_use('Bow'))
 
     def can_use(self, item):
-        human_items = ['']
+        human_items = ['Hookshot', 'Bow']
         # yeah, just write this out at some point
-        # all mask (aside from transform ones), plus bombs etc.
+        # all masks (aside from transform ones), plus bombs etc.
         if item in human_items:
             return self.form('Human') and self.has(item)
         return self.has(item)

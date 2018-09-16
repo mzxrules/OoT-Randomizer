@@ -90,8 +90,8 @@ def global_rules(world):
     # gotta test to see ways of getting on there todo: find ways of getting up to that platform in various forms
     # ah, just thought of adding deku form as I was reading through, nice lol
 
-    set_rule(world.get_location('Festival Tower Rupee Chest'), lambda state: (state.has('Hookshot') and state.form('Human')) or (state.form('Deku') and state.can_reach(world.get_location('Clock Town Business Scrub'))))
-    set_rule(world.get_location('South Clock Town Hookshot Ledge Rupee Chest'), lambda state: state.has('Hookshot') and state.form('Human'))
+    set_rule(world.get_location('Festival Tower Rupee Chest'), lambda state: state.can_use('Hookshot') or (state.form('Deku') and state.can_reach(world.get_location('Clock Town Business Scrub'))))
+    set_rule(world.get_location('South Clock Town Hookshot Ledge Rupee Chest'), lambda state: state.can_use('Hookshot'))
 
     # set_rule(world.get_location('Ocarina of Time'), lambda state: (state.form('Deku') and state.has('Magic Meter')) or (state.has('Bow') and state.form('Human')) or state.form('Zora'))
     set_rule(world.get_location('Ocarina of Time'), lambda state: state.can_pop_balloon())
@@ -103,7 +103,7 @@ def global_rules(world):
 
 
     ### WEST CLOCK TOWN
-    set_rule(world.get_location('Rosa Sisters HP'), lambda state: state.has('Kamaro Mask') and state.form('Human'))
+    set_rule(world.get_location('Rosa Sisters HP'), lambda state: state.can_use('Kamaro Mask'))
 
     # you might not need to be human to get this, but I'd bet the shop owner won't sell to other forms, at least deku
     # set_rule(world.get_location('Bomb Bag'), lambda state: True)
@@ -153,7 +153,7 @@ def global_rules(world):
     set_rule(world.get_location('Clock Town Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
     # it's not the same balloon as for bombers, but the same checks apply
 
-    set_rule(world.get_location('Keaton HP'), lambda state: state.has('Keaton Mask') and state.form('Human'))
+    set_rule(world.get_location('Keaton HP'), lambda state: state.can_use('Keaton Mask'))
     set_rule(world.get_location('Deku Scrub Playground HP'), lambda state: state.form('Deku'))
 
     set_rule(world.get_location('Great Fairy Mask'), lambda state: state.has('Deku Mask'))
@@ -183,8 +183,8 @@ def global_rules(world):
     # I feel like the goron might be able to just punch this todo: test if goron punch works here
 
     set_rule(world.get_location('Honey and Darling HP'), lambda state: state.has('Bomb Bag') and state.has('Bow') and state.form('Human'))
-    set_rule(world.get_location('Clock Town Shooting Gallery Quiver Prize'), lambda state: state.has('Bow') and state.form('Human'))
-    set_rule(world.get_location('Clock Town Shooting Gallery HP Prize'), lambda state: (state.form('Human') and state.has('Bow')) or state.options('NoHardestArchery'))
+    set_rule(world.get_location('Clock Town Shooting Gallery Quiver Prize'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Clock Town Shooting Gallery HP Prize'), lambda state: state.can_use('Bow') or state.options('NoHardestArchery'))
 
     set_rule(world.get_location('Kafei Mask'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora'))
 
@@ -197,8 +197,8 @@ def global_rules(world):
     # and these musings only apply to getting INTO these rooms, so the tests here are open
     # the relevant tests will be for the connecting areas
 
-    set_rule(world.get_location('Grandma Stories HP 1'), lambda state: state.has('All Night Mask') and state.form('Human'))
-    set_rule(world.get_location('Grandma Stories HP 2'), lambda state: state.has('All Night Mask') and state.form('Human'))
+    set_rule(world.get_location('Grandma Stories HP 1'), lambda state: state.can_use('All Night Mask'))
+    set_rule(world.get_location('Grandma Stories HP 2'), lambda state: state.can_use('All Night Mask'))
 
     # set_rule(world.get_location('Toilet Hand HP'), lambda state: state.has('Town Title Deed'))
     set_rule(world.get_location('Toilet Hand HP'), lambda state: state.has_paper())
@@ -245,14 +245,15 @@ def global_rules(world):
     # you just need the adult's wallet
 
     set_rule(world.get_location('Termina Field Beehive Grotto HP'), lambda state: (state.can_blast() or state.form('Goron'))
-                                                                                  and state.has('Bow') and state.form('Zora'))
+                                                                                  and state.can_use('Bow') and state.form('Zora'))
     # boulder to get through, then shoot the bees, then drop to the bottom of the pool as zora
     # actually shooting the bees might be possible as zora
+    # bees might just be more balloons lol
     # todo: test this hp
 
     # set_rule(world.get_location('Termina Field Freestanding 20 Rupee Chest'), lambda state: True)
     # set_rule(world.get_location('Termina Field Deku Baba Pit 20 Rupee Chest'), lambda state: True)
-    set_rule(world.get_location('Termina Field Hookshot Stump 20 Rupee Chest'), lambda state: state.has('Hookshot') and state.form('Human'))
+    set_rule(world.get_location('Termina Field Hookshot Stump 20 Rupee Chest'), lambda state: state.can_use('Hookshot'))
 
     # set_rule(world.get_location(''), lambda state: state)
     # apparently if you look at some guys standing in the field through the telescope, there will be pits where they
@@ -277,8 +278,8 @@ def global_rules(world):
     # set_rule(world.get_location('Path to Swamp 20 Rupee Pit'), lambda state: True)
     # there's apparently 20 rupees in a pit, it's probly just open, but I need to play again to check the details
 
-    set_rule(world.get_location('Swamp Shooting Gallery Quiver Prize'), lambda state: state.form('Human') and state.has('Bow'))
-    set_rule(world.get_location('Swamp Shooting Gallery HP Prize'), lambda state: (state.form('Human') and state.has('Bow')) or state.options('NoHardestArchery'))
+    set_rule(world.get_location('Swamp Shooting Gallery Quiver Prize'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Swamp Shooting Gallery HP Prize'), lambda state: state.can_use('Bow') or state.options('NoHardestArchery'))
 
     ## Southern Swamp
     set_rule(world.get_location('HP Above Tourist Centre'), lambda state: state.can_reach(world.get_location('Swamp Business Scrub')) or state.can('SomeWeirdGoronTrickIDunno'))
@@ -356,11 +357,11 @@ def global_rules(world):
     # since I'm pretty sure it's easier to get to this fairy from the top section, heh
 
     set_rule(world.get_location('WF Stray Fairy Elevator Flower Room'),
-             lambda state: state.can_pop_balloon() and (state.form('Deku') or state.has('Great Fairy Mask')) and state.stray_fairy_req())
+             lambda state: state.can_pop_balloon() and (state.form('Deku') or state.can_use('Great Fairy Mask')) and state.stray_fairy_req())
     # ugh, there's kind of a lot to this one, if you can pop a balloon, then you still need a way to retrieve the fairy
     # that can be either with the deku flowers or with the GFMask, even when the mask isn't required for any particular stray fairy
     # seems kind of weird to add it on to this check, but if you don't, then it's just 3 things ANDed, one of which is
-    # the deku form, and there are certainly ways to get this SF without requiring the deku form
+    # the deku form, and there are certainly ways to get this SF without requiring the deku form..... probly
 
     set_rule(world.get_location('WF Elevator Flower Room Key Chest'), lambda state: state.form('Deku'))
     # zora might be tall enough to run through the poison water and climb up? not sure, should test
