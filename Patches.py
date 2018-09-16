@@ -72,6 +72,10 @@ def patch_rom(world, rom):
             for baseaddress, values in patch.items():
                 rom.write_bytes(int(baseaddress), values)
 
+    # extra mweeps
+    if world.extra_mweeps:
+        rom.write_int32s(0x800C806C - 0x800110A0 + 0xA87000, [0x3404687A,0xAFA40000])
+
     # Can always return to youth
     rom.write_byte(0xCB6844, 0x35)
     rom.write_byte(0x253C0E2, 0x03) # Moves sheik from pedestal
@@ -1409,7 +1413,7 @@ def patch_rom(world, rom):
     
     for i in range(len(NaviHint)):
         for j in range(len(NaviHint[i])):
-            thisNaviHintSFX = world.navi_hint_sounds[i]
+            thisNaviHintSFX = 'Mweep!'
             if thisNaviHintSFX == 'Random Choice':
                 thisNaviHintSFX = randomNaviHintSFX[i]
             if thisNaviHintSFX == 'Notification':
@@ -1439,15 +1443,15 @@ def patch_rom(world, rom):
             if thisNaviHintSFX != 'Default':
                 rom.write_bytes(NaviHint[i][j], naviHintSFX)
 
+
+
     #Low health beep
-    healthSFXList = ['Default', 'Softer Beep', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Navi - Hey!', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'None']
+    healthSFXList = ['Mweep!']
     randomSFX = random.choice(healthSFXList)
     address = 0xADBA1A
-    
-    if world.healthSFX == 'Random Choice':
-        thisHealthSFX = randomSFX
-    else:
-        thisHealthSFX = world.healthSFX
+
+    thisHealthSFX = 'Mweep!'
+
     if thisHealthSFX == 'Default':
         healthSFX = [0x48, 0x1B]
     elif thisHealthSFX == 'Softer Beep':

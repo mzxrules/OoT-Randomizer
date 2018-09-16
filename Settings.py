@@ -364,6 +364,22 @@ setting_infos = [
                       'Always open': Nothing
                       '''
         }),
+    Setting_Info('extra_mweeps', bool, 1, True,
+        {
+            'help': '''\
+                    Extra Mweeps
+                    ''',
+            'action': 'store_true'
+        },
+        {
+            'text': 'Extra Mweeps',
+            'group': 'logic',
+            'widget': 'Checkbutton',
+            'default': 'checked',
+            'tooltip':'''\
+                      Extra Mweeps
+                      '''
+        }),
     Setting_Info('bombchus_in_logic', bool, 1, True, 
         {
             'help': '''\

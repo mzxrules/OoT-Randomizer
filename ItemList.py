@@ -7,6 +7,32 @@ from Items import ItemFactory
 #This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 #Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
 
+random.seed(916)
+
+kz_items = [
+    'Eyeball Frog',
+    'Zora Tunic',
+    'Ice Trap',
+    'Ice Trap',
+    'Ice Trap',
+    'Ice Trap',
+    'Ice Trap',
+    'Rupees (50)',
+    'Rupees (200)',
+    ]
+
+def kz_item(count=None):
+    if count is None:
+        count = 1
+    ret = []
+    for item in range(0, count):
+        index = random.randint(0,len(kz_items) - 1)
+        ret.append(kz_items[index])
+
+    return ret
+
+
+
 alwaysitems = ([
     'Biggoron Sword', 
     'Boomerang', 
@@ -23,92 +49,72 @@ alwaysitems = ([
     'Light Arrows', 
     'Dins Fire', 
     'Farores Wind', 
-    'Rupee (1)'] 
+    'Rupee (Treasure Chest Game)'] 
     + ['Progressive Hookshot'] * 2
     + ['Deku Shield']
     + ['Hylian Shield']
     + ['Progressive Strength Upgrade'] * 3
     + ['Progressive Scale'] * 2
-    + ['Recovery Heart'] * 6
-    + ['Rupees (5)'] * 13
-    + ['Rupees (20)'] * 5
-    + ['Rupees (50)'] * 7
     + ['Rupees (200)'] * 3
     + ['Bow'] * 3
     + ['Slingshot'] * 3
     + ['Bomb Bag'] * 3
     + ['Bottle with Letter']
-    + ['Bombs (5)'] * 2
-    + ['Bombs (10)']
-    + ['Bombs (20)']
-    + ['Arrows (5)']
-    + ['Arrows (10)'] * 5
+    + kz_item(40)
+    + ['Arrows (10)'] * 2
     + ['Progressive Wallet'] * 2
     + ['Deku Stick Capacity'] * 2
     + ['Deku Nut Capacity'] * 2
     + ['Magic Meter'])
 
-DT_vanilla = (['Recovery Heart'] * 2)
+DT_vanilla = (kz_item(2))
 
 DT_MQ = (['Deku Shield'] * 2
-         + ['Rupees (50)'])
+         + kz_item())
 
-DC_vanilla = (['Rupees (20)'])
+DC_vanilla = (kz_item())
 
 DC_MQ = (['Hylian Shield']
-         + ['Rupees (5)'])
+         + kz_item())
 
 JB_MQ = (['Deku Nuts (5)'] * 4
-         + ['Recovery Heart']
+         + kz_item()
          + ['Deku Shield']
          + ['Deku Stick (1)'])
 
-FoT_vanilla = (['Recovery Heart']
-               + ['Arrows (10)']
-               + ['Arrows (30)'])
+FoT_vanilla = (kz_item(3))
 
-FoT_MQ = (['Arrows (5)'])
+FoT_MQ = (kz_item())
 
-FiT_vanilla = (['Rupees (200)'])
+FiT_vanilla = (kz_item())
 
-FiT_MQ = (['Bombs (20)']
+FiT_MQ = (kz_item()
           + ['Hylian Shield'])
 
 SpT_vanilla = (['Deku Shield'] * 2
-               + ['Recovery Heart']
+               + kz_item()
                + ['Bombs (20)'])
 
-SpT_MQ = (['Rupees (50)'] * 2
+SpT_MQ = (kz_item(2)
           + ['Arrows (30)'])
 
 ShT_vanilla = (['Arrows (30)'])
 
-ShT_MQ = (['Arrows (5)'] * 2
-          + ['Rupees (20)'])
+ShT_MQ = (kz_item(3))
 
-BW_vanilla = (['Recovery Heart']
-               + ['Bombs (10)']
-               + ['Rupees (200)']
+BW_vanilla = (kz_item(3)
                + ['Deku Nuts (5)']
                + ['Deku Nuts (10)']
                + ['Deku Shield']
                + ['Hylian Shield'])
 
-GTG_vanilla = (['Arrows (30)'] * 3
-               + ['Rupees (200)'])
+GTG_vanilla = (kz_item(4))
 
-GTG_MQ = (['Rupee (Treasure Chest Game)'] * 2
-          + ['Arrows (10)']
-          + ['Rupee (1)']
-          + ['Rupees (50)'])
+GTG_MQ = (kz_item(5))
 
-GC_vanilla = (['Rupees (5)'] * 3
-               + ['Arrows (30)'])
+GC_vanilla = (kz_item(4))
 
-GC_MQ = (['Arrows (10)'] * 2
-         + ['Bombs (5)']
-         + ['Rupees (20)']
-         + ['Recovery Heart'])
+GC_MQ = (kz_item(5))
 
 normal_bottles = [
     'Bottle',
@@ -478,7 +484,7 @@ def get_pool_core(world):
     if world.difficulty == 'very_hard' or world.difficulty == 'ohko':
         pool.extend(veryharditems)
     else:
-        pool.extend(['Nayrus Love', 'Piece of Heart (Treasure Chest Game)'] + ['Piece of Heart'] * 35)
+        pool.extend(['Nayrus Love'] + kz_item(28) + ['Piece of Heart'] * 8)
 
     if world.gerudo_fortress == 'open':
         placed_items['Gerudo Fortress North F1 Carpenter'] = 'Recovery Heart'
