@@ -59,10 +59,12 @@ def global_rules(world):
 
     set_rule(world.get_entrance('Bomber Tunnel'), lambda state: state.has('Bomber Code'))
     set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: state.has('Magic Beans') or state.can('Goron Boost'))
-    set_rule(world.get_location('Swamp Business Scrub'), lambda state: state.has('Town Title Deed'))
-    set_rule(world.get_location('Mountain Business Scrub'), lambda state: state.has('Swamp Title Deed'))
-    set_rule(world.get_location('Ocean Business Scrub'), lambda state: state.has('Mountain Title Deed'))
-    set_rule(world.get_location('Canyon Business Scrub'), lambda state: state.has('Ocean Title Deed'))
+    set_rule(world.get_location('Swamp Business Scrub'), lambda state: state.has('Town Title Deed') and state.form('Deku'))
+    set_rule(world.get_location('Mountain Business Scrub'), lambda state: state.has('Swamp Title Deed') and state.form('Deku'))
+    set_rule(world.get_location('Ocean Business Scrub'), lambda state: state.has('Mountain Title Deed') and state.form('Deku'))
+    set_rule(world.get_location('Canyon Business Scrub'), lambda state: state.has('Ocean Title Deed') and state.form('Deku'))
+    # I think the scrubs all require you to do the trade as a deku
+
     set_rule(world.get_location('Song From Mask Salesman'), lambda state: state.has('Ocarina of Time'))
     set_rule(world.get_location('Remove the Cursed Mask'), lambda state: state.has('Ocarina of Time'))
     set_rule(world.get_location('Tunnel Balloon From Observatory'), lambda state: state.form('Human') or (state.form('Deku') and state.has('Magic Meter')) or state.form('Zora'))
@@ -96,6 +98,8 @@ def global_rules(world):
     # set_rule(world.get_location('Ocarina of Time'), lambda state: (state.form('Deku') and state.has('Magic Meter')) or (state.has('Bow') and state.form('Human')) or state.form('Zora'))
     set_rule(world.get_location('Ocarina of Time'), lambda state: state.can_pop_balloon())
     # is this right? it looks like the check is just to hit skull kid in the air, functionally the same as popping a balloon lol
+
+    set_rule(world.get_location('Snowhead Owl Statue'), lambda state: state.form('Human'))
 
 
     ### LAUNDRY POOL
@@ -266,7 +270,7 @@ def global_rules(world):
     ### SOUTHERN SWAMP
 
     ## Path to Swamp
-    set_rule(world.get_location('Path to Swamp Bat Tree HP'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Path to Swamp Bat Tree HP'), lambda state: state.can_pop_balloon() or state.form('Human'))
     # the req for this is just to make it up the tree without getting knocked off by the birds, so unless there's some
     # way of cheesing the birds I don't know about, you just have to be able to kill them
     # ...you know, birds are just balloons that try to kill you tbh
@@ -322,7 +326,9 @@ def global_rules(world):
     # oh god, so many spots
     # lots of them are probly just open though
     # I'mma get to this later, I'll do both the spider houses together
-    # set_rule(world.get_location(''), lambda state: state)
+    set_rule(world.get_location('Swamp Spider House Reward'), lambda state: state.can_use('Bottle') and state.form('Deku'))
+    # there might be some other requirements to get all the skulls here, but I'm pretty sure you at least need a
+    # bottle and to use deku flowers
 
     ## Outside Woodfall Area
     set_rule(world.get_location('Outside Woodfall 20 Rupee Chest'),
@@ -333,6 +339,7 @@ def global_rules(world):
 
     set_rule(world.get_location('Outside Woodfall 5 rupees'), lambda state: state.form('Deku'))
     set_rule(world.get_location('Outside Woodfall HP'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Woodfall Owl Statue'), lambda state: state.form('Human'))
 
 
     ### WOODFALL TEMPLE
@@ -415,6 +422,60 @@ def global_rules(world):
 
     ## Post Odolwa Princess Room
     set_rule(world.get_location('Woodfall Princess'), lambda state: state.can_use('Bottle'))
+
+
+    ### MOUNTAIN VILLAGE
+
+    ## Mountain Village
+    set_rule(world.get_location('Goron Mask'), lambda state: state.has('Song of Healing'))
+    # this probly needs to be investigated (do you actually need the lens once you've gotten the ghost there?) and we
+    # should determine how we want to track this check, since you have to follow the ghost through various areas
+    # I kiiiind of want to add a ton of extra stuff for myself to do, like world state checks that just don't get
+    # shuffled in so it's easy to do like state.world('HasLedGhostToSprings') or whatever
+    # stuff that would strictly be used by the crawler to determine placement
+    # we'll see
+
+    set_rule(world.get_location('Goron Grave Hot Spring Water'), lambda state: state.can_use('Bottle'))
+    # something is definitely gonna have to be tweaked in order to keep this (and the goron elder) check in, especially
+    # accounting for entrance shuffle
+    # I think only goron is fast enough to make it from here to the elder, but if entrances are shuffled, there needs
+    # to be a way to check that the distance between the two is short enough (and depending on the length, maybe a
+    # different form can make it)
+    # I think the way to do this is to have checks set here and at the elder, and then add a function to the crawler
+    # that checks the distance between the two
+    # also, to note, the more I encounter checks that require you to do things across multiple rooms/areas, the more
+    # I'm convinced we'll need to use 'fake' item checks, just to keep track of the world state, like set a rule for
+    # starting to follow the goron ghost in one spot and another for catching up, and then another for meeting up with
+    # him at the grave
+    # anyway
+
+    set_rule(world.get_location('Don Gero Mask'), lambda state: state.has('Rock Sirloin'))
+    # gonna need some way to check that you can actually get the sirloin to this guy after entrance shuffle, lol
+
+    ## Frozen Lake
+    set_rule(world.get_location('Mountain Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Mountain Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('First Half Goron Lullaby'), lambda state: (state.can_blast() or state.form('Goron')) and state.can_use('Hot Spring Water'))
+    # not sure if he'll actually teach you the half song if you're not a goron todo: test form requirements
+
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Goron Village
+    set_rule(world.get_location('Biggest Bomb Bag'), lambda state: state.form('Goron') and state.has('Adult Wallet'))
+    # set_rule(world.get_location('Lens of Truth'), lambda state: True)
+    set_rule(world.get_location('Lens of Truth Cave Invisible Chest'), lambda state: state.lens_req())
+    set_rule(world.get_location('Lens of Truth Cave Boulder Chest'), lambda state: state.can_blast())
+    # goron can probly break the boulder, but I should test that
+
+    set_rule(world.get_location('Learn Goron Lullaby'), lambda state: state.form('Goron') and state.has('First Half Goron Lullaby'))
+    set_rule(world.get_location('Rock Sirloin'), lambda state: state.can_use('Deku Stick') and state.form('Goron'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Snowhead and Path To
+    set_rule(world.get_location('Path To Snowhead HP'), lambda state: state.form('Goron') and state.can_use('Hookshot') and state.lens_req())
+    set_rule(world.get_location('Snowhead Owl Statue'), lambda state: state.form('Human'))
+
+    ### misc notes
     # set_rule(world.get_location(''), lambda state: state)
 
 # ooh ooh
