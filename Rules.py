@@ -452,12 +452,26 @@ def global_rules(world):
     set_rule(world.get_location('Don Gero Mask'), lambda state: state.has('Rock Sirloin'))
     # gonna need some way to check that you can actually get the sirloin to this guy after entrance shuffle, lol
 
+    set_rule(world.get_location('Mountain Village 20 Rupee Chest Behind Waterfall'), lambda state: state.event('Beat Ghot') and state.lens_req())
+
+    set_rule(world.get_location('Mountain Village 20 Rupee Pit'), lambda state: state.event('Beat Ghot') and (state.form('Goron') or state.lens_req()))
+    # this one may not be a chest, I should check it
+
+    set_rule(world.get_location('Gilded Sword'), lambda state: state.event('Beat Ghot') and state.has('Gold Dust'))
+    # it's probly best to just assume you can always get the razor sword
+
     ## Frozen Lake
     set_rule(world.get_location('Mountain Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Mountain Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('First Half Goron Lullaby'), lambda state: (state.can_blast() or state.form('Goron')) and state.can_use('Hot Spring Water'))
     # not sure if he'll actually teach you the half song if you're not a goron todo: test form requirements
 
+    set_rule(world.get_location('Frozen Lake HP'), lambda state: state.event('Beat Ghot') and state.form('Zora'))
+
+    set_rule(world.get_location('Frozen Lake Bombchu Pit'), lambda state: state.event('Beat Ghot') and state.form('Goron'))
+    # I should check this one too, dunno if it's a chest or what; also is goron the only one who can get to this pit?
+
+    set_rule(world.get_location('Goron Race Gold Dust Bottle'), lambda state: state.event('Beat Ghot') and state.form('Goron'))
     # set_rule(world.get_location(''), lambda state: state)
 
     ## Goron Village
@@ -474,6 +488,56 @@ def global_rules(world):
     ## Snowhead and Path To
     set_rule(world.get_location('Path To Snowhead HP'), lambda state: state.form('Goron') and state.can_use('Hookshot') and state.lens_req())
     set_rule(world.get_location('Snowhead Owl Statue'), lambda state: state.form('Human'))
+
+    ### SNOWHEAD TEMPLE
+
+    ## 1st Floor and Basement
+    set_rule(world.get_location('SH Stray Fairy 1 Bridge And Freezard Room'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('SH Stray Fairy 2 Bridge And Freezard Room'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('SH Stray Fairy Basement Switch'), lambda state: state.form('Goron'))
+    # set_rule(world.get_location('SH Push Block Key Chest'), lambda state: True)
+    # set_rule(world.get_location('SH Compass Chest'), lambda state: True)
+    # do you have to actually do anything in this room, or is the chest just there already? I forget
+
+    set_rule(world.get_location('SH Bridge and Freezard Room Key Chest'), lambda state: state.can_use('Bow') and state.has('Fire Arrows'))
+    set_rule(world.get_location('SH Stray Fairy Chest In Compass Room'), lambda state: state.can_use('Bow') and state.has('Fire Arrows'))
+
+    set_rule(world.get_location('SH Stray Fairy Compass Room Bombable'), lambda state: state.can_use('Bow') and state.has('Fire Arrows') and state.can_use('Bomb Bag'))
+    # I bet there's a way to cheese this one
+
+    set_rule(world.get_location('SH Stray Fairy Push Block Room'), lambda state: state.can_use('Bow') and state.has('Fire Arrows'))
+    set_rule(world.get_location('SH Stray Fairy Behind Central Pillar Room'), lambda state: state.can_use('Bow') and state.has('Fire Arrows'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## 2nd Floor
+    # set_rule(world.get_location('SH Map Chest'), lambda state: True)
+    # set_rule(world.get_location('SH Stray Fairy Map Chest Room'), lambda state: True)
+    set_rule(world.get_location('SH Icicle Drop Room Key Chest'), lambda state: state.can_use('Bow') and (state.can_blast() or state.form('Goron')))
+    set_rule(world.get_location('SH Stray Fairy Icicle Drop Room'), lambda state: state.can_use('Bow') and state.lens_req())
+    set_rule(world.get_location('SH Stray Fairy Goron Switch Room Ceiling'), lambda state: state.can_pop_balloon() and state.lens_req())
+
+    set_rule(world.get_location('SH Fire Arrows Chest'), lambda state: state.can_use('Bow'))
+    # I bet there are other ways of beating the wizrobe, just not sure how
+
+    set_rule(world.get_location('SH Stray Fairy Elevator Room Lens Platforms'), lambda state: state.can_use('Lens of Truth') and (state.form('Human') or state.form('Zora')))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## 3rd Floor
+    set_rule(world.get_location('SH Stray Fairy 3F Snowman Room'), lambda state: state.can_pop_balloon() and state.lens_req())
+    # can you just jump to this one? I forget
+
+    ## 4th Floor
+    set_rule(world.get_location('SH Stray Fairy 1 Lizalfos Room'), lambda state: state.can_kill_lizalfos())
+    set_rule(world.get_location('SH Stray Fairy 2 Lizalfos Room'), lambda state: state.can_kill_lizalfos())
+
+    set_rule(world.get_location('SH Stray Fairy Hidden Alcove'), lambda state: state.can_use('Lens of Truth') and (state.form('Deku') or state.form('Human')))
+    # there might be other ways to do this, not sure
+
+    set_rule(world.get_location('SH Boss Key Chest'), lambda state: state.can_use('Bow'))
+
+    ## Boss: Ghot
+    set_rule(world.get_location('Ghots Remains'), lambda state: state.can_use('Bow') and state.has('Fire Arrows') and state.form('Goron'))
+    # I know there are various ways to do this boss, but I'm not sure exactly what, so for now let's just require goron form
 
     ### misc notes
     # set_rule(world.get_location(''), lambda state: state)
