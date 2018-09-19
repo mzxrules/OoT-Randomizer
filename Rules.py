@@ -99,7 +99,7 @@ def global_rules(world):
     set_rule(world.get_location('Ocarina of Time'), lambda state: state.can_pop_balloon())
     # is this right? it looks like the check is just to hit skull kid in the air, functionally the same as popping a balloon lol
 
-    set_rule(world.get_location('Snowhead Owl Statue'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Clock Town Owl Statue'), lambda state: state.form('Human'))
 
 
     ### LAUNDRY POOL
@@ -157,7 +157,7 @@ def global_rules(world):
     set_rule(world.get_location('Clock Town Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
     # it's not the same balloon as for bombers, but the same checks apply
 
-    set_rule(world.get_location('Keaton HP'), lambda state: state.can_use('Keaton Mask'))
+    set_rule(world.get_location('North Clock Town Keaton HP'), lambda state: state.can_use('Keaton Mask'))
     set_rule(world.get_location('Deku Scrub Playground HP'), lambda state: state.form('Deku'))
 
     set_rule(world.get_location('Great Fairy Mask'), lambda state: state.has('Deku Mask'))
@@ -460,6 +460,8 @@ def global_rules(world):
     set_rule(world.get_location('Gilded Sword'), lambda state: state.event('Beat Ghot') and state.has('Gold Dust'))
     # it's probly best to just assume you can always get the razor sword
 
+    set_rule(world.get_location('Mountain Village Keaton HP'), lambda state: state.can_use('Keaton Mask') and state.event('Beat Ghot'))
+
     ## Frozen Lake
     set_rule(world.get_location('Mountain Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Mountain Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
@@ -488,6 +490,7 @@ def global_rules(world):
     ## Snowhead and Path To
     set_rule(world.get_location('Path To Snowhead HP'), lambda state: state.form('Goron') and state.can_use('Hookshot') and state.lens_req())
     set_rule(world.get_location('Snowhead Owl Statue'), lambda state: state.form('Human'))
+
 
     ### SNOWHEAD TEMPLE
 
@@ -538,6 +541,26 @@ def global_rules(world):
     ## Boss: Ghot
     set_rule(world.get_location('Ghots Remains'), lambda state: state.can_use('Bow') and state.has('Fire Arrows') and state.form('Goron'))
     # I know there are various ways to do this boss, but I'm not sure exactly what, so for now let's just require goron form
+
+
+    ### ROMANI RANCH AREA
+
+    ## Milk Road
+    set_rule(world.get_location('Milk Road Keaton HP'), lambda state: state.can_use('Keaton Mask'))
+    set_rule(world.get_location('Milk Road Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Milk Road Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Milk Road Owl Statue'), lambda state: state.form('Human'))
+
+    ## Romani Ranch
+    set_rule(world.get_location('Bunny Hood'), lambda state: state.can_use('Bremen Mask'))
+    set_rule(world.get_location('Learn Eponas Song'), lambda state: state.can_use('Bow'))
+    # set_rule(world.get_location('Dog Track 50 Rupee Chest'), lambda state: True)
+    set_rule(world.get_location('Romani Ranch Bottle'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Dog Track HP'), lambda state: state.dog_track_MoT_req())
+    set_rule(world.get_location('Romani Mask'), lambda state: state.can_use('Bow'))
+
+    ## Gorman Bros.
+    set_rule(world.get_location('Garo Mask'), lambda state: state.has('Eponas Song'))
 
     ### misc notes
     # set_rule(world.get_location(''), lambda state: state)

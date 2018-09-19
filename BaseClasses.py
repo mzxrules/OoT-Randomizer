@@ -324,6 +324,9 @@ class CollectionState(object):
     def lens_req(self):
         return (self.can_use('Lens of Truth') and self.has('Magic Meter')) or not self.options('ReqLens')
 
+    def dog_track_MoT_req(self):
+        return self.can_use('Mask of Truth') or not self.options('DogTrackMoT')
+
     def can_kill_lizalfos(self):
         # I figure they use lizalfos as a miniboss enough that this is a check worth abstracting
         # I imagine deku can't deal with them, goron /probably/ can? to test, easy enough to chance later
