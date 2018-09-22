@@ -59,11 +59,13 @@ def global_rules(world):
 
     set_rule(world.get_entrance('Bomber Tunnel'), lambda state: state.has('Bomber Code'))
     set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: state.has('Magic Beans') or state.can('Goron Boost'))
+    set_rule(world.get_location('Clock Town Mailbox HP'), lambda state: state.can_use('Postman Hat'))
     set_rule(world.get_location('Swamp Business Scrub'), lambda state: state.has('Town Title Deed') and state.form('Deku'))
+    # are there even any form requirements for this one?
+
     set_rule(world.get_location('Mountain Business Scrub'), lambda state: state.has('Swamp Title Deed') and state.form('Deku'))
-    set_rule(world.get_location('Ocean Business Scrub'), lambda state: state.has('Mountain Title Deed') and state.form('Deku'))
-    set_rule(world.get_location('Canyon Business Scrub'), lambda state: state.has('Ocean Title Deed') and state.form('Deku'))
-    # I think the scrubs all require you to do the trade as a deku
+    set_rule(world.get_location('Ocean Business Scrub'), lambda state: state.has('Mountain Title Deed') and state.form('Goron'))
+    set_rule(world.get_location('Canyon Business Scrub'), lambda state: state.has('Ocean Title Deed') and state.form('Zora'))
 
     set_rule(world.get_location('Song From Mask Salesman'), lambda state: state.has('Ocarina of Time'))
     set_rule(world.get_location('Remove the Cursed Mask'), lambda state: state.has('Ocarina of Time'))
@@ -104,6 +106,8 @@ def global_rules(world):
 
     ### LAUNDRY POOL
     set_rule(world.get_location('Bremen Mask From Guru Guru'), lambda state: state.form('Human') or state.form('Zora') or state.form('Goron'))
+    # set_rule(world.get_location('Keaton Mask From Kafei'), lambda state: state.event('Something about the a+k quest'))
+    #
 
 
     ### WEST CLOCK TOWN
@@ -130,6 +134,8 @@ def global_rules(world):
     set_rule(world.get_location('All Night mask'), lambda state: (state.form('Human') or state.form('Zora')) and state.has('Giants Wallet'))
     # you need to save the bomb lady from sakon and this will be in the curio shop on the final day for 500 rupees
     # being human might be a hard req, but you can probly buy it as zora (todo: test that)
+
+    set_rule(world.get_location('Postman Hat'), lambda state: state.has('Letter to Mama'))
 
 
     ### NORTH CLOCK TOWN
@@ -288,6 +294,7 @@ def global_rules(world):
     ## Southern Swamp
     set_rule(world.get_location('HP Above Tourist Centre'), lambda state: state.can_reach(world.get_location('Swamp Business Scrub')) or state.can('SomeWeirdGoronTrickIDunno'))
     # set_rule(world.get_location('Bottle From Kotate'), lambda state: True)
+    set_rule(world.get_location('Swamp Owl Statue'), lambda state: state.form('Human'))
 
     # swamp tourist center
     set_rule(world.get_location('Pictograph Box'), lambda state: state.has('Saved Koume'))
@@ -562,7 +569,51 @@ def global_rules(world):
     ## Gorman Bros.
     set_rule(world.get_location('Garo Mask'), lambda state: state.has('Eponas Song'))
 
+
+    ### GREAT BAY
+
+    ## Great Bay North
+    set_rule(world.get_location('Zora Mask'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Great Bay Owl Statue'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Great Bay Tingle Great Bay Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Great Bay Tingle Ikana Map'), lambda state: state.can_pop_balloon())
+    # set_rule(world.get_location('Rupee Pit'), lambda state: True)
+
+    set_rule(world.get_location('Ocean Spider House HP'), lambda state: state.can_use('Bow') and state.has('Hookshot'))
+    set_rule(world.get_location('Giant Wallet'), lambda state: state.can_use('Bow') and state.has('Hookshot'))
+    # todo these later
+
+    set_rule(world.get_location('Great Bay Lab Fish Feeding HP'), lambda state: state.can_use('Bottle'))
+    set_rule(world.get_location('Great Bay Seahorse From Fisherman'), lambda state: state.has('Picto Box') and state.has('Bottle'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Great Bay South
+    set_rule(world.get_location('Great Bay Like Like HP'), lambda state: state.form('Zora'))
+    # set_rule(world.get_location('Great Bay Bombchu Pit'), lambda state: True)
+    set_rule(world.get_location('Great Bay Temple Owl Statue'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Zora Hall 5 Rupees From Stagehand'), lambda state: True)
+    set_rule(world.get_location('Zora Hall 20 Rupees From Lulu Stalker'), lambda state: state.can_use('Bottle'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Gerudo Fortress
+    set_rule(world.get_location('Gerudo Fortress Entrance Harbor 20 Rupee Chest 1'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress Entrance Harbor 20 Rupee Chest 2'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress Entrance Harbor 20 Rupee Chest 3'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress Cage Maze 20 Rupee Chest'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress Cage Maze HP'), lambda state: state.form('Goron'))
+    # I /think/ you need the goron form to be fast enough to make this? maybe there are ways to cheese this
+
+    set_rule(world.get_location('Gerudo Fortress Tower Hub 20 Rupee Chest'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_location('Hookshot'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Gerudo Fortress Zora Egg 1'), lambda state: state.can_use('Bottle') and state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress Zora Egg 2'), lambda state: state.can_use('Bottle') and state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress Zora Egg 3'), lambda state: state.can_use('Bottle') and state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress Zora Egg 4'), lambda state: state.can_use('Bottle') and state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress 100 Rupee Chest'), lambda state: state.can_use('Hookshot') or state.can_use('Bow') or state.can_use('Stone Mask'))
+    # set_rule(world.get_location(''), lambda state: state)
+
     ### misc notes
+    ## stuff that I'll add if I'm like, watching someone's stream and notice something I want to mark down
     # set_rule(world.get_location(''), lambda state: state)
 
 # ooh ooh
