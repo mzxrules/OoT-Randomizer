@@ -319,7 +319,7 @@ class CollectionState(object):
     # would do a check to see if you have the mask and can do human form
 
     def stray_fairy_req(self):
-        return (self.has('Great Fairy Mask') and self.form('Human')) or not self.options('ReqGFMask')
+        return self.can_use('Great Fairy Mask') or not self.options('ReqGFMask')
 
     def lens_req(self):
         return (self.can_use('Lens of Truth') and self.has('Magic Meter')) or not self.options('ReqLens')
@@ -335,7 +335,7 @@ class CollectionState(object):
     def can_kill_gekkos(self):
         # same as with lizalfos, it's common enough
         # I wonder, can zora hit with their blades in place of the bow? or hookshot maybe?
-        return (self.form('Deku') or self.can_use('Bomb Bag')) and (self.can_use('Bow'))
+        return (self.form('Deku') or self.can_use('Bomb Bag')) and self.can_use('Bow')
 
     def can_use(self, item):
         human_items = ['Hookshot', 'Bow']

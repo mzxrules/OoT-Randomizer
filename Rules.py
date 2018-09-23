@@ -471,6 +471,10 @@ def global_rules(world):
 
     set_rule(world.get_location('Mountain Village Keaton HP'), lambda state: state.can_use('Keaton Mask') and state.event('Beat Ghot'))
 
+    set_rule(world.get_location('Don Gero HP'), lambda state: state.event('Beat Ghot') and state.can_kill_gekkos() and state.has('Ice Arrows'))
+    # maybe need to check the reqs on this, but I think we can assume if you can beat ghot and both gekkos,
+    # you can get to all the frogs and get this HP
+
     ## Frozen Lake
     set_rule(world.get_location('Mountain Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Mountain Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
@@ -591,7 +595,7 @@ def global_rules(world):
     set_rule(world.get_location('Great Bay Seahorse From Fisherman'), lambda state: state.has('Picto Box') and state.has('Bottle'))
     set_rule(world.get_location('Learn New Wave Bossa Nova'), lambda state: state.form('Zora') and state.has('Zora Egg', 7))
     set_rule(world.get_location('Great Bay High Cliff HP'), lambda state: state.can_use('Hookshot') and state.has('Spring Water') and state.has('Magic Beans'))
-    # set_rule(world.get_location(''), lambda state: state)
+    set_rule(world.get_location('Great Bay Jumping Game HP'), lambda state: state.event('Beat Gyorg') and state.can_use('Hookshot') and (state.form('Human') or state.form('Zora')))
 
     ## Great Bay South
     set_rule(world.get_location('Great Bay Like Like HP'), lambda state: state.form('Zora'))
@@ -626,6 +630,50 @@ def global_rules(world):
     set_rule(world.get_location('Zora Egg 6'), lambda state: state.form('Zora'))
     set_rule(world.get_location('Zora Egg 7'), lambda state: state.form('Zora'))
     set_rule(world.get_location('Pinnacle Rock Eel HP'), lambda state: state.form('Zora'))
+
+    ### GREAT BAY TEMPLE
+    # note about this temple: there's a lot of stuff you might be able to reach with ice arrows rather than hookshoting
+    # to a chest
+    # this will probly need extensive testing
+
+    set_rule(world.get_location('GB Stray Fairy Entrance Room'), lambda state: state.can_use('Deku Stick'))
+    set_rule(world.get_location('GB Stray Fairy Flywheel Room Underwater'),
+             lambda state: (state.form('Zora') or (state.can_pop_balloon() and state.can_use('Great Fairy Mask'))) and state.stray_fairy_req())
+
+    set_rule(world.get_location('GB Stray Fairy Flywheel Room Big Skulltula'), lambda state: state.form('Zora'))
+    # zoras can deal with big skulls by themselves, right? no need to add any other checks
+
+    set_rule(world.get_location('GB Stray Fairy Big Whirlpool Hub Barrel'), lambda state: state)
+    set_rule(world.get_location('GB Stray Fairy Big Whirlpool Hub Bottom'),
+             lambda state: state.stray_fairy_req() and (state.form('Zora') or (state.can_pop_balloon() and state.can_use('Great Fairy Mask'))))
+    set_rule(world.get_location('GB Map Chest'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_location('GB Stray Fairy Map Room'), lambda state: (state.can_pop_balloon() or state.form('Zora')) and state.stray_fairy_req())
+    set_rule(world.get_location('GB Stray Fairy Tunnel To Compass Room'), lambda state: state.form('Zora') and state.stray_fairy_req())
+    set_rule(world.get_location('GB Compass Chest'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_location('GB Compass Room Key Chest'), lambda state: state.form('Zora'))
+
+    set_rule(world.get_location('GB Stray Fairy Compass Room'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    # ugh, test this check, there are probly lots of ways to do it
+    # todo: lots of testing on this one
+
+    set_rule(world.get_location('GB Ice Arrows Chest'), lambda state: state.can_use('Hookshot'))
+    # todo: look up all the ways of killing Wort
+
+    set_rule(world.get_location('GB Boss Key Chest'), lambda state: state.can_kill_gekkos() and state.has('Ice Arrows'))
+    set_rule(world.get_location('GB Stray Fairy First Green Crank Room'), lambda state: state.can_use('Hookshot') and state.has('Ice Arrows'))
+    set_rule(world.get_location('GB Stray Fairy Waterfall Room 1'), lambda state: state.can_use('Hookshot') and state.has('Ice Arrows'))
+    set_rule(world.get_location('GB Stray Fairy Waterfall Room 2'), lambda state: state.can_use('Hookshot') and state.has('Ice Arrows') and state.has('Fire Arrows'))
+    # including fire arrows here for sanity, otherwise you'd have to reenter the room or maybe dungeon if you messed up
+
+    set_rule(world.get_location('GB Stray Fairy Final Crank Room 1'), lambda state: state.form('Zora') and state.stray_fairy_req())
+    set_rule(world.get_location('GB Stray Fairy Final Crank Room 2'), lambda state: state.form('Zora') and state.stray_fairy_req())
+    # I think just zora is enough for the second one? might have to test that
+
+    set_rule(world.get_location('GB Stray Fairy Before Gyorg Room 1'), lambda state: state.form('Zora') and state.stray_fairy_req())
+    set_rule(world.get_location('GB Stray Fairy Before Gyorg Room 2'), lambda state: (state.can_pop_balloon() or state.form('Zora')) and state.stray_fairy_req())
+
+    ## Boss: Gyorg
+    set_rule(world.get_location('Gyorgs Remains'), lambda state: state.form('Zora') and state.can_use('Bow'))
 
     ### misc notes
     ## stuff that I'll add if I'm like, watching someone's stream and notice something I want to mark down
