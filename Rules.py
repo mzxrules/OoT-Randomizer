@@ -329,6 +329,8 @@ def global_rules(world):
     # once you can get here, you can attempt the race, but I figure goron can't do it, zora probly not
     # so it's human and/or deku? todo: figure this out lol
 
+    set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human') and state.has('Bottle'))
+
     ## Swamp Spider House
     # oh god, so many spots
     # lots of them are probly just open though
@@ -560,7 +562,9 @@ def global_rules(world):
 
     ## Romani Ranch
     set_rule(world.get_location('Bunny Hood'), lambda state: state.can_use('Bremen Mask'))
-    set_rule(world.get_location('Learn Eponas Song'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Learn Eponas Song'), lambda state: state.can_use('Bow') and state.form('Human'))
+    # form reqs?
+
     # set_rule(world.get_location('Dog Track 50 Rupee Chest'), lambda state: True)
     set_rule(world.get_location('Romani Ranch Bottle'), lambda state: state.can_use('Bow'))
     set_rule(world.get_location('Dog Track HP'), lambda state: state.dog_track_MoT_req())
@@ -585,6 +589,8 @@ def global_rules(world):
 
     set_rule(world.get_location('Great Bay Lab Fish Feeding HP'), lambda state: state.can_use('Bottle'))
     set_rule(world.get_location('Great Bay Seahorse From Fisherman'), lambda state: state.has('Picto Box') and state.has('Bottle'))
+    set_rule(world.get_location('Learn New Wave Bossa Nova'), lambda state: state.form('Zora') and state.has('Zora Egg', 7))
+    set_rule(world.get_location('Great Bay High Cliff HP'), lambda state: state.can_use('Hookshot') and state.has('Spring Water') and state.has('Magic Beans'))
     # set_rule(world.get_location(''), lambda state: state)
 
     ## Great Bay South
@@ -593,6 +599,9 @@ def global_rules(world):
     set_rule(world.get_location('Great Bay Temple Owl Statue'), lambda state: state.form('Human'))
     set_rule(world.get_location('Zora Hall 5 Rupees From Stagehand'), lambda state: True)
     set_rule(world.get_location('Zora Hall 20 Rupees From Lulu Stalker'), lambda state: state.can_use('Bottle'))
+    set_rule(world.get_location('Beaver Race Bottle'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Beaver Race HP'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Zora Hall Song HP'), lambda state: state.form('Human'))
     # set_rule(world.get_location(''), lambda state: state)
 
     ## Gerudo Fortress
@@ -605,12 +614,18 @@ def global_rules(world):
 
     set_rule(world.get_location('Gerudo Fortress Tower Hub 20 Rupee Chest'), lambda state: state.can_use('Hookshot'))
     set_rule(world.get_location('Hookshot'), lambda state: state.can_use('Bow'))
-    set_rule(world.get_location('Gerudo Fortress Zora Egg 1'), lambda state: state.can_use('Bottle') and state.form('Zora'))
-    set_rule(world.get_location('Gerudo Fortress Zora Egg 2'), lambda state: state.can_use('Bottle') and state.form('Zora'))
-    set_rule(world.get_location('Gerudo Fortress Zora Egg 3'), lambda state: state.can_use('Bottle') and state.form('Zora'))
-    set_rule(world.get_location('Gerudo Fortress Zora Egg 4'), lambda state: state.can_use('Bottle') and state.form('Zora'))
+    set_rule(world.get_location('Zora Egg 1'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 2'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 3'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 4'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
     set_rule(world.get_location('Gerudo Fortress 100 Rupee Chest'), lambda state: state.can_use('Hookshot') or state.can_use('Bow') or state.can_use('Stone Mask'))
     # set_rule(world.get_location(''), lambda state: state)
+
+    ## Pinnacle Rock
+    set_rule(world.get_location('Zora Egg 5'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Zora Egg 6'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Zora Egg 7'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Pinnacle Rock Eel HP'), lambda state: state.form('Zora'))
 
     ### misc notes
     ## stuff that I'll add if I'm like, watching someone's stream and notice something I want to mark down
