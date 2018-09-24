@@ -269,7 +269,8 @@ def global_rules(world):
     # apparently if you look at some guys standing in the field through the telescope, there will be pits where they
     # each were? dunno what's in them, but we might need to record those
 
-    # set_rule(world.get_location('Termina Field East Pillar Bombchu Pit'), lambda state: True)
+    set_rule(world.get_location('Termina Field East Pillar Bombchu Pit'),
+             lambda state: state.can_use('Bottle') and state.has('Magic Beans') and state.has('Water') and (state.form('Human') or state.form('Zora')))
     # it's an open check once you're there, you just need a bottle, bean, water, and be able to jump to it from the bean
 
 
@@ -631,6 +632,7 @@ def global_rules(world):
     set_rule(world.get_location('Zora Egg 7'), lambda state: state.form('Zora'))
     set_rule(world.get_location('Pinnacle Rock Eel HP'), lambda state: state.form('Zora'))
 
+
     ### GREAT BAY TEMPLE
     # note about this temple: there's a lot of stuff you might be able to reach with ice arrows rather than hookshoting
     # to a chest
@@ -674,6 +676,41 @@ def global_rules(world):
 
     ## Boss: Gyorg
     set_rule(world.get_location('Gyorgs Remains'), lambda state: state.form('Zora') and state.can_use('Bow'))
+
+
+    ### IKANA CANYON
+    set_rule(world.get_location('Ikana Entrance Bombchu Pit'), lambda state: state.form('Goron'))
+    # todo: check this spot in the game
+
+    set_rule(world.get_location('Stone Mask'), lambda state: state.can_epona() and state.has('Bottle') and state.lens_req())
+
+    set_rule(world.get_location('Ikana Graveyard Bombchu Pit'), lambda state: state.can_blast())
+    # todo: test if blast mask works here
+
+    set_rule(world.get_location('Ikana Graveyard Dampe 30 Rupee Prize'), lambda state: state.can_pop_balloon() or state.form('Human'))
+
+    set_rule(world.get_location('Captains Hat'), lambda state: state.has('Sonata of Awakening') and (state.can_use('Bow') or state.can_use('Bunny Hood')))
+    # oh jeez, there are various glitches to get this chest huh?
+    # todo: reaseach this chest
+
+    set_rule(world.get_location('Ikana Graveyard First Night Grave 50 Rupee Chest'), lambda state: state.can_use('Captains Hat'))
+    set_rule(world.get_location('Learn Song of Storms'), lambda state: state.can_use('Captains Hat') and state.has('Bow') and state.has('Fire Arrows'))
+    set_rule(world.get_location('Ikana Graveyard Second Night Grave HP'), lambda state: state.can_use('Captains Hat') and state.lens_req() and state.can_blast())
+    set_rule(world.get_location('Ikana Graveyard Third Night Grave Bottle'), lambda state: state.can_use('Captains Hat') and state.can_use('Bow'))
+
+    set_rule(world.get_location('Ikana Canyon Owl Statue'), lambda state: state.can_use('Bow') and state.has('Ice Arrows') and state.has('Hookshot'))
+    set_rule(world.get_location('Ikana Tingle Ikana Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Ikana Tingle Clock Town Map'), lambda state: state.can_pop_balloon())
+    # really this check depends on the logical area the statue is in; if it's just in the whole map, then there's a
+    # bunch of reqs, but if it's in the upper region, then it's open
+    # I'll leave it open for now, but we'll have to check in on this at some point
+    # same with tingle actually
+
+    set_rule(world.get_location('Gibdo Mask'), lambda state: state.can_use('Bomb Bag') and state.form('Human') and state.has('Song of Healing'))
+
+    ## Beneath the Well
+    # oh god
+    # set_rule(world.get_location(''), lambda state: state)
 
     ### misc notes
     ## stuff that I'll add if I'm like, watching someone's stream and notice something I want to mark down

@@ -345,6 +345,9 @@ class CollectionState(object):
             return self.form('Human') and self.has(item)
         return self.has(item)
 
+    def can_epona(self):
+        return self.has('Eponas Song') and (self.form('Human') or self.options('EponaGlitchesOrSomething'))
+
     def can_pop_balloon(self):
         # todo: test for other ways of popping balloons (in the air)
         return self.form('Zora') or (self.form('Deku') and self.has('Magic Meter')) or (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
