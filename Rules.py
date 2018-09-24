@@ -708,9 +708,29 @@ def global_rules(world):
 
     set_rule(world.get_location('Gibdo Mask'), lambda state: state.can_use('Bomb Bag') and state.form('Human') and state.has('Song of Healing'))
 
+    set_rule(world.get_location('Ghost Hut HP'), lambda state: state.can_use('Bow'))
+    # idek if you actually need the bow to do this, but probly; if not, the check is just for human form
+
     ## Beneath the Well
-    # oh god
+    set_rule(world.get_location('Beneath the Well 50 Rupee Chest 1'),
+             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Blue Potion') and state.lens_req())
+    set_rule(world.get_location('Beneath the Well 50 Rupee Chest 2'),
+             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Magic Beans', 5) and state.can_use('Deku Sticks'))
+    set_rule(world.get_location('Mirror Shield'),
+             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Blue Potion') and
+                           state.has('Magic Beans') and state.has('Bow') and state.has('Bomb Bag') and
+                           state.has('Eponas Song') and state.has('Fire Arrows'))
+    # not actually as bad as I initially thought
+    # the mirror shield is a bit much lol
+
+    ## Ikana Castle
+    set_rule(world.get_location('Ikana Castle Pillar HP'), lambda state: state.form('Human') and state.form('Deku') and state.has('Bow'))
+    set_rule(world.get_location('Learn Elegy of Emptiness'), lambda state: state.can_use('Bow') and state.has('Fire Arrows') and state.has('Mirror Shield'))
     # set_rule(world.get_location(''), lambda state: state)
+
+    ## Stone Tower Climb
+    set_rule(world.get_location('Stone Tower Owl Statue'),
+             lambda state: state.form('Human') and state.form('Goron') and state.form('Zora') and state.has('Hookshot') and state.has('Elegy of Emptiness'))
 
     ### misc notes
     ## stuff that I'll add if I'm like, watching someone's stream and notice something I want to mark down

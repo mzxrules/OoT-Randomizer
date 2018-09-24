@@ -50,7 +50,7 @@ def create_regions(world):
             ['Curiosity Shop', 'Trading Post', 'Bomb Shop',
             'Post Office', 'Lottery Shop', 'Swordsmans School',
              'Clock Town West Gate', 'WCT Top Exit to SCT', 'WCT Bottom Exit to SCT']),
-        create_ow_region('Mailbox', ['Deliver Letter to Kafei'])
+        create_ow_region('Mailbox', ['Deliver Letter to Kafei']),
         create_interior_region('Curiosity Shop', ['Buying The Overpriced Mask'], ['Curiosity Shop Exit']),
         create_interior_region('Trading Post', [], ['Trading Post Exit']),
         create_interior_region('Bomb Shop', ['Buy Bomb Bag', 'Buy Bigger Bomb Bag'], ['Bomb Shop Exit']),
@@ -96,7 +96,7 @@ def create_regions(world):
             ['Woodfall Temple Upstairs Spiderweb']),
         create_dungeon_region('Woodfall Temple Dark Puff Gauntlet',
             [],
-            ['Woodfall Temple '])
+            ['Woodfall Temple ']),
         create_interior_region('GF Woodfall', ['Woodfall GF Reward'], ['Woodfall']),
 
         create_interior_region('GF Snowhead', ['Snowhead GF Reward'], ['Snowhead Spire']),
