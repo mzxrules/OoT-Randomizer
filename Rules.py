@@ -60,7 +60,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Bomber Tunnel'), lambda state: state.has('Bomber Code'))
     set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: state.has('Magic Beans') or state.can('Goron Boost'))
     set_rule(world.get_location('Clock Town Mailbox HP'), lambda state: state.can_use('Postman Hat'))
-    set_rule(world.get_location('Swamp Business Scrub'), lambda state: state.has('Town Title Deed') and state.form('Deku'))
+    set_rule(world.get_location('Swamp Business Scrub'), lambda state: state.has('Town Title Deed') and state.form('Human'))
     # are there even any form requirements for this one?
 
     set_rule(world.get_location('Mountain Business Scrub'), lambda state: state.has('Swamp Title Deed') and state.form('Deku'))
@@ -107,7 +107,7 @@ def global_rules(world):
     ### LAUNDRY POOL
     set_rule(world.get_location('Bremen Mask From Guru Guru'), lambda state: state.form('Human') or state.form('Zora') or state.form('Goron'))
     # set_rule(world.get_location('Keaton Mask From Kafei'), lambda state: state.event('Something about the a+k quest'))
-    #
+    # *sigh* this quest
 
 
     ### WEST CLOCK TOWN
@@ -190,7 +190,6 @@ def global_rules(world):
     set_rule(world.get_location('Clock Town Maze Minigame 10 Deku Nuts'), lambda state: state.form('Deku'))
 
     set_rule(world.get_location('Bomber Hideout 100 Rupee Chest'), lambda state: state.can_blast())
-    # I feel like the goron might be able to just punch this todo: test if goron punch works here
 
     set_rule(world.get_location('Honey and Darling HP'), lambda state: state.has('Bomb Bag') and state.has('Bow') and state.form('Human'))
     set_rule(world.get_location('Clock Town Shooting Gallery Quiver Prize'), lambda state: state.can_use('Bow'))
@@ -228,9 +227,11 @@ def global_rules(world):
     # which means we'd have to have some kind of marker for them so they don't get mixed in to the pool
     # possibly issue in the future, just something to note for now
 
+    set_rule(world.get_location('Mayor HP'), lambda state: state.can_use('Couples Mask'))
+
 
     ### TERMINA FIELD
-    set_rule(world.get_location('Kamaro Mask'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Kamaro Mask'), lambda state: state.form('Human') or state.form('Goron'))
     # so you have to be able to jump to their platform, which rules out goron and probably deku?
     # (actually maybe not if the goron can do some weird trick or something)
     # dunno if there's a form requirement when you actually talk to them, but I'm gonna assume human for now
@@ -325,7 +326,7 @@ def global_rules(world):
     # todo: test requirements for this
 
     # post woodfall, butler race
-    set_rule(world.get_location('Mask of Scents'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Mask of Scents'), lambda state: state.form('Human') and state.form('Deku') and state.has('Deku Princess') and state.event('Beat Odolwa'))
     # you know, I have no idea what the actual requirements are to do this lol
     # once you can get here, you can attempt the race, but I figure goron can't do it, zora probly not
     # so it's human and/or deku? todo: figure this out lol
@@ -336,7 +337,8 @@ def global_rules(world):
     # oh god, so many spots
     # lots of them are probly just open though
     # I'mma get to this later, I'll do both the spider houses together
-    set_rule(world.get_location('Swamp Spider House Reward'), lambda state: state.can_use('Bottle') and state.form('Deku'))
+    set_rule(world.get_location('Swamp Spider House Mask of Truth'),
+             lambda state: state.can_use('Bottle') and state.form('Deku') and state.has('Sonata of Awakening') and state.can_pop_balloon() and state.can_use('Bomb Bag'))
     # there might be some other requirements to get all the skulls here, but I'm pretty sure you at least need a
     # bottle and to use deku flowers
 
@@ -588,8 +590,12 @@ def global_rules(world):
     set_rule(world.get_location('Great Bay Tingle Ikana Map'), lambda state: state.can_pop_balloon())
     # set_rule(world.get_location('Rupee Pit'), lambda state: True)
 
-    set_rule(world.get_location('Ocean Spider House HP'), lambda state: state.can_use('Bow') and state.has('Hookshot'))
-    set_rule(world.get_location('Giant Wallet'), lambda state: state.can_use('Bow') and state.has('Hookshot'))
+    set_rule(world.get_location('Ocean Spider House HP'), lambda state: state.can_use('Bow') and state.has('Hookshot') and state.has('Captains Hat'))
+    # the captain's hat can be used to get the code or whatever from the stalchildren, or you can trial and
+    # error it with arrows
+    # so we can maybe make it an option to need the captain's hat, but for now I'm just going to require it
+
+    set_rule(world.get_location('Ocean Spider House Giant Wallet'), lambda state: state.can_use('Fire Arrows') and state.has('Hookshot') and state.has('Bomb Bag'))
     # todo these later
 
     set_rule(world.get_location('Great Bay Lab Fish Feeding HP'), lambda state: state.can_use('Bottle'))
@@ -706,6 +712,8 @@ def global_rules(world):
     # I'll leave it open for now, but we'll have to check in on this at some point
     # same with tingle actually
 
+    set_rule(world.get_location('Ikana Secret Shrine HP'), lambda state: state.has_hearts(16) and state.can_use('Light Arrows') and state.can_kill_lizalfos() and state.has('Hookshot'))
+
     set_rule(world.get_location('Gibdo Mask'), lambda state: state.can_use('Bomb Bag') and state.form('Human') and state.has('Song of Healing'))
 
     set_rule(world.get_location('Ghost Hut HP'), lambda state: state.can_use('Bow'))
@@ -719,7 +727,7 @@ def global_rules(world):
     set_rule(world.get_location('Mirror Shield'),
              lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Blue Potion') and
                            state.has('Magic Beans') and state.has('Bow') and state.has('Bomb Bag') and
-                           state.has('Eponas Song') and state.has('Fire Arrows'))
+                           (state.has('Eponas Song') or state.has('Romani Mask')) and state.has('Fire Arrows'))
     # not actually as bad as I initially thought
     # the mirror shield is a bit much lol
 
@@ -731,6 +739,58 @@ def global_rules(world):
     ## Stone Tower Climb
     set_rule(world.get_location('Stone Tower Owl Statue'),
              lambda state: state.form('Human') and state.form('Goron') and state.form('Zora') and state.has('Hookshot') and state.has('Elegy of Emptiness'))
+
+
+    ### STONE TOWER TEMPLE
+    ## Regular
+    set_rule(world.get_location('ST Stray Fairy Entryway 1'), lambda state: state.can_use('Bow') and state.stray_fairy_req())
+    set_rule(world.get_location('ST Map Chest'), lambda state: state.can_use('Bomb Bag') and (state.has('Mirror Shield') or state.can_use('Light Arrows')) and state.form('Goron'))
+    set_rule(world.get_location('ST Map Room Key Chest'), lambda state: state.can_use('Bomb Bag') and state.form('Goron'))
+    set_rule(world.get_location('ST Stray Fairy Map Room'), lambda state: state.can_use('Bomb Bag') and state.has('Hookshot'))
+    set_rule(world.get_location('ST Pool Room Key Chest'), lambda state: state.form('Human') or state.form('Zora'))
+    set_rule(world.get_location('ST Compass Chest'), lambda state: (state.form('Zora') and state.can_use('Mirror Shield')) or state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Mirror Network Room 1'), lambda state: (state.form('Goron') and state.can_use('Mirror Shield')) or state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Mirror Network Room 2'), lambda state: (state.form('Goron') and state.can_use('Mirror Shield')) or state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Lava Room Center Chest'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('ST Stray Fairy Lava Room Switch Chest'), lambda state: state.form('Goron'))
+
+    set_rule(world.get_location('ST Light Arrows Chest'), lambda state: state.form('Human') or state.form('Zora'))
+    # todo: what forms/items can beat the garo master?
+
+    set_rule(world.get_location('ST Stray Fairy Pool Room Eyegore'), lambda state: state.can_use('Hookshot') and state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Pool Room Behind Sun Block'), lambda state: state.can_use('Bomb Bag') and state.can_use('Light Arrows'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Inverted
+    set_rule(world.get_location('ST Stray Fairy Inverted Entryway'), lambda state: state.can_use('Light Arrows') and state.can_reach(state.get_location('ST Entryway')))
+    set_rule(world.get_location('ST Inverted Compass Room Key Chest'), lambda state: state.can_use('Light Arrows') and state.form('Deku'))
+    set_rule(world.get_location('ST Stray Fairy Inverted Compass Room 1'),
+             lambda state: state.can_reach(state.get_location('ST Compass Room')) and state.form('Zora') and state.can_use('Light Arrows') and state.form('Deku'))
+    set_rule(world.get_location('ST Stray Fairy Inverted Compass Room 2'),
+             lambda state: state.can_reach(state.get_location('ST Compass Room')) and state.can_use('Fire Arrows')
+                           and state.can_use('Light Arrows') and state.form('Deku') and state.has('Elegy of Emptiness'))
+    set_rule(world.get_location('ST Stray Fairy Compass Room'),
+             lambda state: state.can_reach(state.get_location('ST Compass Room')) and state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Wizrobe Room'), lambda state: state.can_use('Bow') and state.can_use('Hookshot'))
+    set_rule(world.get_location('ST Inverted Map Room Key'), lambda state: state.has('Elegy of Emptiness'))
+    set_rule(world.get_location('ST Boss Key Chest'), lambda state: state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Entryway 2'),
+             lambda state: state.can_reach(state.get_location('ST Entryway')) and (state.can_use('Light Arrow') or state.can_use('Stone Mask')))
+    set_rule(world.get_location('ST Stray Fairy Post Garo Master Room'), lambda state: state.can_reach(state.get_location('ST Post Garo Master Room')) and state.can_use('Bow'))
+    set_rule(world.get_location('Giants Mask'), lambda state: state.can_use('Light Arrows'))
+
+    ## Boss: Twinmold
+    set_rule(world.get_location('Twinmodls Remains'), lambda state: state.can_use('Giants Mask') or state.can_use('Bow'))
+
+
+    ### THE MOON
+    set_rule(world.get_location('Moon Odolwa Child HP'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Moon Ghot Child HP'), lambda state: state.form('Goron'))
+    set_rule(world.get_location('Moon Gyorg Child HP'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Moon Twinmold Child Bombchu Chest'), lambda state: state.can_use('Light Arrows') and state.has('Hookshot') and state.can_kill_lizalfos())
+    set_rule(world.get_location('Moon Twinmold Child HP'), lambda state: state.can_use('Light Arrows') and state.has('Hookshot') and state.can_kill_lizalfos() and state.can_use('Bombchus'))
+    set_rule(world.get_location('Fierce Deity Mask'), lambda state: state.has('Mask', 20))
+    # we still need to determine how to deal with the counting of the masks for this section, but I'll leave it like this for now
 
     ### misc notes
     ## stuff that I'll add if I'm like, watching someone's stream and notice something I want to mark down

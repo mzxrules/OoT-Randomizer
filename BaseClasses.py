@@ -295,7 +295,7 @@ class CollectionState(object):
         return len([pritem for pritem in self.prog_items if pritem == item])
 
     def can_blast(self):
-        return self.form('Human') and (self.has('Bomb Bag') or self.has('Blast Mask'))
+        return (self.form('Human') and (self.has('Bomb Bag') or self.has('Blast Mask'))) or self.can_use('Powder Keg')
 
     def has_bottle(self):
         return (self.has('Bottle') or self.has('Bottle with Milk') or self.has('Bottle with Gold Dust') or self.has('Bottle with Red Potion') or self.has('Bottle with Chateau Romani'))
@@ -341,6 +341,12 @@ class CollectionState(object):
         human_items = ['Hookshot', 'Bow']
         # yeah, just write this out at some point
         # all masks (aside from transform ones), plus bombs etc.
+        # hold on, better version
+        # every item has an associated list of requirements
+        # for stuff like transform masks and stuff that everyone can use, it's just []
+        # for stuff like 'Bow', it's ['Human']
+        # for stuff like 'Fire Arrow', it's ['Human', 'Bow']
+        # then just loop through it and check
         if item in human_items:
             return self.form('Human') and self.has(item)
         return self.has(item)
