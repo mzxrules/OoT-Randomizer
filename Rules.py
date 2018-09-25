@@ -757,7 +757,7 @@ def global_rules(world):
     set_rule(world.get_location('ST Light Arrows Chest'), lambda state: state.form('Human') or state.form('Zora'))
     # todo: what forms/items can beat the garo master?
 
-    set_rule(world.get_location('ST Stray Fairy Pool Room Eyegore'), lambda state: state.can_use('Hookshot') and state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Pool Room Eyegore'), lambda state: state.can_use('Hookshot'))
     set_rule(world.get_location('ST Stray Fairy Pool Room Behind Sun Block'), lambda state: state.can_use('Bomb Bag') and state.can_use('Light Arrows'))
     # set_rule(world.get_location(''), lambda state: state)
 
@@ -777,7 +777,7 @@ def global_rules(world):
     set_rule(world.get_location('ST Stray Fairy Entryway 2'),
              lambda state: state.can_reach(state.get_location('ST Entryway')) and (state.can_use('Light Arrow') or state.can_use('Stone Mask')))
     set_rule(world.get_location('ST Stray Fairy Post Garo Master Room'), lambda state: state.can_reach(state.get_location('ST Post Garo Master Room')) and state.can_use('Bow'))
-    set_rule(world.get_location('Giants Mask'), lambda state: state.can_use('Light Arrows'))
+    set_rule(world.get_location('Giants Mask'), lambda state: ([state.can_use(x) for x in ['Bow', 'Hookshot', 'Bomb Bag']].count(True) > 0) or state.form('Zora') or (state.form('Deku') and state.has('Magic Meter')))
 
     ## Boss: Twinmold
     set_rule(world.get_location('Twinmodls Remains'), lambda state: state.can_use('Giants Mask') or state.can_use('Bow'))
