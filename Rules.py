@@ -439,7 +439,7 @@ def global_rules(world):
     ### MOUNTAIN VILLAGE
 
     ## Mountain Village
-    set_rule(world.get_location('Goron Mask'), lambda state: state.has('Song of Healing'))
+    set_rule(world.get_location('Goron Mask'), lambda state: state.has('Song of Healing') and state.can_use('Lens of Truth'))
     # this probly needs to be investigated (do you actually need the lens once you've gotten the ghost there?) and we
     # should determine how we want to track this check, since you have to follow the ghost through various areas
     # I kiiiind of want to add a ton of extra stuff for myself to do, like world state checks that just don't get
@@ -497,7 +497,6 @@ def global_rules(world):
     # set_rule(world.get_location('Lens of Truth'), lambda state: True)
     set_rule(world.get_location('Lens of Truth Cave Invisible Chest'), lambda state: state.lens_req())
     set_rule(world.get_location('Lens of Truth Cave Boulder Chest'), lambda state: state.can_blast())
-    # goron can probly break the boulder, but I should test that
 
     set_rule(world.get_location('Learn Goron Lullaby'), lambda state: state.form('Goron') and state.has('First Half Goron Lullaby'))
     set_rule(world.get_location('Rock Sirloin'), lambda state: state.can_use('Deku Stick') and state.form('Goron'))
@@ -620,7 +619,7 @@ def global_rules(world):
     set_rule(world.get_location('Gerudo Fortress Entrance Harbor 20 Rupee Chest 2'), lambda state: state.form('Zora'))
     set_rule(world.get_location('Gerudo Fortress Entrance Harbor 20 Rupee Chest 3'), lambda state: state.form('Zora'))
     set_rule(world.get_location('Gerudo Fortress Cage Maze 20 Rupee Chest'), lambda state: state.form('Zora'))
-    set_rule(world.get_location('Gerudo Fortress Cage Maze HP'), lambda state: state.form('Goron'))
+    set_rule(world.get_location('Gerudo Fortress Cage Maze HP'), lambda state: state.form('Goron') or state.can_use('Bunny Hood'))
     # I /think/ you need the goron form to be fast enough to make this? maybe there are ways to cheese this
 
     set_rule(world.get_location('Gerudo Fortress Tower Hub 20 Rupee Chest'), lambda state: state.can_use('Hookshot'))
