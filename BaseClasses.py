@@ -376,6 +376,9 @@ class CollectionState(object):
         if form == 'Human':
             return self.has('Fierce Deity Mask')
 
+    def any_form_but(self, excl_form):
+        return True in [self.form(x) for x in ['Deku', 'Human', 'Goron', 'Zora'] if x != excl_form]
+
     def has_fire_source(self):
         return self.has('Bow') and self.has('Fire Arrows') and self.has('Magic Meter')
 

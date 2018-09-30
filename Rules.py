@@ -57,8 +57,6 @@ def global_rules(world):
     set_rule(world.get_location('Great Bay GF Reward'), lambda state: state.has('GB SF', 15))
     set_rule(world.get_location('Stone Tower GF Reward'), lambda state: state.has('ST SF', 15))
 
-    set_rule(world.get_entrance('Bomber Tunnel'), lambda state: state.has('Bomber Code'))
-    set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: state.has('Magic Beans') or state.can('Goron Boost'))
     set_rule(world.get_location('Clock Town Mailbox HP'), lambda state: state.can_use('Postman Hat'))
     set_rule(world.get_location('Swamp Business Scrub'), lambda state: state.has('Town Title Deed') and state.form('Human'))
     # are there even any form requirements for this one?
@@ -67,11 +65,8 @@ def global_rules(world):
     set_rule(world.get_location('Ocean Business Scrub'), lambda state: state.has('Mountain Title Deed') and state.form('Goron'))
     set_rule(world.get_location('Canyon Business Scrub'), lambda state: state.has('Ocean Title Deed') and state.form('Zora'))
 
-    set_rule(world.get_location('Song From Mask Salesman'), lambda state: state.has('Ocarina of Time'))
+    set_rule(world.get_location('Song From HMS'), lambda state: state.has('Ocarina of Time'))
     set_rule(world.get_location('Remove the Cursed Mask'), lambda state: state.has('Ocarina of Time'))
-    set_rule(world.get_location('Tunnel Balloon From Observatory'), lambda state: state.form('Human') or (state.form('Deku') and state.has('Magic Meter')) or state.form('Zora'))
-    # leaving the human form check by itself here should work, since this balloon you can just go and slash
-    # and I'm pretty sure you always have the sword in human form
 
     set_rule(world.get_location('Tunnel Balloon From ECT'), lambda state: state.can_pop_balloon())
     # @Vlix
@@ -88,54 +83,69 @@ def global_rules(world):
 
     ### SOUTH CLOCK TOWN
     set_rule(world.get_location('Clock Town Business Scrub'), lambda state: state.has('Moons Tear'))
-    set_rule(world.get_location('Clock Tower Platform HP'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or (state.form('Deku') and state.can_reach(world.get_location('Clock Town Business Scrub'))))
+    set_rule(world.get_location('Clock Tower Platform HP'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or (state.form('Deku') and state.has('Moons Tear')))
     # @Vlix
     # oh dang, goron link can't just hop up that small ledge? or maybe he doesn't even fit on it, heh
     # gotta test to see ways of getting on there todo: find ways of getting up to that platform in various forms
     # ah, just thought of adding deku form as I was reading through, nice lol
 
     set_rule(world.get_location('Festival Tower Rupee Chest'), lambda state: state.can_use('Hookshot') or (state.form('Deku') and state.can_reach(world.get_location('Clock Town Business Scrub'))))
-    set_rule(world.get_location('South Clock Town Hookshot Ledge Rupee Chest'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_location('SCT 20 Rupee Chest'), lambda state: state.can_use('Hookshot'))
 
-    # set_rule(world.get_location('Ocarina of Time'), lambda state: (state.form('Deku') and state.has('Magic Meter')) or (state.has('Bow') and state.form('Human')) or state.form('Zora'))
     set_rule(world.get_location('Ocarina of Time'), lambda state: state.can_pop_balloon())
     # is this right? it looks like the check is just to hit skull kid in the air, functionally the same as popping a balloon lol
+    set_rule(world.get_entrance('End of First Cycle'), lambda state: state.has('Ocarina'))
+    set_rule(world.get_entrance('Moon Portal'),
+             lambda state: [state.has(x) for x in ['Oath to Order', 'Odolwas Remains', 'Ghots Remains', 'Gyorgs Remains', 'Twinmolds Remains']].count(True) == 5)
+    set_rule(world.get_entrance('To Clock Tower Rooftop'), lambda state: state.has('Ocarina'))
 
     set_rule(world.get_location('Clock Town Owl Statue'), lambda state: state.form('Human'))
 
+    set_rule(world.get_entrance('Clock Town North Gate'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can('Clock Town Guard Skip'))
+
 
     ### LAUNDRY POOL
-    set_rule(world.get_location('Bremen Mask From Guru Guru'), lambda state: state.form('Human') or state.form('Zora') or state.form('Goron'))
+    set_rule(world.get_location('Listen To Guru Guru'), lambda state: state.form('Human') or state.form('Zora') or state.form('Goron'))
+    set_rule(world.get_location('Don Gero Town Frog'), lambda state: state.can_use('Don Gero Mask'))
+
+    # set_rule(world.get_entrance('Curiosity Backroom Entrance'), lambda state: state.event('Something about the a+k quest'))
     # set_rule(world.get_location('Keaton Mask From Kafei'), lambda state: state.event('Something about the a+k quest'))
+    # set_rule(world.get_location('Letter From Kafei'), lambda state: state.event('Something about the a+k quest'))
     # *sigh* this quest
+    # todo: gestures vaguely at everything about this quest
 
 
     ### WEST CLOCK TOWN
     set_rule(world.get_location('Rosa Sisters HP'), lambda state: state.can_use('Kamaro Mask'))
 
     # you might not need to be human to get this, but I'd bet the shop owner won't sell to other forms, at least deku
-    # set_rule(world.get_location('Bomb Bag'), lambda state: True)
+    # set_rule(world.get_location('Buy Bomb Bag'), lambda state: True)
     # this can be tested easily
 
     # obviously, this and similar 'tests' might not be necessary at all
-    # set_rule(world.get_location('Adult Wallet from bank'), lambda state: True)
+    # set_rule(world.get_location('Bank 200 Rupee Prize'), lambda state: True)
     # set_rule(world.get_location('Bank HP'), lambda state: True)
 
-    set_rule(world.get_location('Big Bomb Bag'), lambda state: state.form('Human') or state.form('Zora') or state.has('Adult Wallet'))
+    # set_rule(world.get_location('Hidden Owl Statue'), lambda state: state.can_do_some_glitch_or_something())
+    # I actually have no idea what the check is here lol
+
+    set_rule(world.get_location('Buy Bigger Bomb Bag'), lambda state: state.form('Human') or state.form('Zora') or state.has('Adult Wallet'))
     # adult wallet is a req because if you don't rescue the old lady from sakon, the big bomb bag shows up in the
     # curiosity shop on the final day (still might be form restrictions?)
 
     set_rule(world.get_location('Sword School HP'), lambda state: state.form('Human'))
 
     # i swear this should be an optional trick, it's so hard without the bunny hood lol
-    # set_rule(world.get_location('Postman Game HP'), lambda state: True)
+    # set_rule(world.get_location('Counting Is Hard'), lambda state: True)
     # sigh alright we'll make this open lol
 
-    set_rule(world.get_location('All Night mask'), lambda state: (state.form('Human') or state.form('Zora')) and state.has('Giants Wallet'))
+    set_rule(world.get_location('Buy All Night Mask'), lambda state: (state.form('Human') or state.form('Zora')) and state.has('Giants Wallet'))
     # you need to save the bomb lady from sakon and this will be in the curio shop on the final day for 500 rupees
     # being human might be a hard req, but you can probly buy it as zora (todo: test that)
 
-    set_rule(world.get_location('Postman Hat'), lambda state: state.has('Letter to Mama'))
+    set_rule(world.get_location('Deliver Letter to Mama To Postman'), lambda state: state.has('Letter to Mama'))
+
+    set_rule(world.get_entrance('Clock Town West Gate'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can('Clock Town Guard Skip'))
 
 
     ### NORTH CLOCK TOWN
@@ -153,9 +163,9 @@ def global_rules(world):
     # since getting the blast mask just involves slashing sakon, it might be possible to get it with other forms? like
     # maybe zora? probly not goron though
     # also you might need to be link to talk to the lady after, so maybe it is only human
-    set_rule(world.get_location('Blast Mask'), lambda state: state.form('Human') or state.form('Zora'))
+    set_rule(world.get_location('Foil Sakon'), lambda state: state.form('Human') or state.form('Zora'))
 
-    set_rule(world.get_location('North Clock Town Tree HP'), lambda state: state.form('Human') or state.form('Zora'))
+    set_rule(world.get_location('NCT Tree HP'), lambda state: state.form('Human') or state.form('Zora'))
     # I thought deku could get this for some reason
     # also lol of course goron can't, shoulda known
 
@@ -163,10 +173,14 @@ def global_rules(world):
     set_rule(world.get_location('Clock Town Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
     # it's not the same balloon as for bombers, but the same checks apply
 
-    set_rule(world.get_location('North Clock Town Keaton HP'), lambda state: state.can_use('Keaton Mask'))
+    set_rule(world.get_location('NCT Keaton HP'), lambda state: state.can_use('Keaton Mask'))
+
+    set_rule(world.get_entrance('To Deku Playground'), lambda state: state.form('Deku') or state.can('Gainer'))
+    # I'm sure there are various ways to get over this fence aside from deku
+    # todo: find ways of bypassing this fence
     set_rule(world.get_location('Deku Scrub Playground HP'), lambda state: state.form('Deku'))
 
-    set_rule(world.get_location('Great Fairy Mask'), lambda state: state.has('Deku Mask'))
+    set_rule(world.get_location('Clock Town GF Reward'), lambda state: state.has('Deku Mask'))
     # actually, the great fairy stuff probly needs to be tested
     # what she gives to what forms, what she gives in first vs other cycles
     # because right now we have rules set for 'Clock Town GF Reward', 'Great Fairy Mask', and 'Magic from NCT Great Fairy' lol
@@ -177,39 +191,49 @@ def global_rules(world):
     # right?
     # so what if you start as goron or zora? not sure how that all works
 
+    set_rule(world.get_entrance('Clock Town North Gate'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can('Clock Town Guard Skip'))
 
     ### EAST CLOCK TOWN
-    set_rule(world.get_location('East Clock Town 100 Rupee Chest'), lambda state: state.form('Human') or state.can('Goron Boost') or state.can('Gainer') or state.form('Zora'))
+    set_rule(world.get_location('ECT 100 Rupee Chest'), lambda state: state.form('Human') or state.can('Goron Boost') or state.can('Gainer') or state.form('Zora'))
     # I need to figure out all the actual requirements for this, including tricks, so this one is tentative
     # also the trick names are guesses for sure
 
-    set_rule(world.get_location('Clock Town Maze Minigame HP'), lambda state: state.form('Goron'))
+    set_rule(world.get_location('Treasure Chest Game Goron Prize'), lambda state: state.form('Goron'))
     # oooh I didn't think about it before, do we want to include all the prizes for this?
-    set_rule(world.get_location('Clock Town Maze Minigame 50 Rupees'), lambda state: state.form('Human'))
-    set_rule(world.get_location('Clock Town Maze Minigame 20 Rupees'), lambda state: state.form('Zora'))
-    set_rule(world.get_location('Clock Town Maze Minigame 10 Deku Nuts'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Treasure Chest Game Human Prize'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Treasure Chest Game Zora Prize'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Treasure Chest Game Deku Prize'), lambda state: state.form('Deku'))
 
-    set_rule(world.get_location('Bomber Hideout 100 Rupee Chest'), lambda state: state.can_blast())
+    set_rule(world.get_entrance('Bomber Bouncer'), lambda state: state.has('Bomber Code'))
+    set_rule(world.get_location('Bomber Tunnel Chest'), lambda state: state.can_blast() and (state.form('Human') or state.form('Zora')))
+    set_rule(world.get_entrance('Tunnel Balloon From ECT'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_entrance('Sewers to Tunnel'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_location('Tunnel Balloon From Observatory'), lambda state: state.can_pop_balloon() or state.form('Human'))
+    # set_rule(world.get_location('Moon Cry'), lambda state: True)
+    set_rule(world.get_location('Watch Business Scrub Fly'), lambda state: state.has('Town Title Deed'))
 
-    set_rule(world.get_location('Honey and Darling HP'), lambda state: state.has('Bomb Bag') and state.has('Bow') and state.form('Human'))
-    set_rule(world.get_location('Clock Town Shooting Gallery Quiver Prize'), lambda state: state.can_use('Bow'))
-    set_rule(world.get_location('Clock Town Shooting Gallery HP Prize'), lambda state: state.can_use('Bow') or state.options('NoHardestArchery'))
+    set_rule(world.get_location('Honey and Darling Grand Champion'), lambda state: state.has('Bomb Bag') and state.has('Bow') and state.form('Human'))
+    set_rule(world.get_location('Town Shooting Gallery Quiver Prize'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Town Shooting Gallery HP Prize'), lambda state: state.can_use('Bow') or state.options('NoHardestArchery'))
 
-    set_rule(world.get_location('Kafei Mask'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora'))
+    set_rule(world.get_location('Expert Person Solver Takes the Case'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora'))
 
-    # 2 silver rupee chests in the stock pot in, jeez I forgot about these if I ever even knew about them
-    # set_rule(world.get_location('Your Room Rupee Chest'), lambda state: True)
-    # is human the only form where you get the key? I forget, but I think that's all you need to get this chest
-    # set_rule(world.get_location('Anju Room Rupee Chest'), lambda state: True)
-    # for this one, you just need to be able to get inside the inn after midnight on day 3
-    # so either the room key or the deku flower
-    # and these musings only apply to getting INTO these rooms, so the tests here are open
-    # the relevant tests will be for the connecting areas
+    set_rule(world.get_entrance('To Stock Pot Inn Secret Entrance'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Stock Pot Inn Key'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Your Room Rupee Chest'), lambda state: state.has('Inn Key'))
+    set_rule(world.get_location('Anjus Room Rupee Chest'), lambda state: state.has('Inn Key') or state.form('Deku'))
+    # ok, so these chests
+    # the one for your room requires the room key regardless, right?
+    # the anju room one is accessible only after midnight on the 3rd day, so you just need to get into the inn somehow
+    # but leaving the regular entrance open means it looks like you can always get to that chest
+    # so I think what we do is just put the restrictions on the actual checks- conceptually wrong, but it works fine
+    # the other option would be to create another logical area ex: 'Stock Pot Inn After Hours'
+    # and the item checks there would be open
+    # which we can do, either way works
 
     set_rule(world.get_location('Grandma Stories HP 1'), lambda state: state.can_use('All Night Mask'))
     set_rule(world.get_location('Grandma Stories HP 2'), lambda state: state.can_use('All Night Mask'))
 
-    # set_rule(world.get_location('Toilet Hand HP'), lambda state: state.has('Town Title Deed'))
     set_rule(world.get_location('Toilet Hand HP'), lambda state: state.has_paper())
     # you need some kind of paper, so any title deed, or a letter from the various subquests that involve letters
     # that's a lot of different ways to be able to do that, so we may need to have inventory record any subquest item
@@ -219,8 +243,9 @@ def global_rules(world):
     # man, this one is involved lol
     # actually you know what, I'm just gonna add state.has_paper()
 
-    set_rule(world.get_location('Milk Bar Troupe Leaders Mask'), lambda state: [state.form(f) for f in ['Human', 'Deku', 'Goron', 'Zora']].count(True) == 4)
-    set_rule(world.get_location('Milk Bar Bottle From Madame Aroma'), lambda state: state.has('Letter to Mama'))
+    set_rule(world.get_entrance('To Milk Bar'), lambda state: state.can_use('Romani Mask'))
+    set_rule(world.get_location('Milk Bar Performance'), lambda state: [state.form(f) for f in ['Human', 'Deku', 'Goron', 'Zora']].count(True) == 4)
+    set_rule(world.get_location('Delivery to Mama Kafei'), lambda state: state.has('Letter to Mama'))
     # so a note about doing checks for stuff like 'Letter to Mama' and stuff that resets when you save
     # it makes it a hell of a lot easier to be able to do checks for temp items like this
     # but it also probably means setting rules for these items and having locations for them
@@ -229,48 +254,69 @@ def global_rules(world):
 
     set_rule(world.get_location('Mayor HP'), lambda state: state.can_use('Couples Mask'))
 
+    set_rule(world.get_entrance('Clock Town East Gate'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can('Clock Town Guard Skip'))
 
     ### TERMINA FIELD
-    set_rule(world.get_location('Kamaro Mask'), lambda state: state.form('Human') or state.form('Goron'))
+    set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: state.has('Magic Beans') or state.can('Goron Boost'))
+
+    set_rule(world.get_entrance('TF to Obs Over Fence Maybe'), lambda state: state.can('Gainer? Something?'))
+    # I don't know if there's actually a way to get over this fence from TF, might only be the other way, so I might
+    # have remove this later
+
+    set_rule(world.get_location('Learn Kamaro Dance'), lambda state: state.form('Human') or state.form('Goron'))
     # so you have to be able to jump to their platform, which rules out goron and probably deku?
     # (actually maybe not if the goron can do some weird trick or something)
     # dunno if there's a form requirement when you actually talk to them, but I'm gonna assume human for now
     # todo: test form requirements
 
-    # set_rule(world.get_location('Moons Tear'), lambda state: True)
-    # pretty sure this is just open, even the deku can use the telescope
+    set_rule(world.get_entrance('TF Mountain Icicles'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_entrance('TF Great Bay Gate'), lambda state: (state.form('Human') and state.has('Eponas Song'))
+                                                                    or state.can('Some Goron Trick probly'))
 
-    set_rule(world.get_location('4 Gossip Stone HP'), lambda state: (state.can_blast() or state.form('Goron'))
-        and (state.has('Sonata of Awakening') or state.has('Goron Lullaby') or state.has('New Wave Bossa Nova'))
-        and (state.form('Deku') or state.form('Goron') or state.form('Zora')))
+    set_rule(world.get_location('Moons Tear'), lambda state: state.event('Moon Cry'))
 
-    set_rule(world.get_location('Termina Field Peahat Grotto HP'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora'))
+    set_rule(world.get_entrance('To Mountain Gossips'), lambda state: state.can_blast() or state.form('Goron'))
+    set_rule(world.get_location('Swamp Gossip Check'), lambda state: (state.has('Sonata of Awakening') or state.has('Goron Lullaby') or state.has('New Wave Bossa Nova'))
+                                        and (state.form('Deku') or state.form('Goron') or state.form('Zora')))
+    set_rule(world.get_location('Mountain Gossip Check'), lambda state: (state.has('Sonata of Awakening') or state.has('Goron Lullaby') or state.has('New Wave Bossa Nova'))
+                                        and (state.form('Deku') or state.form('Goron') or state.form('Zora')))
+    set_rule(world.get_location('Ocean Gossip Check'), lambda state: (state.has('Sonata of Awakening') or state.has('Goron Lullaby') or state.has('New Wave Bossa Nova'))
+                                        and (state.form('Deku') or state.form('Goron') or state.form('Zora')))
+    set_rule(world.get_location('Canyon Gossip Check'), lambda state: (state.has('Sonata of Awakening') or state.has('Goron Lullaby') or state.has('New Wave Bossa Nova'))
+                                        and (state.form('Deku') or state.form('Goron') or state.form('Zora')))
+    set_rule(world.get_location('4 Gossip Stone HP'),
+             lambda state: state.event('Swamp Gossip Check') and state.event('Mountain Gossip Check')
+                           and state.event('Ocean Gossip Check') and state.event('Canyon Gossip Check'))
+
+    set_rule(world.get_location('TF Peahat Grotto HP'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora'))
     # how many ways to kill a peahat? lol
     # for now I'm gonna assume deku can't, but everyone else can
 
-    # set_rule(world.get_location('Termina Field Dodongo Grotto HP'), lambda state: True)
+    # set_rule(world.get_location('TF Dodongo Grotto HP'), lambda state: True)
     # ways to kill a dodongo? might be anyone actually
 
-    set_rule(world.get_location('Termina Field Business Scrub Grotto HP'), lambda state: state.has('Adult Wallet'))
+    set_rule(world.get_entrance('To TF Business Scrub Grotto'), lambda state: state.event('Saw Scrub Fly In'))
+    set_rule(world.get_location('TF Business Scrub Grotto HP'), lambda state: state.has('Adult Wallet'))
     # giving the moon's tear to the scrub is part of the connection requirement to get to the grotto, but once there
     # you just need the adult's wallet
 
-    set_rule(world.get_location('Termina Field Beehive Grotto HP'), lambda state: (state.can_blast() or state.form('Goron'))
+    set_rule(world.get_location('TF Beehive Grotto HP'), lambda state: (state.can_blast() or state.form('Goron'))
                                                                                   and state.can_use('Bow') and state.form('Zora'))
     # boulder to get through, then shoot the bees, then drop to the bottom of the pool as zora
     # actually shooting the bees might be possible as zora
     # bees might just be more balloons lol
     # todo: test this hp
 
-    # set_rule(world.get_location('Termina Field Freestanding 20 Rupee Chest'), lambda state: True)
-    # set_rule(world.get_location('Termina Field Deku Baba Pit 20 Rupee Chest'), lambda state: True)
-    set_rule(world.get_location('Termina Field Hookshot Stump 20 Rupee Chest'), lambda state: state.can_use('Hookshot'))
+    # set_rule(world.get_location('TF Chest In The Grass'), lambda state: True)
+    # set_rule(world.get_location('TF Deku Baba Pit Chest'), lambda state: True)
+    set_rule(world.get_location('TF Chest On A Stump'), lambda state: state.can_use('Hookshot'))
 
     # set_rule(world.get_location(''), lambda state: state)
     # apparently if you look at some guys standing in the field through the telescope, there will be pits where they
     # each were? dunno what's in them, but we might need to record those
+    # todo: test this
 
-    set_rule(world.get_location('Termina Field East Pillar Bombchu Pit'),
+    set_rule(world.get_entrance('To East Pillar Grotto'),
              lambda state: state.can_use('Bottle') and state.has('Magic Beans') and state.has('Water') and (state.form('Human') or state.form('Zora')))
     # it's an open check once you're there, you just need a bottle, bean, water, and be able to jump to it from the bean
 
@@ -278,7 +324,7 @@ def global_rules(world):
     ### SOUTHERN SWAMP
 
     ## Path to Swamp
-    set_rule(world.get_location('Path to Swamp Bat Tree HP'), lambda state: state.can_pop_balloon() or state.form('Human'))
+    set_rule(world.get_location('Swamp Path Bat Tree HP'), lambda state: state.can_pop_balloon() or state.form('Human'))
     # the req for this is just to make it up the tree without getting knocked off by the birds, so unless there's some
     # way of cheesing the birds I don't know about, you just have to be able to kill them
     # ...you know, birds are just balloons that try to kill you tbh
@@ -287,15 +333,16 @@ def global_rules(world):
     set_rule(world.get_location('Swamp Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
     # I can't actually remember the two maps tingle sells, I'll have to just go check that
 
-    # set_rule(world.get_location('Path to Swamp 20 Rupee Pit'), lambda state: True)
+    # set_rule(world.get_location('Swamp Path Rupee Pit Chest'), lambda state: True)
     # there's apparently 20 rupees in a pit, it's probly just open, but I need to play again to check the details
 
     set_rule(world.get_location('Swamp Shooting Gallery Quiver Prize'), lambda state: state.can_use('Bow'))
     set_rule(world.get_location('Swamp Shooting Gallery HP Prize'), lambda state: state.can_use('Bow') or state.options('NoHardestArchery'))
 
     ## Southern Swamp
-    set_rule(world.get_location('HP Above Tourist Centre'), lambda state: state.can_reach(world.get_location('Swamp Business Scrub')) or state.can('SomeWeirdGoronTrickIDunno'))
+    set_rule(world.get_location('Swamp Tourist Roof HP'), lambda state: state.can_reach(world.get_location('Swamp Business Scrub')) or state.can('SomeWeirdGoronTrickIDunno'))
     # set_rule(world.get_location('Bottle From Kotate'), lambda state: True)
+    # set_rule(world.get_location('Save Koume'), lambda state: True)
     set_rule(world.get_location('Swamp Owl Statue'), lambda state: state.form('Human'))
 
     # swamp tourist center
@@ -344,13 +391,16 @@ def global_rules(world):
 
     ## Outside Woodfall Area
     set_rule(world.get_location('Outside Woodfall 20 Rupee Chest'),
-             lambda state: state.form('Deku') or (state.has_hearts(5) and (state.form('Human') or state.form('Zora'))))
+             lambda state: state.form('Deku') or (state.has_hearts(5) and (state.form('Human') or state.form('Zora'))) or state.can_use('Hookshot'))
     # I think you can get to this one by toughing out the poison water as well as just being deku
+    # or also with the hookshot? also do ice arrows freeze poison water?
     # todo: test ways to get to this chest
     # p sure goron just can't get it lol
 
     set_rule(world.get_location('Outside Woodfall 5 rupees'), lambda state: state.form('Deku'))
-    set_rule(world.get_location('Outside Woodfall HP'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Outside Woodfall HP'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    # todo: test if hookshot can get these
+
     set_rule(world.get_location('Woodfall Owl Statue'), lambda state: state.form('Human'))
 
 
@@ -517,14 +567,19 @@ def global_rules(world):
     # set_rule(world.get_location('SH Compass Chest'), lambda state: True)
     # do you have to actually do anything in this room, or is the chest just there already? I forget
 
-    set_rule(world.get_location('SH Bridge and Freezard Room Key Chest'), lambda state: state.can_use('Bow') and state.has('Fire Arrows'))
-    set_rule(world.get_location('SH Stray Fairy Chest In Compass Room'), lambda state: state.can_use('Bow') and state.has('Fire Arrows'))
+    set_rule(world.get_location('SH Bridge and Freezard Room Key Chest'), lambda state: state.can_use('Fire Arrows'))
+    set_rule(world.get_location('SH Stray Fairy Chest In Compass Room'), lambda state: state.can_use('Fire Arrows') or state.can_use('Hookshot'))
 
-    set_rule(world.get_location('SH Stray Fairy Compass Room Bombable'), lambda state: state.can_use('Bow') and state.has('Fire Arrows') and state.can_use('Bomb Bag'))
+    set_rule(world.get_location('SH Stray Fairy Compass Room Bombable'),
+             lambda state: (state.can_use('Fire Arrows') or state.can_use('Hookshot')) and state.can_use('Bomb Bag') and state.stray_fairy_req())
     # I bet there's a way to cheese this one
 
-    set_rule(world.get_location('SH Stray Fairy Push Block Room'), lambda state: state.can_use('Bow') and state.has('Fire Arrows'))
-    set_rule(world.get_location('SH Stray Fairy Behind Central Pillar Room'), lambda state: state.can_use('Bow') and state.has('Fire Arrows'))
+    set_rule(world.get_location('SH Stray Fairy Push Block Room'), lambda state: state.can_use('Fire Arrows'))
+    # this check will need to be changed depending on the logical regions defined- probly have a path of regions from
+    # the compass room leading here, plus an exit from the lower part of the room to the chest/torches part gated by
+    # the hookshot
+
+    set_rule(world.get_location('SH Stray Fairy Behind Central Pillar Room'), lambda state: state.can_use('Fire Arrows'))
     # set_rule(world.get_location(''), lambda state: state)
 
     ## 2nd Floor
@@ -687,7 +742,7 @@ def global_rules(world):
     set_rule(world.get_location('Ikana Entrance Bombchu Pit'), lambda state: state.form('Goron'))
     # todo: check this spot in the game
 
-    set_rule(world.get_location('Stone Mask'), lambda state: state.can_epona() and state.has('Bottle') and state.lens_req())
+    set_rule(world.get_location('Stone Mask'), lambda state: state.can_epona() and state.has('Bottle') and state.can_use('Lens of Truth'))
 
     set_rule(world.get_location('Ikana Graveyard Bombchu Pit'), lambda state: state.can_blast())
     # todo: test if blast mask works here
@@ -776,7 +831,10 @@ def global_rules(world):
     set_rule(world.get_location('ST Stray Fairy Entryway 2'),
              lambda state: state.can_reach(state.get_location('ST Entryway')) and (state.can_use('Light Arrow') or state.can_use('Stone Mask')))
     set_rule(world.get_location('ST Stray Fairy Post Garo Master Room'), lambda state: state.can_reach(state.get_location('ST Post Garo Master Room')) and state.can_use('Bow'))
-    set_rule(world.get_location('Giants Mask'), lambda state: ([state.can_use(x) for x in ['Bow', 'Hookshot', 'Bomb Bag']].count(True) > 0) or state.form('Zora') or (state.form('Deku') and state.has('Magic Meter')))
+    # set_rule(world.get_location('Giants Mask'), lambda state: ([state.can_use(x) for x in ['Bow', 'Hookshot', 'Bomb Bag']].count(True) > 0) or state.form('Zora') or (state.form('Deku') and state.has('Magic Meter')))
+    # leaving this as an open check because you need lights to get to the eyegore, which can beat him already
+    # unless there's a possible path say in entrance shuffle that could allow you to reach here another way
+    # figure that out later, that'll take more defined region logic
 
     ## Boss: Twinmold
     set_rule(world.get_location('Twinmodls Remains'), lambda state: state.can_use('Giants Mask') or state.can_use('Bow'))
@@ -791,12 +849,11 @@ def global_rules(world):
     set_rule(world.get_location('Fierce Deity Mask'), lambda state: state.has('Mask', 20))
     # we still need to determine how to deal with the counting of the masks for this section, but I'll leave it like this for now
 
-    ### misc notes
-    ## stuff that I'll add if I'm like, watching someone's stream and notice something I want to mark down
-    # set_rule(world.get_location(''), lambda state: state)
 
 # ooh ooh
 # maybe have a gate at the clock tower roof that requires the ocarina, to go back to south clock town on the first day
 # maayyybe
 # to force placement of the ocarina somewhere you can get to it in the first cycle
 # depends on how crawling through the graph works
+# todo: go through and put in checks (that shouldn't get shuffled!) for various steps of quests
+# like, 'looked at skull kid in telescope' to be used to get the moon's tear, or all the various steps in the a+k quest
