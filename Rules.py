@@ -207,7 +207,6 @@ def global_rules(world):
     set_rule(world.get_entrance('Bomber Bouncer'), lambda state: state.has('Bomber Code'))
     set_rule(world.get_location('Bomber Tunnel Chest'), lambda state: state.can_blast() and (state.form('Human') or state.form('Zora')))
     set_rule(world.get_entrance('Tunnel Balloon From ECT'), lambda state: state.can_pop_balloon())
-    set_rule(world.get_entrance('Sewers to Tunnel'), lambda state: state.any_form_but('Goron'))
     set_rule(world.get_location('Tunnel Balloon From Observatory'), lambda state: state.can_pop_balloon() or state.form('Human'))
     # set_rule(world.get_location('Moon Cry'), lambda state: True)
     set_rule(world.get_location('Watch Business Scrub Fly'), lambda state: state.has('Town Title Deed'))

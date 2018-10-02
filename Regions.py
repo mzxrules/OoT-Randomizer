@@ -43,8 +43,7 @@ def create_regions(world):
             'We Shall Greet The Morning Together'],
             ['Stock Pot Inn Roof Exit', 'Stock Pot Inn Front Door']),
         create_interior_region('Mayors Office', ['Expert Person Solver Takes the Case', 'Mayor HP'], ['Mayors Office Exit']),
-        create_interior_region('Bomber Tunnel', [], ['Bomber Tunnel Exit', 'Tunnel to Sewers']),
-        create_interior_region('Bomber Tunnel Sewers', ['Bomber Tunnel Chest'], ['Tunnel Balloon From ECT', 'Sewers to Tunnel']),
+        create_interior_region('Bomber Tunnel', ['Bomber Tunnel Chest'], ['Bomber Tunnel Exit', 'Tunnel Balloon From ECT']),
         create_interior_region('Astral Observatory', ['Moon Cry'], ['Tunnel Balloon From Observatory', 'Astral Observatory Exit']),
         create_ow_region('Astral Observatory Deck', ['Moons Tear'], ['Observatory Deck to Inside', 'Astral Observatory Fence']),
 
