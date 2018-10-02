@@ -3,19 +3,18 @@ from BaseClasses import Region, Location, Entrance, RegionType
 
 
 def create_regions(world):
-
+    # TODO: finish out this whole thing (what I'm currently working on)
     world.regions = [
         create_ow_region('Beginning',[], ['Cursed Underground']),
         create_interior_region('Deku Flower Tutorial Area', [], ['Clock Tower Twisted Hallway']),
         create_interior_region('Clock Tower Basement',
             ['Remove the Cursed Mask', 'Song from HMS'],
             ['Clock Tower Exit', 'Clock Tower Twisted Hallway Backwards']),
-        # create_interior_region('Clock Tower Roof', ['Dropped Ocarina', 'Song from Skull Kid'], ['End of First Cycle']),
 
         # TODO: Suffix Entrance to all of these
         create_ow_region('South Clock Town',
             ['SCT 20 Rupee Chest', 'Festival Tower Rupee Chest',
-            'Clock Town Owl Statue', 'Clock Tower Platform HP'],
+            'Clock Town Owl Statue', 'Clock Tower Platform HP', 'Clock Town Business Scrub'],
             ['To Clock Tower Basement', 'To Clock Tower Rooftop', 'South Mailbox',
             'SCT Top Exit to WCT', 'SCT Bottom Exit to WCT', 'SCT Exit to NCT',
             'SCT Bottom Exit to ECT', 'SCT Top Exit to ECT',
@@ -23,7 +22,7 @@ def create_regions(world):
         create_interior_region('Clock Tower Rooftop', ['Dropped Ocarina', 'Song from Skull Kid'], ['End of First Cycle', 'Moon Portal']),
 
         create_ow_region('East Clock Town',
-            ['Free The Postman (?)', 'ECT 100 Rupee Chest'],
+            ['ECT 100 Rupee Chest'],
             ['To Honey and Darling', 'To Treasure Chest Shop', 'To Town Shooting Gallery', 'East Mailbox',
             'To Milk Bar', 'To Stock Pot Inn', 'To Stock Pot Inn Secret Entrance', 'To Mayors Office',
             'Bomber Bouncer', 'ECT Top Exit to SCT', 'ECT Bottom Exit to SCT',
@@ -38,7 +37,7 @@ def create_regions(world):
         create_interior_region('Town Shooting Gallery', ['Town Shooting Gallery Quiver Prize', 'Town Shooting Gallery HP Prize'], ['Town Shooting Gallery Exit']),
         create_interior_region('Milk Bar', ['Milk Bar Performance', 'Delivery to Mama Kafei'], ['Milk Bar Exit']),
         create_interior_region('Stock Pot Inn',
-            ['Stock Pot Inn Key', 'Have you seen this man? (?)',
+            ['Stock Pot Inn Key', 'Have you seen this man?',
             'Grandma Stories HP 1', 'Grandma Stories HP 2',
             'Toilet Hand HP', 'Your Room Rupee Chest', 'Anjus Room Rupee Chest',
             'We Shall Greet The Morning Together'],
@@ -56,7 +55,7 @@ def create_regions(world):
             'To Post Office', 'To Lottery Shop', 'To Swordsmans School',
              'Clock Town West Gate', 'WCT Top Exit to SCT', 'WCT Bottom Exit to SCT']),
         create_ow_region('Mailbox', ['Deliver Letter to Kafei', 'Clock Town Mailbox HP']),
-        create_interior_region('Curiosity Shop', ['Buy All Night Mask'], ['Curiosity Shop Exit']),
+        create_interior_region('Curiosity Shop', ['Buy All Night Mask', 'Buy Bigger Bomb Bag'], ['Curiosity Shop Exit']),
         create_interior_region('Trading Post', [], ['Trading Post Exit']),
         create_interior_region('Bomb Shop', ['Buy Bomb Bag', 'Buy Bigger Bomb Bag'], ['Bomb Shop Exit']),
         create_interior_region('Post Office', ['Deliver Letter to Mama To Postman', 'Counting Is Hard'], ['Post Office Exit']),
@@ -71,13 +70,13 @@ def create_regions(world):
         # TODO: Don't know how to handle the clock town stray fairy right now
         # I think for now, we could just place checks on the fairy herself
         # But later we'll have Stray Fairy Pickups in the pool
-        create_interior_region('Clock Town Fairy Shrine', ['Clock Town GF Reward'], ['Clock Town Fairy Shrine Exit']),
+        create_interior_region('Clock Town Fairy Shrine', ['Clock Town GF Magic Bar', 'Clock Town GF Mask'], ['Clock Town Fairy Shrine Exit']),
         create_interior_region('Deku Playground', ['Deku Challenge Day 1', 'Deku Challenge Day 2', 'Deku Challenge Day 3', 'Deku Playground HP'], ['Deku Playground Exit']),
 
         create_ow_region('Laundry Pool',
             ['Don Gero Town Frog', 'Listen To Guru Guru'],
             ['Curiosity Backroom Entrance', 'Laundry Pool Exit to SCT']),
-        create_interior_region('Curiosity Shop Backroom', ['Keaton Mask From Kafei', 'Letter From Kafei'], ['Clock Town']),
+        create_interior_region('Curiosity Shop Backroom', ['Keaton Mask From Kafei', 'Letter From Kafei', 'Pendant From Kafei'], ['Clock Town']),
 
         create_ow_region('Termina Field',
             ['Learn Kamaro Dance', 'TF Chest In The Grass', 'TF Chest On A Stump'],
@@ -101,12 +100,14 @@ def create_regions(world):
 
         create_ow_region('Swamp Path', ['Swamp Path Bat Tree HP', 'Swamp Tingle Woodfall Map', 'Swamp Tingle Snowhead Map'],
                          ['Swamp Path To Termina Field', 'To Swamp Shooting Gallery',
-                          'Swamp Path To Southern Swamp', 'To Swamp Path Rupee Pit']),
+                          'Swamp Path To Southern Swamp (Poisoned)', 'Swamp Path To Southern Swamp (Clean)',
+                          'To Swamp Path Rupee Pit']),
         create_grotto_region('Swamp Path Rupee Pit', ['Swamp Path Rupee Pit Chest'], ['Swamp Path Rupee Pit Exit']),
         create_interior_region('Swamp Shooting Gallery', ['Swamp Shooting Gallery Quiver Prize', 'Swamp Shooting Gallery HP Prize'], ['Swamp Shooting Gallery Exit']),
 
         create_ow_region('Southern Swamp Tourist Region (Poisoned)', ['Swamp Tourist Roof HP', 'Swamp Owl Statue'],
-                         ['Swamp Big Octo From Tourist Region', 'Tourist Centre Big Octo', 'To Swamp Tourist Centre']),
+                         ['Tourist Region to Swamp path', 'Swamp Big Octo From Tourist Region',
+                          'Tourist Centre Big Octo', 'To Swamp Tourist Centre', 'Tourist Region To Potion Shop Region']),
         create_ow_region('Southern Swamp Potion Shop Region (Poisoned)', [],
                          ['Potion Shop Region to Tourist Region', 'Potion Shop Region To Potion Shop', 'To Lost Woods']),
         create_ow_region('Southern Swamp Deku Palace Region', [],
@@ -217,6 +218,7 @@ def _create_region(name, type, locations=None, exits=None):
         ret.locations.append(Location(location, address, address2, default, type, ret))
     return ret
 
+# TODO: addresses, SO many addresses, and more
 location_table = {'Remove the Cursed Mask': (None, None, None, 'Mask'),
                     'SCT 20 Rupee Chest': (None, None, None, 'Chest'),
                     'Festival Tower Rupee Chest': (None, None, None, 'Chest'),

@@ -51,7 +51,7 @@ def item_name(state, location):
 
 def global_rules(world):
     set_rule(world.get_location('First Nut'), lambda state: state.form('Deku'))
-    set_rule(world.get_location('Clock Town GF Reward'), lambda state: state.has('CT SF', 1))
+    # set_rule(world.get_location('Clock Town GF Reward'), lambda state: state.has('CT SF', 1))
     set_rule(world.get_location('Woodfall GF Reward'), lambda state: state.has('WF SF', 15))
     set_rule(world.get_location('Snowhead GF Reward'), lambda state: state.has('SH SF', 15))
     set_rule(world.get_location('Great Bay GF Reward'), lambda state: state.has('GB SF', 15))
@@ -59,7 +59,6 @@ def global_rules(world):
 
     set_rule(world.get_location('Clock Town Mailbox HP'), lambda state: state.can_use('Postman Hat'))
     set_rule(world.get_location('Swamp Business Scrub'), lambda state: state.has('Town Title Deed') and state.form('Human'))
-    # are there even any form requirements for this one?
 
     set_rule(world.get_location('Mountain Business Scrub'), lambda state: state.has('Swamp Title Deed') and state.form('Deku'))
     set_rule(world.get_location('Ocean Business Scrub'), lambda state: state.has('Mountain Title Deed') and state.form('Goron'))
@@ -83,21 +82,19 @@ def global_rules(world):
 
     ### SOUTH CLOCK TOWN
     set_rule(world.get_location('Clock Town Business Scrub'), lambda state: state.has('Moons Tear'))
-    set_rule(world.get_location('Clock Tower Platform HP'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or (state.form('Deku') and state.has('Moons Tear')))
-    # @Vlix
-    # oh dang, goron link can't just hop up that small ledge? or maybe he doesn't even fit on it, heh
-    # gotta test to see ways of getting on there todo: find ways of getting up to that platform in various forms
-    # ah, just thought of adding deku form as I was reading through, nice lol
+    set_rule(world.get_location('Clock Tower Platform HP'), lambda state: state.form('Human') or state.form('Zora') or (state.form('Deku') and (state.has('Moons Tear') or state.can('Gainer'))))
 
-    set_rule(world.get_location('Festival Tower Rupee Chest'), lambda state: state.can_use('Hookshot') or (state.form('Deku') and state.can_reach(world.get_location('Clock Town Business Scrub'))))
-    set_rule(world.get_location('SCT 20 Rupee Chest'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_location('Festival Tower Rupee Chest'), lambda state: state.can_use('Hookshot') or (state.form('Deku') and state.has('Moons Tear')))
+    set_rule(world.get_location('SCT 20 Rupee Chest'), lambda state: state.can_use('Hookshot')
+                or (state.form('Deku') and state.has('Moons Tear') and (state.form('Human') or state.form('Zora'))))
 
     set_rule(world.get_location('Ocarina of Time'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Song from Skull Kid'), lambda state: state.can_pop_balloon())
     # is this right? it looks like the check is just to hit skull kid in the air, functionally the same as popping a balloon lol
-    set_rule(world.get_entrance('End of First Cycle'), lambda state: state.has('Ocarina'))
+    set_rule(world.get_entrance('End of First Cycle'), lambda state: state.has('Song of Time'))
     set_rule(world.get_entrance('Moon Portal'),
              lambda state: [state.has(x) for x in ['Oath to Order', 'Odolwas Remains', 'Ghots Remains', 'Gyorgs Remains', 'Twinmolds Remains']].count(True) == 5)
-    set_rule(world.get_entrance('To Clock Tower Rooftop'), lambda state: state.has('Ocarina'))
+    set_rule(world.get_entrance('To Clock Tower Rooftop'), lambda state: state.form('Human') or state.form('Zora') or (state.form('Deku') and (state.has('Moons Tear') or state.can('Gainer'))))
 
     set_rule(world.get_location('Clock Town Owl Statue'), lambda state: state.form('Human'))
 
@@ -111,6 +108,7 @@ def global_rules(world):
     # set_rule(world.get_entrance('Curiosity Backroom Entrance'), lambda state: state.event('Something about the a+k quest'))
     # set_rule(world.get_location('Keaton Mask From Kafei'), lambda state: state.event('Something about the a+k quest'))
     # set_rule(world.get_location('Letter From Kafei'), lambda state: state.event('Something about the a+k quest'))
+    # set_rule(world.get_location('Pendant From Kafei'), lambda state: state.event('Something about the a+k quest'))
     # *sigh* this quest
     # todo: gestures vaguely at everything about this quest
 
@@ -139,7 +137,7 @@ def global_rules(world):
     # set_rule(world.get_location('Counting Is Hard'), lambda state: True)
     # sigh alright we'll make this open lol
 
-    set_rule(world.get_location('Buy All Night Mask'), lambda state: (state.form('Human') or state.form('Zora')) and state.has('Giants Wallet'))
+    set_rule(world.get_location('Buy All Night Mask'), lambda state: state.form('Human') and state.has('Giants Wallet'))
     # you need to save the bomb lady from sakon and this will be in the curio shop on the final day for 500 rupees
     # being human might be a hard req, but you can probly buy it as zora (todo: test that)
 
@@ -180,10 +178,12 @@ def global_rules(world):
     # todo: find ways of bypassing this fence
     set_rule(world.get_location('Deku Scrub Playground HP'), lambda state: state.form('Deku'))
 
-    set_rule(world.get_location('Clock Town GF Reward'), lambda state: state.has('Deku Mask'))
-    # actually, the great fairy stuff probly needs to be tested
-    # what she gives to what forms, what she gives in first vs other cycles
-    # because right now we have rules set for 'Clock Town GF Reward', 'Great Fairy Mask', and 'Magic from NCT Great Fairy' lol
+    set_rule(world.get_location('Clock Town GF Magic Bar'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_location('Clock Town GF Mask'), lambda state: state.has('Deku Mask'))
+    # the thing the great fairy gives you depends on the cycle... I think? so I'm not sure how to
+    # handle this/these checks
+    # also, is goron the only form that can't get a stray fairy? it might be able to anyway, by getting the laundry pool
+    # fairy and then falling into the water lol
 
     # set_rule(world.get_location('Magic from NCT Great Fairy'), lambda state: state.form('Deku'))
     # I'll have to test how this happens, I haven't played in so long
@@ -219,7 +219,8 @@ def global_rules(world):
     set_rule(world.get_location('Expert Person Solver Takes the Case'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora'))
 
     set_rule(world.get_entrance('To Stock Pot Inn Secret Entrance'), lambda state: state.form('Deku'))
-    set_rule(world.get_location('Stock Pot Inn Key'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Stock Pot Inn Key'), lambda state: state.any_form_but('Deku'))
+    set_rule(world.get_location('Have you seen this man?'), lambda state: state.can_use('Kafei Mask'))
     set_rule(world.get_location('Your Room Rupee Chest'), lambda state: state.has('Inn Key'))
     set_rule(world.get_location('Anjus Room Rupee Chest'), lambda state: state.has('Inn Key') or state.form('Deku'))
     # ok, so these chests
@@ -230,7 +231,6 @@ def global_rules(world):
     # the other option would be to create another logical area ex: 'Stock Pot Inn After Hours'
     # and the item checks there would be open
     # which we can do, either way works
-
     set_rule(world.get_location('Grandma Stories HP 1'), lambda state: state.can_use('All Night Mask'))
     set_rule(world.get_location('Grandma Stories HP 2'), lambda state: state.can_use('All Night Mask'))
 
@@ -244,7 +244,7 @@ def global_rules(world):
     # actually you know what, I'm just gonna add state.has_paper()
 
     set_rule(world.get_entrance('To Milk Bar'), lambda state: state.can_use('Romani Mask'))
-    set_rule(world.get_location('Milk Bar Performance'), lambda state: [state.form(f) for f in ['Human', 'Deku', 'Goron', 'Zora']].count(True) == 4)
+    set_rule(world.get_location('Milk Bar Performance'), lambda state: False not in [state.form(f) for f in ['Human', 'Deku', 'Goron', 'Zora']] and state.has('Ocarina'))
     set_rule(world.get_location('Delivery to Mama Kafei'), lambda state: state.has('Letter to Mama'))
     # so a note about doing checks for stuff like 'Letter to Mama' and stuff that resets when you save
     # it makes it a hell of a lot easier to be able to do checks for temp items like this
@@ -257,7 +257,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Clock Town East Gate'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can('Clock Town Guard Skip'))
 
     ### TERMINA FIELD
-    set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: state.has('Magic Beans') or state.can('Goron Boost'))
+    set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: (state.has('Magic Beans') and state.has('Bottle')) or state.can('Goron Boost'))
 
     set_rule(world.get_entrance('TF to Obs Over Fence Maybe'), lambda state: state.can('Gainer? Something?'))
     # I don't know if there's actually a way to get over this fence from TF, might only be the other way, so I might
@@ -269,21 +269,21 @@ def global_rules(world):
     # dunno if there's a form requirement when you actually talk to them, but I'm gonna assume human for now
     # todo: test form requirements
 
-    set_rule(world.get_entrance('TF Mountain Icicles'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_entrance('TF Mountain Icicles'), lambda state: state.can_use('Bow') or state.form('Goron'))
     set_rule(world.get_entrance('TF Great Bay Gate'), lambda state: (state.form('Human') and state.has('Eponas Song'))
                                                                     or state.can('Some Goron Trick probly'))
 
     set_rule(world.get_location('Moons Tear'), lambda state: state.event('Moon Cry'))
 
     set_rule(world.get_entrance('To Mountain Gossips'), lambda state: state.can_blast() or state.form('Goron'))
-    set_rule(world.get_location('Swamp Gossip Check'), lambda state: (state.has('Sonata of Awakening') or state.has('Goron Lullaby') or state.has('New Wave Bossa Nova'))
-                                        and (state.form('Deku') or state.form('Goron') or state.form('Zora')))
-    set_rule(world.get_location('Mountain Gossip Check'), lambda state: (state.has('Sonata of Awakening') or state.has('Goron Lullaby') or state.has('New Wave Bossa Nova'))
-                                        and (state.form('Deku') or state.form('Goron') or state.form('Zora')))
-    set_rule(world.get_location('Ocean Gossip Check'), lambda state: (state.has('Sonata of Awakening') or state.has('Goron Lullaby') or state.has('New Wave Bossa Nova'))
-                                        and (state.form('Deku') or state.form('Goron') or state.form('Zora')))
-    set_rule(world.get_location('Canyon Gossip Check'), lambda state: (state.has('Sonata of Awakening') or state.has('Goron Lullaby') or state.has('New Wave Bossa Nova'))
-                                        and (state.form('Deku') or state.form('Goron') or state.form('Zora')))
+    set_rule(world.get_location('Swamp Gossip Check'), lambda state: (state.form('Deku') and state.has('Sonata of Awakening'))
+            or (state.form('Goron') and state.has('Goron Lullaby')) or (state.form('Zora') and state.has('New Wave Bossa Nova')))
+    set_rule(world.get_location('Mountain Gossip Check'), lambda state: (state.form('Deku') and state.has('Sonata of Awakening'))
+            or (state.form('Goron') and state.has('Goron Lullaby')) or (state.form('Zora') and state.has('New Wave Bossa Nova')))
+    set_rule(world.get_location('Ocean Gossip Check'), lambda state: (state.form('Deku') and state.has('Sonata of Awakening'))
+            or (state.form('Goron') and state.has('Goron Lullaby')) or (state.form('Zora') and state.has('New Wave Bossa Nova')))
+    set_rule(world.get_location('Canyon Gossip Check'), lambda state: (state.form('Deku') and state.has('Sonata of Awakening'))
+            or (state.form('Goron') and state.has('Goron Lullaby')) or (state.form('Zora') and state.has('New Wave Bossa Nova')))
     set_rule(world.get_location('4 Gossip Stone HP'),
              lambda state: state.event('Swamp Gossip Check') and state.event('Mountain Gossip Check')
                            and state.event('Ocean Gossip Check') and state.event('Canyon Gossip Check'))
@@ -317,7 +317,7 @@ def global_rules(world):
     # todo: test this
 
     set_rule(world.get_entrance('To East Pillar Grotto'),
-             lambda state: state.can_use('Bottle') and state.has('Magic Beans') and state.has('Water') and (state.form('Human') or state.form('Zora')))
+             lambda state: state.can_use('Bottle') and state.has('Magic Beans') and (state.form('Human') or state.form('Zora')))
     # it's an open check once you're there, you just need a bottle, bean, water, and be able to jump to it from the bean
 
 
@@ -346,9 +346,10 @@ def global_rules(world):
     set_rule(world.get_location('Swamp Owl Statue'), lambda state: state.form('Human'))
 
     # swamp tourist center
-    set_rule(world.get_location('Pictograph Box'), lambda state: state.has('Saved Koume'))
+    set_rule(world.get_location('Pictograph Box'), lambda state: state.event('Saved Koume'))
+
     # swamp tourist center clean water
-    set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: state.can_use('Bow'))
+    # set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: True)
 
     # set_rule(world.get_location('Picto Game HP'), lambda state: True)
     # I think this check is just open, unless some forms can't use the picto box lol

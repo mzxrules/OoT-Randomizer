@@ -335,7 +335,7 @@ class CollectionState(object):
     def can_kill_gekkos(self):
         # same as with lizalfos, it's common enough
         # I wonder, can zora hit with their blades in place of the bow? or hookshot maybe?
-        return (self.form('Deku') or self.can_use('Bomb Bag')) and self.can_use('Bow')
+        return (self.form('Deku') or self.can_blast() or self.form('Goron')) and self.can_use('Bow')
 
     def can_use(self, item):
         human_items = ['Hookshot', 'Bow']
@@ -357,6 +357,11 @@ class CollectionState(object):
     def can_pop_balloon(self):
         # todo: test for other ways of popping balloons (in the air)
         return self.form('Zora') or (self.form('Deku') and self.has('Magic Meter')) or (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
+
+    def can(self, trick):
+        # still don't know exactly how this should work, but the idea is to have a collection of tricks the user has
+        # selected as allowed
+        return self.tricks[trick]
 
     def heart_count(self):
         # Warning: This only considers items that are marked as advancement items
