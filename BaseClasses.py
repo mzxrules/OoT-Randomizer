@@ -731,6 +731,8 @@ class Location(object):
                 , address2=None # Secondary hex address of Location
                 , default=None  # Default hex code (???)
                 , type='Chest'  # Type of Location
+                , scene_listing=None
+                , scene_name=None
                 , parent=None): # Region this Location is in
         self.name = name
         self.parent_region = parent
@@ -739,6 +741,8 @@ class Location(object):
         self.address2 = address2
         self.default = default
         self.type = type
+        self.scene_listing = scene_listing
+        self.scene_name = scene_name
         self.spot_type = 'Location'
         self.recursion_count = 0 # Used to stop infinite loops when calling `can_reach`
         self.staleness_count = 0 # !!! NEVER USED

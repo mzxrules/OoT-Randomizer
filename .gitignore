@@ -1,2 +1,5 @@
 *.sublime-project
 *.sublime-workspace
+*.pyc
+*.n64
+*.z64
