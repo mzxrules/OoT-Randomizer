@@ -18,17 +18,17 @@ different things.
 """
 class World(object):
 
-"""
-`moon` -> variable on which the "beatable" settings is set,
-          like Ganon's bridge in OoT being beatable 'vanilla',
-          or 'all medallions' etc.
-`open_*` -> flags as settings to be set as options in OoT
-`place_dungeon_items` -> if False, wouldn't add dungeon items (map and compass)
-`check_beatable_only` -> if True, would only require game to be beatable
-                         if False, would require game to be completable.
-`hints` -> option to set stones to give hints or not.
-           (isn't used anywhere, but used for some `Location.access_rule`s in ZOoTR)
-"""
+    """
+    `moon` -> variable on which the "beatable" settings is set,
+              like Ganon's bridge in OoT being beatable 'vanilla',
+              or 'all medallions' etc.
+    `open_*` -> flags as settings to be set as options in OoT
+    `place_dungeon_items` -> if False, wouldn't add dungeon items (map and compass)
+    `check_beatable_only` -> if True, would only require game to be beatable
+                             if False, would require game to be completable.
+    `hints` -> option to set stones to give hints or not.
+               (isn't used anywhere, but used for some `Location.access_rule`s in ZOoTR)
+    """
     def __init__( self
                 , moon
                 , open_ocarina
@@ -440,7 +440,7 @@ class CollectionState(object):
 
     # Checks if explosions are possible given the current state.
     def can_blast(self):
-        return self.form('Human') and (self.has('Bomb Bag') or self.has('Blast Mask'))
+        return (self.form('Human') and (self.has('Bomb Bag') or self.has('Blast Mask'))) or self.can_use('Powder Keg')
 
     # Checks if bottles have been obtained
     def has_bottle(self):
@@ -475,12 +475,53 @@ class CollectionState(object):
     # TODO: consider can_wear(mask_name), rather than just using has(item)
     # would do a check to see if you have the mask and can do human form
 
+    def stray_fairy_req(self):
+        return self.can_use('Great Fairy Mask') or not self.options('ReqGFMask')
+
+    def lens_req(self):
+        return (self.can_use('Lens of Truth') and self.has('Magic Meter')) or not self.options('ReqLens')
+
+    def dog_track_MoT_req(self):
+        return self.can_use('Mask of Truth') or not self.options('DogTrackMoT')
+
+    def can_kill_lizalfos(self):
+        # I figure they use lizalfos as a miniboss enough that this is a check worth abstracting
+        # I imagine deku can't deal with them, goron /probably/ can? to test, easy enough to chance later
+        return self.form('Human') or self.form('Zora') or self.form('Goron')
+
+    def can_kill_gekkos(self):
+        # same as with lizalfos, it's common enough
+        # I wonder, can zora hit with their blades in place of the bow? or hookshot maybe?
+        return (self.form('Deku') or self.can_blast() or self.form('Goron')) and self.can_use('Bow')
+
+    def can_use(self, item):
+        human_items = ['Hookshot', 'Bow']
+        # yeah, just write this out at some point
+        # all masks (aside from transform ones), plus bombs etc.
+        # hold on, better version
+        # every item has an associated list of requirements
+        # for stuff like transform masks and stuff that everyone can use, it's just []
+        # for stuff like 'Bow', it's ['Human']
+        # for stuff like 'Fire Arrow', it's ['Human', 'Bow']
+        # then just loop through it and check
+        if item in human_items:
+            return self.form('Human') and self.has(item)
+        return self.has(item)
+
+    def can_epona(self):
+        return self.has('Eponas Song') and (self.form('Human') or self.options('EponaGlitchesOrSomething'))
+
     # Checks to see if balloons are poppable.
     def can_pop_balloon(self):
         # TODO: test for other ways of popping balloons (in the air)
-        return self.form('Zora')
+        return (self.form('Zora')
             or (self.form('Deku') and self.has('Magic Meter'))
-            or (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
+            or (self.form('Human') and (self.has('Bow') or self.has('Hookshot'))))
+
+    def can(self, trick):
+        # still don't know exactly how this should work, but the idea is to have a collection of tricks the user has
+        # selected as allowed
+        return self.tricks[trick]
 
     # Gives the number of current full hearts
     def heart_count(self):
@@ -504,6 +545,9 @@ class CollectionState(object):
         # (or instead of Song of Healing, just Ocarina, or 'Cured by HMS' or something)
         if form == 'Human':
             return self.has('Fierce Deity Mask')
+
+    def any_form_but(self, excl_form):
+        return True in [self.form(x) for x in ['Deku', 'Human', 'Goron', 'Zora'] if x != excl_form]
 
     # Checks to see if fire can be generated autonomously
     def has_fire_source(self):
@@ -650,8 +694,7 @@ class Entrance(object):
     # - Checks `self.access_rule` and if the region this Entrance is in is reachable
     # - Then, if not already in `CollectionState.path`, inserts itself into the path
     def can_reach(self, state):
-        if self.access_rule(state)
-                and state.can_reach(self.parent_region):
+        if self.access_rule(state) and state.can_reach(self.parent_region):
             if not self in state.path:
                 state.path[self] = ( self.name
                                    , state.path.get( self.parent_region
@@ -764,8 +807,7 @@ class Location(object):
       This is done when `has_beaten_game` is True and `beatable_only` is set.
     '''
     def can_fill(self, state, item, check_access=True):
-        return self.always_allow(item, self)
-                or (self.parent_region.can_fill(item)
+        return self.always_allow(item, self) or (self.parent_region.can_fill(item)
                     and self.item_rule(item)
                     and (not check_access or self.can_reach(state))
                    )
@@ -778,8 +820,7 @@ class Location(object):
     # Uses `self.access_rule` and checks if the Region this Location
     # is in is also reachable.
     def can_reach(self, state):
-        if self.access_rule(state)
-                and state.can_reach(self.parent_region):
+        if self.access_rule(state) and state.can_reach(self.parent_region):
             return True
         return False
 
