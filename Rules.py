@@ -258,7 +258,7 @@ def global_rules(world):
     ### TERMINA FIELD
     set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: (state.has('Magic Beans') and state.has('Bottle')) or state.can('Goron Boost'))
 
-    set_rule(world.get_entrance('TF to Obs Over Fence Maybe'), lambda state: state.can('Gainer? Something?'))
+    set_rule(world.get_entrance('TF to Obs Over Fence'), lambda state: state.can('Goron Boost'))
     # I don't know if there's actually a way to get over this fence from TF, might only be the other way, so I might
     # have remove this later
 
