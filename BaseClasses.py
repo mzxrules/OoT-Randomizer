@@ -18,17 +18,17 @@ different things.
 """
 class World(object):
 
-"""
-`moon` -> variable on which the "beatable" settings is set,
-          like Ganon's bridge in OoT being beatable 'vanilla',
-          or 'all medallions' etc.
-`open_*` -> flags as settings to be set as options in OoT
-`place_dungeon_items` -> if False, wouldn't add dungeon items (map and compass)
-`check_beatable_only` -> if True, would only require game to be beatable
-                         if False, would require game to be completable.
-`hints` -> option to set stones to give hints or not.
-           (isn't used anywhere, but used for some `Location.access_rule`s in ZOoTR)
-"""
+    """
+    `moon` -> variable on which the "beatable" settings is set,
+              like Ganon's bridge in OoT being beatable 'vanilla',
+              or 'all medallions' etc.
+    `open_*` -> flags as settings to be set as options in OoT
+    `place_dungeon_items` -> if False, wouldn't add dungeon items (map and compass)
+    `check_beatable_only` -> if True, would only require game to be beatable
+                             if False, would require game to be completable.
+    `hints` -> option to set stones to give hints or not.
+               (isn't used anywhere, but used for some `Location.access_rule`s in ZOoTR)
+    """
     def __init__( self
                 , moon
                 , open_ocarina
@@ -514,9 +514,9 @@ class CollectionState(object):
     # Checks to see if balloons are poppable.
     def can_pop_balloon(self):
         # TODO: test for other ways of popping balloons (in the air)
-        return self.form('Zora')
+        return (self.form('Zora')
             or (self.form('Deku') and self.has('Magic Meter'))
-            or (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
+            or (self.form('Human') and (self.has('Bow') or self.has('Hookshot'))))
 
     def can(self, trick):
         # still don't know exactly how this should work, but the idea is to have a collection of tricks the user has
@@ -694,8 +694,7 @@ class Entrance(object):
     # - Checks `self.access_rule` and if the region this Entrance is in is reachable
     # - Then, if not already in `CollectionState.path`, inserts itself into the path
     def can_reach(self, state):
-        if self.access_rule(state)
-                and state.can_reach(self.parent_region):
+        if self.access_rule(state) and state.can_reach(self.parent_region):
             if not self in state.path:
                 state.path[self] = ( self.name
                                    , state.path.get( self.parent_region
@@ -808,8 +807,7 @@ class Location(object):
       This is done when `has_beaten_game` is True and `beatable_only` is set.
     '''
     def can_fill(self, state, item, check_access=True):
-        return self.always_allow(item, self)
-                or (self.parent_region.can_fill(item)
+        return self.always_allow(item, self) or (self.parent_region.can_fill(item)
                     and self.item_rule(item)
                     and (not check_access or self.can_reach(state))
                    )
@@ -822,8 +820,7 @@ class Location(object):
     # Uses `self.access_rule` and checks if the Region this Location
     # is in is also reachable.
     def can_reach(self, state):
-        if self.access_rule(state)
-                and state.can_reach(self.parent_region):
+        if self.access_rule(state) and state.can_reach(self.parent_region):
             return True
         return False
 
