@@ -226,25 +226,19 @@ location_table = {'Hidden Owl Statue': (0x221224E, None, 0x0F, 'Statue'),
                     'Song from Baby Zoras': (None, None, None, 'Song'),
                     'Song in Composer Grave': (None, None, None, 'Song'),
                     'Song from Igos': (None, None, None, 'Song'),
-                    'Song from the Giants': (None, None, None, 'Song'),
+                    'Song from Giants': (None, None, None, 'Song'),
 
-                    'SCT 20 Rupee Chest': (None, None, 0x5080, 'Chest'),
-                    'Festival Tower Rupee Chest': (None, None, None, 'Chest'),
-                    'ECT 100 Rupee Chest': (None, None, None, 'Chest'),
+                    'SCT 20 Rupee Chest': (0x2E5C284, None, 0x5080, 'Chest'),
+                    'Festival Tower Rupee Chest': (0x2E5C344, None, 0x50A1, 'Chest'),
+                    'ECT 100 Rupee Chest': (0x2DE4434, None, 0x50CA, 'Chest'),
 
                     'Termina Field Stump Chest': (0x25C5D44, None, 0x5080, 'Chest', 0x26, 'Termina Field'),
                     'Termina Field Meadow Chest': (0x25C5D54, None, 5081, 'Chest', 0x26, 'Termina Field'),
                     'Termina Field Underwater Chest': (0x25C5D64, None, 0x5082, 'Chest', 0x26, 'Termina Field'),
 
-                    'Woodfall Owl Platform Chest': (),
-                    'Woodfall Red Rupee Chest': (),
-                    'Woodfall HP Chest': (),
-
-                    'Lens Grotto Lens Chest': (),
-                    'Lens Grotto Invisible Chest': (),
-                    'Lens Grotto Chest Under Rock': (),
-
-
+                    'Woodfall Owl Platform Chest': (0x2884224, None, 0x5042, 'Chest', 0x3F, 'Woodfall'),
+                    'Woodfall Red Rupee Chest': (0x2884234, None, 0x5080, 'Chest', 0x3F, 'Woodfall'),
+                    'Woodfall HP Chest': (0x2884244, None, 0x0180, 'Chest', 0x3F, 'Woodfall'),
 
                     'WFT Map Chest': (None, None, None, 'Chest'),
                     'WFT Small Key Chest': (None, None, None, 'Chest'),
@@ -255,28 +249,69 @@ location_table = {'Hidden Owl Statue': (0x221224E, None, 0x0F, 'Statue'),
                     'WFT Central Room Switch Chest': (None, None, None, 'Chest'),
                     'WFT Dark Puff Battle Arena Chest': (None, None, None, 'Chest'),
 
-                    'Town Deku Salesman': (None, None, None, 'NPC'),
-                    'Swamp Deku Salesman': (None, None, None, 'NPC'),
-                    'Mountain Deku Salesman': (None, None, None, 'NPC'),
-                    'Ocean Deku Salesman': (None, None, None, 'NPC'),
-                    'Canyon Deku Salesman': (None, None, None, 'NPC'),
-                    'Song from Goron Elder': (None, None, None, 'NPC'),
+                    'Lens Grotto Lens Chest': (0x2EB808C, None, 0x841, 'Chest', 0x00, 'Grottos'),
+                    'Lens Grotto Invisible Chest': (0x2EB809C, None, 0x6083, 'Chest', 0x00, 'Grottos'),
+                    'Lens Grotto Chest Under Rock': (0x2EB80CC, None, 0x50A6, 'Chest', 0x00, 'Grottos'),
+
+                    'Mountain Village Waterfall Chest': (0x2BDD2D4, None, 0x6080, 'Chest'),
+                    'Goron Village Path Winter HP': (0x2C232A8, None, 0x186, 'Chest'),
+                    'Goron Village Path Underwater Crevice': (0x2C3412C, None, 0x5080, 'Chest'),
+                    'Goron Village Path HP Chest': (0x2C3418C, None, 0x186, 'Chest'),
+
+                    # Snowhead Temple Chests
+
+                    'Path to Beavers Deku Flower Chest': (0x271541C, None, 0x5081, 'Chest', 0x38, 'Zora Cape'),
+                    'Path to Beavers Chest': (0x271543C, None, 0x5082, 'Chest', 0x38, 'Zora Cape'),
+                    'Zora Cape Sea Floor Chest': (0x271547C, None, 0x50A0, 'Chest', 0x38, 'Zora Cape'),
+                    # TODO:
+                    'Zora Cape Lake Bottom HP': (None, None, None, 'Collectable', 0x38, 'Zora Cape'),
+
+                    # Pinnacle Rock
+                    # TODO: Add spots to all sea snakes to randomize Zora Eggs???
+
+                    'Pirate Fortress Chest Under Pipe': (0x2740188, None, 0x5080, 'Chest', 0x34, 'Pirate Fortress Entrance'),
+                    'Pirate Fortress Chest By Coast Gate': (0x2740198, None, 0x5081, 'Chest', 0x34, 'Pirate Fortress Entrance'),
+                    'Pirate Fortress Chest By Entry Tunnel': (0x27401A8, None, 0x5082, 'Chest', 0x34, 'Pirate Fortress Entrance'),
+
+                    'Pirate Fortress Floor Chest': (0x20A2248, None, 0x5080, 'Chest', 0x0D, 'Inner Pirate Fortress'),
+                    'Pirate Fortress Roof Chest': (0x20A2258, None, 0x5081, 'Chest', 0x0D, 'Inner Pirate Fortress'),
+
+                    'Pirate Fortress Chest Between Caged Push Blocks': (0x23F00D0, None, 0x5081, 'Chest', 0x1C, 'Pirate Fortress Interior Rooms'),
+                    'Pirate Fortress Tunnel Red Rupee Chest': (0x23E6240, None, 0x5084, 'Chest', 0x1C, 'Pirate Fortress Interior Rooms'),
+                    'Pirate Fortress Tunnel Blupee Chest': (0x23E6250, None, 0x5046, 'Chest', 0x1C, 'Pirate Fortress Interior Rooms'),
+                    'Pirate Fortress Hookshot Chest': (0x238B13C, None, 0x0822, 'Chest', 0x1C, 'Pirate Fortress Interior Rooms'),
+                    'Pirate Fortress Fish Guarded Chest': (0x23BB048, None, 0x5080, 'Chest', 0x1C, 'Pirate Fortress Interior Rooms'),
+                    'Pirate Fortress Silver Booty': (0x23BB048, None, 0x00C3, 'Chest', 0x1C, 'Pirate Fortress Interior Rooms'),
+
+                    # Great Bay Temple Chests
+
+                    # TODO: Ikana Graveyard Locations
+
+                    # TODO: Secret Shrine Locations
+
+                    # TODO: Misc Ikana Locations: Poe Sisters, Ikana Castle, Well
+
+                    # TODO: Inverted Stone Tower Chests
+
+                    # Stone Tower Temple Chests
+
+                    # Inverted Stone Tower Temple Chests
+
+                    # Moon Trial Chests
 
                     'Love on the Balcony': (None, None, None, 'Collectable'),
-                    'Claim Odolwa\'s Remains': (None, None, None, 'Remains'),
+                    'NCT Heart In A Tree': (0x2DE4434, None, 0xA06, 'Collectable'),
+                    'Bat Guarded Swamp HP': (0x27C12BC, None, 0x106, 'Collectable'),
+                    # TODO:
+                    'Scarecrow On The Coast': (0x26DEE44, None, 0x??, 'Collectable'),
+                    'Scarecrow On The Coast Post Gyorg': (0x26DE0E0, None, 0x??, 'Collectable'),
+                    'Love In Pirate Jail': (0x23E62A0, None, 0xC06, 'Collectable'),
                     'Claim Odolwa\'s Heart': (None, None, None, 'Collectable'),
-                    'Claim Goht\'s Remains': (None, None, None, 'Remains'),
                     'Claim Goht\'s Heart': (None, None, None, 'Collectable'),
-                    'Claim Gyorg\'s Remains': (None, None, None, 'Remains'),
                     'Claim Gyorg\'s Heart': (None, None, None, 'Collectable'),
-                    'Claim Odolwa\'s Remains': (None, None, None, 'Remains'),
                     'Claim Odolwa\'s Heart': (None, None, None, 'Collectable'),
-                    'Defeat Odolwa': (None, None, None, 'Event'),
-                    'Defeat Goht': (None, None, None, 'Event'),
-                    'Defeat Gyorg': (None, None, None, 'Event'),
-                    'Defeat Twinmold': (None, None, None, 'Event'),
-                    'Song from Giants': (None, None, None, 'Song'),
 
+                    # TODO: Add 3 Spots to replace Stray Fairy Chests
                     'WFT Lobby Floating Fairy': (None, None, None, 'Fairy'),
                     'WFT Central Flower Corner Pot': (None, None, None, 'Pot'),
                     'WFT Deku Flower Elevator Beehive': (None, None, None, 'Bees'),
@@ -289,4 +324,29 @@ location_table = {'Hidden Owl Statue': (0x221224E, None, 0x0F, 'Statue'),
                     'WFT Hot Bubble Fairy': (None, None, None, 'Bubble Fairy'),
                     'WFT Central Flower Deku Baba': (None, None, None, 'Enemy'),
                     'WFT Bridge Skulltula': (None, None, None, 'Enemy'),
+
+                    # TODO: Snowhead Stray Fairy Spots
+                    # TODO: Great Bay Stray Fairy Spots
+                    # TODO: Stone Tower Stray Fairy Spots
+
+                    'Town Deku Salesman': (None, None, None, 'Deku'),
+                    'Swamp Deku Salesman': (None, None, None, 'Deku'),
+                    'Mountain Deku Salesman': (None, None, None, 'Deku'),
+                    'Ocean Deku Salesman': (None, None, None, 'Deku'),
+                    'Canyon Deku Salesman': (None, None, None, 'Deku'),
+
+                    'Song from Goron Elder': (None, None, None, 'NPC'),
+                    # TODO:
+                    'Fisherman Torch Game': (0x26DEDC4, None, 0x??, 'NPC'),
+                    'Reunite Seahorse': (None, None, None, 'NPC'),
+
+                    'Claim Odolwa\'s Remains': (None, None, None, 'Remains'),
+                    'Claim Goht\'s Remains': (None, None, None, 'Remains'),
+                    'Claim Gyorg\'s Remains': (None, None, None, 'Remains'),
+                    'Claim Odolwa\'s Remains': (None, None, None, 'Remains'),
+
+                    'Defeat Odolwa': (None, None, None, 'Event'),
+                    'Defeat Goht': (None, None, None, 'Event'),
+                    'Defeat Gyorg': (None, None, None, 'Event'),
+                    'Defeat Twinmold': (None, None, None, 'Event'),
                     'Open the Moon': (None, None, None, 'Event')}
