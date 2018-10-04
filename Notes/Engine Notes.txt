@@ -34,3 +34,4 @@ Regions.py create region
 Fairies are handled as interior in Regions.py, Rewards only stated as a Location for the three goddess magic items
 For MM Fairies only ST will add a location, 'SF' and 'SF Chest' will be used as the in dungeon Location type for Stray Fairies
 Might just poke into the dev branch to see how the fairy rewards are going to be handled
+Lullaby Intro flag is part of the heart pieces flag
