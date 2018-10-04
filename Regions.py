@@ -22,7 +22,7 @@ def create_regions(world):
         create_interior_region('Clock Tower Rooftop', ['Dropped Ocarina', 'Song from Skull Kid'], ['End of First Cycle', 'Moon Portal']),
 
         create_ow_region('East Clock Town',
-            ['ECT 100 Rupee Chest'],
+            ['ECT 100 Rupee Chest', 'Deliver Letter to Mama To Postman'],
             ['To Honey and Darling', 'To Treasure Chest Shop', 'To Town Shooting Gallery', 'East Mailbox',
             'To Milk Bar', 'To Stock Pot Inn', 'To Stock Pot Inn Secret Entrance', 'To Mayors Office',
             'Bomber Bouncer', 'ECT Top Exit to SCT', 'ECT Bottom Exit to SCT',
@@ -49,7 +49,7 @@ def create_regions(world):
 
         create_ow_region('West Clock Town',
             ['Bank 200 Rupee Prize', 'Bank HP', 'Rosa Sisters HP',
-            'Hidden Owl Statue'],
+            'Hidden Owl Statue', 'Deliver Letter to Mama To Postman'],
             ['To Curiosity Shop', 'To Trading Post', 'To Bomb Shop',
             'To Post Office', 'To Lottery Shop', 'To Swordsmans School',
              'Clock Town West Gate', 'WCT Top Exit to SCT', 'WCT Bottom Exit to SCT']),
