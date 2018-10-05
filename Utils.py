@@ -57,6 +57,14 @@ def output_path(path):
 
 output_path.cached_path = None
 
+def default_output_path(path):
+    if path == '':
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Output')
+
+    if not os.path.exists(path):
+        os.mkdir(path)
+    return path
+
 def open_file(filename):
     if sys.platform == 'win32':
         os.startfile(filename)
