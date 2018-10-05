@@ -5,7 +5,7 @@ import re
 import random
 import hashlib
 
-from Patches import get_tunic_color_options, get_navi_color_options
+# from Patches import get_tunic_color_options, get_navi_color_options
 from version import __version__
 from Utils import random_choices
 
