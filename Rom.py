@@ -156,7 +156,7 @@ class LocalRom(object):
             self.write_int32(startaddress + (i * 4), value)
 
     def write_to_file(self, file):
-        # self.verify_dmadata()
+        self.verify_dmadata()
         self.update_crc()
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
