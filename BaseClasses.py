@@ -395,7 +395,7 @@ class CollectionState(object):
 
     # Checks if explosions are possible given the current state.
     def can_blast(self):
-        return self.form('Human') and (self.has('Bomb Bag') or self.has('Blast Mask'))
+        return self.form('Human') and (self.has_explosives() or self.has('Blast Mask'))
 
     def has_nuts(self):
         return self.has('Buy Deku Nut (5)') or self.has('Buy Deku Nut (10)') or self.has('Deku Nut Drop')
@@ -404,68 +404,78 @@ class CollectionState(object):
         return self.has('Buy Deku Stick (1)') or self.has('Deku Stick Drop')
 
     def has_bow(self):
-        return self.has('Bow')
+        return self.has('Bow') or self.has('Large Quiver'), self.has('Largest Quiver')
+
+    def has_bomb_bag(self):
+        return self.has('Bomb Bag') or self.has('Bigger Bomb Bag'), self.has('Biggest Bomb Bag')
 
     def has_ocarina(self):
-        return (self.has('Ocarina') or self.has("Fairy Ocarina") or self.has("Ocarina of Time"))
+        return self.has("Ocarina of Time")
 
     def can_play(self, song):
         return self.has_ocarina() and self.has(song)
 
     def can_use(self, item):
-        magic_items = ['Dins Fire', 'Farores Wind', 'Nayrus Love', 'Lens of Truth']
-        magic_arrows = ['Fire Arrows', 'Light Arrows']
+        magic_items = ['Lens of Truth', 'Deku Bubble', 'Deity Beam']
+        magic_arrows = ['Fire Arrow', 'Ice Arrow', 'Light Arrow']
+        human_items = ['Bow', 'Hookshot', 'Magic Beans']
         if item in magic_items:
             return self.has(item) and self.has('Magic Meter')
+        elif item in human_items:
+            return self.has(item) and self.form('Human')
         elif item in magic_arrows:
-            return self.has(item) and self.is_adult() and self.has_bow() and self.has('Magic Meter')
+            return self.has(item) and self.form('Human') and self.has_bow()
         elif item == 'Hookshot':
-            return self.has('Progressive Hookshot') and self.is_adult()
+            return self.has('Hookshot') and self.form('Human')
         elif item == 'Scarecrow':
-            return self.has('Progressive Hookshot') and self.is_adult() and self.has_ocarina()
+            return self.has('Hookshot') and self.form('Human') and self.has_ocarina()
+        elif item = 'Powder Keg':
+            return self.has('Powder Keg') and self.form('Goron')
 
     def can_buy_bombchus(self):
         return self.has('Buy Bombchu (5)') or \
                self.has('Buy Bombchu (10)') or \
                self.has('Buy Bombchu (20)') or \
-               self.can_reach('Castle Town Bombchu Bowling')
+               self.can_reach('Bomb Shop')
 
     def has_bombchus(self):
         return (self.world.bombchus_in_logic and \
                     ((any(pritem.startswith('Bombchus') for pritem in self.prog_items) and \
-                        self.can_buy_bombchus()) \
-                    or (self.has('Progressive Wallet') and self.can_reach('Haunted Wasteland')))) \
-            or (not self.world.bombchus_in_logic and self.has('Bomb Bag') and \
+                        self.can_buy_bombchus())) \
+            or (not self.world.bombchus_in_logic and self.has_bomb_bag() and \
                         self.can_buy_bombchus())
 
     def has_bombchus_item(self):
         return (self.world.bombchus_in_logic and \
-                (any(pritem.startswith('Bombchus') for pritem in self.prog_items) \
-                or (self.has('Progressive Wallet') and self.can_reach('Haunted Wasteland')))) \
-            or (not self.world.bombchus_in_logic and self.has('Bomb Bag'))
+                (any(pritem.startswith('Bombchus') for pritem in self.prog_items))) \
+            or (not self.world.bombchus_in_logic and self.has_bomb_bag())
 
     def has_explosives(self):
-        return self.has_bombs() or self.has_bombchus()
+        return self.has_bombs() or self.has_bombchus() or can_wear('Blast Mask') or self.can_use('Powder Keg')
 
-    def can_blast_or_smash(self):
-        return self.has_explosives() or (self.is_adult() and self.has('Hammer'))
+    def can_smash(self):
+        return self.has_explosives() or self.form('Goron')
 
     def can_dive(self):
-        return self.has('Progressive Scale')
+        return self.form('Zora')
 
     def can_see_with_lens(self):
         return ((self.has('Magic Meter') and self.has('Lens of Truth')) or self.world.logic_lens != 'all')
 
-    def has_projectile(self, age='either'):
-            return self.has_explosives() or self.has_bow() or self.has('Progressive Hookshot')
+    def has_projectile(self):
+        # TODO: test for other ways of popping balloons (in the air)
+        return self.form('Zora')
+            or (self.form('Deku') and self.has('Magic Meter'))
+            or (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
+
     # Checks if bottles have been obtained
     def has_bottle(self):
-        is_normal_bottle = lambda item: (item.startswith('Bottle') and item != 'Bottle with Letter' and (item != 'Bottle with Big Poe' or self.is_adult()))
+        is_normal_bottle = lambda item: (item.startswith('Bottle') )
         return any(is_normal_bottle(pritem) for pritem in self.prog_items)
 
     # Counts the number of bottles in `.prog_items`
     def bottle_count(self):
-        return sum([pritem for pritem in self.prog_items if pritem.startswith('Bottle') and pritem != 'Bottle with Letter' and (pritem != 'Bottle with Big Poe' or self.is_adult())])
+        return sum([pritem for pritem in self.prog_items if pritem.startswith('Bottle')])
 
     # Checks if the current heart count is equal or higher than the given `count` number
     def has_hearts(self, count):
@@ -479,15 +489,15 @@ class CollectionState(object):
                      , 'Swamp Title Deed'
                      , 'Mountain Title Deed'
                      , 'Ocean Title Deed'
-                     , 'Letter to Mama'
-                     , 'Letter to Anju']  # TODO: needs more?
+                     , 'Letter to Kafei'
+                     , 'Special Delivery to Mama']  # TODO: needs more? # TODO: no?
         for p in paper_list:
             if self.has(p):
                 return True
         return False
 
-    # TODO: consider can_wear(mask_name), rather than just using has(item)
-    # would do a check to see if you have the mask and can do human form
+    def can_wear(self, mask):
+        return self.form('Human') and self.has(mask)
 
     # Checks to see if balloons are poppable.
     def can_pop_balloon(self):
@@ -506,6 +516,9 @@ class CollectionState(object):
         )
 
     # Checks if the given form is accessable.
+    # TODO: have logical constraints for starting form
+    # `starting_form('Human') or has('Song of Healing')`
+    # (or instead of Song of Healing, just Ocarina, or 'Cured by HMS' or something)
     def form(self, form):
         if form == 'Deku':
             return self.has('Deku Mask')
@@ -514,47 +527,32 @@ class CollectionState(object):
         if form == 'Zora':
             return self.has('Zora Mask')
         # TODO: This probably needs to change to something like:
-        # `starting_form('Human') or has('Song of Healing')`
-        # (or instead of Song of Healing, just Ocarina, or 'Cured by HMS' or something)
         if form == 'Human':
             return self.has('Fierce Deity Mask')
 
     # Checks to see if fire can be generated autonomously
     def has_fire_source(self):
-        return self.has('Bow') and self.has('Fire Arrows') and self.has('Magic Meter')
+        return self.can_use('Fire Arrows')
 
     # Not used anywhere, but used in ZOoTR in `Location.access_rule`s as a requirement?
     def guarantee_hint(self):
         if(self.world.hints == 'mask'):
             # has the mask of truth
-            return self.has('Zeldas Letter') and self.can_play('Sarias Song') and self.has('Kokiri Emerald') and self.has('Goron Ruby') and self.has('Zora Sapphire')
+            return self.has('Mask of Truth')
         elif(self.world.hints == 'agony'):
             # has the Stone of Agony
             return self.has('Stone of Agony')
         return True
 
-    def nighttime(self):
-        if self.world.logic_no_night_tokens_without_suns_song:
-            return self.can_play('Suns Song')
-        return True
-
-    def can_finish_GerudoFortress(self):
-        if self.world.gerudo_fortress == 'normal':
-            return self.has('Small Key (Gerudo Fortress)', 4) and (self.can_use('Bow') or self.can_use('Hookshot') or self.can_use('Hover Boots') or self.world.logic_tricks)
-        elif self.world.gerudo_fortress == 'fast':
-            return self.has('Small Key (Gerudo Fortress)', 1) and self.is_adult()
-        else:
-            return self.is_adult()
-
     # Be careful using this function. It will not collect any
-    # items that may be locked behind the item, only the item itself.         
+    # items that may be locked behind the item, only the item itself.
     def collect(self, item):
         if item.advancement:
             self.prog_items[item.name] += 1
             self.clear_cached_unreachable()
-           
+
     # Be careful using this function. It will not uncollect any
-    # items that may be locked behind the item, only the item itself. 
+    # items that may be locked behind the item, only the item itself.
     def remove(self, item):
         if self.prog_items[item.name] > 0:
             self.prog_items[item.name] -= 1
@@ -617,7 +615,7 @@ class CollectionState(object):
             # Check if already beaten
             game_beaten = True
             for state in state_list:
-                if not state.has('Triforce'):
+                if not state.has('Majora\'s Mask'):
                     game_beaten = False
                     break
             if game_beaten:
@@ -631,7 +629,7 @@ class CollectionState(object):
 
         # if the every state got the Triforce, then return True
         for state in new_state_list:
-            if not state.has('Triforce'):
+            if not state.has('Majora\'s Mask'):
                 return False
         return True
 
@@ -641,12 +639,12 @@ class CollectionState(object):
 
         # get list of all of the progressive items that can appear in hints
         all_locations = [location for world in worlds for location in world.get_filled_locations()]
-        item_locations = [location for location in all_locations  
-            if location.item.advancement 
-            and location.item.type != 'Event' 
-            and location.item.type != 'Shop' 
-            and not location.event 
-            and (worlds[0].shuffle_smallkeys != 'dungeon' or not location.item.smallkey) 
+        item_locations = [location for location in all_locations
+            if location.item.advancement
+            and location.item.type != 'Event'
+            and location.item.type != 'Shop'
+            and not location.event
+            and (worlds[0].shuffle_smallkeys != 'dungeon' or not location.item.smallkey)
             and (worlds[0].shuffle_bosskeys != 'dungeon' or not location.item.bosskey)]
 
         # if the playthrough was generated, filter the list of locations to the
@@ -734,7 +732,7 @@ class Region(object):
             is_dungeon_restricted = self.world.shuffle_smallkeys == 'dungeon'
         elif item.bosskey:
             is_dungeon_restricted = self.world.shuffle_bosskeys == 'dungeon'
-        elif item.type != 'Token' and item.type != 'Event' and item.type != 'Shop' and item.advancement and self.world.one_item_per_dungeon and self.dungeon:
+        elif item.type != 'Event' and item.type != 'Shop' and item.advancement and self.world.one_item_per_dungeon and self.dungeon:
             return self.dungeon.major_items == 0
 
         if is_dungeon_restricted:
@@ -965,7 +963,7 @@ class Item(object):
     @property
     def dungeonitem(self):
         return self.type == 'SmallKey' or self.type == 'BossKey' or self.type == 'Map' or self.type == 'Compass'
-    
+
 
     def __str__(self):
         return str(self.__unicode__())
@@ -995,7 +993,7 @@ class Spoiler(object):
         if self.world.settings.world_count > 1:
             self.locations = {'other locations': OrderedDict([(str(location), "%s [Player %d]" % (str(location.item), location.item.world.id + 1) if location.item is not None else 'Nothing') for location in spoiler_locations])}
         else:
-            self.locations = {'other locations': OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in spoiler_locations])}            
+            self.locations = {'other locations': OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in spoiler_locations])}
         self.version = OoTRVersion
         self.settings = self.world.settings
 
