@@ -252,7 +252,6 @@ def patch_rom(world, rom):
             elif location.name == 'Sheik at Colossus':
                 rom.write_byte(0x218C589, item_data[item.name]) #Fix text box
         elif location.type == 'Boss':
-            else:
                 rom.write_byte(locationaddress, itemid)
                 rom.write_byte(secondaryaddress, item_data[item.name][2])
 
@@ -290,7 +289,7 @@ def patch_rom(world, rom):
     if world.correct_chest_sizes:
         update_chest_sizes(rom, override_table)
 
-    '''
+    unused_comment = '''
     # TODO: Update these messages to reflect MM
     # give dungeon items the correct messages
     message_patch_for_dungeon_items(messages, shop_items, world)
@@ -342,12 +341,12 @@ def patch_rom(world, rom):
                     else:
                         map_message = "\x13\x76\x08You found the \x05\x41Dungeon Map\x05\x40\x01for %s\x05\x40!\x01It\'s %s!\x09" % (dungeon_name, "masterful" if world.dungeon_mq[dungeon] else "ordinary")
                     update_message_by_id(messages, map_id, map_message)
+        else:
+            # Set hints for boss reward shuffle # TODO: Find correct thing in MM
+            # rom.write_bytes(0xE2ADB2, [0x70, 0x7A])
+            # rom.write_bytes(0xE2ADB6, [0x70, 0x57])
+            buildBossRewardHints(world, messages)
         '''
-    else:
-        # Set hints for boss reward shuffle # TODO: Find correct thing in MM
-        # rom.write_bytes(0xE2ADB2, [0x70, 0x7A])
-        # rom.write_bytes(0xE2ADB6, [0x70, 0x57])
-        buildBossRewardHints(world, messages)
 
     # add song messages
     add_song_messages(messages, world)
@@ -361,7 +360,7 @@ def patch_rom(world, rom):
     # rom.write_int16(0xB6EC52, 999)
     # tycoon_message = "\x08\x13\x57You got a \x05\x43Tycoon's Wallet\x05\x40!\x01Now you can hold\x01up to \x05\x46999\x05\x40 \x05\x46Rupees\x05\x40."
     if world.world_count > 1:
-       # tycoon_message = make_player_message(tycoon_message)
+       tycoon_message = make_player_message(tycoon_message)
     update_message_by_id(messages, 0x00F8, tycoon_message, 0x23)
 
     repack_messages(rom, messages)
@@ -570,7 +569,7 @@ chestTypeMap = {
         #    small   big     boss
     0x0000: [0x5000, 0x0000, 0x2000], #Large
     0x1000: [0x7000, 0x1000, 0x1000], #Large, Appears, Clear Flag
-    0x2000: [0x5000, 0x0000, 0x2000], #Boss Key’s Chest
+    0x2000: [0x5000, 0x0000, 0x2000], #Boss Key's Chest
     0x3000: [0x8000, 0x3000, 0x3000], #Large, Falling, Switch Flag
     0x4000: [0x6000, 0x4000, 0x4000], #Large, Invisible
     0x5000: [0x5000, 0x0000, 0x2000], #Small

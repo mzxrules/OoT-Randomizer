@@ -403,17 +403,14 @@ class CollectionState(object):
             return self.has('Hookshot') and self.form('Human')
         elif item == 'Scarecrow':
             return self.has('Hookshot') and self.form('Human') and self.has_ocarina()
-        elif item = 'Powder Keg':
+        elif item == 'Powder Keg':
             return self.has('Powder Keg') and self.form('Goron')
 
     def can_buy_bombchus(self):
-        return self.has('Buy Bombchu (5)') or \
-               self.has('Buy Bombchu (10)') or \
-               self.has('Buy Bombchu (20)') or \
-               self.can_reach('Bomb Shop')
-
+        return self.has('Buy Bombchu (5)') or self.has('Buy Bombchu (10)') or self.has('Buy Bombchu (20)') or self.can_reach('Bomb Shop')
+    
     def has_bombchus(self):
-        return (self.world.bombchus_in_logic and \
+        return self.world.bombchus_in_logic and \
                     ((any(pritem.startswith('Bombchus') for pritem in self.prog_items) and \
                         self.can_buy_bombchus())) \
             or (not self.world.bombchus_in_logic and self.has_bomb_bag() and \
@@ -434,13 +431,12 @@ class CollectionState(object):
         return self.form('Zora')
 
     def can_see_with_lens(self):
-        return ((self.has('Magic Meter') and self.has('Lens of Truth')) or self.world.logic_lens != 'all')
+        return (self.has('Magic Meter') and self.has('Lens of Truth')) or self.world.logic_lens != 'all'
 
     def has_projectile(self):
         # TODO: test for other ways of popping balloons (in the air)
-        return self.form('Zora')
-            or (self.form('Deku') and self.has('Magic Meter'))
-            or (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
+        return self.form('Zora') or (self.form('Deku') and self.has('Magic Meter')) or \
+            (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
 
     # Checks if bottles have been obtained
     def has_bottle(self):

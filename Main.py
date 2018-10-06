@@ -13,7 +13,7 @@ from EntranceShuffle import link_entrances
 from Rom import LocalRom
 from Patches import patch_rom
 from Rules import set_rules
-from Dungeons import create_dungeons, fill_dungeons_restrictive
+from Dungeons import create_dungeons
 from Fill import distribute_items_restrictive
 from ItemList import generate_itempool
 from Utils import output_path
