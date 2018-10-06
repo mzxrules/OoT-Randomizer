@@ -3,22 +3,22 @@ import logging
 import random
 
 from Items import ItemFactory
-from Fill import FillError, fill_restrictive
 
 #This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 #Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
-
-alwaysitems = (['Gilded Sword', 'Fierce Deity Mask', 'Hookshot', 'Lens of Truth', 'Powder Keg', 'Deku Mask', 'Goron Mask', 'Zora Mask', 'Mirror Shield', 'Fire Arrows', 'Ice Arrows', 'Light Arrows'] +
-              ['Postmans Hat', 'Blast Mask', 'Great Fairy Mask', 'All Night Mask', 'Stone Mask'] + ['Keaton Mask', 'Bremen Mask', 'Bunny Hood', 'Don Geros Mask', 'Mask of Scents'] +
-              ['Romani Mask', 'Circus Leader Mask', 'Couple Mask', 'Mask of Truth'] + ['Kamaros Mask', 'Garo Mask', 'Captains Hat', 'Gibdo Mask', 'Giant Mask'] +
-              ['Bow'] * 3 + ['Bomb Bag'] * 3 + ['Bottle'] * 2 + ['Bottle with Gold Dust'] + ['Bottle with Red Potion'] + ['Bottle with Milk'] + ['Bottle with Chateau Romani'] +
-              ['Deku Nuts (10)'] + ['Piece of Heart'] * 14 + ['Piece of Heart (Free)'] * 4 + ['Rupees (5)'] + ['Rupees (20)'] + ['Rupees (100)'] * 4 + ['Rupees (50)'] * 6 +
-              ['Pictograph Box'])
-              #['Hylian Shield'] * 2 + ['Progressive Wallet'] * 2) + ['Great Fairy Sword'] + ['Ice Trap'] * 6 +
-              #['Bombs (5)'] * 2 + ['Bombs (10)'] * 2 + ['Bombs (20)'] + ['Bombchus (5)'] + ['Bombchus (10)'] * 3 + ['Bombchus (20)'] + ['Arrows (5)'] + ['Arrows (10)'] * 6 + ['Arrows (30)'] * 6 +
-              #['Deku Nuts (5)']
-notmapcompass = ['Rupees (5)'] * 20
-rewardlist = ['Odolwa Remains', 'Goht Remains', 'Gyorg Remains', 'Twinmold Remains']
+alwaysitems = (['Kokiri Sword', 'Gilded Sword', 'Great Fairy Sword', 'Hylian Shield', 'Mirror Shield'] +
+              ['Deku Mask', 'Goron Mask', 'Zora Mask', 'Fierce Deity Mask'] +
+              ['Postmans Hat', 'Blast Mask', 'Great Fairy Mask', 'All Night Mask', 'Stone Mask'] +
+              ['Keaton Mask', 'Bremen Mask', 'Bunny Hood', 'Don Geros Mask', 'Mask of Scents'] +
+              ['Romani Mask', 'Circus Leader Mask', 'Couple Mask', 'Mask of Truth'] +
+              ['Kamaros Mask', 'Garo Mask', 'Captains Hat', 'Gibdo Mask', 'Giant Mask'] +
+              ['Bow', 'Large Quiver', 'Largest Quiver'] + ['Fire Arrows', 'Ice Arrows', 'Light Arrows'] +
+              ['Powder Keg', 'Pictograph Box', 'Lens of Truth', 'Hookshot'] +
+              ['Bomb Bag', 'Big Bomb Bag', ] + ['Bottle'] * 2 + ['Bottle with Gold Dust'] +
+              ['Bottle with Red Potion'] + ['Bottle with Milk'] + ['Bottle with Chateau Romani'] +
+              ['Piece of Heart'] * 52 + ['Heart Container'] * 4 + ['Adult Wallet', 'Giant Wallet'])
+notmapcompass = ['Ice Trap'] * 8
+rewardlist = ['Odolwa\'s Remains', 'Goht\'s Remains', 'Gyorg\'s Remains', 'Twinmold\'s Remains']
 songlist = ['Song of Time', 'Song of Healing', 'Song of Soaring', 'Eponas Song','Song of Storms', 'Sonata of Awakening', 'Goron Lullaby', 'New Wave Bossa Nova', 'Elegy of Emptiness', 'Oath to Order']
 # TODO: this could need to be aligned with the location_table
 stray_fairy_locations = (['WF-SF1', 'WF-SF2', 'WF-SF3', 'WF-SF4', 'WF-SF5', 'WF-SF6', 'WF-SF7', 'WF-SF8', 'WF-SF9', 'WF-SF10', 'WF-SF11', 'WF-SF12', 'WF-SF13', 'WF-SF14', 'WF-SF15'] +
@@ -26,57 +26,124 @@ stray_fairy_locations = (['WF-SF1', 'WF-SF2', 'WF-SF3', 'WF-SF4', 'WF-SF5', 'WF-
                         ['GB-SF1', 'GB-SF2', 'GB-SF3', 'GB-SF4', 'GB-SF5', 'GB-SF6', 'GB-SF7', 'GB-SF8', 'GB-SF9', 'GB-SF10', 'GB-SF11', 'GB-SF12', 'GB-SF13', 'GB-SF14', 'GB-SF15'] +
                         ['ST-SF1', 'ST-SF2', 'ST-SF3', 'ST-SF4', 'ST-SF5', 'ST-SF6', 'ST-SF7', 'ST-SF8', 'ST-SF9', 'ST-SF10', 'ST-SF11', 'ST-SF12', 'ST-SF13', 'ST-SF14', 'ST-SF15'])
 tradeitems = (['Moon Tear', 'Town Title Deed', 'Swamp Title Deed', 'Mountain Title Deed', 'Ocean Title Deed'] +
-                ['Room Key', 'Letter to Kafei', 'Pendant of Memories', 'Letter to Mama'] +
-                []) # Will fill properly when I find out which slots are actually shared for the above
 
-#total_items_to_place = 5
+
+WF_vanilla = (['Recovery Heart'] * 2)
+SH_vanilla = (['Recovery Heart'] * 2)
+GB_vanilla = (['Recovery Heart'] * 2)
+ST_vanilla = (['Recovery Heart'] * 2)
+PF_vanilla = (['Recovery Heart'] * 2)
+
+normal_bottles = [
+    'Bottle',
+    'Bottle with Milk',
+    'Bottle with Red Potion',
+    'Bottle with Green Potion',
+    'Bottle with Blue Potion',
+    'Bottle with Fairy',
+    'Bottle with Fish',
+    'Bottle with Bugs',
+    'Bottle with Poe',
+    'Bottle with Big Poe']
+
+normal_bottle_count = 6
+
+normal_rupees = (
+    ['Rupees (5)'] * 13
+    + ['Rupees (20)'] * 5
+    + ['Rupees (50)'] * 7
+    + ['Rupees (200)'] * 3)
+
+shopsanity_rupees = (
+    ['Rupees (5)'] * 2
+    + ['Rupees (20)'] * 10
+    + ['Rupees (50)'] * 10
+    + ['Rupees (200)'] * 5
+    + ['Progressive Wallet'])
+
+vanilla_shop_items = {
+    'Trading Post Item 1': 'Buy Hylian Shield',
+    # TODO: Fill out the rest
+}
+
+titledeeds = {
+    'Sad Moon Crater': 'Moon\'s Tear',
+    # TODO: fill out the rest
+}
+
+npc_items = {
+    # TODO: List all locations which give items by NPC, and set them to give that specific item
+}
+
+eventlocations = {
+    'Majora': 'Majora\'s Mask'
+}
+
+junk_pool = (
+    8 *  ['Bombs (5)'] +
+    2 *  ['Bombs (10)'] +
+    8 *  ['Arrows (5)'] +
+    2 *  ['Arrows (10)'] +
+    5 *  ['Deku Stick (1)'] +
+    5 *  ['Deku Nuts (5)'] +
+    10 * ['Rupees (5)'] +
+    4 *  ['Rupees (20)'] +
+    20 * ['Ice Trap'])
+def get_junk_item(count=1):
+    ret_junk = []
+    for _ in range(count):
+        ret_junk.append(random.choice(junk_pool))
+
+    return ret_junk
+
 
 def generate_itempool(world):
-
-    world.push_item('Majoras Wrath', ItemFactory('Majora Mask'), False)
-    world.get_location('Majoras Wrath').event = True
-    world.push_item('Gift from Skull Kid', ItemFactory('Fairy Ocarina'), False)
-    world.get_location('Gift from Skull Kid').event = True
-
     # set up item pool
-    (pool, placed_items) = get_pool_core(world.place_dungeon_items)
-    world.itempool = ItemFactory(pool)
-    for (location, item) in placed_items:
-        world.push_item(location, ItemFactory(item), False)
+    (pool, placed_items) = get_pool_core(world)
+    world.itempool = ItemFactory(pool, world)
+    for (location, item) in placed_items.items():
+        world.push_item(location, ItemFactory(item, world))
         world.get_location(location).event = True
 
     fill_bosses(world)
-    fill_songs(world)
 
-def get_pool_core(dungeon_items):
+    world.initialize_items()
+
+'''
+This is where we decide what items to place and how
+'''
+def get_pool_core(world):
     pool = []
-    placed_items = []
+    placed_items = {}
+    '''
+        # Used to place an item randomly into the pool
+        pool.append('Kokiri Sword')
+        # Used to place a specific item in a specific location
+         placed_items['Kokiri Sword Chest'] = 'Kokiri Sword'
+         # Adds x items to the pool which are not progression items
+        pool.extend(get_junk_item(37))
+        # locations_with_items is a list of key value pairs where
+        #   the key is the location name for an item
+        #   the value is the item being placed at that location
+        placed_items.update(locations_with_items)
+        # tells the logic that you start out with the given item
+        world.state.collect(item)
+    '''
+    pool.extend(songlist)
 
-    if not dungeon_items:
-        pool.extend(notmapcompass)
-    pool.extend(alwaysitems)
-    tradeitem = random.choice(tradeitems)
-    pool.append(tradeitem)
-
+    if world.shuffle_mapcompass == 'remove':
+        for item in [item for dungeon in world.dungeons for item in dungeon.dungeon_items]:
+            world.state.collect(item)
+            pool.extend(get_junk_item())
+    if world.shuffle_smallkeys == 'remove':
+        for item in [item for dungeon in world.dungeons for item in dungeon.small_keys]:
+            world.state.collect(item)
+            pool.extend(get_junk_item())
+    if world.shuffle_bosskeys == 'remove':
+        for item in [item for dungeon in world.dungeons for item in dungeon.boss_key]:
+            world.state.collect(item)
+            pool.extend(get_junk_item())
     return (pool, placed_items)
-
-def fill_bosses(world, bossCount=4):
-    boss_rewards = ItemFactory(rewardlist)
-    boss_locations = [world.get_location('Odolwa'), world.get_location('Goht'), world.get_location('Gyorg'), world.get_location('Twinmold')]
-    placed_prizes = [loc.item.name for loc in boss_locations if loc.item is not None]
-    unplaced_prizes = [item for item in boss_rewards if item.name not in placed_prizes]
-    empty_boss_locations = [loc for loc in boss_locations if loc.item is None]
-    prizepool = list(unplaced_prizes)
-    prize_locs = list(empty_boss_locations)
-
-    while bossCount:
-        bossCount -= 1
-        random.shuffle(prizepool)
-        random.shuffle(prize_locs)
-        item = prizepool.pop()
-        loc = prize_locs.pop()
-        world.push_item(loc, item, False)
-        world.get_location(loc).event = True
 
 def fill_songs(world, attempts=15):
     songs = ItemFactory(songlist)
@@ -101,3 +168,21 @@ def fill_songs(world, attempts=15):
         break
     else:
         raise FillError('Unable to place songs')
+
+def fill_bosses(world, bossCount=4):
+    boss_rewards = ItemFactory(rewardlist)
+    boss_locations = [world.get_location('Odolwa'), world.get_location('Goht'), world.get_location('Gyorg'), world.get_location('Twinmold')]
+    placed_prizes = [loc.item.name for loc in boss_locations if loc.item is not None]
+    unplaced_prizes = [item for item in boss_rewards if item.name not in placed_prizes]
+    empty_boss_locations = [loc for loc in boss_locations if loc.item is None]
+    prizepool = list(unplaced_prizes)
+    prize_locs = list(empty_boss_locations)
+
+    while bossCount:
+        bossCount -= 1
+        random.shuffle(prizepool)
+        random.shuffle(prize_locs)
+        item = prizepool.pop()
+        loc = prize_locs.pop()
+        world.push_item(loc, item, False)
+        world.get_location(loc).event = True

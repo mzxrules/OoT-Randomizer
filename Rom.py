@@ -40,6 +40,7 @@ class LocalRom(object):
         self.buffer.extend(bytearray([0x00] * (0x4000000 - len(self.buffer))))
 
     def decompress_rom_file(self, file, decomp_file):
+        # TODO: Figure out the appropriate CRCs for MM ROMs
         validCRC = [
             [ ], # Compressed
             [ ], # Byteswap compressed
@@ -51,8 +52,8 @@ class LocalRom(object):
         romCRC = list(self.buffer[0x10:0x18])
         if romCRC not in validCRC:
             # Bad CRC validation
-            raise RuntimeError('ROM file %s is not a valid MM ? ROM.' % file)
-        elif len(self.buffer) < 0x2000000 or len(self.buffer) > 0x4000000 or file_name[1] not in ['.z64', '.n64']:
+            raise RuntimeError('ROM file %s is not a valid MM 1.0 US ROM.' % file)
+        elif len(self.buffer) < 0x2000000 or len(self.buffer) > (0x4000000) or file_name[1] not in ['.z64', '.n64']:
             # ROM is too big, or too small, or not a bad type
             raise RuntimeError('ROM file %s is not a valid MM ? ROM.' % file)
         elif len(self.buffer) == 0x2000000:
@@ -170,7 +171,7 @@ class LocalRom(object):
             d = self.read_int32(cur)
 
             if ((t6 + d) & u32) < t6:
-                t4 += 1 
+                t4 += 1
 
             t6 = (t6+d) & u32
             t3 ^= d
@@ -214,7 +215,7 @@ class LocalRom(object):
         cur = DMADATA_START
         overlapping_records = []
         dma_data = []
-    
+
         while True:
             this_start, this_end, this_size = rom._get_dmadata_record(cur)
 
@@ -239,7 +240,7 @@ class LocalRom(object):
         if len(overlapping_records) > 0:
             raise Exception("Overlapping DMA Data Records!\n%s" % \
                 '\n-------------------------------------\n'.join(overlapping_records))
-        
+
 
     def update_dmadata_record(rom, key, start, end):
         cur = DMADATA_START

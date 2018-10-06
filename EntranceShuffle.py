@@ -5,22 +5,66 @@ def link_entrances(world):
     # setup mandatory connections
     for exitname, regionname in mandatory_connections:
         connect_simple(world, exitname, regionname)
-
+    if world.dungeon_mq['DT']:
+        for exitname, regionname in DT_MQ_connections:
+            connect_simple(world, exitname, regionname)
+    else:
+        for exitname, regionname in DT_vanilla_connections:
+            connect_simple(world, exitname, regionname)
+    if world.dungeon_mq['DC']:
+        for exitname, regionname in DC_MQ_connections:
+            connect_simple(world, exitname, regionname)
+    else:
+        for exitname, regionname in DC_vanilla_connections:
+            connect_simple(world, exitname, regionname)
+    if world.dungeon_mq['JB']:
+        for exitname, regionname in JB_MQ_connections:
+            connect_simple(world, exitname, regionname)
+    else:
+        for exitname, regionname in JB_vanilla_connections:
+            connect_simple(world, exitname, regionname)
+    if world.dungeon_mq['FoT']:
+        for exitname, regionname in FoT_MQ_connections:
+            connect_simple(world, exitname, regionname)
+    else:
+        for exitname, regionname in FoT_vanilla_connections:
+            connect_simple(world, exitname, regionname)
+    if world.dungeon_mq['FiT']:
+        for exitname, regionname in FiT_MQ_connections:
+            connect_simple(world, exitname, regionname)
+    else:
+        for exitname, regionname in FiT_vanilla_connections:
+            connect_simple(world, exitname, regionname)
+    if world.dungeon_mq['WT']:
+        for exitname, regionname in WT_MQ_connections:
+            connect_simple(world, exitname, regionname)
+    else:
+        for exitname, regionname in WT_vanilla_connections:
+            connect_simple(world, exitname, regionname)
+    if world.dungeon_mq['GTG']:
+        for exitname, regionname in GTG_MQ_connections:
+            connect_simple(world, exitname, regionname)
+    else:
+        for exitname, regionname in GTG_vanilla_connections:
+            connect_simple(world, exitname, regionname)
+    if world.dungeon_mq['SpT']:
+        for exitname, regionname in SpT_MQ_connections:
+            connect_simple(world, exitname, regionname)
+    else:
+        for exitname, regionname in SpT_vanilla_connections:
+            connect_simple(world, exitname, regionname)
+    if world.dungeon_mq['ShT']:
+        for exitname, regionname in ShT_MQ_connections:
+            connect_simple(world, exitname, regionname)
+    else:
+        for exitname, regionname in ShT_vanilla_connections:
+            connect_simple(world, exitname, regionname)
     # if we do not shuffle, set default connections
     if world.shuffle == 'vanilla':
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname)
         for exitname, regionname in default_dungeon_connections:
             connect_simple(world, exitname, regionname)
-        targets = list(Fairy_List)
-        destinations = list(Fairy_List)
-        random.shuffle(targets)
-        random.shuffle(destinations)
-        Fairy_Pairs = []
-        for i in range (0, 6):
-            Fairy_Pairs.append((targets[i], destinations[i]))
-        for i in range (0, 6):
-            connect_fairy(world, Fairy_Pairs[i][0], Fairy_Pairs[i][1])
     else:
         raise NotImplementedError('Shuffling not supported yet')
 
@@ -105,8 +149,6 @@ mandatory_connections = [ ('Cursed Underground', 'Clock Tower'),
                         ]
 
 # these connections are the pairs of owl statues that may be shuffled
-owl_statue_connections = [('', '')
-                        ]
 
 # entrances that cross a loading zone and may be shuffled
 default_connections = [('Clock Tower Exit', 'South Clock Town'),
@@ -182,27 +224,3 @@ default_connections = [('Clock Tower Exit', 'South Clock Town'),
 # dungeon entrance links
 default_dungeon_connections = [('Woodfall Temple Entrance', 'Woodfall Temple Lobby'),
                               ]
-
-# Fairy Fountain exit IDs
-# (entrance, exit)
-
-Fairy_List = ['Clock Town Fairy',
-              'Woodfall Fairy',
-              'Snowhead Fairy',
-              'Great Bay Fairy',
-              'Stone Tower Fairy']
-
-Fairy_IDs = {'Clock Town Fairy': (0x0588, 0xBEFD82),
-             'Woodfall Fairy': (0x04C2, 0xBEFD6C),
-             'Snowhead Fairy': (0x04BE, 0xBEFD6A),
-             'Great Bay Fairy': (0x0315, 0xBEFD68),
-             'Stone Tower Fairy': (0x0371, 0xBEFD7E)}
-
-# Fairy Fountain exit addresses
-# (entrance, exit)
-
-Fairy_addresses = {'Clock Town Fairy': (0x2186114, 0x218D644, 0x218D644, 0x057C),
-                   'Woodfall Fairy': (0x21F60E0, 0x21F60E0, 0x21F60E0, 0x0340),
-                   'Snowhead Fairy': (0x292B0B4, 0x292B0B4, 0x292B0B4, 0x0340),
-                   'Great Bay Fairy': (0x22470FE, 0x224E31A, 0x224E31A, 0x0482),
-                   'Stone Tower Fairy': (0x221D104, 0x222467C, 0x222467C, 0x045B)}
