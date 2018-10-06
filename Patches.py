@@ -81,19 +81,24 @@ def get_navi_color_options():
     return ["Random Choice", "Completely Random"] + get_navi_colors()
 
 def patch_rom(world, rom):
-    with open(local_path('data/rom_patch.txt'), 'r') as stream:
-        for line in stream:
-            address, value = [int(x, 16) for x in line.split(',')]
-            rom.write_byte(address, value)
+
+    rom_patch_path = 'data/rom_patch.txt'
+    if os.path.isfile(rom_patch_path):
+        with open(local_path(rom_patch_path), 'r') as stream:
+            for line in stream:
+                address, value = [int(x, 16) for x in line.split(',')]
+                rom.write_byte(address, value)
 
     # Write Randomizer title screen logo
-    with open(local_path('data/title.bin'), 'rb') as stream:
-        titleBytes = stream.read()
-        rom.write_bytes(0x01795300, titleBytes)
+    #with open(local_path('data/title.bin'), 'rb') as stream:
+    #    titleBytes = stream.read()
+    #    rom.write_bytes(0x01795300, titleBytes)
 
     # will be populated with data to be written to initial save
     # see initial_save.asm and config.asm for more details on specifics
     # or just use the following functions to add an entry to the table
+
+    # Initial Save Data
     initial_save_table = []
 
     # will set the bits of value to the offset in the save (or'ing them with what is already there)
@@ -130,9 +135,6 @@ def patch_rom(world, rom):
             raise Exception("The Initial Save Table has exceeded it's maximum capacity: 0x%03X/0x400" % table_len)
         rom.write_bytes(0x3481800, initial_save_table)
 
-
-    # Initial Save Data
-    patch_files(rom, mq_scenes)
 
     # Load Message and Shop Data
     messages = read_messages(rom)
@@ -289,7 +291,7 @@ def patch_rom(world, rom):
     if world.correct_chest_sizes:
         update_chest_sizes(rom, override_table)
 
-    unused_comment = '''
+    """
     # TODO: Update these messages to reflect MM
     # give dungeon items the correct messages
     message_patch_for_dungeon_items(messages, shop_items, world)
@@ -346,7 +348,9 @@ def patch_rom(world, rom):
             # rom.write_bytes(0xE2ADB2, [0x70, 0x7A])
             # rom.write_bytes(0xE2ADB6, [0x70, 0x57])
             buildBossRewardHints(world, messages)
-        '''
+    """
+
+
 
     # add song messages
     add_song_messages(messages, world)
