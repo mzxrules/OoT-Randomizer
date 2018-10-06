@@ -30,6 +30,12 @@ def add_rule(spot, rule, combine='and'):
     else:
         spot.access_rule = lambda state: rule(state) and old_rule(state)
 
+def add_item_rule(spot, rule, combine='and'):
+    old_rule = spot.item_rule
+    if combine == 'or':
+        spot.item_rule = lambda item: rule(item) or old_rule(item)
+    else:
+        spot.item_rule = lambda item: rule(item) and old_rule(item)
 
 def forbid_item(location, item):
     old_rule = location.item_rule
