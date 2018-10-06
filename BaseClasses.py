@@ -868,6 +868,8 @@ class Location(object):
         self.address2 = address2
         self.default = default
         self.type = type
+        self.scene = scene
+        self.hint = hint
         self.spot_type = 'Location'
         self.recursion_count = 0
         self.staleness_count = 0
