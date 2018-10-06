@@ -429,7 +429,7 @@ class CollectionState(object):
             return self.has('Hookshot') and self.form('Human')
         elif item == 'Scarecrow':
             return self.has('Hookshot') and self.form('Human') and self.has_ocarina()
-        elif item = 'Powder Keg':
+        elif item == 'Powder Keg':
             return self.has('Powder Keg') and self.form('Goron')
 
     def can_buy_bombchus(self):
@@ -443,7 +443,7 @@ class CollectionState(object):
                     ((any(pritem.startswith('Bombchus') for pritem in self.prog_items) and \
                         self.can_buy_bombchus())) \
             or (not self.world.bombchus_in_logic and self.has_bomb_bag() and \
-                        self.can_buy_bombchus())
+                        self.can_buy_bombchus()))
 
     def has_bombchus_item(self):
         return (self.world.bombchus_in_logic and \
@@ -464,9 +464,9 @@ class CollectionState(object):
 
     def has_projectile(self):
         # TODO: test for other ways of popping balloons (in the air)
-        return self.form('Zora')
-            or (self.form('Deku') and self.has('Magic Meter'))
-            or (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
+        return self.form('Zora') or \
+            (self.form('Deku') and self.has('Magic Meter')) or \
+            (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
 
     # Checks if bottles have been obtained
     def has_bottle(self):
@@ -502,9 +502,9 @@ class CollectionState(object):
     # Checks to see if balloons are poppable.
     def can_pop_balloon(self):
         # TODO: test for other ways of popping balloons (in the air)
-        return self.form('Zora')
-            or (self.form('Deku') and self.has('Magic Meter'))
-            or (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
+        return self.form('Zora') or \
+            (self.form('Deku') and self.has('Magic Meter')) or \
+            (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
 
     # Gives the number of current full hearts
     def heart_count(self):
@@ -882,11 +882,10 @@ class Location(object):
       This is done when `has_beaten_game` is True and `beatable_only` is set.
     '''
     def can_fill(self, state, item, check_access=True):
-        return self.always_allow(item, self)
-                or (self.parent_region.can_fill(item)
-                    and self.item_rule(item)
-                    and (not check_access or self.can_reach(state))
-                   )
+        return self.always_allow(item, self) or \
+                    (self.parent_region.can_fill(item) and \
+                    self.item_rule(item) and \
+                    (not check_access or self.can_reach(state)))
 
     # Like `can_fill`, but only checks `self.item_rule`
     def can_fill_fast(self, item):
@@ -896,8 +895,7 @@ class Location(object):
     # Uses `self.access_rule` and checks if the Region this Location
     # is in is also reachable.
     def can_reach(self, state):
-        if self.access_rule(state)
-                and state.can_reach(self.parent_region):
+        if self.access_rule(state) and state.can_reach(self.parent_region):
             return True
         return False
 

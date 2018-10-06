@@ -1,7 +1,7 @@
 import random
 import logging
 from BaseClasses import CollectionState
-from Rules import set_shop_rules
+# from Rules import set_shop_rules
 
 class FillError(RuntimeError):
     pass
@@ -9,8 +9,8 @@ class FillError(RuntimeError):
 # Places all items into the world
 def distribute_items_restrictive(window, worlds, fill_locations=None):
     song_locations = [world.get_location(location) for world in worlds for location in
-        ['Song from Composer Grave', 'Impa at Castle', 'Song from Malon', 'Song from Saria', 
-        'Song from Ocarina of Time', 'Song at Windmill', 'Sheik Forest Song', 'Sheik at Temple', 
+        ['Song from Composer Grave', 'Impa at Castle', 'Song from Malon', 'Song from Saria',
+        'Song from Ocarina of Time', 'Song at Windmill', 'Sheik Forest Song', 'Sheik at Temple',
         'Sheik in Crater', 'Sheik in Ice Cavern', 'Sheik in Kakariko', 'Sheik at Colossus']]
 
     shop_locations = [location for world in worlds for location in world.get_unfilled_locations() if location.type == 'Shop' and location.price == None]
@@ -49,7 +49,7 @@ def distribute_items_restrictive(window, worlds, fill_locations=None):
     if shop_locations:
         random.shuffle(shop_locations)
         fill_shops(window, worlds, shop_locations, shopitempool, itempool + songitempool + dungeon_items)
-    # Update the shop item access rules    
+    # Update the shop item access rules
     for world in worlds:
         set_shop_rules(world)
 
@@ -61,8 +61,8 @@ def distribute_items_restrictive(window, worlds, fill_locations=None):
     fill_dungeons_restrictive(window, worlds, fill_locations, dungeon_items, itempool + songitempool)
     for world in worlds:
         world.keys_placed = True
-        
-    # I have no idea why the locations are reversed but this is how it was, 
+
+    # I have no idea why the locations are reversed but this is how it was,
     # so whatever. It can't hurt I guess
     random.shuffle(fill_locations)
     fill_locations.reverse()
@@ -263,7 +263,7 @@ def fill_restrictive(window, worlds, base_state_list, locations, itempool):
 
         # generate the max states that include every remaining item
         # this will allow us to place this item in a reachable location
-        maximum_exploration_state_list = CollectionState.get_states_with_items(base_state_list, itempool)     
+        maximum_exploration_state_list = CollectionState.get_states_with_items(base_state_list, itempool)
 
         # perform_access_check checks location reachability
         perform_access_check = True
@@ -286,7 +286,7 @@ def fill_restrictive(window, worlds, base_state_list, locations, itempool):
         # if we failed to find a suitable location, then stop placing items
         if spot_to_fill is None:
             raise FillError('Game unbeatable: No more spots to place %s [World %d]' % (item_to_place, item_to_place.world.id))
-            
+
         # Place the item in the world and continue
         spot_to_fill.world.push_item(spot_to_fill, item_to_place)
         locations.remove(spot_to_fill)
