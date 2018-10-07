@@ -1,4 +1,4 @@
-# text details: https://wiki.cloudmodding.com/oot/Text_Format
+# text details: https://wiki.cloudmodding.com/mm/Text_Format
 
 import random
 

@@ -1,9 +1,7 @@
 import copy
 from enum import Enum, unique
 import logging
-from collections import OrderedDict, Counter, defaultdict
-from version import __version__ as OoTRVersion
-import random
+from collections import OrderedDict
 
 """
 World object:
@@ -96,32 +94,6 @@ class World(object):
     def initialize_regions(self):
         for region in self.regions:
             region.world = self
-            for location in region.locations:
-                location.world = self
-
-    def initialize_items(self):
-        for item in self.itempool:
-            item.world = self
-        for region in self.regions:
-            for location in region.locations:
-                if location.item != None:
-                    location.item.world = self
-        for item in [item for dungeon in self.dungeons for item in dungeon.all_items]:
-            item.world = self
-
-    def random_shop_prices(self):
-        shop_item_indexes = ['7', '5', '8', '6']
-        self.shop_prices = {}
-        for region in self.regions:
-            if self.shopsanity == 'random':
-                shop_item_count = random.randint(0,4)
-            else:
-                shop_item_count = int(self.shopsanity)
-
-            for location in region.locations:
-                if location.type == 'Shop':
-                    if location.name[-1:] in shop_item_indexes[:shop_item_count]:
-                        self.shop_prices[location.name] = int(random.betavariate(1.5, 2) * 60) * 5
 
     # Checks if `regionname` is actually a Region
     # If not, will try to find that name in `World.regions` if
@@ -216,15 +188,13 @@ class World(object):
         if not isinstance(location, Location):
             location = self.get_location(location)
 
-        # This check should never be false normally, but is here as a sanity check
         if location.can_fill(self.state, item, False):
             location.item = item
             item.location = location
+            if collect:
+                self.state.collect(item, location.event, location)
 
-            if item.type != 'Token' and item.type != 'Event' and item.type != 'Shop' and not (item.key or item.map or item.compass) and item.advancement and location.parent_region.dungeon:
-                location.parent_region.dungeon.major_items += 1
-
-            logging.getLogger('').debug('Placed %s [World %d] at %s [World %d]', item, item.world.id if hasattr(item, 'world') else -1, location, location.world.id if hasattr(location, 'world') else -1)
+            logging.getLogger('').debug('Placed %s at %s', item, location)
         else:
             raise RuntimeError('Cannot assign item %s to location %s.' % (item, location))
 
@@ -319,7 +289,9 @@ class CollectionState(object):
         ret.region_cache = copy.copy(self.region_cache)
         ret.location_cache = copy.copy(self.location_cache)
         ret.entrance_cache = copy.copy(self.entrance_cache)
-        ret.collected_locations = copy.copy(self.collected_locations)
+        ret.events = copy.copy(self.events)
+        ret.path = copy.copy(self.path)
+        ret.locations_checked = copy.copy(self.locations_checked)
         return ret
 
     '''
@@ -386,7 +358,9 @@ class CollectionState(object):
         return correct_cache[spot]
 
     def has(self, item, count=1):
-        return self.prog_items[item] >= count
+        if count == 1:
+            return item in self.prog_items
+        return self.item_count(item) >= count
 
     # Count how many duplicates of an item are in `.prog_items`
     # (Used in `heart_count` and `has`)
@@ -433,13 +407,10 @@ class CollectionState(object):
             return self.has('Powder Keg') and self.form('Goron')
 
     def can_buy_bombchus(self):
-        return self.has('Buy Bombchu (5)') or \
-               self.has('Buy Bombchu (10)') or \
-               self.has('Buy Bombchu (20)') or \
-               self.can_reach('Bomb Shop')
-
+        return self.has('Buy Bombchu (5)') or self.has('Buy Bombchu (10)') or self.has('Buy Bombchu (20)') or self.can_reach('Bomb Shop')
+    
     def has_bombchus(self):
-        return (self.world.bombchus_in_logic and \
+        return self.world.bombchus_in_logic and \
                     ((any(pritem.startswith('Bombchus') for pritem in self.prog_items) and \
                         self.can_buy_bombchus())) \
             or (not self.world.bombchus_in_logic and self.has_bomb_bag() and \
@@ -460,12 +431,11 @@ class CollectionState(object):
         return self.form('Zora')
 
     def can_see_with_lens(self):
-        return ((self.has('Magic Meter') and self.has('Lens of Truth')) or self.world.logic_lens != 'all')
+        return (self.has('Magic Meter') and self.has('Lens of Truth')) or self.world.logic_lens != 'all'
 
     def has_projectile(self):
         # TODO: test for other ways of popping balloons (in the air)
-        return self.form('Zora') or \
-            (self.form('Deku') and self.has('Magic Meter')) or \
+        return self.form('Zora') or (self.form('Deku') and self.has('Magic Meter')) or \
             (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
 
     # Checks if bottles have been obtained
@@ -499,12 +469,54 @@ class CollectionState(object):
     def can_wear(self, mask):
         return self.form('Human') and self.has(mask)
 
+    def stray_fairy_req(self):
+        return self.can_use('Great Fairy Mask') or not self.options('ReqGFMask')
+
+    def lens_req(self):
+        return (self.can_use('Lens of Truth') and self.has('Magic Meter')) or not self.options('ReqLens')
+
+    def dog_track_MoT_req(self):
+        return self.can_use('Mask of Truth') or not self.options('DogTrackMoT')
+
+    def can_kill_lizalfos(self):
+        # I figure they use lizalfos as a miniboss enough that this is a check worth abstracting
+        # I imagine deku can't deal with them, goron /probably/ can? to test, easy enough to chance later
+        return self.form('Human') or self.form('Zora') or self.form('Goron')
+
+    def can_kill_gekkos(self):
+        # same as with lizalfos, it's common enough
+        # I wonder, can zora hit with their blades in place of the bow? or hookshot maybe?
+        return (self.form('Deku') or self.can_blast() or self.form('Goron')) and self.can_use('Bow')
+
+    def can_use(self, item):
+        human_items = ['Hookshot', 'Bow']
+        # yeah, just write this out at some point
+        # all masks (aside from transform ones), plus bombs etc.
+        # hold on, better version
+        # every item has an associated list of requirements
+        # for stuff like transform masks and stuff that everyone can use, it's just []
+        # for stuff like 'Bow', it's ['Human']
+        # for stuff like 'Fire Arrow', it's ['Human', 'Bow']
+        # then just loop through it and check
+        if item in human_items:
+            return self.form('Human') and self.has(item)
+        return self.has(item)
+
+    def can_epona(self):
+        return self.has('Eponas Song') and (self.form('Human') or self.options('EponaGlitchesOrSomething'))
+
     # Checks to see if balloons are poppable.
     def can_pop_balloon(self):
         # TODO: test for other ways of popping balloons (in the air)
-        return self.form('Zora') or \
-            (self.form('Deku') and self.has('Magic Meter')) or \
-            (self.form('Human') and (self.has('Bow') or self.has('Hookshot')))
+        return (self.form('Zora')
+            or (self.form('Deku') and self.has('Magic Meter'))
+            or (self.form('Human') and (self.has('Bow') or self.has('Hookshot'))))
+
+    def can(self, trick):
+        # still don't know exactly how this should work, but the idea is to have a collection of tricks the user has
+        # selected as allowed
+        return self.tricks[trick]
+
 
     # Gives the number of current full hearts
     def heart_count(self):
@@ -529,6 +541,9 @@ class CollectionState(object):
         # TODO: This probably needs to change to something like:
         if form == 'Human':
             return self.has('Fierce Deity Mask')
+
+    def any_form_but(self, excl_form):
+        return True in [self.form(x) for x in ['Deku', 'Human', 'Goron', 'Zora'] if x != excl_form]
 
     # Checks to see if fire can be generated autonomously
     def has_fire_source(self):
@@ -718,6 +733,8 @@ class Region(object):
     def can_reach(self, state):
         for entrance in self.entrances:
             if state.can_reach(entrance):
+                if not self in state.path:
+                    state.path[self] = (self.name, state.path.get(entrance, None))
                 return True
         return False
 
@@ -815,7 +832,7 @@ class Dungeon(object):
     # Returns all Small and Boss keys of this Dungeon
     @property
     def keys(self):
-        return self.small_keys + self.boss_key
+        return self.small_keys + ([self.boss_key] if self.boss_key else [])
 
     # Returns all items in this Dungeon (Keys and others)
     @property
@@ -867,8 +884,6 @@ class Location(object):
         # Function that takes an item and determines if the item
         # can be filled into this Location
         self.item_rule = lambda item: True
-        self.event = False
-        self.price = None
 
     '''
     Takes a state and item and checks if the item can be filled into this Location.
@@ -882,10 +897,11 @@ class Location(object):
       This is done when `has_beaten_game` is True and `beatable_only` is set.
     '''
     def can_fill(self, state, item, check_access=True):
-        return self.always_allow(item, self) or \
-                    (self.parent_region.can_fill(item) and \
-                    self.item_rule(item) and \
-                    (not check_access or self.can_reach(state)))
+        return self.always_allow(item, self) or (self.parent_region.can_fill(item)
+                    and self.item_rule(item)
+                    and (not check_access or self.can_reach(state))
+                   )
+
 
     # Like `can_fill`, but only checks `self.item_rule`
     def can_fill_fast(self, item):
@@ -936,14 +952,6 @@ class Item(object):
     # DEPRECATED DEPRECATED DEPRECATED DEPRECATED
     # `crystal` not used anywhere. I opt for removing this function
     # DEPRECATED DEPRECATED DEPRECATED DEPRECATED
-    @property
-    def smallkey(self):
-        return self.type == 'SmallKey'
-
-    @property
-    def bosskey(self):
-        return self.type == 'BossKey'
-
     @property
     def crystal(self):
         return self.type == 'Crystal'
@@ -1007,19 +1015,18 @@ class Spoiler(object):
             else:
                 outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(['%s: %s' % (location, item) for (location, item) in self.locations['other locations'].items()]))
-
             outfile.write('\n\nPlaythrough:\n\n')
-            if self.settings.world_count > 1:
-                outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s [World %d]: %s [Player %d]' % (location.name, location.world.id + 1, item.name, item.world.id + 1) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
-            else:
-                outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location.name, item.name) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
+            outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
+            outfile.write('\n\nPaths:\n\n')
 
-            if len(self.hints) > 0:
-                outfile.write('\n\nAlways Required Locations:\n\n')
-                if self.settings.world_count > 1:
-                    outfile.write('\n'.join(['%s: %s [Player %d]' % (location.name, location.item.name, location.item.world.id + 1) for location in self.required_locations]))
-                else:
-                    outfile.write('\n'.join(['%s: %s' % (location.name, location.item.name) for location in self.required_locations]))
+            path_listings = []
+            for location, path in sorted(self.paths.items()):
+                path_lines = []
+                for region, exit in path:
+                    if exit is not None:
+                        path_lines.append("{} -> {}".format(region, exit))
+                    else:
+                        path_lines.append(region)
+                path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
 
-                outfile.write('\n\nGossip Stone Hints:\n\n')
-                outfile.write('\n'.join(self.hints.values()))
+            outfile.write('\n'.join(path_listings))
