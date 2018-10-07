@@ -22,6 +22,13 @@ def ItemFactory(items):
     return ret
 
 
+class ShopData(object):
+    def __init__(self, model, gid, price):
+        self.model = model
+        self.gid = gid
+        self.price = price
+
+# TODO: Verify these or make up a different data structure for our chest shuffle type item
 # Format: Name: (Advancement, Priority, Type, ItemCode, Index)
 item_table = {'Bow': (True, False, None, 0x0620, 0x31),
               'Hookshot': (True, False, None, 0x0120, 0x09),
