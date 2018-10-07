@@ -337,7 +337,15 @@ def global_rules(world):
     # there's apparently 20 rupees in a pit, it's probly just open, but I need to play again to check the details
 
     set_rule(world.get_location('Swamp Shooting Gallery Quiver Prize'), lambda state: state.can_use('Bow'))
-    set_rule(world.get_location('Swamp Shooting Gallery HP Prize'), lambda state: state.can_use('Bow') or state.options('NoHardestArchery'))
+    set_rule(world.get_location('Swamp Shooting Gallery HP Prize'), lambda state: state.can_use('Bow'))
+    # or state.options('NoHardestArchery')
+    # that doesn't work now that I think about it
+    # it means if the option is checked, this is treated as open, obviously wrong
+    # otherwise nothing can be placed there
+    # so todo: determine how to restrict progression items from this spot if the option is selected
+    # (there's probly a mechanism for this in testrunner's build)
+
+    set_rule(world.get_entrance('Swamp Path To Southern Swamp (Clean)'), lambda state: state.event('Beat Odolwa'))
 
     ## Southern Swamp
     set_rule(world.get_location('Swamp Tourist Roof HP'), lambda state: state.can_reach(world.get_location('Swamp Business Scrub')) or state.can('SomeWeirdGoronTrickIDunno'))
@@ -479,6 +487,7 @@ def global_rules(world):
 
     ## Boss: Odolwa
     set_rule(world.get_location('Odolwas Remains'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Beat Odolwa'), lambda state: state.can_use('Bow'))
     # todo: figure out all the ways to kill odolwa
     # you probly hard need to use the bow, which means most other checks aren't needed
     # but yeah, gotta figure out all the ways to beat this

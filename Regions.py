@@ -109,7 +109,7 @@ def create_regions(world):
                           'Tourist Centre Big Octo', 'To Swamp Tourist Centre', 'Tourist Region To Potion Shop Region']),
         create_ow_region('Southern Swamp Potion Shop Region (Poisoned)', [],
                          ['Potion Shop Region to Tourist Region', 'Potion Shop Region To Potion Shop', 'To Lost Woods']),
-        create_ow_region('Southern Swamp Deku Palace Region', [],
+        create_ow_region('Southern Swamp Deku Palace Region (Poisoned)', [],
                          ['Palace Region to Tourist Region', 'Palace Region to Deku Palace', 'some other exits I think I dunno']),
 
         create_interior_region('Swamp Tourist Centre', ['Swamp Tourist Free Product', 'Pictograph Contest Winner'], ['Boat Ride', 'Southern Swamp']),
