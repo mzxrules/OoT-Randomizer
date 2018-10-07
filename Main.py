@@ -10,20 +10,20 @@ import time
 from BaseClasses import World, CollectionState, Item
 from Regions import create_regions
 from EntranceShuffle import link_entrances
-from Rom import patch_rom, LocalRom
+from Rom import LocalRom
+from Patches import patch_rom
 from Rules import set_rules
-from Dungeons import create_dungeons, fill_dungeons_restrictive
+from Dungeons import create_dungeons
 from Fill import distribute_items_restrictive
 from ItemList import generate_itempool
 from Utils import output_path
-
-__version__ = '1.0.0'
+from version import __version__
 
 def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.bridge, args.open_forest, args.open_door_of_time, not args.nodungeonitems, args.beatableonly, args.hints, [args.kokiricolor, args.goroncolor, args.zoracolor], args.healthSFX)
+    world = World(args.bridge, args.open_forest, args.open_door_of_time, not args.nodungeonitems, args.beatableonly, args.hints)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -94,7 +94,7 @@ def main(args, seed=None):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.bridge, world.open_forest, world.open_door_of_time, world.place_dungeon_items, world.check_beatable_only, world.hints, world.colors, world.healthSFX)
+    ret = World(world.bridge, world.open_forest, world.open_door_of_time, world.place_dungeon_items, world.check_beatable_only, world.hints)
     ret.seed = world.seed
     ret.can_take_damage = world.can_take_damage
     create_regions(ret)

@@ -4,7 +4,7 @@ import logging
 
 def set_rules(world):
     global_rules(world)
-
+    '''
     if world.bridge == 'medallions':
         # require all medallions to form the bridge
         set_rule(world.get_entrance('Rainbow Bridge'), lambda state: state.has('Forest Medallion') and state.has('Fire Medallion') and state.has('Water Medallion') and state.has('Shadow Medallion') and state.has('Spirit Medallion') and state.has('Light Medallion'))
@@ -14,7 +14,7 @@ def set_rules(world):
     elif world.bridge == 'dungeons':
         # require all medallions and stones to form the bridge
         set_rule(world.get_entrance('Rainbow Bridge'), lambda state: state.has('Forest Medallion') and state.has('Fire Medallion') and state.has('Water Medallion') and state.has('Shadow Medallion') and state.has('Spirit Medallion') and state.has('Light Medallion') and state.has('Kokiri Emerald') and state.has('Goron Ruby') and state.has('Zora Sapphire'))
-
+    '''
 
 def set_rule(spot, rule):
     spot.access_rule = rule
@@ -50,370 +50,811 @@ def item_name(state, location):
 
 
 def global_rules(world):
-    # ganon can only carry triforce
-    world.get_location('Ganon').item_rule = lambda item: item.name == 'Triforce'
+    set_rule(world.get_entrance('Clock Tower Twisted Hallway'), False)
+    set_rule(world.get_location('First Nut'), lambda state: state.form('Deku'))
+    # set_rule(world.get_location('Clock Town GF Reward'), lambda state: state.has('CT SF', 1))
+    set_rule(world.get_location('Woodfall GF Reward'), lambda state: state.has('WF SF', 15))
+    set_rule(world.get_location('Snowhead GF Reward'), lambda state: state.has('SH SF', 15))
+    set_rule(world.get_location('Great Bay GF Reward'), lambda state: state.has('GB SF', 15))
+    set_rule(world.get_location('Stone Tower GF Reward'), lambda state: state.has('ST SF', 15))
 
-    # these are default save&quit points and always accessible
-    world.get_region('Links House').can_reach = lambda state: True
+    set_rule(world.get_location('Clock Town Mailbox HP'), lambda state: state.can_use('Postman Hat'))
+    set_rule(world.get_location('Swamp Business Scrub'), lambda state: state.has('Town Title Deed') and state.form('Human'))
 
-    # overworld requirements
-    set_rule(world.get_entrance('Deku Tree'), lambda state: state.has('Kokiri Sword') or world.open_forest)
-    set_rule(world.get_entrance('Lost Woods Bridge'), lambda state: world.open_forest or (state.has('Slingshot') and state.has('Kokiri Sword')))
-    set_rule(world.get_entrance('Deku Tree Basement Path'), lambda state: state.has('Slingshot'))
-    set_rule(world.get_location('Skull Kid'), lambda state: state.has('Sarias Song'))
-    set_rule(world.get_location('Ocarina Memory Game'), lambda state: state.has('Fairy Ocarina') or state.has('Ocarina of Time'))
-    set_rule(world.get_location('Target in Woods'), lambda state: state.has('Slingshot'))
-    set_rule(world.get_location('Deku Theater Skull Mask'), lambda state: state.has('Zeldas Letter'))
-    set_rule(world.get_location('Deku Theater Mask of Truth'), lambda state: state.has('Zeldas Letter') and state.has('Sarias Song') and state.has('Kokiri Emerald') and state.has('Goron Ruby') and state.has('Zora Sapphire') and state.guarantee_hint()) #Must befriend Skull Kid to sell Skull Mask, all stones to spawn running man.
-    set_rule(world.get_location('Anju as Adult'), lambda state: state.is_adult())
-    set_rule(world.get_location('Man on Roof'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('Impa House Freestanding PoH'), lambda state: (state.has('Progressive Hookshot') and state.is_adult()) or state.has('Bomb Bag'))
-    set_rule(world.get_location('10 Gold Skulltulla Reward'), lambda state: state.has('Gold Skulltulla Token', 10))
-    set_rule(world.get_location('20 Gold Skulltulla Reward'), lambda state: state.has('Gold Skulltulla Token', 20))
-    set_rule(world.get_location('30 Gold Skulltulla Reward'), lambda state: state.has('Gold Skulltulla Token', 30) and state.guarantee_hint())
-    set_rule(world.get_location('40 Gold Skulltulla Reward'), lambda state: state.has('Gold Skulltulla Token', 40) and state.guarantee_hint())
-    set_rule(world.get_location('50 Gold Skulltulla Reward'), lambda state: state.has('Gold Skulltulla Token', 50) and state.guarantee_hint())
-    set_rule(world.get_location('Heart Piece Grave Chest'), lambda state: state.has('Suns Song'))
-    set_rule(world.get_entrance('Composer Grave'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_location('Composer Grave Chest'), lambda state: state.has_fire_source())
-    set_rule(world.get_entrance('Bottom of the Well'), lambda state: state.has('Song of Storms'))
-    set_rule(world.get_location('Bottom of the Well Front Left Hidden Wall'), lambda state: state.has('Lens of Truth') and state.has('Magic Meter'))
-    set_rule(world.get_location('Bottom of the Well Front Center Bombable'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Bottom of the Well Right Bottom Hidden Wall'), lambda state: state.has('Lens of Truth') and state.has('Magic Meter'))
-    set_rule(world.get_location('Bottom of the Well Center Large Chest'), lambda state: state.has('Lens of Truth') and state.has('Magic Meter'))
-    set_rule(world.get_location('Bottom of the Well Center Small Chest'), lambda state: state.has('Lens of Truth') and state.has('Magic Meter'))
-    set_rule(world.get_location('Bottom of the Well Back Left Bombable'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Bottom of the Well Defeat Boss'), lambda state: state.has('Zeldas Lullaby') and state.has('Kokiri Sword')) #Sword not strictly necessary but frankly being forced to do this with sticks isn't fair
-    set_rule(world.get_location('Bottom of the Well Invisible Chest'), lambda state: state.has('Zeldas Lullaby') and state.has('Lens of Truth') and state.has('Magic Meter'))
-    set_rule(world.get_location('Bottom of the Well Underwater Front Chest'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_location('Bottom of the Well Underwater Left Chest'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_location('Bottom of the Well Basement Chest'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Bottom of the Well Locked Pits'), lambda state: state.has('Small Key (Bottom of the Well)', 3) and state.has('Lens of Truth') and state.has('Magic Meter')) #These pits are really unfair.
-    set_rule(world.get_location('Bottom of the Well Behind Right Grate'), lambda state: state.has('Small Key (Bottom of the Well)', 3) and state.has('Lens of Truth') and state.has('Magic Meter'))
-    set_rule(world.get_entrance('Death Mountain Entrance'), lambda state: state.has('Zeldas Letter') or state.is_adult())
-    set_rule(world.get_location('Death Mountain Bombable Chest'), lambda state: state.can_blast())
-    set_rule(world.get_location('Biggoron'), lambda state: state.can_blast() and state.is_adult() and state.can_finish_adult_trades() and state.guarantee_hint())
-    set_rule(world.get_location('Goron City Leftmost Maze Chest'), lambda state: state.is_adult() and (state.has('Progressive Strength Upgrade', 2) or state.has('Hammer')))
-    set_rule(world.get_location('Goron City Left Maze Chest'), lambda state: state.can_blast() or (state.has('Progressive Strength Upgrade', 2) and state.is_adult()))
-    set_rule(world.get_location('Goron City Right Maze Chest'), lambda state: state.can_blast() or (state.has('Progressive Strength Upgrade', 2) and state.is_adult()))
-    set_rule(world.get_location('Rolling Goron as Child'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Goron City Pot Freestanding PoH'), lambda state: (state.has('Bomb Bag') or state.has('Progressive Strength Upgrade')) and (state.has('Zeldas Lullaby') or (state.has('Dins Fire') and state.has('Magic Meter'))))
-    set_rule(world.get_entrance('Darunias Chamber'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_location('Darunias Joy'), lambda state: state.has('Sarias Song'))
-    set_rule(world.get_entrance('Goron City from Woods'), lambda state: state.can_blast() and (world.open_forest or (state.has('Slingshot') and state.has('Kokiri Sword'))))
-    set_rule(world.get_entrance('Dodongos Cavern Rocks'), lambda state: state.can_blast() or state.has('Progressive Strength Upgrade') or state.is_adult())
-    set_rule(world.get_entrance('Dodongos Cavern Lobby'), lambda state: state.can_blast() or state.has('Progressive Strength Upgrade'))
-    set_rule(world.get_entrance('Dodongos Cavern Left Door'), lambda state: state.has('Bomb Bag') or state.has('Progressive Strength Upgrade'))
-    set_rule(world.get_entrance('Dodongos Cavern Slingshot Target'), lambda state: state.has('Slingshot') or ((state.has('Bow') or state.has('Hover Boots')) and state.is_adult()))
-    set_rule(world.get_location('Dodongos Cavern End of Bridge Chest'), lambda state: state.has('Bomb Bag') or ((state.has('Bow') or state.has('Hover Boots')) and state.is_adult() and state.has('Hammer')))
-    set_rule(world.get_entrance('Dodongos Cavern Bomb Drop'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Song from Saria'), lambda state: state.has('Zeldas Letter'))
-    set_rule(world.get_entrance('Mountain Summit Fairy'), lambda state: state.can_blast())
-    set_rule(world.get_location('Crater Fairy Reward'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_location('Mountain Summit Fairy Reward'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_entrance('Mountain Crater Entrance'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Hyrule Castle Fairy'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Hyrule Castle Fairy Reward'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_entrance('Ganons Castle Grounds'), lambda state: state.is_adult())
-    set_rule(world.get_entrance('Ganons Castle Fairy'), lambda state: state.has('Progressive Strength Upgrade', 3))
-    set_rule(world.get_location('Ganons Castle Fairy Reward'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_location('Bombchu Bowling Bomb Bag'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Bombchu Bowling Piece of Heart'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Adult Shooting Gallery'), lambda state: state.has('Bow') and state.is_adult())
-    set_rule(world.get_location('10 Big Poes'), lambda state: state.has('Bow') and state.has('Epona') and state.has_bottle() and state.is_adult() and state.guarantee_hint())
-    set_rule(world.get_location('Treasure Chest Game'), lambda state: state.has('Lens of Truth') and state.has('Magic Meter'))
-    set_rule(world.get_entrance('Lost Woods Dive Warp'), lambda state: state.can_dive() and (world.open_forest or (state.has('Slingshot') and state.has('Kokiri Sword'))))
-    set_rule(world.get_entrance('Zora River Dive Warp'), lambda state: state.can_dive())
-    set_rule(world.get_entrance('Lake Hylia Dive Warp'), lambda state: state.can_dive())
-    set_rule(world.get_entrance('Zoras Domain Dive Warp'), lambda state: state.can_dive())
-    set_rule(world.get_entrance('Zora River Waterfall'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_entrance('Zora River Rocks'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Zora River Lower Freestanding PoH'), lambda state: state.has('Bomb Bag') or state.has('Progressive Scale') or (state.has('Hover Boots') and state.is_adult()))
-    set_rule(world.get_location('Zora River Upper Freestanding PoH'), lambda state: state.has('Bomb Bag') or state.has('Progressive Scale') or (state.has('Hover Boots') and state.is_adult()))
-    set_rule(world.get_location('Frog Ocarina Game'), lambda state: state.has('Zeldas Lullaby') and state.has('Sarias Song') and state.has('Suns Song') and state.has('Eponas Song') and state.has('Song of Time') and state.has('Song of Storms'))
-    set_rule(world.get_location('Frogs in the Rain'), lambda state: state.has('Song of Storms'))
-    set_rule(world.get_location('Underwater Bottle'), lambda state: state.can_dive())
-    set_rule(world.get_location('King Zora Moves'), lambda state: state.has('Bottle with Letter'))
-    set_rule(world.get_entrance('Behind King Zora'), lambda state: state.has('Bottle with Letter'))
-    set_rule(world.get_entrance('Zora River Adult'), lambda state: state.is_adult())
-    set_rule(world.get_entrance('Zoras Domain Adult Access'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_entrance('Zoras Fountain Adult Access'), lambda state: state.can_reach('Zoras Fountain'))
-    set_rule(world.get_entrance('Jabu Jabus Belly'), lambda state: state.has_bottle())
-    set_rule(world.get_entrance('Zoras Fountain Fairy'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Zoras Fountain Fairy Reward'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_entrance('Jabu Jabus Belly Ceiling Switch'), lambda state: state.has('Slingshot') or state.has('Bomb Bag') or state.has('Boomerang'))
-    set_rule(world.get_entrance('Jabu Jabus Belly Tentacles'), lambda state: state.has('Boomerang'))
-    set_rule(world.get_location('Ice Cavern Map Chest'), lambda state: state.has_bottle())
-    set_rule(world.get_location('Ice Cavern Compass Chest'), lambda state: state.has_bottle())
-    set_rule(world.get_location('Ice Cavern Freestanding PoH'), lambda state: state.has_bottle())
-    set_rule(world.get_location('Ice Cavern Iron Boots Chest'), lambda state: state.has_bottle())
-    set_rule(world.get_location('Sheik in Ice Cavern'), lambda state: state.has_bottle() and state.is_adult())
-    set_rule(world.get_location('Ocarina of Time'), lambda state: state.has('Kokiri Emerald') and state.has('Goron Ruby') and state.has('Zora Sapphire') and state.guarantee_hint())
-    set_rule(world.get_location('Song from Ocarina of Time'), lambda state: state.has('Kokiri Emerald') and state.has('Goron Ruby') and state.has('Zora Sapphire') and state.guarantee_hint())
-    set_rule(world.get_entrance('Door of Time'), lambda state: state.has('Song of Time') or world.open_door_of_time)
-    set_rule(world.get_location('Talons Chickens'), lambda state: state.has('Zeldas Letter'))
-    set_rule(world.get_location('Epona'), lambda state: state.has('Eponas Song') and state.is_adult())
-    set_rule(world.get_entrance('Adult Forest Warp Pad'), lambda state: state.has('Minuet of Forest') and state.is_adult())
-    set_rule(world.get_entrance('Child Forest Warp Pad'), lambda state: state.has('Minuet of Forest'))
-    set_rule(world.get_entrance('Adult Meadow Access'), lambda state: state.has('Sarias Song') and state.is_adult())
-    set_rule(world.get_entrance('Forest Temple Entrance'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_entrance('Forest Temple Song of Time Block'), lambda state: state.has('Song of Time'))
-    set_rule(world.get_entrance('Forest Temple Lobby Eyeball Switch'), lambda state: state.has('Bow') and state.is_adult())
-    set_rule(world.get_entrance('Forest Temple Lobby Locked Door'), lambda state: state.has('Progressive Strength Upgrade') and state.has('Small Key (Forest Temple)', 1))
-    set_rule(world.get_entrance('Forest Temple Well Connection'), lambda state: ((state.has('Iron Boots') or state.has('Progressive Hookshot', 2)) and state.is_adult()) or state.has('Progressive Scale', 2)) #Longshot can grab some very high up vines to drain the well.
-    set_rule(world.get_entrance('Forest Temple Scarecrows Song'), lambda state: False) #For some reason you can't actually activate this from below. Cool game.
-    set_rule(world.get_entrance('Forest Temple Elevator'), lambda state: state.has('Bow') and state.is_adult() and state.has('Progressive Strength Upgrade') and state.has('Small Key (Forest Temple)', 3))
-    set_rule(world.get_entrance('Forest Temple Outside Backdoor'), lambda state: state.has('Hover Boots') and state.is_adult())
-    set_rule(world.get_entrance('Forest Temple Twisted Hall'), lambda state: state.has('Small Key (Forest Temple)', 3))
-    set_rule(world.get_entrance('Forest Temple Straightened Hall'), lambda state: state.has('Small Key (Forest Temple)', 2) and state.has('Bow'))
-    set_rule(world.get_entrance('Forest Temple Drop to Falling Room'), lambda state: state.has('Small Key (Forest Temple)', 5) and (state.has('Bow') or (state.has('Dins Fire') and state.has('Magic Meter'))))
-    set_rule(world.get_location('Forest Temple Block Push Chest'), lambda state: state.has('Bow') and state.is_adult())
-    set_rule(world.get_location('Forest Temple Red Poe Chest'), lambda state: state.has('Bow') and state.is_adult())
-    set_rule(world.get_location('Forest Temple Blue Poe Chest'), lambda state: state.has('Bow') and state.is_adult())
-    set_rule(world.get_location('Phantom Ganon'), lambda state: state.has('Boss Key (Forest Temple)'))
-    set_rule(world.get_location('Phantom Ganon Heart'), lambda state: state.has('Boss Key (Forest Temple)'))
-    set_rule(world.get_entrance('Dampes Grave'), lambda state: state.is_adult())
-    set_rule(world.get_location('Graveyard Freestanding PoH'), lambda state: state.is_adult() and (state.has('Magic Bean') or state.has('Progressive Hookshot', 2)))
-    set_rule(world.get_location('Song at Windmill'), lambda state: state.is_adult())
-    set_rule(world.get_location('Windmill Freestanding PoH'), lambda state: (state.is_adult() and state.has('Song of Time')) or state.has('Boomerang'))
-    set_rule(world.get_entrance('Temple Warp Pad'), lambda state: state.has('Prelude of Light'))
-    set_rule(world.get_location('Sheik at Temple'), lambda state: state.has('Forest Medallion') and state.is_adult())
-    set_rule(world.get_location('Diving in the Lab'), lambda state: state.has('Progressive Scale', 2))
-    set_rule(world.get_location('Child Fishing'), lambda state: state.has('Kokiri Sword'))
-    set_rule(world.get_location('Adult Fishing'), lambda state: state.is_adult() and (state.has('Progressive Hookshot') or state.has('Magic Bean')))
-    set_rule(world.get_location('Lake Hylia Freestanding PoH'), lambda state: state.is_adult() and (state.has('Progressive Hookshot') or state.has('Magic Bean')))
-    set_rule(world.get_location('Lake Hylia Sun'), lambda state: state.has('Progressive Hookshot', 2) and state.has('Bow') and state.is_adult())
-    set_rule(world.get_entrance('Crater Hover Boots'), lambda state: state.is_adult() and state.has('Hover Boots'))
-    set_rule(world.get_entrance('Crater Ascent'), lambda state: state.is_adult() and (state.has('Goron Tunic') or (state.has('Progressive Wallet') and state.has('Bomb Bag'))) and (state.has('Hover Boots') or state.has('Hammer')))
-    set_rule(world.get_entrance('Crater Scarecrow'), lambda state: state.is_adult() and state.has('Progressive Hookshot', 2) and (state.has('Goron Tunic') or (state.has('Progressive Wallet') and state.has('Bomb Bag'))))
-    set_rule(world.get_entrance('Crater Bridge'), lambda state: state.is_adult() and (state.has('Hover Boots') or state.has('Progressive Hookshot')))
-    set_rule(world.get_entrance('Crater Bridge Reverse'), lambda state: state.is_adult() and (state.has('Hover Boots') or state.has('Progressive Hookshot')))
-    set_rule(world.get_entrance('Crater Warp Pad'), lambda state: state.has('Bolero of Fire'))
-    set_rule(world.get_entrance('Crater Fairy'), lambda state: state.is_adult() and state.has('Hammer'))
-    set_rule(world.get_location('DM Crater Volcano Freestanding PoH'), lambda state: state.is_adult() and state.has('Magic Bean') and state.has('Bolero of Fire'))
-    set_rule(world.get_entrance('Fire Temple Entrance'), lambda state: state.is_adult() and (state.has('Goron Tunic') or (state.has('Progressive Wallet') and state.has('Bomb Bag'))))
-    set_rule(world.get_entrance('Fire Temple Early Climb'), lambda state: state.has('Small Key (Fire Temple)', 3) and state.has('Progressive Strength Upgrade') and (state.has('Bomb Bag') or ((state.has('Bow') or state.has('Progressive Hookshot')) and state.is_adult())))
-    set_rule(world.get_entrance('Fire Temple Fire Maze Escape'), lambda state: state.has('Small Key (Fire Temple)', 7) or (state.has('Small Key (Fire Temple)', 6) and state.has('Hover Boots') and state.has('Hammer') and state.is_adult()))
-    set_rule(world.get_location('Fire Temple Fire Dancer Chest'), lambda state: state.is_adult() and state.has('Hammer'))
-    set_rule(world.get_location('Fire Temple Boss Key Chest'), lambda state: state.is_adult() and state.has('Hammer'))
-    set_rule(world.get_location('Fire Temple Big Lava Room Bombable Chest'), lambda state: state.has('Small Key (Fire Temple)', 1) and state.has('Bomb Bag'))
-    set_rule(world.get_location('Fire Temple Big Lava Room Open Chest'), lambda state: state.has('Small Key (Fire Temple)', 1))
-    set_rule(world.get_location('Fire Temple Map Chest'), lambda state: state.has('Small Key (Fire Temple)', 5) or (state.has('Small Key (Fire Temple)', 4) and state.is_adult() and state.has('Bow')))
-    set_rule(world.get_location('Fire Temple Boulder Maze Upper Chest'), lambda state: state.has('Small Key (Fire Temple)', 5))
-    set_rule(world.get_location('Fire Temple Boulder Maze Bombable Pit'), lambda state: state.has('Small Key (Fire Temple)', 5) and state.has('Bomb Bag'))
-    set_rule(world.get_location('Fire Temple Scarecrow Chest'), lambda state: state.has('Small Key (Fire Temple)', 5) and state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('Fire Temple Compass Chest'), lambda state: state.has('Small Key (Fire Temple)', 6))
-    set_rule(world.get_location('Fire Temple Highest Goron Chest'), lambda state: state.has('Song of Time') and state.has('Hammer') and state.is_adult())
-    set_rule(world.get_location('Fire Temple Megaton Hammer Chest'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Volvagia'), lambda state: state.has('Hammer') and state.is_adult() and state.has('Boss Key (Fire Temple)') and (state.has('Hover Boots') or (state.can_reach('Fire Temple Upper') and (state.has('Song of Time') or state.has('Bomb Bag')))))
-    set_rule(world.get_location('Volvagia Heart'), lambda state: state.has('Hammer') and state.is_adult() and state.has('Boss Key (Fire Temple)') and (state.has('Hover Boots') or (state.can_reach('Fire Temple Upper') and (state.has('Song of Time') or state.has('Bomb Bag')))))
-    set_rule(world.get_location('Sheik in Crater'), lambda state: state.is_adult())
-    set_rule(world.get_location('Link the Goron'), lambda state: state.is_adult() and (state.has('Progressive Strength Upgrade') or state.has('Bomb Bag')))
-    set_rule(world.get_entrance('Crater Access'), lambda state: state.is_adult() and (state.has('Progressive Strength Upgrade') or state.has('Bomb Bag')))
-    set_rule(world.get_entrance('Lake Warp Pad'), lambda state: state.has('Serenade of Water'))
-    set_rule(world.get_location('King Zora Thawed'), lambda state: state.has_bottle() and (state.can_reach('Ice Cavern') or state.can_reach('Ganons Castle Water Trial') or state.has('Progressive Wallet', 2)))
-    set_rule(world.get_location('Zoras Fountain Bottom Freestanding PoH'), lambda state: state.has('Iron Boots'))
-    set_rule(world.get_entrance('Water Temple Entrance'), lambda state: state.is_adult() and (state.has('Zora Tunic') or (state.has('Progressive Wallet', 2) and state.has_bottle() and state.has('Zeldas Lullaby'))) and state.has('Iron Boots') and state.has('Progressive Hookshot'))
-    set_rule(world.get_entrance('Water Temple Central Pillar'), lambda state: (state.has('Bow') or (state.has('Dins Fire') and state.has('Magic Meter')) or state.has('Small Key (Water Temple)', 5)) and state.has('Zeldas Lullaby'))
-    set_rule(world.get_entrance('Water Temple Upper Locked Door'), lambda state: state.has('Small Key (Water Temple)', 5) and (state.has('Zeldas Lullaby') or world.keysanity))
-    set_rule(world.get_location('Water Temple Torches Chest'), lambda state: (state.has('Bow') or (state.has('Dins Fire') and state.has('Magic Meter'))) and state.has('Zeldas Lullaby'))
-    set_rule(world.get_location('Water Temple Dragon Chest'), lambda state: (state.has('Progressive Strength Upgrade') and state.has('Zeldas Lullaby')) or (state.has('Small Key (Water Temple)', 6) and (state.has('Zeldas Lullaby') or world.keysanity) and state.has('Song of Time') and state.has('Bow')))
-    set_rule(world.get_location('Water Temple Central Bow Target Chest'), lambda state: state.has('Bow') and state.has('Progressive Strength Upgrade') and state.has('Zeldas Lullaby') and (state.has('Hover Boots') or state.has('Progressive Hookshot', 2)))
-    set_always_allow(world.get_location('Water Temple Boss Key Chest'), lambda state, item: item.name == 'Small Key (Water Temple)')
-    set_rule(world.get_location('Water Temple Boss Key Chest'), lambda state: (state.has('Small Key (Water Temple)', 6) and (state.has('Zeldas Lullaby') or world.keysanity) and ((state.has('Bomb Bag') and state.has('Progressive Strength Upgrade')) or state.has('Hover Boots')) and state.has('Progressive Hookshot', 2)) or item_name(state, 'Water Temple Boss Key Chest') == 'Small Key (Water Temple)') #If key for key, this lets the logic reduce the small key reqs for every other locked door.
-    set_rule(world.get_location('Morpha'), lambda state: state.has('Boss Key (Water Temple)') and state.has('Progressive Hookshot', 2))
-    set_rule(world.get_location('Morpha Heart'), lambda state: state.has('Boss Key (Water Temple)') and state.has('Progressive Hookshot', 2))
-    set_rule(world.get_location('Water Temple Cracked Wall Chest'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Water Temple Dark Link Chest'), lambda state: state.has('Small Key (Water Temple)', 6) and (state.has('Zeldas Lullaby') or world.keysanity))
-    set_rule(world.get_location('Water Temple River Chest'), lambda state: state.has('Small Key (Water Temple)', 6) and state.has('Song of Time') and state.has('Bow') and (state.has('Zeldas Lullaby') or world.keysanity))
-    set_rule(world.get_location('Sheik in Kakariko'), lambda state: state.has('Forest Medallion') and state.has('Fire Medallion') and state.has('Water Medallion'))
-    set_rule(world.get_entrance('Graveyard Warp Pad'), lambda state: state.has('Nocturne of Shadow'))
-    set_rule(world.get_entrance('Shadow Temple Entrance'), lambda state: state.has('Dins Fire') and state.has('Magic Meter') and state.has('Lens of Truth') and state.is_adult() and (state.has('Hover Boots') or state.has('Progressive Hookshot')))
-    set_rule(world.get_entrance('Shadow Temple First Pit'), lambda state: state.has('Hover Boots'))
-    set_rule(world.get_entrance('Shadow Temple Bomb Wall'), lambda state: state.has('Bomb Bag') and state.has('Small Key (Shadow Temple)', 1))
-    set_rule(world.get_entrance('Shadow Temple Hookshot Target'), lambda state: state.has('Progressive Hookshot') and state.has('Small Key (Shadow Temple)', 3))
-    set_rule(world.get_entrance('Shadow Temple Boat'), lambda state: state.has('Zeldas Lullaby') and state.has('Small Key (Shadow Temple)', 4))
-    set_rule(world.get_location('Shadow Temple Falling Spikes Upper Chest'), lambda state: state.has('Progressive Strength Upgrade'))
-    set_rule(world.get_location('Shadow Temple Falling Spikes Switch Chest'), lambda state: state.has('Progressive Strength Upgrade'))
-    set_rule(world.get_location('Shadow Temple Invisible Spikes Chest'), lambda state: state.has('Small Key (Shadow Temple)', 2))
-    set_rule(world.get_location('Shadow Temple Freestanding Key'), lambda state: state.has('Small Key (Shadow Temple)', 2) and state.has('Progressive Hookshot'))
-    set_rule(world.get_location('Bongo Bongo'), lambda state: state.has('Small Key (Shadow Temple)', 5) and (state.has('Bow') or state.has('Progressive Hookshot', 2)) and state.has('Boss Key (Shadow Temple)'))
-    set_rule(world.get_location('Bongo Bongo Heart'), lambda state: state.has('Small Key (Shadow Temple)', 5) and (state.has('Bow') or state.has('Progressive Hookshot', 2)) and state.has('Boss Key (Shadow Temple)'))
-    set_rule(world.get_entrance('Bridge Crossing'), lambda state: (state.has('Epona') or state.has('Progressive Hookshot', 2)) and state.is_adult())
-    set_rule(world.get_location('Gerudo Valley Hammer Rocks Chest'), lambda state: state.has('Hammer') and state.is_adult())
-    set_rule(world.get_entrance('Fortress Entrance'), lambda state: (state.has('Bow') or state.has('Progressive Hookshot') or state.has('Hover Boots')) and state.is_adult())
-    set_rule(world.get_entrance('Gerudo Training Grounds Entrance'), lambda state: state.has('Gerudo Membership Card') and state.is_adult())
-    set_rule(world.get_entrance('Haunted Wasteland Entrance'), lambda state: state.has('Gerudo Membership Card') and state.is_adult() and (state.has('Hover Boots') or state.has('Progressive Hookshot', 2)))
-    set_rule(world.get_entrance('Haunted Wasteland Crossing'), lambda state: state.has('Lens of Truth') and state.has('Magic Meter'))
-    set_rule(world.get_entrance('Colossus Warp Pad'), lambda state: state.has('Requiem of Spirit'))
-    set_rule(world.get_entrance('Colossus Fairy'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Colossus Freestanding PoH'), lambda state: state.has('Requiem of Spirit') and state.has('Magic Bean') and state.is_adult())
-    set_rule(world.get_location('Desert Colossus Fairy Reward'), lambda state: state.has('Zeldas Lullaby'))
-    set_rule(world.get_location('Gerudo Fortress Rooftop Chest'), lambda state: (state.has('Hover Boots') or state.has('Progressive Hookshot', 2)) and state.is_adult())
-    set_rule(world.get_location('Horseback Archery 1000 Points'), lambda state: state.has('Gerudo Membership Card') and state.has('Epona') and state.has('Bow') and state.is_adult())
-    set_rule(world.get_location('Horseback Archery 1500 Points'), lambda state: state.has('Gerudo Membership Card') and state.has('Epona') and state.has('Bow') and state.is_adult())
-    set_rule(world.get_location('Haunted Wasteland Structure Chest'), lambda state: state.has_fire_source())
-    set_rule(world.get_entrance('Gerudo Training Ground Left Silver Rupees'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_entrance('Gerudo Training Ground Beamos'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_entrance('Gerudo Training Grounds Right Locked Doors'), lambda state: state.has('Small Key (Gerudo Training Grounds)', 9))
-    set_rule(world.get_entrance('Gerudo Training Grounds Maze Ledge'), lambda state: state.has('Song of Time'))
-    set_rule(world.get_entrance('Gerudo Training Grounds Right Hookshot Target'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_entrance('Gerudo Training Grounds Hammer Target'), lambda state: state.has('Hammer') and state.has('Bow') and state.is_adult())
-    set_rule(world.get_entrance('Gerudo Training Grounds Hidden Hookshot Target'), lambda state: state.has('Progressive Hookshot') and state.has('Lens of Truth') and state.has('Magic Meter') and state.is_adult())
-    set_rule(world.get_location('Gerudo Training Grounds Lobby Left Chest'), lambda state: state.has('Bow') and state.is_adult())
-    set_rule(world.get_location('Gerudo Training Grounds Lobby Right Chest'), lambda state: state.has('Bow') and state.is_adult())
-    set_rule(world.get_location('Gerudo Training Grounds Beamos Chest'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('Gerudo Training Grounds Hidden Ceiling Chest'), lambda state: state.has('Small Key (Gerudo Training Grounds)', 3) and state.has('Lens of Truth') and state.has('Magic Meter'))
-    set_rule(world.get_location('Gerudo Training Grounds Maze Path First Chest'), lambda state: state.has('Small Key (Gerudo Training Grounds)', 4))
-    set_rule(world.get_location('Gerudo Training Grounds Maze Path Second Chest'), lambda state: state.has('Small Key (Gerudo Training Grounds)', 6))
-    set_rule(world.get_location('Gerudo Training Grounds Maze Path Third Chest'), lambda state: state.has('Small Key (Gerudo Training Grounds)', 7))
-    set_always_allow(world.get_location('Gerudo Training Grounds Maze Path Final Chest'), lambda state, item: item.name == 'Small Key (Gerudo Training Grounds)')
-    set_rule(world.get_location('Gerudo Training Grounds Maze Path Final Chest'), lambda state: (state.has('Small Key (Gerudo Training Grounds)', 9)) or (item_name(state, 'Gerudo Training Grounds Maze Path Final Chest') == 'Small Key (Gerudo Training Grounds)' and state.has('Small Key (Gerudo Training Grounds)', 8))) #Allow key for key
-    set_rule(world.get_location('Gerudo Training Grounds Underwater Silver Rupee Chest'), lambda state: state.has('Progressive Hookshot') and state.has('Song of Time') and state.has('Iron Boots') and state.is_adult())
-    set_rule(world.get_location('Gerudo Training Grounds Hammer Room Switch Chest'), lambda state: state.has('Hammer') and state.is_adult())
-    set_rule(world.get_location('Gerudo Training Grounds Eye Statue Chest'), lambda state: state.has('Bow') and state.is_adult())
-    set_rule(world.get_location('Gerudo Training Grounds Near Scarecrow Chest'), lambda state: state.has('Bow') and state.is_adult())
-    set_rule(world.get_location('Gerudo Training Grounds Heavy Block First Chest'), lambda state: state.has('Progressive Strength Upgrade', 2) and state.has('Lens of Truth') and state.has('Magic Meter') and state.is_adult())
-    set_rule(world.get_location('Gerudo Training Grounds Heavy Block Second Chest'), lambda state: state.has('Progressive Strength Upgrade', 2) and state.has('Lens of Truth') and state.has('Magic Meter') and state.is_adult())
-    set_rule(world.get_location('Gerudo Training Grounds Heavy Block Third Chest'), lambda state: state.has('Progressive Strength Upgrade', 2) and state.has('Lens of Truth') and state.has('Magic Meter') and state.is_adult())
-    set_rule(world.get_location('Gerudo Training Grounds Heavy Block Fourth Chest'), lambda state: state.has('Progressive Strength Upgrade', 2) and state.has('Lens of Truth') and state.has('Magic Meter') and state.is_adult())
-    set_rule(world.get_entrance('Spirit Temple Crawl Passage'), lambda state: state.has('Requiem of Spirit'))
-    set_rule(world.get_entrance('Spirit Temple Silver Block'), lambda state: state.has('Progressive Strength Upgrade', 2) and state.is_adult())
-    set_rule(world.get_entrance('Child Spirit Temple Passthrough'), lambda state: state.has('Bomb Bag') and state.has('Small Key (Spirit Temple)', 1))
-    set_rule(world.get_entrance('Adult Spirit Temple Passthrough'), lambda state: state.has('Small Key (Spirit Temple)', 1))
-    set_rule(world.get_entrance('Spirit Temple Central Locked Door'), lambda state: state.has('Small Key (Spirit Temple)', 4) and state.has('Progressive Strength Upgrade', 2) and state.is_adult())
-    set_rule(world.get_entrance('Spirit Temple Final Locked Door'), lambda state: state.has('Small Key (Spirit Temple)', 5) and (state.has('Progressive Hookshot') or state.has('Bow') or state.has('Bomb Bag')))
-    set_rule(world.get_location('Spirit Temple Child Left Chest'), lambda state: state.has('Boomerang') or state.has('Slingshot'))
-    set_rule(world.get_location('Spirit Temple Child Right Chest'), lambda state: state.has('Boomerang') or state.has('Slingshot'))
-    set_rule(world.get_location('Spirit Temple Compass Chest'), lambda state: state.has('Progressive Hookshot') and state.has('Zeldas Lullaby'))
-    set_rule(world.get_location('Spirit Temple Early Adult Right Chest'), lambda state: state.has('Bow') or state.has('Progressive Hookshot') or state.has('Bomb Bag')) #Bomb Bag option requires a very specific Bombchu use, Hover Boots can be skipped by jumping on top of the rolling rock.
-    set_rule(world.get_location('Spirit Temple First Mirror Right Chest'), lambda state: state.has('Small Key (Spirit Temple)', 3))
-    set_rule(world.get_location('Spirit Temple First Mirror Left Chest'), lambda state: state.has('Small Key (Spirit Temple)', 3))
-    set_rule(world.get_location('Spirit Temple Map Chest'), lambda state: state.has('Magic Meter') and (state.has('Dins Fire') or (state.has('Fire Arrows') and state.has('Bow') and state.has('Progressive Strength Upgrade', 2) and state.has('Small Key (Spirit Temple)', 3) and state.is_adult())))
-    set_rule(world.get_location('Spirit Temple Child Climb East Chest'), lambda state: state.has('Bomb Bag') or ((state.has('Boomerang') or state.has('Slingshot')) and (state.has('Progressive Hookshot') or state.has('Bow'))) or (state.has('Small Key (Spirit Temple)', 3) and state.has('Progressive Strength Upgrade', 2) and state.is_adult() and (state.has('Progressive Hookshot') or state.has('Bow'))) or (state.has('Small Key (Spirit Temple)', 5) and state.has('Requiem of Spirit') and (state.has('Boomerang') or state.has('Slingshot'))))
-    set_rule(world.get_location('Spirit Temple Child Climb North Chest'), lambda state: state.has('Bomb Bag') or ((state.has('Boomerang') or state.has('Slingshot')) and (state.has('Progressive Hookshot') or state.has('Bow'))) or (state.has('Small Key (Spirit Temple)', 3) and state.has('Progressive Strength Upgrade', 2) and state.is_adult() and (state.has('Progressive Hookshot') or state.has('Bow'))) or (state.has('Small Key (Spirit Temple)', 5) and state.has('Requiem of Spirit') and (state.has('Boomerang') or state.has('Slingshot'))))
-    set_rule(world.get_location('Spirit Temple Sun Block Room Chest'), lambda state: (state.has('Small Key (Spirit Temple)', 5) and state.has('Bomb Bag') and state.has('Requiem of Spirit')) or (state.has_fire_source() and (state.has('Bomb Bag') or state.has('Small Key (Spirit Temple)', 2))))
-    set_rule(world.get_location('Spirit Temple Statue Hand Chest'), lambda state: state.has('Small Key (Spirit Temple)', 3) and state.has('Progressive Strength Upgrade', 2) and state.is_adult() and state.has('Zeldas Lullaby'))
-    set_rule(world.get_location('Spirit Temple NE Main Room Chest'), lambda state: state.has('Small Key (Spirit Temple)', 3) and state.has('Progressive Strength Upgrade', 2) and state.is_adult() and state.has('Zeldas Lullaby') and state.has('Progressive Hookshot'))
-    set_rule(world.get_location('Mirror Shield Chest'), lambda state: state.has('Small Key (Spirit Temple)', 4) and state.has('Progressive Strength Upgrade', 2) and state.is_adult())
-    set_rule(world.get_location('Silver Gauntlets Chest'), lambda state: (state.has('Small Key (Spirit Temple)', 3) and state.has('Progressive Hookshot', 2)) or state.has('Small Key (Spirit Temple)', 5))
-    set_rule(world.get_location('Spirit Temple Near Four Armos Chest'), lambda state: state.has('Mirror Shield'))
-    set_rule(world.get_location('Spirit Temple Hallway Left Invisible Chest'), lambda state: state.has('Magic Meter') and state.has('Lens of Truth'))
-    set_rule(world.get_location('Spirit Temple Hallway Right Invisible Chest'), lambda state: state.has('Magic Meter') and state.has('Lens of Truth'))
-    set_rule(world.get_location('Spirit Temple Boss Key Chest'), lambda state: state.has('Zeldas Lullaby') and state.has('Bow') and state.has('Progressive Hookshot') and state.can_blast())
-    set_rule(world.get_location('Spirit Temple Topmost Chest'), lambda state: state.has('Mirror Shield'))
-    set_rule(world.get_location('Twinrova'), lambda state: state.has('Mirror Shield') and state.has('Bomb Bag') and state.has('Progressive Hookshot') and state.has('Boss Key (Spirit Temple)'))
-    set_rule(world.get_location('Twinrova Heart'), lambda state: state.has('Mirror Shield') and state.has('Bomb Bag') and state.has('Progressive Hookshot') and state.has('Boss Key (Spirit Temple)'))
-    set_rule(world.get_location('Zelda'), lambda state: state.has('Shadow Medallion') and state.has('Spirit Medallion'))
-    set_rule(world.get_entrance('Ganons Castle Light Trial'), lambda state: state.has('Progressive Strength Upgrade', 3))
-    set_rule(world.get_entrance('Ganons Castle Tower'), lambda state: state.has('Forest Trial Clear') and state.has('Fire Trial Clear') and state.has('Water Trial Clear') and state.has('Shadow Trial Clear') and state.has('Spirit Trial Clear') and state.has('Light Trial Clear'))
-    set_rule(world.get_location('Ganons Castle Forest Trial Clear'), lambda state: state.has('Magic Meter') and state.has('Bow') and state.has('Light Arrows') and (state.has('Fire Arrows') or (state.has('Progressive Hookshot') and state.has('Dins Fire'))))
-    set_rule(world.get_location('Ganons Castle Fire Trial Clear'), lambda state: (state.has('Goron Tunic') or (state.has('Progressive Wallet') and state.has('Bomb Bag'))) and state.has('Progressive Strength Upgrade', 3) and state.has('Magic Meter') and state.has('Bow') and state.has('Light Arrows') and state.has('Progressive Hookshot', 2))
-    set_rule(world.get_location('Ganons Castle Water Trial Clear'), lambda state: state.has_bottle() and state.has('Hammer') and state.has('Magic Meter') and state.has('Bow') and state.has('Light Arrows'))
-    set_rule(world.get_location('Ganons Castle Shadow Trial Clear'), lambda state: state.has('Magic Meter') and state.has('Bow') and state.has('Light Arrows') and state.has('Hammer') and (state.has('Fire Arrows') or state.has('Progressive Hookshot', 2)) and (state.has('Lens of Truth') or (state.has('Hover Boots') and state.has('Progressive Hookshot', 2))))
-    set_rule(world.get_location('Ganons Castle Shadow Trial First Chest'), lambda state: (state.has('Magic Meter') and state.has('Bow') and state.has('Fire Arrows')) or state.has('Progressive Hookshot', 2))
-    set_rule(world.get_location('Ganons Castle Shadow Trial Second Chest'), lambda state: (state.has('Magic Meter') and state.has('Bow') and state.has('Fire Arrows')) or (state.has('Progressive Hookshot', 2) and state.has('Hover Boots')))
-    set_rule(world.get_location('Ganons Castle Spirit Trial Clear'), lambda state: state.has('Magic Meter') and state.has('Bow') and state.has('Light Arrows') and state.has('Mirror Shield') and state.has('Bomb Bag') and state.has('Progressive Hookshot'))
-    set_rule(world.get_location('Ganons Castle Spirit Trial First Chest'), lambda state: state.has('Progressive Hookshot') and (state.has('Magic Meter') or state.has('Bomb Bag')))
-    set_rule(world.get_location('Ganons Castle Spirit Trial Second Chest'), lambda state: state.has('Progressive Hookshot') and state.has('Magic Meter') and state.has('Bomb Bag') and state.has('Lens of Truth'))
-    set_rule(world.get_location('Ganons Castle Light Trial Clear'), lambda state: state.has('Magic Meter') and state.has('Bow') and state.has('Progressive Hookshot') and state.has('Light Arrows') and state.has('Small Key (Ganons Castle)', 2))
-    set_rule(world.get_location('Ganons Castle Light Trail Invisible Enemies Chest'), lambda state: state.has('Magic Meter') and state.has('Lens of Truth'))
-    set_rule(world.get_location('Ganons Castle Light Trial Lullaby Chest'), lambda state: state.has('Zeldas Lullaby') and state.has('Small Key (Ganons Castle)', 1))
-    set_rule(world.get_location('Ganon'), lambda state: state.has('Boss Key (Ganons Castle)'))
-    set_rule(world.get_entrance('Kokiri Forest Storms Grotto'), lambda state: state.has('Song of Storms'))
-    set_rule(world.get_entrance('Lost Woods Generic Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Lost Woods Sales Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Front of Meadow Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Remote Southern Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Field Near Lake Inside Fence Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Field Valley Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Field West Castle Town Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Field Far West Castle Town Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Field Kakariko Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Field North Lon Lon Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Castle Storms Grotto'), lambda state: state.has('Song of Storms'))
-    set_rule(world.get_entrance('Kakariko Bombable Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Mountain Bombable Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Mountain Storms Grotto'), lambda state: state.has('Song of Storms'))
-    set_rule(world.get_entrance('Top of Crater Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_entrance('Zora River Plateau Open Grotto'), lambda state: state.has('Bomb Bag') or state.has('Progressive Scale') or state.is_adult())
-    set_rule(world.get_entrance('Zora River Plateau Bombable Grotto'), lambda state: state.can_blast())
-    set_rule(world.get_location('Tektite Grotto Freestanding PoH'), lambda state: state.has('Progressive Scale', 2) or (state.has('Iron Boots') and state.is_adult()))
-    set_rule(world.get_location('GS2'), lambda state: state.has_bottle())
-    set_rule(world.get_location('GS3'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS4'), lambda state: state.has_bottle())
-    set_rule(world.get_location('GS5'), lambda state: state.has_bottle())
-    set_rule(world.get_location('GS6'), lambda state: state.has('Magic Bean'))
-    set_rule(world.get_location('GS7'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS9'), lambda state: state.has('Slingshot') or state.has('Bomb Bag') or state.has('Boomerang') or (state.has('Dins Fire') and state.has('Magic Meter')))
-    set_rule(world.get_location('GS11'), lambda state: state.has('Boomerang') and state.has('Bomb Bag'))
-    set_rule(world.get_location('GS12'), lambda state: state.has('Boomerang') or (state.has('Progressive Hookshot') and state.is_adult()))
-    set_rule(world.get_location('GS13'), lambda state: (state.has('Hammer') and state.has_fire_source() and state.has('Progressive Hookshot') and state.is_adult()) or (state.has('Boomerang') and state.has('Bomb Bag') and state.has('Dins Fire') and state.has('Magic Meter')))
-    set_rule(world.get_location('GS16'), lambda state: state.has('Boomerang'))
-    set_rule(world.get_location('GS20'), lambda state: state.has('Boomerang'))
-    set_rule(world.get_location('GS21'), lambda state: state.has('Boomerang'))
-    set_rule(world.get_location('GS26'), lambda state: state.has('Slingshot') or state.has('Bomb Bag'))
-    set_rule(world.get_location('GS27'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS28'), lambda state: state.has('Boomerang'))
-    set_rule(world.get_location('GS29'), lambda state: state.has_bottle())
-    set_rule(world.get_location('GS30'), lambda state: state.has_bottle() and (state.has('Bomb Bag') or state.has('Progressive Strength Upgrade')))
-    set_rule(world.get_location('GS31'), lambda state: state.can_blast())
-    set_rule(world.get_location('GS32'), lambda state: state.has('Hammer') and state.is_adult())
-    set_rule(world.get_location('GS33'), lambda state: state.has('Hammer') and state.is_adult())
-    set_rule(world.get_location('GS34'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('GS35'), lambda state: state.is_adult())
-    set_rule(world.get_location('GS37'), lambda state: state.has('Bolero of Fire') and state.has_bottle())
-    set_rule(world.get_location('GS39'), lambda state: state.has('Bomb Bag') or (state.has('Boomerang') or state.has('Slingshot') and state.has('Progressive Strength Upgrade')) or (state.has('Dins Fire') and state.has('Magic Meter')) or (state.is_adult and (state.has('Progressive Hookshot') or state.has('Bow') or state.has('Biggoron Sword'))))
-    set_rule(world.get_location('GS41'), lambda state: (state.has('Progressive Hookshot') and state.is_adult()) or (state.has('Boomerang') and (state.has('Bomb Bag') or state.has('Progressive Strength Upgrade'))))
-    set_rule(world.get_location('GS42'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS45'), lambda state: state.has('Progressive Hookshot'))
-    set_rule(world.get_location('GS46'), lambda state: state.has('Progressive Hookshot'))
-    set_rule(world.get_location('GS47'), lambda state: state.has('Progressive Hookshot') or state.has('Bow') or state.has('Magic Meter'))
-    set_rule(world.get_location('GS49'), lambda state: state.has('Boomerang'))
-    set_rule(world.get_location('GS50'), lambda state: state.has('Progressive Strength Upgrade', 2) and state.can_blast() and state.has('Progressive Hookshot'))
-# Jabu Jabu GS need no reqs becuase the access reqs for their zones cover them.
-    set_rule(world.get_location('GS55'), lambda state: state.has_bottle())
-    set_rule(world.get_location('GS56'), lambda state: state.has('Boomerang'))
-    set_rule(world.get_location('GS58'), lambda state: state.is_adult() and state.has('Progressive Hookshot', 2))
-    set_rule(world.get_location('GS59'), lambda state: state.is_adult() and state.has('Iron Boots') and state.has('Progressive Hookshot'))
-    set_rule(world.get_location('GS60'), lambda state: (state.has('Progressive Hookshot') or state.has('Bow') or (state.has('Dins Fire') and state.has('Magic Meter'))) and state.is_adult())
-    set_rule(world.get_location('GS61'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS62'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS63'), lambda state: (state.has('Progressive Hookshot', 2) or (state.has('Progressive Hookshot') and state.can_reach('Forest Temple Outside Upper Ledge'))) and state.is_adult())
-    set_rule(world.get_location('GS64'), lambda state: state.has('Progressive Hookshot'))
-    set_rule(world.get_location('GS65'), lambda state: state.has('Small Key (Fire Temple)', 1) and state.has('Song of Time'))
-    set_rule(world.get_location('GS66'), lambda state: state.has('Bomb Bag'))
-    set_rule(world.get_location('GS67'), lambda state: state.has('Small Key (Fire Temple)', 5) and state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS68'), lambda state: state.has('Small Key (Fire Temple)', 5) and state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS69'), lambda state: state.has('Hammer') and state.is_adult())
-    set_rule(world.get_location('GS70'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS71'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS72'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS73'), lambda state: state.has('Bomb Bag') and state.has('Magic Meter'))
-    set_rule(world.get_location('GS74'), lambda state: state.has('Song of Time') and state.has('Small Key (Water Temple)', 6))
-    set_rule(world.get_location('GS75'), lambda state: state.has('Progressive Hookshot', 2))
-    set_rule(world.get_location('GS76'), lambda state: state.has('Progressive Hookshot', 2))
-    set_rule(world.get_location('GS77'), lambda state: state.has('Progressive Hookshot', 2) and ((state.has('Bomb Bag') and state.has('Progressive Strength Upgrade')) or state.has('Hover Boots')) and state.has('Small Key (Water Temple)', 6)) #5 keys would be better but it wouldn't be compatible with the key for key scenarios, 6 will be identical pre-keysanity.
-    set_rule(world.get_location('GS78'), lambda state: state.has('Small Key (Bottom of the Well)', 3) and state.has('Boomerang') and (state.has('Progressive Strength Upgrade') or state.has('Bomb Bag') or (state.has('Lens of Truth') and state.has('Magic Meter'))))
-    set_rule(world.get_location('GS79'), lambda state: state.has('Small Key (Bottom of the Well)', 3) and state.has('Boomerang'))
-    set_rule(world.get_location('GS80'), lambda state: state.has('Small Key (Bottom of the Well)', 3) and state.has('Boomerang'))
-    set_rule(world.get_location('GS81'), lambda state: state.has('Progressive Hookshot'))
-    set_rule(world.get_location('GS82'), lambda state: state.has('Progressive Hookshot'))
-    set_rule(world.get_location('GS84'), lambda state: state.has('Progressive Hookshot', 2) and state.has('Progressive Strength Upgrade') and state.has('Small Key (Shadow Temple)', 4))
-    set_rule(world.get_location('GS86'), lambda state: state.has('Boomerang'))
-    set_rule(world.get_location('GS87'), lambda state: state.has_bottle())
-    set_rule(world.get_location('GS88'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS89'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS90'), lambda state: state.has('Progressive Hookshot') and state.has('Gerudo Membership Card') and state.is_adult())
-    set_rule(world.get_location('GS92'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS93'), lambda state: state.has_bottle() and state.has('Requiem of Spirit'))
-    set_rule(world.get_location('GS94'), lambda state: state.has('Progressive Hookshot') and state.is_adult())
-    set_rule(world.get_location('GS95'), lambda state: ((state.has('Magic Bean') and state.has('Requiem of Spirit')) or state.has('Progressive Hookshot', 2)) and state.is_adult())
-    set_rule(world.get_location('GS96'), lambda state: state.has('Boomerang'))
-    set_rule(world.get_location('GS98'), lambda state: (state.has('Boomerang') and state.has('Progressive Hookshot')) or (state.has('Boomerang') and state.has('Small Key (Spirit Temple)', 5) and state.has('Bomb Bag') and state.has('Requiem of Spirit')) or (state.has('Progressive Hookshot') and state.has('Progressive Strength Upgrade', 2) and state.is_adult() and state.has('Small Key (Spirit Temple)', 3)))
-    set_rule(world.get_location('GS99'), lambda state: state.has('Song of Time') and (state.has('Bow') or state.has('Progressive Hookshot') or state.has('Bomb Bag')))
-    set_rule(world.get_location('GS100'), lambda state: state.has('Progressive Strength Upgrade', 2) and state.has('Small Key (Spirit Temple)', 3) and state.is_adult() and (state.has('Progressive Hookshot') or state.has('Hover Boots')))
+    set_rule(world.get_location('Mountain Business Scrub'), lambda state: state.has('Swamp Title Deed') and state.form('Deku'))
+    set_rule(world.get_location('Ocean Business Scrub'), lambda state: state.has('Mountain Title Deed') and state.form('Goron'))
+    set_rule(world.get_location('Canyon Business Scrub'), lambda state: state.has('Ocean Title Deed') and state.form('Zora'))
 
-    for location in world.get_locations():
-        if location.type != 'Chest':
-            forbid_item(location, 'Ice Trap')
+    set_rule(world.get_location('Song From HMS'), lambda state: state.has('Ocarina of Time'))
+    set_rule(world.get_location('Remove the Cursed Mask'), lambda state: state.has('Ocarina of Time'))
+
+    set_rule(world.get_location('Tunnel Balloon From ECT'), lambda state: state.can_pop_balloon())
+    # @Vlix
+    # that's right, zora link should be able to slice it, good call
+    # other human items, hmm... hookshot probly? maybe bombs? lol that'd be a pain; yeah we'll have to do some testing
+    # to see what can be used there (hookshot makes a lot of sense though, I'll add that for now)
+    # todo: test what else can be used to break these balloons
+
+    # RevelationOrange started adding rules here (plus a few changes in rules above)
+    # location names used are mostly guesses and can absolutely be changed later
+    # item names used are also guesses, as are some state function names probly
+    # location names may be longer than necessary so as to be descriptive, like we can change 'South Clock Town Hookshot
+    # Ledge Rupee Chest' if we want lol
+
+    ### SOUTH CLOCK TOWN
+    set_rule(world.get_location('Clock Town Business Scrub'), lambda state: state.has('Moons Tear'))
+    set_rule(world.get_location('Clock Tower Platform HP'), lambda state: state.form('Human') or state.form('Zora') or (state.form('Deku') and (state.has('Moons Tear') or state.can('Gainer'))))
+
+    set_rule(world.get_location('Festival Tower Rupee Chest'), lambda state: state.can_use('Hookshot') or (state.form('Deku') and state.has('Moons Tear')))
+    set_rule(world.get_location('SCT 20 Rupee Chest'), lambda state: state.can_use('Hookshot')
+                or (state.form('Deku') and state.has('Moons Tear') and (state.form('Human') or state.form('Zora'))))
+
+    set_rule(world.get_location('Ocarina of Time'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Song from Skull Kid'), lambda state: state.can_pop_balloon())
+    # is this right? it looks like the check is just to hit skull kid in the air, functionally the same as popping a balloon lol
+    set_rule(world.get_entrance('End of First Cycle'), lambda state: state.has('Song of Time'))
+    set_rule(world.get_entrance('Moon Portal'),
+             lambda state: [state.has(x) for x in ['Oath to Order', 'Odolwas Remains', 'Ghots Remains', 'Gyorgs Remains', 'Twinmolds Remains']].count(True) == 5)
+    set_rule(world.get_entrance('To Clock Tower Rooftop'), lambda state: state.form('Human') or state.form('Zora') or (state.form('Deku') and (state.has('Moons Tear') or state.can('Gainer'))))
+
+    set_rule(world.get_location('Clock Town Owl Statue'), lambda state: state.form('Human'))
+
+    set_rule(world.get_entrance('Clock Town North Gate'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can('Clock Town Guard Skip'))
+
+
+    ### LAUNDRY POOL
+    set_rule(world.get_location('Listen To Guru Guru'), lambda state: state.form('Human') or state.form('Zora') or state.form('Goron'))
+    set_rule(world.get_location('Don Gero Town Frog'), lambda state: state.can_use('Don Gero Mask'))
+
+    # set_rule(world.get_entrance('Curiosity Backroom Entrance'), lambda state: state.event('Something about the a+k quest'))
+    # set_rule(world.get_location('Keaton Mask From Kafei'), lambda state: state.event('Something about the a+k quest'))
+    # set_rule(world.get_location('Letter From Kafei'), lambda state: state.event('Something about the a+k quest'))
+    # set_rule(world.get_location('Pendant From Kafei'), lambda state: state.event('Something about the a+k quest'))
+    # *sigh* this quest
+    # todo: gestures vaguely at everything about this quest
+
+
+    ### WEST CLOCK TOWN
+    set_rule(world.get_location('Rosa Sisters HP'), lambda state: state.can_use('Kamaro Mask'))
+
+    # you might not need to be human to get this, but I'd bet the shop owner won't sell to other forms, at least deku
+    # set_rule(world.get_location('Buy Bomb Bag'), lambda state: True)
+    # this can be tested easily
+
+    # obviously, this and similar 'tests' might not be necessary at all
+    # set_rule(world.get_location('Bank 200 Rupee Prize'), lambda state: True)
+    # set_rule(world.get_location('Bank HP'), lambda state: True)
+
+    # set_rule(world.get_location('Hidden Owl Statue'), lambda state: state.can_do_some_glitch_or_something())
+    # I actually have no idea what the check is here lol
+
+    set_rule(world.get_location('Buy Bigger Bomb Bag'), lambda state: state.form('Human') or state.form('Zora') or state.has('Adult Wallet'))
+    # adult wallet is a req because if you don't rescue the old lady from sakon, the big bomb bag shows up in the
+    # curiosity shop on the final day (still might be form restrictions?)
+
+    set_rule(world.get_location('Sword School HP'), lambda state: state.form('Human'))
+
+    # i swear this should be an optional trick, it's so hard without the bunny hood lol
+    # set_rule(world.get_location('Counting Is Hard'), lambda state: True)
+    # sigh alright we'll make this open lol
+
+    set_rule(world.get_location('Buy All Night Mask'), lambda state: state.form('Human') and state.has('Giants Wallet'))
+    # you need to save the bomb lady from sakon and this will be in the curio shop on the final day for 500 rupees
+    # being human might be a hard req, but you can probly buy it as zora (todo: test that)
+
+    set_rule(world.get_location('Deliver Letter to Mama To Postman'), lambda state: state.has('Letter to Mama'))
+
+    set_rule(world.get_entrance('Clock Town West Gate'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can('Clock Town Guard Skip'))
+
+
+    ### NORTH CLOCK TOWN
+    # I don't know that this item matters at all or if we should even have a spot for it
+    # but we can if we want, you get it the same way you get the code in the first cycle, you just have to be human to
+    # get the actual notebook from them I think
+    set_rule(world.get_location('Bomber Notebook'), lambda state: state.can_pop_balloon() and state.form('Human'))
+
+    set_rule(world.get_location('Bomber Code'), lambda state: state.can_pop_balloon() and (state.form('Human') or state.form('Deku')))
+    # set_rule(world.get_location('Bomber Code'), lambda state: state.has('Magic Meter') and state.form('Deku'))
+    # for the bomber code, it's essentially only can_reach('pop NCT balloon'), you don't need to be human
+    # you know, for the popping the balloon test, that might just be a general state.can('pop balloon')
+    # since it shows up in several places, and the NCT balloon isn't any different than others (I believe, lol)
+
+    # since getting the blast mask just involves slashing sakon, it might be possible to get it with other forms? like
+    # maybe zora? probly not goron though
+    # also you might need to be link to talk to the lady after, so maybe it is only human
+    set_rule(world.get_location('Foil Sakon'), lambda state: state.form('Human') or state.form('Zora'))
+
+    set_rule(world.get_location('NCT Tree HP'), lambda state: state.form('Human') or state.form('Zora'))
+    # I thought deku could get this for some reason
+    # also lol of course goron can't, shoulda known
+
+    set_rule(world.get_location('Clock Town Tingle Clock Town Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Clock Town Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
+    # it's not the same balloon as for bombers, but the same checks apply
+
+    set_rule(world.get_location('NCT Keaton HP'), lambda state: state.can_use('Keaton Mask'))
+
+    set_rule(world.get_entrance('To Deku Playground'), lambda state: state.form('Deku') or state.can('Gainer'))
+    # I'm sure there are various ways to get over this fence aside from deku
+    # todo: find ways of bypassing this fence
+    set_rule(world.get_location('Deku Scrub Playground HP'), lambda state: state.form('Deku'))
+
+    set_rule(world.get_location('Clock Town GF Magic Bar'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_location('Clock Town GF Mask'), lambda state: state.has('Deku Mask'))
+    # the thing the great fairy gives you depends on the cycle... I think? so I'm not sure how to
+    # handle this/these checks
+    # also, is goron the only form that can't get a stray fairy? it might be able to anyway, by getting the laundry pool
+    # fairy and then falling into the water lol
+
+    # set_rule(world.get_location('Magic from NCT Great Fairy'), lambda state: state.form('Deku'))
+    # I'll have to test how this happens, I haven't played in so long
+    # first cycle she gives you magic because you're stuck as deku, afterwards she gives you the mask because you're human
+    # right?
+    # so what if you start as goron or zora? not sure how that all works
+
+    set_rule(world.get_entrance('Clock Town North Gate'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can('Clock Town Guard Skip'))
+
+    ### EAST CLOCK TOWN
+    set_rule(world.get_location('ECT 100 Rupee Chest'), lambda state: state.form('Human') or state.can('Goron Boost') or state.can('Gainer') or state.form('Zora'))
+    # I need to figure out all the actual requirements for this, including tricks, so this one is tentative
+    # also the trick names are guesses for sure
+
+    set_rule(world.get_location('Treasure Chest Game Goron Prize'), lambda state: state.form('Goron'))
+    # oooh I didn't think about it before, do we want to include all the prizes for this?
+    set_rule(world.get_location('Treasure Chest Game Human Prize'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Treasure Chest Game Zora Prize'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Treasure Chest Game Deku Prize'), lambda state: state.form('Deku'))
+
+    set_rule(world.get_entrance('Bomber Bouncer'), lambda state: state.has('Bomber Code'))
+    set_rule(world.get_location('Bomber Tunnel Chest'), lambda state: state.can_blast() and (state.form('Human') or state.form('Zora')))
+    set_rule(world.get_entrance('Tunnel Balloon From ECT'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Tunnel Balloon From Observatory'), lambda state: state.can_pop_balloon() or state.form('Human'))
+    # set_rule(world.get_location('Moon Cry'), lambda state: True)
+    set_rule(world.get_location('Watch Business Scrub Fly'), lambda state: state.has('Town Title Deed'))
+
+    set_rule(world.get_location('Honey and Darling Grand Champion'), lambda state: state.has('Bomb Bag') and state.has('Bow') and state.form('Human'))
+    set_rule(world.get_location('Town Shooting Gallery Quiver Prize'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Town Shooting Gallery HP Prize'), lambda state: state.can_use('Bow') or state.options('NoHardestArchery'))
+
+    set_rule(world.get_location('Expert Person Solver Takes the Case'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora'))
+
+    set_rule(world.get_entrance('To Stock Pot Inn Secret Entrance'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Stock Pot Inn Key'), lambda state: state.any_form_but('Deku'))
+    set_rule(world.get_location('Have you seen this man?'), lambda state: state.can_use('Kafei Mask'))
+    set_rule(world.get_location('Your Room Rupee Chest'), lambda state: state.has('Inn Key'))
+    set_rule(world.get_location('Anjus Room Rupee Chest'), lambda state: state.has('Inn Key') or state.form('Deku'))
+    # ok, so these chests
+    # the one for your room requires the room key regardless, right?
+    # the anju room one is accessible only after midnight on the 3rd day, so you just need to get into the inn somehow
+    # but leaving the regular entrance open means it looks like you can always get to that chest
+    # so I think what we do is just put the restrictions on the actual checks- conceptually wrong, but it works fine
+    # the other option would be to create another logical area ex: 'Stock Pot Inn After Hours'
+    # and the item checks there would be open
+    # which we can do, either way works
+    set_rule(world.get_location('Grandma Stories HP 1'), lambda state: state.can_use('All Night Mask'))
+    set_rule(world.get_location('Grandma Stories HP 2'), lambda state: state.can_use('All Night Mask'))
+
+    set_rule(world.get_location('Toilet Hand HP'), lambda state: state.has_paper())
+    # you need some kind of paper, so any title deed, or a letter from the various subquests that involve letters
+    # that's a lot of different ways to be able to do that, so we may need to have inventory record any subquest item
+    # that can be obtained as obtained, so we can just do state.has('any paper') or something
+    # for now I'll just leave it as the clock town title deed check, the easiest one to do
+    # todo: test everything that can be used as paper and record reqs to get them, OR them all together for this check
+    # man, this one is involved lol
+    # actually you know what, I'm just gonna add state.has_paper()
+
+    set_rule(world.get_entrance('To Milk Bar'), lambda state: state.can_use('Romani Mask'))
+    set_rule(world.get_location('Milk Bar Performance'), lambda state: False not in [state.form(f) for f in ['Human', 'Deku', 'Goron', 'Zora']] and state.has('Ocarina'))
+    set_rule(world.get_location('Delivery to Mama Kafei'), lambda state: state.has('Letter to Mama'))
+    # so a note about doing checks for stuff like 'Letter to Mama' and stuff that resets when you save
+    # it makes it a hell of a lot easier to be able to do checks for temp items like this
+    # but it also probably means setting rules for these items and having locations for them
+    # which means we'd have to have some kind of marker for them so they don't get mixed in to the pool
+    # possibly issue in the future, just something to note for now
+
+    set_rule(world.get_location('Mayor HP'), lambda state: state.can_use('Couples Mask'))
+
+    set_rule(world.get_entrance('Clock Town East Gate'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can('Clock Town Guard Skip'))
+
+    ### TERMINA FIELD
+    set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: (state.has('Magic Beans') and state.has('Bottle')) or state.can('Goron Boost'))
+
+    set_rule(world.get_entrance('TF to Obs Over Fence'), lambda state: state.can('Goron Boost'))
+    # I don't know if there's actually a way to get over this fence from TF, might only be the other way, so I might
+    # have remove this later
+
+    set_rule(world.get_location('Learn Kamaro Dance'), lambda state: state.form('Human') or state.form('Goron'))
+    # so you have to be able to jump to their platform, which rules out goron and probably deku?
+    # (actually maybe not if the goron can do some weird trick or something)
+    # dunno if there's a form requirement when you actually talk to them, but I'm gonna assume human for now
+    # todo: test form requirements
+
+    set_rule(world.get_entrance('TF Mountain Icicles'), lambda state: state.can_use('Bow') or state.form('Goron'))
+    set_rule(world.get_entrance('TF Great Bay Gate'), lambda state: (state.form('Human') and state.has('Eponas Song'))
+                                                                    or state.can('Some Goron Trick probly'))
+
+    set_rule(world.get_location('Moons Tear'), lambda state: state.event('Moon Cry'))
+
+    set_rule(world.get_entrance('To Mountain Gossips'), lambda state: state.can_blast() or state.form('Goron'))
+    set_rule(world.get_location('Swamp Gossip Check'), lambda state: (state.form('Deku') and state.has('Sonata of Awakening'))
+            or (state.form('Goron') and state.has('Goron Lullaby')) or (state.form('Zora') and state.has('New Wave Bossa Nova')))
+    set_rule(world.get_location('Mountain Gossip Check'), lambda state: (state.form('Deku') and state.has('Sonata of Awakening'))
+            or (state.form('Goron') and state.has('Goron Lullaby')) or (state.form('Zora') and state.has('New Wave Bossa Nova')))
+    set_rule(world.get_location('Ocean Gossip Check'), lambda state: (state.form('Deku') and state.has('Sonata of Awakening'))
+            or (state.form('Goron') and state.has('Goron Lullaby')) or (state.form('Zora') and state.has('New Wave Bossa Nova')))
+    set_rule(world.get_location('Canyon Gossip Check'), lambda state: (state.form('Deku') and state.has('Sonata of Awakening'))
+            or (state.form('Goron') and state.has('Goron Lullaby')) or (state.form('Zora') and state.has('New Wave Bossa Nova')))
+    set_rule(world.get_location('4 Gossip Stone HP'),
+             lambda state: state.event('Swamp Gossip Check') and state.event('Mountain Gossip Check')
+                           and state.event('Ocean Gossip Check') and state.event('Canyon Gossip Check'))
+
+    set_rule(world.get_location('TF Peahat Grotto HP'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora'))
+    # how many ways to kill a peahat? lol
+    # for now I'm gonna assume deku can't, but everyone else can
+
+    # set_rule(world.get_location('TF Dodongo Grotto HP'), lambda state: True)
+    # ways to kill a dodongo? might be anyone actually
+
+    set_rule(world.get_entrance('To TF Business Scrub Grotto'), lambda state: state.event('Saw Scrub Fly In'))
+    set_rule(world.get_location('TF Business Scrub Grotto HP'), lambda state: state.has('Adult Wallet'))
+    # giving the moon's tear to the scrub is part of the connection requirement to get to the grotto, but once there
+    # you just need the adult's wallet
+
+    set_rule(world.get_location('TF Beehive Grotto HP'), lambda state: (state.can_blast() or state.form('Goron'))
+                                                                                  and state.can_use('Bow') and state.form('Zora'))
+    # boulder to get through, then shoot the bees, then drop to the bottom of the pool as zora
+    # actually shooting the bees might be possible as zora
+    # bees might just be more balloons lol
+    # todo: test this hp
+
+    # set_rule(world.get_location('TF Chest In The Grass'), lambda state: True)
+    # set_rule(world.get_location('TF Deku Baba Pit Chest'), lambda state: True)
+    set_rule(world.get_location('TF Chest On A Stump'), lambda state: state.can_use('Hookshot'))
+
+    # set_rule(world.get_location(''), lambda state: state)
+    # apparently if you look at some guys standing in the field through the telescope, there will be pits where they
+    # each were? dunno what's in them, but we might need to record those
+    # todo: test this
+
+    set_rule(world.get_entrance('To East Pillar Grotto'),
+             lambda state: state.can_use('Bottle') and state.has('Magic Beans') and (state.form('Human') or state.form('Zora')))
+    # it's an open check once you're there, you just need a bottle, bean, water, and be able to jump to it from the bean
+
+
+    ### SOUTHERN SWAMP
+
+    ## Path to Swamp
+    set_rule(world.get_location('Swamp Path Bat Tree HP'), lambda state: state.can_pop_balloon() or state.form('Human'))
+    # the req for this is just to make it up the tree without getting knocked off by the birds, so unless there's some
+    # way of cheesing the birds I don't know about, you just have to be able to kill them
+    # ...you know, birds are just balloons that try to kill you tbh
+
+    set_rule(world.get_location('Swamp Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Swamp Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
+    # I can't actually remember the two maps tingle sells, I'll have to just go check that
+
+    # set_rule(world.get_location('Swamp Path Rupee Pit Chest'), lambda state: True)
+    # there's apparently 20 rupees in a pit, it's probly just open, but I need to play again to check the details
+
+    set_rule(world.get_location('Swamp Shooting Gallery Quiver Prize'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Swamp Shooting Gallery HP Prize'), lambda state: state.can_use('Bow') or state.options('NoHardestArchery'))
+
+    ## Southern Swamp
+    set_rule(world.get_location('Swamp Tourist Roof HP'), lambda state: state.can_reach(world.get_location('Swamp Business Scrub')) or state.can('SomeWeirdGoronTrickIDunno'))
+    # set_rule(world.get_location('Bottle From Kotate'), lambda state: True)
+    # set_rule(world.get_location('Save Koume'), lambda state: True)
+    set_rule(world.get_location('Swamp Owl Statue'), lambda state: state.form('Human'))
+
+    # swamp tourist center
+    set_rule(world.get_location('Pictograph Box'), lambda state: state.event('Saved Koume'))
+
+    # swamp tourist center clean water
+    # set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: True)
+
+    # set_rule(world.get_location('Picto Game HP'), lambda state: True)
+    # I think this check is just open, unless some forms can't use the picto box lol
+
+    # set_rule(world.get_location('Learn Song of Soaring'), lambda state: True)
+    # as far as I know, no matter what once you're in this area, you still need to use the deku flowers to get across
+    # to the spot where you learn the song
+    # actually... you can get to the spot from the outside woodfall zone
+    # ok so here's what's up, it's an open check, but it's in its own logical region; the lower part of this area is
+    # its own region with an exit to the top region /before/ the check, using that trick that lets you grab that ledge,
+    # then there's an exit from that region to the region with the learn spot gated by using the deku flowers
+    # that logical region has exits to the outside woodfall area (which has an open exit back to here) and down to the
+    # bottom of the area (since you can just drop down whenever)
+    # (I could be wrong about it being an open check tho, not sure what form requirements exist for the owl to teach it)
+
+    ## Deku Palace
+    # set_rule(world.get_location('Deku Palace Garden HP'), lambda state: True)
+
+    set_rule(world.get_location('Learn Sonata of Awakening'), lambda state: state.form('Human') and state.form('Deku'))
+    # probly need to test the reqs for this, but apparently you need to talk to the monkey as link and then show him an
+    # instrument that isn't the ocarina to learn it? I dunno
+    # todo: test requirements for this
+
+    # post woodfall, butler race
+    set_rule(world.get_location('Mask of Scents'), lambda state: state.form('Human') and state.form('Deku') and state.has('Deku Princess') and state.event('Beat Odolwa'))
+    # you know, I have no idea what the actual requirements are to do this lol
+    # once you can get here, you can attempt the race, but I figure goron can't do it, zora probly not
+    # so it's human and/or deku? todo: figure this out lol
+
+    set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human') and state.has('Bottle'))
+
+    ## Swamp Spider House
+    # oh god, so many spots
+    # lots of them are probly just open though
+    # I'mma get to this later, I'll do both the spider houses together
+    set_rule(world.get_location('Swamp Spider House Mask of Truth'),
+             lambda state: state.can_use('Bottle') and state.form('Deku') and state.has('Sonata of Awakening') and state.can_pop_balloon() and state.can_use('Bomb Bag'))
+    # there might be some other requirements to get all the skulls here, but I'm pretty sure you at least need a
+    # bottle and to use deku flowers
+
+    ## Outside Woodfall Area
+    set_rule(world.get_location('Outside Woodfall 20 Rupee Chest'),
+             lambda state: state.form('Deku') or (state.has_hearts(5) and (state.form('Human') or state.form('Zora'))) or state.can_use('Hookshot'))
+    # I think you can get to this one by toughing out the poison water as well as just being deku
+    # or also with the hookshot? also do ice arrows freeze poison water?
+    # todo: test ways to get to this chest
+    # p sure goron just can't get it lol
+
+    set_rule(world.get_location('Outside Woodfall 5 rupees'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Outside Woodfall HP'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    # todo: test if hookshot can get these
+
+    set_rule(world.get_location('Woodfall Owl Statue'), lambda state: state.form('Human'))
+
+
+    ### WOODFALL TEMPLE
+
+    ## Lobby
+    set_rule(world.get_location('WF Stray Fairy Entrance'), lambda state: state.stray_fairy_req())
+    # not sure what forms can get this aside from human, but basically if you require the GFMask to get fairies, checks
+    # are done, otherwise you have to get to this fairy however you like, which... I think it's right by the entrance,
+    # so it should be possible with anyone? unless it's like just below the entrance, in which case we have to see
+    # which forms can get to it and require those regardless
+
+    set_rule(world.get_location('WF Stray Fairy Lobby Chest'), lambda state: state.form('Deku') and state.stray_fairy_req())
+    # I /think/ the one you get from the chest can be picked up without the mask? we may want to have an option to
+    # require the mask to pick up any of the fairies, because damn it makes it a lot easier, heh
+
+    ## First Floor
+    set_rule(world.get_location('WF Stray Fairy Central Room Deku Baba'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Central Room SW Corner'),
+             lambda state: (state.form('Deku') or (state.has_hearts(4) and (state.form('Human') or state.form('Zora'))))
+                           and state.stray_fairy_req())
+    # this actually might have to be changed later on depending on if we split this room into logical regions
+    # since I'm pretty sure it's easier to get to this fairy from the top section, heh
+
+    set_rule(world.get_location('WF Stray Fairy Elevator Flower Room'),
+             lambda state: state.can_pop_balloon() and (state.form('Deku') or state.can_use('Great Fairy Mask')) and state.stray_fairy_req())
+    # ugh, there's kind of a lot to this one, if you can pop a balloon, then you still need a way to retrieve the fairy
+    # that can be either with the deku flowers or with the GFMask, even when the mask isn't required for any particular stray fairy
+    # seems kind of weird to add it on to this check, but if you don't, then it's just 3 things ANDed, one of which is
+    # the deku form, and there are certainly ways to get this SF without requiring the deku form..... probly
+
+    set_rule(world.get_location('WF Elevator Flower Room Key Chest'), lambda state: state.form('Deku'))
+    # zora might be tall enough to run through the poison water and climb up? not sure, should test
+    # todo: test ways to get to this key chest
+
+    set_rule(world.get_location('WF Map Chest'),
+             lambda state: state.form('Deku') or state.can_use('Bomb Bag') or state.form('Goron'))
+    # possibly the blast mask can be used as well? in which case just change this to can_blast()
+
+    ## Push Block Bridge Room
+    set_rule(world.get_location('WF Stray Fairy Push Block Room Hive'),
+             lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Push Block Room Skulltula'), lambda state: state.stray_fairy_req())
+    # I /think/ any form can kill a skulltula? maybe test this
+
+    set_rule(world.get_location('WF Stray Fairy Push Block Room Underwater'),
+             lambda state: state.stray_fairy_req()
+                and ((state.form('Human') or state.form('Zora')) and (state.swamp_cleaned() or state.has_hearts(6))))
+    set_rule(world.get_location('WF Compass Chest'),
+             lambda state: state.form('Zora')
+                           or (state.form('Deku') and state.has('Magic Meter'))
+                           or (state.form('Human') and state.can_pop_balloon()))
+
+    ## Dark Puff Gauntlet
+    set_rule(world.get_location('WF Stray Fairy Dark Puffs'), lambda state: state.stray_fairy_req())
+    # I'm pretty sure any form can kill the puffs, the only one that would be hard is goron lol
+
+    ## Second Floor
+    set_rule(world.get_location('WF Stray Fairy Central Room Upper Bubble'),
+             lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Central Room Upper Switch Chest'),
+             lambda state: state.stray_fairy_req() and state.form('Deku'))
+    set_rule(world.get_location('WF Bow Chest'), lambda state: state.can_kill_lizalfos())
+    set_rule(world.get_location('WF Boss Key Chest'), lambda state: state.can_kill_gekkos())
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Pre-Boss Room
+    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Alcoves 1'), lambda state: state.stray_fairy_req() and state.form('Deku'))
+    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Alcoves 2'), lambda state: state.stray_fairy_req() and state.form('Deku'))
+    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Alcoves 3'), lambda state: state.stray_fairy_req() and state.form('Deku'))
+    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Bubble'),
+             lambda state: state.stray_fairy_req() and state.can_pop_balloon()
+                           and state.form('Deku') and state.can_use('Great Fairy Mask'))
+    # this one might just hard require the GFMask, not sure how to get to it at all
+
+    ## Boss: Odolwa
+    set_rule(world.get_location('Odolwas Remains'), lambda state: state.can_use('Bow'))
+    # todo: figure out all the ways to kill odolwa
+    # you probly hard need to use the bow, which means most other checks aren't needed
+    # but yeah, gotta figure out all the ways to beat this
+
+    ## Post Odolwa Princess Room
+    set_rule(world.get_location('Woodfall Princess'), lambda state: state.can_use('Bottle'))
+
+
+    ### MOUNTAIN VILLAGE
+
+    ## Mountain Village
+    set_rule(world.get_location('Goron Mask'), lambda state: state.has('Song of Healing') and state.can_use('Lens of Truth'))
+    # this probly needs to be investigated (do you actually need the lens once you've gotten the ghost there?) and we
+    # should determine how we want to track this check, since you have to follow the ghost through various areas
+    # I kiiiind of want to add a ton of extra stuff for myself to do, like world state checks that just don't get
+    # shuffled in so it's easy to do like state.world('HasLedGhostToSprings') or whatever
+    # stuff that would strictly be used by the crawler to determine placement
+    # we'll see
+
+    set_rule(world.get_location('Goron Grave Hot Spring Water'), lambda state: state.can_use('Bottle'))
+    # something is definitely gonna have to be tweaked in order to keep this (and the goron elder) check in, especially
+    # accounting for entrance shuffle
+    # I think only goron is fast enough to make it from here to the elder, but if entrances are shuffled, there needs
+    # to be a way to check that the distance between the two is short enough (and depending on the length, maybe a
+    # different form can make it)
+    # I think the way to do this is to have checks set here and at the elder, and then add a function to the crawler
+    # that checks the distance between the two
+    # also, to note, the more I encounter checks that require you to do things across multiple rooms/areas, the more
+    # I'm convinced we'll need to use 'fake' item checks, just to keep track of the world state, like set a rule for
+    # starting to follow the goron ghost in one spot and another for catching up, and then another for meeting up with
+    # him at the grave
+    # anyway
+
+    set_rule(world.get_location('Don Gero Mask'), lambda state: state.has('Rock Sirloin'))
+    # gonna need some way to check that you can actually get the sirloin to this guy after entrance shuffle, lol
+
+    set_rule(world.get_location('Mountain Village 20 Rupee Chest Behind Waterfall'), lambda state: state.event('Beat Ghot') and state.lens_req())
+
+    set_rule(world.get_location('Mountain Village 20 Rupee Pit'), lambda state: state.event('Beat Ghot') and (state.form('Goron') or state.lens_req()))
+    # this one may not be a chest, I should check it
+
+    set_rule(world.get_location('Gilded Sword'), lambda state: state.event('Beat Ghot') and state.has('Gold Dust'))
+    # it's probly best to just assume you can always get the razor sword
+
+    set_rule(world.get_location('Mountain Village Keaton HP'), lambda state: state.can_use('Keaton Mask') and state.event('Beat Ghot'))
+
+    set_rule(world.get_location('Don Gero HP'), lambda state: state.event('Beat Ghot') and state.can_kill_gekkos() and state.has('Ice Arrows'))
+    # maybe need to check the reqs on this, but I think we can assume if you can beat ghot and both gekkos,
+    # you can get to all the frogs and get this HP
+
+    ## Frozen Lake
+    set_rule(world.get_location('Mountain Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Mountain Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('First Half Goron Lullaby'), lambda state: (state.can_blast() or state.form('Goron')) and state.can_use('Hot Spring Water'))
+    # not sure if he'll actually teach you the half song if you're not a goron todo: test form requirements
+
+    set_rule(world.get_location('Frozen Lake HP'), lambda state: state.event('Beat Ghot') and state.form('Zora'))
+
+    set_rule(world.get_location('Frozen Lake Bombchu Pit'), lambda state: state.event('Beat Ghot') and state.form('Goron'))
+    # I should check this one too, dunno if it's a chest or what; also is goron the only one who can get to this pit?
+
+    set_rule(world.get_location('Goron Race Gold Dust Bottle'), lambda state: state.event('Beat Ghot') and state.form('Goron'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Goron Village
+    set_rule(world.get_location('Biggest Bomb Bag'), lambda state: state.form('Goron') and state.has('Adult Wallet'))
+    # set_rule(world.get_location('Lens of Truth'), lambda state: True)
+    set_rule(world.get_location('Lens of Truth Cave Invisible Chest'), lambda state: state.lens_req())
+    set_rule(world.get_location('Lens of Truth Cave Boulder Chest'), lambda state: state.can_blast())
+
+    set_rule(world.get_location('Learn Goron Lullaby'), lambda state: state.form('Goron') and state.has('First Half Goron Lullaby'))
+    set_rule(world.get_location('Rock Sirloin'), lambda state: state.can_use('Deku Stick') and state.form('Goron'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Snowhead and Path To
+    set_rule(world.get_location('Path To Snowhead HP'), lambda state: state.form('Goron') and state.can_use('Hookshot') and state.lens_req())
+    set_rule(world.get_location('Snowhead Owl Statue'), lambda state: state.form('Human'))
+
+
+    ### SNOWHEAD TEMPLE
+
+    ## 1st Floor and Basement
+    set_rule(world.get_location('SH Stray Fairy 1 Bridge And Freezard Room'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('SH Stray Fairy 2 Bridge And Freezard Room'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('SH Stray Fairy Basement Switch'), lambda state: state.form('Goron'))
+    # set_rule(world.get_location('SH Push Block Key Chest'), lambda state: True)
+    # set_rule(world.get_location('SH Compass Chest'), lambda state: True)
+    # do you have to actually do anything in this room, or is the chest just there already? I forget
+
+    set_rule(world.get_location('SH Bridge and Freezard Room Key Chest'), lambda state: state.can_use('Fire Arrows'))
+    set_rule(world.get_location('SH Stray Fairy Chest In Compass Room'), lambda state: state.can_use('Fire Arrows') or state.can_use('Hookshot'))
+
+    set_rule(world.get_location('SH Stray Fairy Compass Room Bombable'),
+             lambda state: (state.can_use('Fire Arrows') or state.can_use('Hookshot')) and state.can_use('Bomb Bag') and state.stray_fairy_req())
+    # I bet there's a way to cheese this one
+
+    set_rule(world.get_location('SH Stray Fairy Push Block Room'), lambda state: state.can_use('Fire Arrows'))
+    # this check will need to be changed depending on the logical regions defined- probly have a path of regions from
+    # the compass room leading here, plus an exit from the lower part of the room to the chest/torches part gated by
+    # the hookshot
+
+    set_rule(world.get_location('SH Stray Fairy Behind Central Pillar Room'), lambda state: state.can_use('Fire Arrows'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## 2nd Floor
+    # set_rule(world.get_location('SH Map Chest'), lambda state: True)
+    # set_rule(world.get_location('SH Stray Fairy Map Chest Room'), lambda state: True)
+    set_rule(world.get_location('SH Icicle Drop Room Key Chest'), lambda state: state.can_use('Bow') and (state.can_blast() or state.form('Goron')))
+    set_rule(world.get_location('SH Stray Fairy Icicle Drop Room'), lambda state: state.can_use('Bow') and state.lens_req())
+    set_rule(world.get_location('SH Stray Fairy Goron Switch Room Ceiling'), lambda state: state.can_pop_balloon() and state.lens_req())
+
+    set_rule(world.get_location('SH Fire Arrows Chest'), lambda state: state.can_use('Bow'))
+    # I bet there are other ways of beating the wizrobe, just not sure how
+
+    set_rule(world.get_location('SH Stray Fairy Elevator Room Lens Platforms'), lambda state: state.can_use('Lens of Truth') and (state.form('Human') or state.form('Zora')))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## 3rd Floor
+    set_rule(world.get_location('SH Stray Fairy 3F Snowman Room'), lambda state: state.can_pop_balloon() and state.lens_req())
+    # can you just jump to this one? I forget
+
+    ## 4th Floor
+    set_rule(world.get_location('SH Stray Fairy 1 Lizalfos Room'), lambda state: state.can_kill_lizalfos())
+    set_rule(world.get_location('SH Stray Fairy 2 Lizalfos Room'), lambda state: state.can_kill_lizalfos())
+
+    set_rule(world.get_location('SH Stray Fairy Hidden Alcove'), lambda state: state.can_use('Lens of Truth') and (state.form('Deku') or state.form('Human')))
+    # there might be other ways to do this, not sure
+
+    set_rule(world.get_location('SH Boss Key Chest'), lambda state: state.can_use('Bow'))
+
+    ## Boss: Ghot
+    set_rule(world.get_location('Ghots Remains'), lambda state: state.can_use('Bow') and state.has('Fire Arrows') and state.form('Goron'))
+    # I know there are various ways to do this boss, but I'm not sure exactly what, so for now let's just require goron form
+
+
+    ### ROMANI RANCH AREA
+
+    ## Milk Road
+    set_rule(world.get_location('Milk Road Keaton HP'), lambda state: state.can_use('Keaton Mask'))
+    set_rule(world.get_location('Milk Road Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Milk Road Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Milk Road Owl Statue'), lambda state: state.form('Human'))
+
+    ## Romani Ranch
+    set_rule(world.get_location('Bunny Hood'), lambda state: state.can_use('Bremen Mask'))
+    set_rule(world.get_location('Learn Eponas Song'), lambda state: state.can_use('Bow') and state.form('Human'))
+    # form reqs?
+
+    # set_rule(world.get_location('Dog Track 50 Rupee Chest'), lambda state: True)
+    set_rule(world.get_location('Romani Ranch Bottle'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Dog Track HP'), lambda state: state.dog_track_MoT_req())
+    set_rule(world.get_location('Romani Mask'), lambda state: state.can_use('Bow'))
+
+    ## Gorman Bros.
+    set_rule(world.get_location('Garo Mask'), lambda state: state.has('Eponas Song'))
+
+
+    ### GREAT BAY
+
+    ## Great Bay North
+    set_rule(world.get_location('Zora Mask'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Great Bay Owl Statue'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Great Bay Tingle Great Bay Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Great Bay Tingle Ikana Map'), lambda state: state.can_pop_balloon())
+    # set_rule(world.get_location('Rupee Pit'), lambda state: True)
+
+    set_rule(world.get_location('Ocean Spider House HP'), lambda state: state.can_use('Bow') and state.has('Hookshot') and state.has('Captains Hat'))
+    # the captain's hat can be used to get the code or whatever from the stalchildren, or you can trial and
+    # error it with arrows
+    # so we can maybe make it an option to need the captain's hat, but for now I'm just going to require it
+
+    set_rule(world.get_location('Ocean Spider House Giant Wallet'), lambda state: state.can_use('Fire Arrows') and state.has('Hookshot') and state.has('Bomb Bag'))
+    # todo these later
+
+    set_rule(world.get_location('Great Bay Lab Fish Feeding HP'), lambda state: state.can_use('Bottle'))
+    set_rule(world.get_location('Great Bay Seahorse From Fisherman'), lambda state: state.has('Picto Box') and state.has('Bottle'))
+    set_rule(world.get_location('Learn New Wave Bossa Nova'), lambda state: state.form('Zora') and state.has('Zora Egg', 7))
+    set_rule(world.get_location('Great Bay High Cliff HP'), lambda state: state.can_use('Hookshot') and state.has('Spring Water') and state.has('Magic Beans'))
+    set_rule(world.get_location('Great Bay Jumping Game HP'), lambda state: state.event('Beat Gyorg') and state.can_use('Hookshot') and (state.form('Human') or state.form('Zora')))
+
+    ## Great Bay South
+    set_rule(world.get_location('Great Bay Like Like HP'), lambda state: state.form('Zora'))
+    # set_rule(world.get_location('Great Bay Bombchu Pit'), lambda state: True)
+    set_rule(world.get_location('Great Bay Temple Owl Statue'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Zora Hall 5 Rupees From Stagehand'), lambda state: True)
+    set_rule(world.get_location('Zora Hall 20 Rupees From Lulu Stalker'), lambda state: state.can_use('Bottle'))
+    set_rule(world.get_location('Beaver Race Bottle'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Beaver Race HP'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Zora Hall Song HP'), lambda state: state.form('Human'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Gerudo Fortress
+    set_rule(world.get_location('Gerudo Fortress Entrance Harbor 20 Rupee Chest 1'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress Entrance Harbor 20 Rupee Chest 2'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress Entrance Harbor 20 Rupee Chest 3'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress Cage Maze 20 Rupee Chest'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Gerudo Fortress Cage Maze HP'), lambda state: state.form('Goron') or state.can_use('Bunny Hood'))
+    # I /think/ you need the goron form to be fast enough to make this? maybe there are ways to cheese this
+
+    set_rule(world.get_location('Gerudo Fortress Tower Hub 20 Rupee Chest'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_location('Hookshot'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Zora Egg 1'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 2'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 3'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 4'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Gerudo Fortress 100 Rupee Chest'), lambda state: state.can_use('Hookshot') or state.can_use('Bow') or state.can_use('Stone Mask'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Pinnacle Rock
+    set_rule(world.get_location('Zora Egg 5'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Zora Egg 6'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Zora Egg 7'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Pinnacle Rock Eel HP'), lambda state: state.form('Zora'))
+
+
+    ### GREAT BAY TEMPLE
+    # note about this temple: there's a lot of stuff you might be able to reach with ice arrows rather than hookshoting
+    # to a chest
+    # this will probly need extensive testing
+
+    set_rule(world.get_location('GB Stray Fairy Entrance Room'), lambda state: state.can_use('Deku Stick'))
+    set_rule(world.get_location('GB Stray Fairy Flywheel Room Underwater'),
+             lambda state: (state.form('Zora') or (state.can_pop_balloon() and state.can_use('Great Fairy Mask'))) and state.stray_fairy_req())
+
+    set_rule(world.get_location('GB Stray Fairy Flywheel Room Big Skulltula'), lambda state: state.form('Zora'))
+    # zoras can deal with big skulls by themselves, right? no need to add any other checks
+
+    set_rule(world.get_location('GB Stray Fairy Big Whirlpool Hub Barrel'), lambda state: state)
+    set_rule(world.get_location('GB Stray Fairy Big Whirlpool Hub Bottom'),
+             lambda state: state.stray_fairy_req() and (state.form('Zora') or (state.can_pop_balloon() and state.can_use('Great Fairy Mask'))))
+    set_rule(world.get_location('GB Map Chest'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_location('GB Stray Fairy Map Room'), lambda state: (state.can_pop_balloon() or state.form('Zora')) and state.stray_fairy_req())
+    set_rule(world.get_location('GB Stray Fairy Tunnel To Compass Room'), lambda state: state.form('Zora') and state.stray_fairy_req())
+    set_rule(world.get_location('GB Compass Chest'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_location('GB Compass Room Key Chest'), lambda state: state.form('Zora'))
+
+    set_rule(world.get_location('GB Stray Fairy Compass Room'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    # ugh, test this check, there are probly lots of ways to do it
+    # todo: lots of testing on this one
+
+    set_rule(world.get_location('GB Ice Arrows Chest'), lambda state: state.can_use('Hookshot'))
+    # todo: look up all the ways of killing Wort
+
+    set_rule(world.get_location('GB Boss Key Chest'), lambda state: state.can_kill_gekkos() and state.has('Ice Arrows'))
+    set_rule(world.get_location('GB Stray Fairy First Green Crank Room'), lambda state: state.can_use('Hookshot') and state.has('Ice Arrows'))
+    set_rule(world.get_location('GB Stray Fairy Waterfall Room 1'), lambda state: state.can_use('Hookshot') and state.has('Ice Arrows'))
+    set_rule(world.get_location('GB Stray Fairy Waterfall Room 2'), lambda state: state.can_use('Hookshot') and state.has('Ice Arrows') and state.has('Fire Arrows'))
+    # including fire arrows here for sanity, otherwise you'd have to reenter the room or maybe dungeon if you messed up
+
+    set_rule(world.get_location('GB Stray Fairy Final Crank Room 1'), lambda state: state.form('Zora') and state.stray_fairy_req())
+    set_rule(world.get_location('GB Stray Fairy Final Crank Room 2'), lambda state: state.form('Zora') and state.stray_fairy_req())
+    # I think just zora is enough for the second one? might have to test that
+
+    set_rule(world.get_location('GB Stray Fairy Before Gyorg Room 1'), lambda state: state.form('Zora') and state.stray_fairy_req())
+    set_rule(world.get_location('GB Stray Fairy Before Gyorg Room 2'), lambda state: (state.can_pop_balloon() or state.form('Zora')) and state.stray_fairy_req())
+
+    ## Boss: Gyorg
+    set_rule(world.get_location('Gyorgs Remains'), lambda state: state.form('Zora') and state.can_use('Bow'))
+
+
+    ### IKANA CANYON
+    set_rule(world.get_location('Ikana Entrance Bombchu Pit'), lambda state: state.form('Goron'))
+    # todo: check this spot in the game
+
+    set_rule(world.get_location('Stone Mask'), lambda state: state.can_epona() and state.has('Bottle') and state.can_use('Lens of Truth'))
+
+    set_rule(world.get_location('Ikana Graveyard Bombchu Pit'), lambda state: state.can_blast())
+    # todo: test if blast mask works here
+
+    set_rule(world.get_location('Ikana Graveyard Dampe 30 Rupee Prize'), lambda state: state.can_pop_balloon() or state.form('Human'))
+
+    set_rule(world.get_location('Captains Hat'), lambda state: state.has('Sonata of Awakening') and (state.can_use('Bow') or state.can_use('Bunny Hood')))
+    # oh jeez, there are various glitches to get this chest huh?
+    # todo: reaseach this chest
+
+    set_rule(world.get_location('Ikana Graveyard First Night Grave 50 Rupee Chest'), lambda state: state.can_use('Captains Hat'))
+    set_rule(world.get_location('Learn Song of Storms'), lambda state: state.can_use('Captains Hat') and state.has('Bow') and state.has('Fire Arrows'))
+    set_rule(world.get_location('Ikana Graveyard Second Night Grave HP'), lambda state: state.can_use('Captains Hat') and state.lens_req() and state.can_blast())
+    set_rule(world.get_location('Ikana Graveyard Third Night Grave Bottle'), lambda state: state.can_use('Captains Hat') and state.can_use('Bow'))
+
+    set_rule(world.get_location('Ikana Canyon Owl Statue'), lambda state: state.can_use('Bow') and state.has('Ice Arrows') and state.has('Hookshot'))
+    set_rule(world.get_location('Ikana Tingle Ikana Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Ikana Tingle Clock Town Map'), lambda state: state.can_pop_balloon())
+    # really this check depends on the logical area the statue is in; if it's just in the whole map, then there's a
+    # bunch of reqs, but if it's in the upper region, then it's open
+    # I'll leave it open for now, but we'll have to check in on this at some point
+    # same with tingle actually
+
+    set_rule(world.get_location('Ikana Secret Shrine HP'), lambda state: state.has_hearts(16) and state.can_use('Light Arrows') and state.can_kill_lizalfos() and state.has('Hookshot'))
+
+    set_rule(world.get_location('Gibdo Mask'), lambda state: state.can_use('Bomb Bag') and state.form('Human') and state.has('Song of Healing'))
+
+    set_rule(world.get_location('Ghost Hut HP'), lambda state: state.can_use('Bow'))
+    # idek if you actually need the bow to do this, but probly; if not, the check is just for human form
+
+    ## Beneath the Well
+    set_rule(world.get_location('Beneath the Well 50 Rupee Chest 1'),
+             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Blue Potion') and state.lens_req())
+    set_rule(world.get_location('Beneath the Well 50 Rupee Chest 2'),
+             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Magic Beans', 5) and state.can_use('Deku Sticks'))
+    set_rule(world.get_location('Mirror Shield'),
+             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Blue Potion') and
+                           state.has('Magic Beans') and state.has('Bow') and state.has('Bomb Bag') and
+                           (state.has('Eponas Song') or state.has('Romani Mask')) and state.has('Fire Arrows'))
+    # not actually as bad as I initially thought
+    # the mirror shield is a bit much lol
+
+    ## Ikana Castle
+    set_rule(world.get_location('Ikana Castle Pillar HP'), lambda state: state.form('Human') and state.form('Deku') and state.has('Bow'))
+    set_rule(world.get_location('Learn Elegy of Emptiness'), lambda state: state.can_use('Bow') and state.has('Fire Arrows') and state.has('Mirror Shield'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Stone Tower Climb
+    set_rule(world.get_location('Stone Tower Owl Statue'),
+             lambda state: state.form('Human') and state.form('Goron') and state.form('Zora') and state.has('Hookshot') and state.has('Elegy of Emptiness'))
+
+
+    ### STONE TOWER TEMPLE
+    ## Regular
+    set_rule(world.get_location('ST Stray Fairy Entryway 1'), lambda state: state.can_use('Bow') and state.stray_fairy_req())
+    set_rule(world.get_location('ST Map Chest'), lambda state: state.can_use('Bomb Bag') and (state.has('Mirror Shield') or state.can_use('Light Arrows')) and state.form('Goron'))
+    set_rule(world.get_location('ST Map Room Key Chest'), lambda state: state.can_use('Bomb Bag') and state.form('Goron'))
+    set_rule(world.get_location('ST Stray Fairy Map Room'), lambda state: state.can_use('Bomb Bag') and state.has('Hookshot'))
+    set_rule(world.get_location('ST Pool Room Key Chest'), lambda state: state.form('Human') or state.form('Zora'))
+    set_rule(world.get_location('ST Compass Chest'), lambda state: (state.form('Zora') and state.can_use('Mirror Shield')) or state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Mirror Network Room 1'), lambda state: (state.form('Goron') and state.can_use('Mirror Shield')) or state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Mirror Network Room 2'), lambda state: (state.form('Goron') and state.can_use('Mirror Shield')) or state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Lava Room Center Chest'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('ST Stray Fairy Lava Room Switch Chest'), lambda state: state.form('Goron'))
+
+    set_rule(world.get_location('ST Light Arrows Chest'), lambda state: state.form('Human') or state.form('Zora'))
+    # todo: what forms/items can beat the garo master?
+
+    set_rule(world.get_location('ST Stray Fairy Pool Room Eyegore'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_location('ST Stray Fairy Pool Room Behind Sun Block'), lambda state: state.can_use('Bomb Bag') and state.can_use('Light Arrows'))
+    # set_rule(world.get_location(''), lambda state: state)
+
+    ## Inverted
+    set_rule(world.get_location('ST Stray Fairy Inverted Entryway'), lambda state: state.can_use('Light Arrows') and state.can_reach(state.get_location('ST Entryway')))
+    set_rule(world.get_location('ST Inverted Compass Room Key Chest'), lambda state: state.can_use('Light Arrows') and state.form('Deku'))
+    set_rule(world.get_location('ST Stray Fairy Inverted Compass Room 1'),
+             lambda state: state.can_reach(state.get_location('ST Compass Room')) and state.form('Zora') and state.can_use('Light Arrows') and state.form('Deku'))
+    set_rule(world.get_location('ST Stray Fairy Inverted Compass Room 2'),
+             lambda state: state.can_reach(state.get_location('ST Compass Room')) and state.can_use('Fire Arrows')
+                           and state.can_use('Light Arrows') and state.form('Deku') and state.has('Elegy of Emptiness'))
+    set_rule(world.get_location('ST Stray Fairy Compass Room'),
+             lambda state: state.can_reach(state.get_location('ST Compass Room')) and state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Wizrobe Room'), lambda state: state.can_use('Bow') and state.can_use('Hookshot'))
+    set_rule(world.get_location('ST Inverted Map Room Key'), lambda state: state.has('Elegy of Emptiness'))
+    set_rule(world.get_location('ST Boss Key Chest'), lambda state: state.can_use('Light Arrows'))
+    set_rule(world.get_location('ST Stray Fairy Entryway 2'),
+             lambda state: state.can_reach(state.get_location('ST Entryway')) and (state.can_use('Light Arrow') or state.can_use('Stone Mask')))
+    set_rule(world.get_location('ST Stray Fairy Post Garo Master Room'), lambda state: state.can_reach(state.get_location('ST Post Garo Master Room')) and state.can_use('Bow'))
+    # set_rule(world.get_location('Giants Mask'), lambda state: ([state.can_use(x) for x in ['Bow', 'Hookshot', 'Bomb Bag']].count(True) > 0) or state.form('Zora') or (state.form('Deku') and state.has('Magic Meter')))
+    # leaving this as an open check because you need lights to get to the eyegore, which can beat him already
+    # unless there's a possible path say in entrance shuffle that could allow you to reach here another way
+    # figure that out later, that'll take more defined region logic
+
+    ## Boss: Twinmold
+    set_rule(world.get_location('Twinmodls Remains'), lambda state: state.can_use('Giants Mask') or state.can_use('Bow'))
+
+
+    ### THE MOON
+    set_rule(world.get_location('Moon Odolwa Child HP'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Moon Ghot Child HP'), lambda state: state.form('Goron'))
+    set_rule(world.get_location('Moon Gyorg Child HP'), lambda state: state.form('Zora'))
+    set_rule(world.get_location('Moon Twinmold Child Bombchu Chest'), lambda state: state.can_use('Light Arrows') and state.has('Hookshot') and state.can_kill_lizalfos())
+    set_rule(world.get_location('Moon Twinmold Child HP'), lambda state: state.can_use('Light Arrows') and state.has('Hookshot') and state.can_kill_lizalfos() and state.can_use('Bombchus'))
+    set_rule(world.get_location('Fierce Deity Mask'), lambda state: state.has('Mask', 20))
+    # we still need to determine how to deal with the counting of the masks for this section, but I'll leave it like this for now
+
+
+# ooh ooh
+# maybe have a gate at the clock tower roof that requires the ocarina, to go back to south clock town on the first day
+# maayyybe
+# to force placement of the ocarina somewhere you can get to it in the first cycle
+# depends on how crawling through the graph works
+# todo: go through and put in checks (that shouldn't get shuffled!) for various steps of quests
+# like, 'looked at skull kid in telescope' to be used to get the moon's tear, or all the various steps in the a+k quest
