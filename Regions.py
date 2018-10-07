@@ -370,4 +370,3 @@ test = '''
 'Goron Shop Item 7': (shop_address(8, 6), None, 0x36, 'Shop', 0x2E, 'Goron City'),
 'Goron Shop Item 8': (shop_address(8, 7), None, 0x37, 'Shop', 0x2E, 'Goron City'),
 '''
-
