@@ -170,7 +170,7 @@ def global_rules(world):
 
     set_rule(world.get_location('Clock Town Tingle Clock Town Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Clock Town Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
-    # it's not the same balloon as for bombers, but the same checks apply
+    set_rule(world.get_location('Clock Town Tingle Pic'), lambda state: state.can_use('Picto Box'))
 
     set_rule(world.get_location('NCT Keaton HP'), lambda state: state.can_use('Keaton Mask'))
 
@@ -257,7 +257,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Clock Town East Gate'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can('Clock Town Guard Skip'))
 
     ### TERMINA FIELD
-    set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: (state.has('Magic Beans') and state.has('Bottle')) or state.can('Goron Boost'))
+    set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: (state.has('Magic Beans') and state.has_bottle()) or state.can('Goron Boost'))
 
     set_rule(world.get_entrance('TF to Obs Over Fence'), lambda state: state.can('Goron Boost'))
     # I don't know if there's actually a way to get over this fence from TF, might only be the other way, so I might
@@ -317,7 +317,7 @@ def global_rules(world):
     # todo: test this
 
     set_rule(world.get_entrance('To East Pillar Grotto'),
-             lambda state: state.can_use('Bottle') and state.has('Magic Beans') and (state.form('Human') or state.form('Zora')))
+             lambda state: state.has_bottle() and state.has('Magic Beans') and (state.form('Human') or state.form('Zora')))
     # it's an open check once you're there, you just need a bottle, bean, water, and be able to jump to it from the bean
 
 
@@ -331,7 +331,7 @@ def global_rules(world):
 
     set_rule(world.get_location('Swamp Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Swamp Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
-    # I can't actually remember the two maps tingle sells, I'll have to just go check that
+    set_rule(world.get_location('Swamp Tingle Pic'), lambda state: state.can_use('Picto Box'))
 
     # set_rule(world.get_location('Swamp Path Rupee Pit Chest'), lambda state: True)
     # there's apparently 20 rupees in a pit, it's probly just open, but I need to play again to check the details
@@ -348,19 +348,37 @@ def global_rules(world):
     set_rule(world.get_entrance('Swamp Path To Southern Swamp (Clean)'), lambda state: state.event('Beat Odolwa'))
 
     ## Southern Swamp
-    set_rule(world.get_location('Swamp Tourist Roof HP'), lambda state: state.can_reach(world.get_location('Swamp Business Scrub')) or state.can('SomeWeirdGoronTrickIDunno'))
+    set_rule(world.get_location('Swamp Tourist Roof HP'), lambda state: state.has('Town Title Deed') or state.can('Goron Boost'))
     # set_rule(world.get_location('Bottle From Kotate'), lambda state: True)
     # set_rule(world.get_location('Save Koume'), lambda state: True)
     set_rule(world.get_location('Swamp Owl Statue'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Kill Swamp Big Octo'), lambda state: state.can_use('Bow') or state.can_use('Hookshot'))
+    set_rule(world.get_location('Kill Swamp Big Octo From Palace'), lambda state: state.can_use('Bow') or state.can_use('Hookshot'))
+    # what are all the ways this you can kill the big octo? note, using the boat cruise to kill it will be a separate
+    # check located in the tourist center
+
+    set_rule(world.get_entrance('Swamp Big Octo From Tourist Region'), lambda state: state.event('Swamp Big Octo Dead'))
 
     # swamp tourist center
-    set_rule(world.get_location('Pictograph Box'), lambda state: state.event('Saved Koume'))
+    set_rule(world.get_location('Picto Box'), lambda state: state.event('Saved Koume'))
+    set_rule(world.get_location('Pictograph Contest Winner'), lambda state: state.has('Tingle Pic') or state.has('Deku King Pic'))
+    set_rule(world.get_location('Kill Swamp Big Octo With Boat'), lambda state: state.event('Saved Koume'))
+    set_rule(world.get_entrance('Boat Ride'), lambda state: state.event('Saved Koume'))
+
+    # potion shop and lost woods
+    set_rule(world.get_location('Red Potion To Help Koume'), lambda state: state.event('Checked Koume'))
+    set_rule(world.get_location('Saved Koume'), lambda state: state.has_bottle())
 
     # swamp tourist center clean water
-    # set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: True)
+    set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: state.can_use('Bow'))
 
-    # set_rule(world.get_location('Picto Game HP'), lambda state: True)
-    # I think this check is just open, unless some forms can't use the picto box lol
+    set_rule(world.get_entrance('Palace Region to Deku Palace'), lambda state: state.form('Deku') or (state.can('Deku Palace Guard Skip')))
+    # not sure how the trick to get past the palace guards works, but it's essentially that option plus form(s)
+
+    set_rule(world.get_entrance('To Swamp Spider House'), lambda state: state.can_use('Fire Arrows'))
+
+    set_rule(world.get_entrance('Lower Palace Region Trick To Upper'), lambda state: state.can('Some Jumping Trick') and state.form('Human'))
+    # I've seen this done as human, dunno the details, but the check is going to essentially look like this
 
     # set_rule(world.get_location('Learn Song of Soaring'), lambda state: True)
     # as far as I know, no matter what once you're in this area, you still need to use the deku flowers to get across
@@ -387,14 +405,14 @@ def global_rules(world):
     # once you can get here, you can attempt the race, but I figure goron can't do it, zora probly not
     # so it's human and/or deku? todo: figure this out lol
 
-    set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human') and state.has('Bottle'))
+    set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human') and state.has_bottle())
 
     ## Swamp Spider House
     # oh god, so many spots
     # lots of them are probly just open though
     # I'mma get to this later, I'll do both the spider houses together
     set_rule(world.get_location('Swamp Spider House Mask of Truth'),
-             lambda state: state.can_use('Bottle') and state.form('Deku') and state.has('Sonata of Awakening') and state.can_pop_balloon() and state.can_use('Bomb Bag'))
+             lambda state: state.has_bottle() and state.form('Deku') and state.has('Sonata of Awakening') and state.can_pop_balloon() and state.can_use('Bomb Bag'))
     # there might be some other requirements to get all the skulls here, but I'm pretty sure you at least need a
     # bottle and to use deku flowers
 
@@ -493,7 +511,7 @@ def global_rules(world):
     # but yeah, gotta figure out all the ways to beat this
 
     ## Post Odolwa Princess Room
-    set_rule(world.get_location('Woodfall Princess'), lambda state: state.can_use('Bottle'))
+    set_rule(world.get_location('Woodfall Princess'), lambda state: state.has_bottle())
 
 
     ### MOUNTAIN VILLAGE
@@ -507,7 +525,7 @@ def global_rules(world):
     # stuff that would strictly be used by the crawler to determine placement
     # we'll see
 
-    set_rule(world.get_location('Goron Grave Hot Spring Water'), lambda state: state.can_use('Bottle'))
+    set_rule(world.get_location('Goron Grave Hot Spring Water'), lambda state: state.has_bottle())
     # something is definitely gonna have to be tweaked in order to keep this (and the goron elder) check in, especially
     # accounting for entrance shuffle
     # I think only goron is fast enough to make it from here to the elder, but if entrances are shuffled, there needs
@@ -541,6 +559,7 @@ def global_rules(world):
     ## Frozen Lake
     set_rule(world.get_location('Mountain Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Mountain Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Mountain Tingle Pic'), lambda state: state.can_use('Picto Box'))
     set_rule(world.get_location('First Half Goron Lullaby'), lambda state: (state.can_blast() or state.form('Goron')) and state.can_use('Hot Spring Water'))
     # not sure if he'll actually teach you the half song if you're not a goron todo: test form requirements
 
@@ -629,6 +648,7 @@ def global_rules(world):
     set_rule(world.get_location('Milk Road Keaton HP'), lambda state: state.can_use('Keaton Mask'))
     set_rule(world.get_location('Milk Road Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Milk Road Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Milk Road Tingle Pic'), lambda state: state.can_use('Picto Box'))
     set_rule(world.get_location('Milk Road Owl Statue'), lambda state: state.form('Human'))
 
     ## Romani Ranch
@@ -652,6 +672,7 @@ def global_rules(world):
     set_rule(world.get_location('Great Bay Owl Statue'), lambda state: state.form('Human'))
     set_rule(world.get_location('Great Bay Tingle Great Bay Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Great Bay Tingle Ikana Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Great Bay Tingle Pic'), lambda state: state.can_use('Picto Box'))
     # set_rule(world.get_location('Rupee Pit'), lambda state: True)
 
     set_rule(world.get_location('Ocean Spider House HP'), lambda state: state.can_use('Bow') and state.has('Hookshot') and state.has('Captains Hat'))
@@ -662,8 +683,8 @@ def global_rules(world):
     set_rule(world.get_location('Ocean Spider House Giant Wallet'), lambda state: state.can_use('Fire Arrows') and state.has('Hookshot') and state.has('Bomb Bag'))
     # todo these later
 
-    set_rule(world.get_location('Great Bay Lab Fish Feeding HP'), lambda state: state.can_use('Bottle'))
-    set_rule(world.get_location('Great Bay Seahorse From Fisherman'), lambda state: state.has('Picto Box') and state.has('Bottle'))
+    set_rule(world.get_location('Great Bay Lab Fish Feeding HP'), lambda state: state.has_bottle())
+    set_rule(world.get_location('Great Bay Seahorse From Fisherman'), lambda state: state.has('Picto Box') and state.has_bottle())
     set_rule(world.get_location('Learn New Wave Bossa Nova'), lambda state: state.form('Zora') and state.has('Zora Egg', 7))
     set_rule(world.get_location('Great Bay High Cliff HP'), lambda state: state.can_use('Hookshot') and state.has('Spring Water') and state.has('Magic Beans'))
     set_rule(world.get_location('Great Bay Jumping Game HP'), lambda state: state.event('Beat Gyorg') and state.can_use('Hookshot') and (state.form('Human') or state.form('Zora')))
@@ -673,7 +694,7 @@ def global_rules(world):
     # set_rule(world.get_location('Great Bay Bombchu Pit'), lambda state: True)
     set_rule(world.get_location('Great Bay Temple Owl Statue'), lambda state: state.form('Human'))
     set_rule(world.get_location('Zora Hall 5 Rupees From Stagehand'), lambda state: True)
-    set_rule(world.get_location('Zora Hall 20 Rupees From Lulu Stalker'), lambda state: state.can_use('Bottle'))
+    set_rule(world.get_location('Zora Hall 20 Rupees From Lulu Stalker'), lambda state: state.has_bottle())
     set_rule(world.get_location('Beaver Race Bottle'), lambda state: state.form('Zora'))
     set_rule(world.get_location('Beaver Race HP'), lambda state: state.form('Zora'))
     set_rule(world.get_location('Zora Hall Song HP'), lambda state: state.form('Human'))
@@ -689,10 +710,10 @@ def global_rules(world):
 
     set_rule(world.get_location('Gerudo Fortress Tower Hub 20 Rupee Chest'), lambda state: state.can_use('Hookshot'))
     set_rule(world.get_location('Hookshot'), lambda state: state.can_use('Bow'))
-    set_rule(world.get_location('Zora Egg 1'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
-    set_rule(world.get_location('Zora Egg 2'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
-    set_rule(world.get_location('Zora Egg 3'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
-    set_rule(world.get_location('Zora Egg 4'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 1'), lambda state: state.has_bottle() and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 2'), lambda state: state.has_bottle() and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 3'), lambda state: state.has_bottle() and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 4'), lambda state: state.has_bottle() and state.form('Zora') and state.can_use('Hookshot'))
     set_rule(world.get_location('Gerudo Fortress 100 Rupee Chest'), lambda state: state.can_use('Hookshot') or state.can_use('Bow') or state.can_use('Stone Mask'))
     # set_rule(world.get_location(''), lambda state: state)
 
@@ -752,7 +773,7 @@ def global_rules(world):
     set_rule(world.get_location('Ikana Entrance Bombchu Pit'), lambda state: state.form('Goron'))
     # todo: check this spot in the game
 
-    set_rule(world.get_location('Stone Mask'), lambda state: state.can_epona() and state.has('Bottle') and state.can_use('Lens of Truth'))
+    set_rule(world.get_location('Stone Mask'), lambda state: state.can_epona() and state.has_bottle() and state.can_use('Lens of Truth'))
 
     set_rule(world.get_location('Ikana Graveyard Bombchu Pit'), lambda state: state.can_blast())
     # todo: test if blast mask works here
@@ -771,6 +792,7 @@ def global_rules(world):
     set_rule(world.get_location('Ikana Canyon Owl Statue'), lambda state: state.can_use('Bow') and state.has('Ice Arrows') and state.has('Hookshot'))
     set_rule(world.get_location('Ikana Tingle Ikana Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Ikana Tingle Clock Town Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Ikana Tingle Pic'), lambda state: state.can_use('Picto Box'))
     # really this check depends on the logical area the statue is in; if it's just in the whole map, then there's a
     # bunch of reqs, but if it's in the upper region, then it's open
     # I'll leave it open for now, but we'll have to check in on this at some point
@@ -785,11 +807,11 @@ def global_rules(world):
 
     ## Beneath the Well
     set_rule(world.get_location('Beneath the Well 50 Rupee Chest 1'),
-             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Blue Potion') and state.lens_req())
+             lambda state: state.can_use('Gibdo Mask') and state.has_bottle() and state.has('Blue Potion') and state.lens_req())
     set_rule(world.get_location('Beneath the Well 50 Rupee Chest 2'),
-             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Magic Beans', 5) and state.can_use('Deku Sticks'))
+             lambda state: state.can_use('Gibdo Mask') and state.has_bottle() and state.has('Magic Beans', 5) and state.can_use('Deku Sticks'))
     set_rule(world.get_location('Mirror Shield'),
-             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Blue Potion') and
+             lambda state: state.can_use('Gibdo Mask') and state.has_bottle() and state.has('Blue Potion') and
                            state.has('Magic Beans') and state.has('Bow') and state.has('Bomb Bag') and
                            (state.has('Eponas Song') or state.has('Romani Mask')) and state.has('Fire Arrows'))
     # not actually as bad as I initially thought
