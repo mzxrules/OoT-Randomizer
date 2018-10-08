@@ -414,7 +414,7 @@ class CollectionState(object):
                     ((any(pritem.startswith('Bombchus') for pritem in self.prog_items) and \
                         self.can_buy_bombchus())) \
             or (not self.world.bombchus_in_logic and self.has_bomb_bag() and \
-                        self.can_buy_bombchus())
+                        self.can_buy_bombchus()))
 
     def has_bombchus_item(self):
         return (self.world.bombchus_in_logic and \
@@ -516,6 +516,7 @@ class CollectionState(object):
         # still don't know exactly how this should work, but the idea is to have a collection of tricks the user has
         # selected as allowed
         return self.tricks[trick]
+
 
     # Gives the number of current full hearts
     def heart_count(self):
@@ -900,6 +901,7 @@ class Location(object):
                     and self.item_rule(item)
                     and (not check_access or self.can_reach(state))
                    )
+
 
     # Like `can_fill`, but only checks `self.item_rule`
     def can_fill_fast(self, item):
