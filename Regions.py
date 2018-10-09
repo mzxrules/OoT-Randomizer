@@ -104,17 +104,37 @@ def create_regions(world):
         create_grotto_region('Swamp Path Rupee Pit', ['Swamp Path Rupee Pit Chest'], ['Swamp Path Rupee Pit Exit']),
         create_interior_region('Swamp Shooting Gallery', ['Swamp Shooting Gallery Quiver Prize', 'Swamp Shooting Gallery HP Prize'], ['Swamp Shooting Gallery Exit']),
 
-        create_ow_region('Southern Swamp Tourist Region (Poisoned)', ['Swamp Tourist Roof HP', 'Swamp Owl Statue', 'Kill Swamp Big Octo'],
+        create_ow_region('Swamp Tourist Region (Poisoned)', ['Swamp Tourist Roof HP', 'Swamp Owl Statue', 'Kill Swamp Big Octo'],
                          ['Tourist Region to Swamp path', 'Swamp Big Octo From Tourist Region',
                           'To Swamp Tourist Centre', 'To Potion Shop', 'To Lost Woods']),
         create_interior_region('Swamp Tourist Centre', ['Swamp Tourist Free Product (?)', 'Pictograph Contest Winner',
-                                'Picto Box', 'Kill Swamp Big Octo With Boat'], ['Boat Ride', 'Tourist Centre Exit']),
+                                'Picto Box', 'Kill Swamp Big Octo With Boat'], ['Swamp Boat Ride', 'Tourist Centre Exit']),
         create_interior_region('Swamp Potion Shop', ['Red Potion To Help Koume'], ['Swamp Potion Shop Exit']),
         create_ow_region('Lost Woods', ['Checked Koume', 'Saved Koume'], ['Lost Woods Exit', 'But like, a LOT of them']),
         # oh jeez, we have to have an exit here for every exit in lost woods don't we? lol
-        create_ow_region('Southern Swamp Deku Palace Region Lower (Poisoned)', ['Kill Swamp Big Octo From Palace'],
-                         ['Palace Region to Tourist Region', 'Palace Region to Deku Palace',
-                          'To Swamp Spider House', 'Lower Palace Region Trick To Upper']),
+        # also not actually sure if lost woods should be ow or interior
+        create_ow_region('Swamp Octo Region Lower (Poisoned)', ['Kill Swamp Big Octo From Palace'],
+                         ['Swamp Big Octo From Octo Region', 'Octo Region to Deku Palace',
+                          'To Swamp Spider House', 'Lower Octo Region Trick To Upper']),
+        create_interior_region('Swamp Spider House', ['spiders', 'so many spiders', 'Swamp Spider House Reward'], ['Swamp Spider House Exit']),
+        # a note about this poisoned region, while in the previous section of the swamp any form could get around, now
+        # only deku can get around without needing health due to the poisoned water, so to deal with that, do with put
+        # a heart requirement on the entrance to here? split it up into logical regions requiring health?
+        # things to ponder
+
+        create_ow_region('Swamp Deku Palace Outer Region (Poisoned)', [], ['Outer Palace To Lower Octo',
+                        'Outer Palace To Octo Upper', 'Outer Palace To Lower Courtyard', 'Poisoned Palace To Butler Race',
+                        'Outer Palace To Upper Courtyard']),
+        create_interior_region('Butler Race', ['Butler Race Prize'], ['Butler Race Exit']),
+
+        create_ow_region('Swamp Deku Palace Lower Courtyard', ['Deku Palace Courtyard HP'], ['Deku Palace Lower Courtyard To Outer Region',
+            'Deku Palace Lower Courtyard To Main Throne Room', 'To Magic Beans', 'Deku Palace Lower Courtyard To Upper']),
+        create_grotto_region('Magic Bean Grotto', ['Magic Beans'], ['Magic Bean Grotto Exit']),
+
+        create_ow_region('Swamp Deku Palace Upper Courtyard', [], ['Deku Palace Upper Courtyard To Lower',
+            'Deku Palace Upper Courtyard To Outer Region', 'Deku Palace Upper Courtyard To Throne Room Cage Region']),
+        create_interior_region('Swamp Deku Palace Throne Room', ['Return Deku Princess'], ['Swamp Deku Palace Throne Room Exit']),
+        create_interior_region('Swamp Deku Palace Cage Room', ['Song From Monkey'], ['Swamp Deku Palace Cage Room Exit']),
 
         create_ow_region('Boat Ride', [], ['Poison Swamp']),
         create_ow_region('Poison Swamp', [], ['Swamp Exit to Deku Palace', 'Swamp Spider House Entrance']),

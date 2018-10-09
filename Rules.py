@@ -358,12 +358,13 @@ def global_rules(world):
     # check located in the tourist center
 
     set_rule(world.get_entrance('Swamp Big Octo From Tourist Region'), lambda state: state.event('Swamp Big Octo Dead'))
+    set_rule(world.get_entrance('Swamp Big Octo From Octo Region'), lambda state: state.event('Swamp Big Octo Dead'))
 
     # swamp tourist center
     set_rule(world.get_location('Picto Box'), lambda state: state.event('Saved Koume'))
     set_rule(world.get_location('Pictograph Contest Winner'), lambda state: state.has('Tingle Pic') or state.has('Deku King Pic'))
     set_rule(world.get_location('Kill Swamp Big Octo With Boat'), lambda state: state.event('Saved Koume'))
-    set_rule(world.get_entrance('Boat Ride'), lambda state: state.event('Saved Koume'))
+    set_rule(world.get_entrance('Swamp Boat Ride'), lambda state: state.event('Saved Koume'))
 
     # potion shop and lost woods
     set_rule(world.get_location('Red Potion To Help Koume'), lambda state: state.event('Checked Koume'))
@@ -372,12 +373,8 @@ def global_rules(world):
     # swamp tourist center clean water
     set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: state.can_use('Bow'))
 
-    set_rule(world.get_entrance('Palace Region to Deku Palace'), lambda state: state.form('Deku') or (state.can('Deku Palace Guard Skip')))
-    # not sure how the trick to get past the palace guards works, but it's essentially that option plus form(s)
-
     set_rule(world.get_entrance('To Swamp Spider House'), lambda state: state.can_use('Fire Arrows'))
-
-    set_rule(world.get_entrance('Lower Palace Region Trick To Upper'), lambda state: state.can('Some Jumping Trick') and state.form('Human'))
+    set_rule(world.get_entrance('Lower Octo Region Trick To Upper'), lambda state: state.can('Some Jumping Trick') and state.form('Human'))
     # I've seen this done as human, dunno the details, but the check is going to essentially look like this
 
     # set_rule(world.get_location('Learn Song of Soaring'), lambda state: True)
@@ -391,21 +388,37 @@ def global_rules(world):
     # bottom of the area (since you can just drop down whenever)
     # (I could be wrong about it being an open check tho, not sure what form requirements exist for the owl to teach it)
 
-    ## Deku Palace
-    # set_rule(world.get_location('Deku Palace Garden HP'), lambda state: True)
-
-    set_rule(world.get_location('Learn Sonata of Awakening'), lambda state: state.form('Human') and state.form('Deku'))
+    # set_rule(world.get_location('Learn Sonata of Awakening'), lambda state: state.form('Human') and state.form('Deku'))
     # probly need to test the reqs for this, but apparently you need to talk to the monkey as link and then show him an
     # instrument that isn't the ocarina to learn it? I dunno
     # todo: test requirements for this
 
-    # post woodfall, butler race
-    set_rule(world.get_location('Mask of Scents'), lambda state: state.form('Human') and state.form('Deku') and state.has('Deku Princess') and state.event('Beat Odolwa'))
+    ## Deku Palace
+    set_rule(world.get_entrance('Outer Palace To Octo Upper'), lambda state: state.form('Deku') or state.can('Gainer'))
+    # does gainer work here? or is it strictly deku
+
+    set_rule(world.get_entrance('Poisoned Palace To Butler Race'), lambda state: state.form('Deku') or state.has_hearts(6))
+    set_rule(world.get_entrance('Outer Palace To Lower Courtyard'), lambda state: state.form('Deku') or (state.can('Deku Palace Guard Skip')))
+    # not sure how the trick to get past the palace guards works, but it's essentially that option plus form(s)
+
+    set_rule(world.get_entrance('Outer Palace To Upper Courtyard'), lambda state: state.has_bottle() and state.has('Magic Beans'))
+    # set_rule(world.get_entrance('To Magic Beans'), lambda state: True)
+    set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human'))
+    # will he sell you the beans even if you don't have a bottle? it seems like he should
+    # todo: find out
+
+    # set_rule(world.get_location('Deku Palace Courtyard HP'), lambda state: True)
+    set_rule(world.get_entrance('Deku Palace Lower Courtyard To Upper'), lambda state: state.can('Deku Palace Coutryard Trick'))
+    # not sure of the details on this, but I'm pretty sure it exists
+    set_rule(world.get_entrance('Deku Palace Upper Courtyard To Throne Room Cage Region'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Song From Monkey'), lambda state: state.form('Deku') and state.has('Ocarina'))
+
+    # post woodfall palace
+    set_rule(world.get_location('Returned Deku Princess'), lambda state: state.form('Deku') and state.has('Deku Princess'))
+    set_rule(world.get_location('Butler Race Prize'), lambda state: state.form('Human') and state.event('Returned Deku Princess') and state.event('Beat Odolwa'))
     # you know, I have no idea what the actual requirements are to do this lol
     # once you can get here, you can attempt the race, but I figure goron can't do it, zora probly not
     # so it's human and/or deku? todo: figure this out lol
-
-    set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human') and state.has_bottle())
 
     ## Swamp Spider House
     # oh god, so many spots
@@ -511,7 +524,7 @@ def global_rules(world):
     # but yeah, gotta figure out all the ways to beat this
 
     ## Post Odolwa Princess Room
-    set_rule(world.get_location('Woodfall Princess'), lambda state: state.has_bottle())
+    set_rule(world.get_location('Deku Princess'), lambda state: state.has_bottle())
 
 
     ### MOUNTAIN VILLAGE
