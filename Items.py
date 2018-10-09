@@ -110,11 +110,11 @@ item_table = {
     'SH Stray Fairy Pickup': (True, False, 'Event', None, None),
     'GB Stray Fairy Pickup': (True, False, 'Event', None, None),
     'ST Stray Fairy Pickup': (True, False, 'Event', None, None),
-    'Odolwa\'s Remains': (True, False, 'Event', None, None),
-    'Goht\'s Remains': (True, False, 'Event', None, None),
-    'Gyorg\'s Remains': (True, False, 'Event', None, None),
-    'Twinmold\'s Remains': (True, False, 'Event', None, None),
-    'Majoras Mask': (True, False, 'Event', None, None)
+    "Odolwa's Remains": (True, False, 'Event', None, None),
+    "Goht's Remains": (True, False, 'Event', None, None),
+    "Gyorg's Remains": (True, False, 'Event', None, None),
+    "Twinmold's Remains": (True, False, 'Event', None, None),
+    "Majoras Mask': (True, False, 'Event', None, None)
     }
 
 item_data = {
