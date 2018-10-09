@@ -410,11 +410,10 @@ class CollectionState(object):
         return self.has('Buy Bombchu (5)') or self.has('Buy Bombchu (10)') or self.has('Buy Bombchu (20)') or self.can_reach('Bomb Shop')
     
     def has_bombchus(self):
-        return self.world.bombchus_in_logic and \
-                    ((any(pritem.startswith('Bombchus') for pritem in self.prog_items) and \
-                        self.can_buy_bombchus())) \
-            or (not self.world.bombchus_in_logic and self.has_bomb_bag() and \
-                        self.can_buy_bombchus()))
+        if self.world.bombchus_in_logic:
+            return (any(pritem.startswith('Bombchus') for pritem in self.prog_items) and self.can_buy_bombchus())
+        else:
+            return self.has_bomb_bag() and self.can_buy_bombchus()
 
     def has_bombchus_item(self):
         return (self.world.bombchus_in_logic and \
