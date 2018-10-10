@@ -105,6 +105,32 @@ def create_regions(world):
 
         create_ow_region('Woodfall Owl Platform', [], ['Woodfall Temple Entrance', 'GF Woodfall', 'Woodfall']),
 
+        create_dungeon_region('Woodfall Temple Lobby',
+            ['Woodfall Temple Lobby Stray Fairy', 'Woodfall Temple Lobby Stray Fairy Chest'],
+            ['Woodfall Temple Front Exit', 'Woodfall Temple Torch Platform']),
+        create_dungeon_region('Woodfall Temple Lower 1F',
+            ['Woodfall Temple Central Flower Pot Fairy', 'Woodfall Temple Beehive Stray Fairy',
+            'Woodfall Temple Central Flower Deku Baba', 'Woodfall Temple Deku Flower Elevator Beehive'
+            'Woodfall Temple Central Flower Stray Fairy Chest', 'Woodfall Temple Map Chest',
+            'Woodfall Temple Small Key Chest'],
+            ['Woodfall Temple Central Flower Torch', 'Woodfall Temple Small Key Door',
+            'Woodfall Temple Deku Flower Elevator']),
+        create_dungeon_region('Woodfall Temple Push Block Room',
+            ['Woodfall Temple Skulltula Fairy', 'Woodfall Temple Push Block Beehive'
+            'Woodfall Temple Push Block Bubble Fairy', 'Woodfall Temple Compass Chest'],
+            ['Woodfall Temple Small Key Door Backwards', 'Woodfall Temple Spiderweb']),
+        create_dungeon_region('Woodfall Temple Dark Puff Arena',
+            ['Woodfall Temple Dark Puff Killing Prize'],
+            ['Woodfall Temple Spiderweb Backwards', 'Woodfall Temple 2F Barred Door']),
+        create_dungeon_region('Woodfall Temple Upper 1F',
+            ['Woodfall Temple Central Flower Bubble Fairy', 'Woodfall Temple Bow Chest'],
+            ['Woodfall Temple Stairs Backwards', 'Woodfall Temple Central Flower Barred Door']),
+        create_dungeon_region('Woodfall Temple Gecko Arena',
+            ['Woodfall Temple Boss Key Chest', 'Woodfall Temple Frog Get']),
+        create_dungeon_region('Woodfall Temple Final Chamber',
+            ['Woodfall Temple Lower East Bubble Fairy', 'Woodfall Temple Upper East Bubble Fairy',
+            'Woodfall Temple West Bubble Fairy', 'Woodfall Temple Hot Bubble Fairy'],),
+
         create_interior_region('Woodfall Fairy Shrine', ['Woodfall GF Reward'], ['Woodfall']),
 
         create_ow_region('Mountain Icicles', [], ['Termina Field North Exit', 'Termina Field From Mountain']),
@@ -193,8 +219,8 @@ def _create_region(name, type, locations=None, exits=None):
     for exit in exits:
         ret.exits.append(Entrance(exit, ret))
     for location in locations:
-        address, address2, default, type, scene, hint = location_table[location]
-        ret.locations.append(Location(location, address, address2, default, type, scene, hint, ret))
+        address, address2, default, type = location_table[location]
+        ret.locations.append(Location(location, address, address2, default, type, 0x00, 'Grottos', ret))
     return ret
 
 location_table = {'Remove the Cursed Mask': (None, None, None, 'Mask'),
@@ -303,7 +329,7 @@ location_table = {'Remove the Cursed Mask': (None, None, None, 'Mask'),
                     'Open the Moon': (None, None, None, 'Event')}
 
 '''
-# TODO: Curiosity Shop
+# DOOT: Curiosity Shop
 'Castle Town Potion Shop Item 1': (shop_address(3, 0), None, 0x30, 'Shop', 0x31, 'the Market'),
 'Castle Town Potion Shop Item 2': (shop_address(3, 1), None, 0x31, 'Shop', 0x31, 'the Market'),
 'Castle Town Potion Shop Item 3': (shop_address(3, 2), None, 0x32, 'Shop', 0x31, 'the Market'),

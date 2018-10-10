@@ -17,7 +17,7 @@ class LocalRom(object):
         self.last_address = None
 
         file = settings.rom
-        decomp_file = 'ZOOTDEC.z64'
+        decomp_file = 'ZMMDEC.z64'
 
         os.chdir(os.path.dirname(os.path.realpath(__file__)))
         #os.chdir(output_path(os.path.dirname(os.path.realpath(__file__))))
@@ -45,6 +45,8 @@ class LocalRom(object):
             [0xEC, 0x70, 0x11, 0xB7, 0x76, 0x16, 0xD7, 0x2B], # Compressed
             [0x70, 0xEC, 0xB7, 0x11, 0x16, 0x76, 0x2B, 0xD7], # Byteswap compressed
             [0x93, 0x52, 0x2E, 0x7B, 0xE5, 0x06, 0xD4, 0x27], # Decompressed
+            [0xDA, 0x69, 0x83, 0xE7, 0x50, 0x67, 0x44, 0x58], # Decompressed MM?
+            [0xE9, 0x79, 0x55, 0xC6, 0xBC, 0x33, 0x8D, 0x38], # Compressed MM?
         ]
 
         # Validate ROM file
@@ -157,8 +159,8 @@ class LocalRom(object):
             self.write_int32(startaddress + (i * 4), value)
 
     def write_to_file(self, file):
-        self.verify_dmadata()
-        self.update_crc()
+        # self.verify_dmadata()
+        # self.update_crc()
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 

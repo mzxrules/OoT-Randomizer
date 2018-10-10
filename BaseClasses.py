@@ -42,9 +42,17 @@ class World(object):
         self.keysanity = self.shuffle_smallkeys != 'dungeon'
         self.check_beatable_only = not self.all_reachable
         # group a few others
-        self.tunic_colors = [self.kokiricolor, self.goroncolor, self.zoracolor]
-        self.navi_colors = [self.navicolordefault, self.navicolorenemy, self.navicolornpc, self.navicolorprop]
-        self.navi_hint_sounds = [self.navisfxoverworld, self.navisfxenemytarget]
+        self.tunic_colors = [self.humancolor, self.humanpantscolor,
+            self.humanhatcolor, self.deitycolor, self.humanswordcolor,
+            self.dekuspincolor, self.zoraslashcolor, self.deityswordcolor,
+            self.deitybeamcolor, self.boomerangtrail]
+        self.tunic_palettes = [self.dekucolor, self.dekupantscolor,
+            self.dekuhatcolor, self.goronhatcolor, self.goronpantscolor,
+            self.zoracolor, self.zorafincolor,
+            self.zorahatcolor, self.zorapantscolor,
+            self.boomerangcolor]
+        # self.navi_colors = [self.navicolordefault, self.navicolorenemy, self.navicolornpc, self.navicolorprop]
+        # self.navi_hint_sounds = [self.navisfxoverworld, self.navisfxenemytarget]
         self.can_take_damage = True
         self.keys_placed = False
         self.spoiler = Spoiler(self)
