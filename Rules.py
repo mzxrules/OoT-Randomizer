@@ -344,7 +344,7 @@ def global_rules(world):
     # so todo: determine how to restrict progression items from this spot if the option is selected
     # (there's probly a mechanism for this in testrunner's build)
 
-    set_rule(world.get_entrance('Swamp Path To Southern Swamp (Clean)'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Swamp Path To Southern Swamp (Clean)'), lambda state: state.event('Cleaned Swamp'))
 
     ## Southern Swamp
     set_rule(world.get_location('Swamp Tourist Roof HP'), lambda state: state.has('Town Title Deed') or state.can('Goron Boost'))
@@ -395,7 +395,7 @@ def global_rules(world):
     set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human'))
     # will he sell you the beans even if you don't have a bottle? it seems like he should
     # todo: find out
-    set_rule(world.get_entrance('Magic Bean Grotto Clean Exit'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Magic Bean Grotto Clean Exit'), lambda state: state.event('Cleaned Swamp'))
 
     # set_rule(world.get_location('Deku Palace Courtyard HP'), lambda state: True)
     set_rule(world.get_entrance('Deku Palace Lower Courtyard To Upper'), lambda state: state.can('Deku Palace Coutryard Trick'))
@@ -406,7 +406,7 @@ def global_rules(world):
     # instrument that isn't the ocarina to learn it? I dunno
     # todo: test requirements for this
 
-    set_rule(world.get_entrance('Butler Race Clean Exit'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Butler Race Clean Exit'), lambda state: state.event('Cleaned Swamp'))
 
     # post woodfall palace
     set_rule(world.get_location('Returned Deku Princess'), lambda state: state.form('Deku') and state.has('Deku Princess'))
@@ -423,7 +423,7 @@ def global_rules(world):
              lambda state: state.has_bottle() and state.form('Deku') and state.has('Sonata of Awakening') and state.can_pop_balloon() and state.can_use('Bomb Bag'))
     # there might be some other requirements to get all the skulls here, but I'm pretty sure you at least need a
     # bottle and to use deku flowers
-    set_rule(world.get_entrance('Swamp Spider House Clean Exit'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Swamp Spider House Clean Exit'), lambda state: state.event('Cleaned Swamp'))
 
     ## Outside Woodfall Area
     # todo: where can the hookshot get you in this area? also ice arrows??
@@ -451,7 +451,7 @@ def global_rules(world):
     # dunno if gainer actually works here, but it seems like the kind of spot where it would
 
     set_rule(world.get_location('Woodfall GF Reward'), lambda state: state.has('WF SF', 15))
-    set_rule(world.get_entrance('Woodfall Fountain Clean Exit'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Woodfall Fountain Clean Exit'), lambda state: state.event('Cleaned Swamp'))
 
 
     ### WOODFALL TEMPLE
