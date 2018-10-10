@@ -53,7 +53,6 @@ def global_rules(world):
     set_rule(world.get_entrance('Clock Tower Twisted Hallway'), False)
     set_rule(world.get_location('First Nut'), lambda state: state.form('Deku'))
     # set_rule(world.get_location('Clock Town GF Reward'), lambda state: state.has('CT SF', 1))
-    set_rule(world.get_location('Woodfall GF Reward'), lambda state: state.has('WF SF', 15))
     set_rule(world.get_location('Snowhead GF Reward'), lambda state: state.has('SH SF', 15))
     set_rule(world.get_location('Great Bay GF Reward'), lambda state: state.has('GB SF', 15))
     set_rule(world.get_location('Stone Tower GF Reward'), lambda state: state.has('ST SF', 15))
@@ -374,24 +373,14 @@ def global_rules(world):
     set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: state.can_use('Bow'))
 
     set_rule(world.get_entrance('To Swamp Spider House'), lambda state: state.can_use('Fire Arrows'))
-    set_rule(world.get_entrance('Lower Octo Region Trick To Upper'), lambda state: state.can('Some Jumping Trick') and state.form('Human'))
+    set_rule(world.get_entrance('Lower Octo Region Trick To Upper Midpoint'), lambda state: state.can('Some Jumping Trick') and state.form('Human'))
     # I've seen this done as human, dunno the details, but the check is going to essentially look like this
-
-    # set_rule(world.get_location('Learn Song of Soaring'), lambda state: True)
-    # as far as I know, no matter what once you're in this area, you still need to use the deku flowers to get across
-    # to the spot where you learn the song
-    # actually... you can get to the spot from the outside woodfall zone
-    # ok so here's what's up, it's an open check, but it's in its own logical region; the lower part of this area is
-    # its own region with an exit to the top region /before/ the check, using that trick that lets you grab that ledge,
-    # then there's an exit from that region to the region with the learn spot gated by using the deku flowers
-    # that logical region has exits to the outside woodfall area (which has an open exit back to here) and down to the
-    # bottom of the area (since you can just drop down whenever)
-    # (I could be wrong about it being an open check tho, not sure what form requirements exist for the owl to teach it)
-
-    # set_rule(world.get_location('Learn Sonata of Awakening'), lambda state: state.form('Human') and state.form('Deku'))
-    # probly need to test the reqs for this, but apparently you need to talk to the monkey as link and then show him an
-    # instrument that isn't the ocarina to learn it? I dunno
-    # todo: test requirements for this
+    set_rule(world.get_entrance('Poisoned Octo Upper Near Palace To Midpoint'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Octo Upper Midpoint To Near Palace'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Octo Upper Midpoint To Kaepora'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Octo Kaepora To Midpoint'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Song From Kaepora Gaebora'), lambda state: state.has('Ocarina'))
+    # form req?
 
     ## Deku Palace
     set_rule(world.get_entrance('Outer Palace To Octo Upper'), lambda state: state.form('Deku') or state.can('Gainer'))
@@ -406,12 +395,18 @@ def global_rules(world):
     set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human'))
     # will he sell you the beans even if you don't have a bottle? it seems like he should
     # todo: find out
+    set_rule(world.get_entrance('Magic Bean Grotto Clean Exit'), lambda state: state.event('Beat Odolwa'))
 
     # set_rule(world.get_location('Deku Palace Courtyard HP'), lambda state: True)
     set_rule(world.get_entrance('Deku Palace Lower Courtyard To Upper'), lambda state: state.can('Deku Palace Coutryard Trick'))
     # not sure of the details on this, but I'm pretty sure it exists
     set_rule(world.get_entrance('Deku Palace Upper Courtyard To Throne Room Cage Region'), lambda state: state.form('Deku'))
     set_rule(world.get_location('Song From Monkey'), lambda state: state.form('Deku') and state.has('Ocarina'))
+    # probly need to test the reqs for this, but apparently you need to talk to the monkey as link and then show him an
+    # instrument that isn't the ocarina to learn it? I dunno
+    # todo: test requirements for this
+
+    set_rule(world.get_entrance('Butler Race Clean Exit'), lambda state: state.event('Beat Odolwa'))
 
     # post woodfall palace
     set_rule(world.get_location('Returned Deku Princess'), lambda state: state.form('Deku') and state.has('Deku Princess'))
@@ -428,20 +423,35 @@ def global_rules(world):
              lambda state: state.has_bottle() and state.form('Deku') and state.has('Sonata of Awakening') and state.can_pop_balloon() and state.can_use('Bomb Bag'))
     # there might be some other requirements to get all the skulls here, but I'm pretty sure you at least need a
     # bottle and to use deku flowers
+    set_rule(world.get_entrance('Swamp Spider House Clean Exit'), lambda state: state.event('Beat Odolwa'))
 
     ## Outside Woodfall Area
+    # todo: where can the hookshot get you in this area? also ice arrows??
     set_rule(world.get_location('Outside Woodfall 20 Rupee Chest'),
-             lambda state: state.form('Deku') or (state.has_hearts(5) and (state.form('Human') or state.form('Zora'))) or state.can_use('Hookshot'))
+             lambda state: state.form('Deku') or state.has_hearts(5) or state.can_use('Hookshot'))
     # I think you can get to this one by toughing out the poison water as well as just being deku
     # or also with the hookshot? also do ice arrows freeze poison water?
     # todo: test ways to get to this chest
-    # p sure goron just can't get it lol
+    set_rule(world.get_entrance('Poisoned Outside Woodfall Entrance To Woodfall Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Outside Woodfall Entrance To Fountain Platform'), lambda state: state.any_form_but('Deku') and state.has_hearts(10))
 
-    set_rule(world.get_location('Outside Woodfall 5 rupees'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Outside Woodfall 5 Rupee Chest'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    set_rule(world.get_location('Woodfall Owl Statue (Poisoned)'), lambda state: state.form('Human'))
+    set_rule(world.get_entrance('Poisoned Owl Platform To Entrance'), lambda state: state.form('Deku') or state.has_hearts(10))
+    set_rule(world.get_entrance('Poisoned Owl Platform To Fountain Platform'), lambda state: state.form('Deku') or state.has_hearts(4))
+    set_rule(world.get_entrance('Poisoned Owl Platform To Temple Platform'), lambda state: state.form('Deku') and state.has('Sonata Of Awakening'))
+
+    set_rule(world.get_entrance('Poisoned Woodfall Temple Platform To Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Woodfall Temple Platform To Entrance'), lambda state: state.form('Deku') or state.has_hearts(6))
+
     set_rule(world.get_location('Outside Woodfall HP'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
-    # todo: test if hookshot can get these
+    set_rule(world.get_entrance('Poisoned Fountain Platform To Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Fountain Platform To Entrance'), lambda state: state.any_form_but('Deku') and state.has_hearts(10))
+    set_rule(world.get_entrance('Poisoned Fountain Platform To Fountain'), lambda state: state.form('Deku') or state.can('Gainer'))
+    # dunno if gainer actually works here, but it seems like the kind of spot where it would
 
-    set_rule(world.get_location('Woodfall Owl Statue'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Woodfall GF Reward'), lambda state: state.has('WF SF', 15))
+    set_rule(world.get_entrance('Woodfall Fountain Clean Exit'), lambda state: state.event('Beat Odolwa'))
 
 
     ### WOODFALL TEMPLE

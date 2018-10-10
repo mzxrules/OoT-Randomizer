@@ -115,42 +115,56 @@ def create_regions(world):
         # also not actually sure if lost woods should be ow or interior
         create_ow_region('Swamp Octo Region Lower (Poisoned)', ['Kill Swamp Big Octo From Palace'],
                          ['Swamp Big Octo From Octo Region', 'Octo Region to Deku Palace',
-                          'To Swamp Spider House', 'Lower Octo Region Trick To Upper']),
-        create_interior_region('Swamp Spider House', ['spiders', 'so many spiders', 'Swamp Spider House Reward'], ['Swamp Spider House Exit']),
+                          'To Swamp Spider House', 'Lower Octo Region Trick To Upper Midpoint']),
+        create_interior_region('Swamp Spider House', ['spiders', 'so many spiders', 'Swamp Spider House Reward'], ['Swamp Spider House Clean Exit', 'Swamp Spider House Poisoned Exit']),
         # a note about this poisoned region, while in the previous section of the swamp any form could get around, now
         # only deku can get around without needing health due to the poisoned water, so to deal with that, do with put
         # a heart requirement on the entrance to here? split it up into logical regions requiring health?
         # things to ponder
 
-        create_ow_region('Swamp Deku Palace Outer Region (Poisoned)', [], ['Outer Palace To Lower Octo',
-                        'Outer Palace To Octo Upper', 'Outer Palace To Lower Courtyard', 'Poisoned Palace To Butler Race',
-                        'Outer Palace To Upper Courtyard']),
-        create_interior_region('Butler Race', ['Butler Race Prize'], ['Butler Race Exit']),
+        create_ow_region('Swamp Deku Palace Outer Region (Poisoned)', [], ['Poisoned Outer Palace To Lower Octo',
+                        'Poisoned Outer Palace To Octo Upper', 'Poisoned Outer Palace To Lower Courtyard', 'Poisoned Palace To Butler Race',
+                        'Poisoned Outer Palace To Upper Courtyard']),
+        create_interior_region('Butler Race', ['Butler Race Prize'], ['Butler Race Clean Exit', 'Butler Race Poisoned Exit']),
 
-        create_ow_region('Swamp Deku Palace Lower Courtyard', ['Deku Palace Courtyard HP'], ['Deku Palace Lower Courtyard To Outer Region',
-            'Deku Palace Lower Courtyard To Main Throne Room', 'To Magic Beans', 'Deku Palace Lower Courtyard To Upper']),
-        create_grotto_region('Magic Bean Grotto', ['Magic Beans'], ['Magic Bean Grotto Exit']),
+        create_ow_region('Swamp Deku Palace Lower Courtyard (Poisoned)', ['Deku Palace Courtyard HP'], ['Poisoned Deku Palace Lower Courtyard To Outer Region',
+            'Poisoned Deku Palace Lower Courtyard To Main Throne Room', 'To Magic Beans', 'Deku Palace Lower Courtyard To Upper']),
+        create_grotto_region('Magic Bean Grotto', ['Magic Beans'], ['Magic Bean Grotto Clean Exit', 'Magic Bean Grotto Poisoned Exit']),
 
-        create_ow_region('Swamp Deku Palace Upper Courtyard', [], ['Deku Palace Upper Courtyard To Lower',
+        create_ow_region('Swamp Deku Palace Upper Courtyard (Poisoned)', [], ['Deku Palace Upper Courtyard To Lower',
             'Deku Palace Upper Courtyard To Outer Region', 'Deku Palace Upper Courtyard To Throne Room Cage Region']),
-        create_interior_region('Swamp Deku Palace Throne Room', ['Return Deku Princess'], ['Swamp Deku Palace Throne Room Exit']),
-        create_interior_region('Swamp Deku Palace Cage Room', ['Song From Monkey'], ['Swamp Deku Palace Cage Room Exit']),
+        create_interior_region('Swamp Deku Palace Throne Room', ['Return Deku Princess'], ['Swamp Deku Palace Throne Room Clean Exit', 'Swamp Deku Palace Throne Room Poisoned Exit']),
+        create_interior_region('Swamp Deku Palace Cage Room', ['Song From Monkey'], ['Swamp Deku Palace Cage Room Clean Exit', 'Swamp Deku Palace Cage Room Poisoned Exit']),
+        # the throne room, is that actually a different map for poisoned vs clean water? todo: find out
+
+        create_ow_region('Swamp Octo Region Upper Near Palace (Poisoned)', [], ['Poisoned Octo Upper Near Palace To Lower',
+                                    'Poisoned Octo Upper To Deku Palace', 'Poisoned Octo Upper Near Palace To Midpoint']),
+        create_ow_region('Swamp Octo Region Upper Midpoint (Poisoned)', [], ['Poisoned Octo Upper Midpoint To Near Palace',
+                                    'Poisoned Octo Upper Midpoint To Lower', 'Poisoned Octo Upper Midpoint To Kaepora']),
+        create_ow_region('Swamp Octo Kaepora Region (Poisoned)', ['Song From Kaepora Gaebora'], ['Posoned Octo Kaepora To Lower',
+                                    'Poisoned Octo Kaepora To Midpoint', 'Poisoned Octo Kaepora To Woodfall']),
+        # exit 'Poisoned Octo Upper To Deku Palace': thinking- entrance rando, coming in from tourist swamp (getting
+        # through the octos isn't a loading zone, right? oh lordy), the exit into the outer palace from lower and upper
+        # parts of this region are different loading zones, right? which means splitting the upper region up further
+        # might be necessary; if the player can trick up to the upper part, a check still needs to be made to see if
+        # they can get across to the deku palace exit (and the SoS learn spot, both hard requiring deku I believe)
+        # I'll leave it as the 3 pieces for the upper region, they can be combined later easily enough
+
+        create_ow_region('Outside Woodfall Entrance Region (Poisoned)', ['Outside Woodfall 20 Rupee Chest'],
+                         ['Poisoned Outside Woodfall Entrance To Woodfall Owl Platform', 'Poisoned Outside Woodfall Entrance To Fountain Platform']),
+        create_ow_region('Woodfall Owl Platform (Poisoned)', ['Outside Woodfall 5 Rupee Chest', 'Woodfall Owl Statue (Poisoned)'],
+                         ['Poisoned Owl Platform To Entrance', 'Poisoned Owl Platform To Fountain Platform', 'Poisoned Owl Platform To Temple Platform']),
+        create_ow_region('Outside Woodfall Temple Platform (Poisoned)', [], ['Poisoned Woodfall Temple Platform To Owl Platform',
+                        'Poisoned Woodfall Temple Platform To Entrance', 'Poisoned Woodfall Temple Platform Into Temple']),
+        create_ow_region('Outside Woodfall Fairy Fountain Platform (Poisoned)', ['Outside Woodfall HP'],
+                         ['Poisoned Fountain Platform To Owl Platform', 'Poisoned Fountain Platform To Entrance', 'Poisoned Fountain Platform To Fountain']),
+        create_interior_region('Woodfall Fairy Shrine', ['Woodfall GF Reward'], ['Woodfall Fountain Clean Exit', 'Woodfall Fountain Poisoned Exit']),
 
         create_ow_region('Boat Ride', [], ['Poison Swamp']),
-        create_ow_region('Poison Swamp', [], ['Swamp Exit to Deku Palace', 'Swamp Spider House Entrance']),
-        # TODO Give an exit
-        create_interior_region('Swamp Spider House'),
-        create_ow_region('Deku Palace', ['Deku Palace HP'], ['Deku Palace Back Entrance', 'Deku Palace Chamber Entrance']),
-        create_interior_region('Deku Palace Royal Chamber'),
-        create_interior_region('Deku Palace Shrine'),
         # TODO All of the Woodfall area
         create_interior_region('Woodfall',
             [],
             []),
-
-        create_ow_region('Woodfall Owl Platform', [], ['Woodfall Temple Entrance', 'GF Woodfall', 'Woodfall']),
-
-        create_interior_region('Woodfall Fairy Shrine', ['Woodfall GF Reward'], ['Woodfall']),
 
         # create_ow_region('Mountain Icicles', [], ['Termina Field North Exit', 'Termina Field From Mountain']),
         create_ow_region('Mountain Village Path South', [], ['Mountain Snowball Block', 'Mountain Path South Exit']),
