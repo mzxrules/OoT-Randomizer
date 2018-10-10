@@ -160,11 +160,13 @@ def create_regions(world):
                          ['Poisoned Fountain Platform To Owl Platform', 'Poisoned Fountain Platform To Entrance', 'Poisoned Fountain Platform To Fountain']),
         create_interior_region('Woodfall Fairy Shrine', ['Woodfall GF Reward'], ['Woodfall Fountain Clean Exit', 'Woodfall Fountain Poisoned Exit']),
 
-        create_ow_region('Boat Ride', [], ['Poison Swamp']),
+        # create_ow_region('Boat Ride', [], ['Poison Swamp']),
+        # should this actually be its own region? idek
+        # ugh maybe it should, it might have loading zones or smth ugh
+
         # TODO All of the Woodfall area
-        create_interior_region('Woodfall',
-            [],
-            []),
+        # also todo: figure out what the actual loading zones are because I'm about to create an unholy mess of logical regions
+        create_dungeon_region('Woodfall', [], []),
 
         # create_ow_region('Mountain Icicles', [], ['Termina Field North Exit', 'Termina Field From Mountain']),
         create_ow_region('Mountain Village Path South', [], ['Mountain Snowball Block', 'Mountain Path South Exit']),
