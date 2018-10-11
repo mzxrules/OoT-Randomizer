@@ -51,13 +51,10 @@ class World(object):
     def copy(self):
         ret = World(self.settings)
         ret.skipped_trials = copy.copy(self.skipped_trials)
-        ret.dungeon_mq = copy.copy(self.dungeon_mq)
-        ret.big_poe_count = copy.copy(self.big_poe_count)
         ret.can_take_damage = self.can_take_damage
         ret.shop_prices = copy.copy(self.shop_prices)
         ret.id = self.id
-        from Regions import create_regions
-        from Dungeons import create_dungeons
+        from Regions import create_dungeons, create_regions
         from Rules import set_rules, set_shop_rules
         create_regions(ret)
         create_dungeons(ret)
@@ -761,7 +758,7 @@ class Region(object):
     def __unicode__(self):
         return '%s' % self.name
 
-'''
+    '''
 Entrance object:
 Information about exits of Regions (being Entrances to someplace else)
 '''
@@ -849,7 +846,7 @@ class Dungeon(object):
         return '%s' % self.name
 
 
-'''
+    '''
 Location object:
 Information about the location where an item can be or is placed.
 
@@ -871,10 +868,7 @@ class Location(object):
         self.scene = scene
         self.hint = hint
         self.spot_type = 'Location'
-        self.recursion_count = 0
-        self.staleness_count = 0
         self.recursion_count = 0 # Used to stop infinite loops when calling `can_reach`
-        self.staleness_count = 0 # !!! NEVER USED
         # Function that takes an item and a state and determines
         # if the item can (always) be filled into this Location.
         self.always_allow = lambda item, state: False
