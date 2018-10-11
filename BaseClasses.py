@@ -392,7 +392,7 @@ class CollectionState(object):
     def can_use(self, item):
         magic_items = ['Lens of Truth', 'Deku Bubble', 'Deity Beam']
         magic_arrows = ['Fire Arrow', 'Ice Arrow', 'Light Arrow']
-        human_items = ['Bow', 'Hookshot', 'Magic Beans']
+        human_items = ['Bow', 'Hookshot', 'Magic Beans', 'Bomb Bag', 'Bombchu', 'Deku Stick', 'Deku Nut']
         if item in magic_items:
             return self.has(item) and self.has('Magic Meter')
         elif item in human_items:
@@ -414,7 +414,7 @@ class CollectionState(object):
                     ((any(pritem.startswith('Bombchus') for pritem in self.prog_items) and \
                         self.can_buy_bombchus())) \
             or (not self.world.bombchus_in_logic and self.has_bomb_bag() and \
-                        self.can_buy_bombchus()))
+                        self.can_buy_bombchus())
 
     def has_bombchus_item(self):
         return (self.world.bombchus_in_logic and \
@@ -469,8 +469,10 @@ class CollectionState(object):
     def can_wear(self, mask):
         return self.form('Human') and self.has(mask)
 
-    def stray_fairy_req(self):
-        return self.can_use('Great Fairy Mask') or not self.options('ReqGFMask')
+    def stray_fairy_req(self, test=True):
+        return self.can_use('Great Fairy Mask') or (not self.options('ReqGFMask') and test)
+    # I think this is what's actually correct for optionally requiring gf mask for all fairies: a test is passed to this
+    # fxn which is only needed if you can't use the gf mask and you're not required to
 
     def lens_req(self):
         return (self.can_use('Lens of Truth') and self.has('Magic Meter')) or not self.options('ReqLens')

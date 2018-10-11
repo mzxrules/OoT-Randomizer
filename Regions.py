@@ -115,7 +115,8 @@ def create_regions(world):
         # also not actually sure if lost woods should be ow or interior
         create_ow_region('Swamp Octo Region Lower (Poisoned)', ['Kill Swamp Big Octo From Palace'],
                          ['Swamp Big Octo From Octo Region', 'Octo Region to Deku Palace',
-                          'To Swamp Spider House', 'Lower Octo Region Trick To Upper Midpoint']),
+                          'To Swamp Spider House', 'Lower Octo Region Trick To Upper Midpoint', 'To Octo Region Grotto']),
+        create_grotto_region('Octo Region Grotto', ['Octo Grotto 20 Rupee Chest'], ['Octo Grotto Clean Exit', 'Octo Grotto Poison Exit']),
         create_interior_region('Swamp Spider House', ['spiders', 'so many spiders', 'Swamp Spider House Reward'], ['Swamp Spider House Clean Exit', 'Swamp Spider House Poisoned Exit']),
         # a note about this poisoned region, while in the previous section of the swamp any form could get around, now
         # only deku can get around without needing health due to the poisoned water, so to deal with that, do with put
@@ -166,7 +167,26 @@ def create_regions(world):
 
         # TODO All of the Woodfall area
         # also todo: figure out what the actual loading zones are because I'm about to create an unholy mess of logical regions
-        create_dungeon_region('Woodfall', [], []),
+        create_dungeon_region('WF Entrance Room (Poisoned)', ['WF Stray Fairy Entrance', 'WF Stray Fairy Lobby Chest'],
+                              ['WF Poisoned Front Exit', 'WF Poisoned Entrance To Central Room']),
+
+        create_dungeon_region('WF Central Room Front Region (Poisoned)', ['WF Stray Fairy Central Room Deku Baba', 'WF Clean Poison Water Using Fire Arrows',
+                        'WF Stray Fairy Central Room Upper Bubble Long Range', 'WF Poisoned Central Room Gate Torch Using Fire Arrows'],
+                      ['WF Poisoned Central Room Front To Entrance Room', 'WF Poisoned Central Room Front To Push Block Room',
+                       'WF Poisoned Central Room Front To Fairy Platform', 'WF Poisoned Central Room Front To Upper',
+                       'WF Clean Poison Water Using Fire Arrows Exit']),
+        create_dungeon_region('WF Central Room Fairy Platform (Poisoned)', ['WF Stray Fairy Central Room SW Corner'],
+                      ['WF Poisoned Central Room Fairy Platform To Front', 'WF Poisoned Central Room Fairy Platform To Right',
+                       'WF Poisoned Central Room Fairy Platform To Upper']),
+        create_dungeon_region('WF Central Room Right Region (Poisoned)', [], ['WF Poisoned Central Room Right To Fairy Platform',
+                        'WF Poisoned Central Room Right To Upper', 'WF Poisoned Central Room Right To Ladder Up',
+                        'WF Poisoned Central Room Right To Elevator Room']),
+        create_dungeon_region('WF Central Room Upper Region (Poisoned)', ['WF Stray Fairy Central Room Upper Bubble',
+                        'WF Stray Fairy Central Room Upper Switch Chest', 'WF Poisoned Central Room Ladder Switch', 'WF Clean Poison Water'],
+                        ['WF Poisoned Central Room Upper To Pre Boss Room', 'WF Poisoned Central Room Upper To Dragonfly Room',
+                         'WF Poisoned Central Room Upper To Elevator Room', 'WF Poisoned Central Room Upper To Fairy Platform',
+                         'WF Poisoned Central Room Upper To Right', 'WF Poisoned Central Room Upper To Front', 'WF Clean Poison Water Exit']),
+
 
         # create_ow_region('Mountain Icicles', [], ['Termina Field North Exit', 'Termina Field From Mountain']),
         create_ow_region('Mountain Village Path South', [], ['Mountain Snowball Block', 'Mountain Path South Exit']),
