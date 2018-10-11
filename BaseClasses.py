@@ -42,15 +42,14 @@ class World(object):
         self.keysanity = self.shuffle_smallkeys != 'dungeon'
         self.check_beatable_only = not self.all_reachable
         # group a few others
-        self.tunic_colors = [self.humancolor, self.humanpantscolor,
-            self.humanhatcolor, self.deitycolor, self.humanswordcolor,
-            self.dekuspincolor, self.zoraslashcolor, self.deityswordcolor,
+        self.tunic_colors = [self.hatcolor, self.shirtcolor, self.pantscolor,
+            self.deitycolor, self.swordcolor, self.deityswordcolor,
+            self.dekuspincolor, self.zoraslashcolor,
             self.deitybeamcolor, self.boomerangtrail]
-        self.tunic_palettes = [self.dekucolor, self.dekupantscolor,
-            self.dekuhatcolor, self.goronhatcolor, self.goronpantscolor,
-            self.zoracolor, self.zorafincolor,
-            self.zorahatcolor, self.zorapantscolor,
-            self.boomerangcolor]
+        self.tunic_palettes = [self.dekucolor, self.dekutuniccolor,
+            self.goronhatcolor, self.goronpantscolor,
+            self.zoracolor, self.zoratuniccolor,
+            self.zorafincolor, self.boomerangcolor]
         # self.navi_colors = [self.navicolordefault, self.navicolorenemy, self.navicolornpc, self.navicolorprop]
         # self.navi_hint_sounds = [self.navisfxoverworld, self.navisfxenemytarget]
         self.can_take_damage = True
@@ -60,11 +59,11 @@ class World(object):
 
     def copy(self):
         ret = World(self.settings)
-        ret.skipped_trials = copy.copy(self.skipped_trials)
-        ret.dungeon_mq = copy.copy(self.dungeon_mq)
-        ret.big_poe_count = copy.copy(self.big_poe_count)
+        # ret.skipped_trials = copy.copy(self.skipped_trials)
+        # ret.dungeon_mq = copy.copy(self.dungeon_mq)
+        # ret.big_poe_count = copy.copy(self.big_poe_count)
         ret.can_take_damage = self.can_take_damage
-        ret.shop_prices = copy.copy(self.shop_prices)
+        # ret.shop_prices = copy.copy(self.shop_prices)
         ret.id = self.id
         from Regions import create_regions
         from Dungeons import create_dungeons

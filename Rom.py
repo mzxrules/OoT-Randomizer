@@ -57,7 +57,7 @@ class LocalRom(object):
             raise RuntimeError('ROM file %s is not a valid MM 1.0 US ROM.' % file)
         elif len(self.buffer) < 0x2000000 or len(self.buffer) > (0x4000000) or file_name[1] not in ['.z64', '.n64']:
             # ROM is too big, or too small, or not a bad type
-            raise RuntimeError('ROM file %s is not a valid OoT 1.0 US ROM.' % file)
+            raise RuntimeError('ROM file %s is not a valid MM 1.0 US ROM.' % file)
         elif len(self.buffer) == 0x2000000:
             # If Input ROM is compressed, then Decompress it
             subcall = []

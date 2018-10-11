@@ -1195,7 +1195,7 @@ setting_infos = [
                        '''
         }),
 
-    Setting_Info('humanhatcolor', str, 0, False,
+    Setting_Info('hatcolor', str, 0, False,
         {
             'default': 'White',
             'const': 'White',
@@ -1221,7 +1221,7 @@ setting_infos = [
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('humancolor', str, 0, False,
+    Setting_Info('shirtcolor', str, 0, False,
         {
             'default': 'Goron Red',
             'const': 'Goron Red',
@@ -1247,7 +1247,7 @@ setting_infos = [
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('humanpantscolor', str, 0, False,
+    Setting_Info('pantscolor', str, 0, False,
         {
             'default': 'Zora Blue',
             'const': 'Zora Blue',
@@ -1271,6 +1271,22 @@ setting_infos = [
                       color from this list of colors.
                       'Completely Random': Choose a random
                       color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('dekumorph', bool, 1, True,
+        {
+            'help': '''\
+                    Deku Link's entire body becomes one color
+                    ''',
+            'action': 'store_true'
+        },
+        {
+            'text': 'Deku Morph Suit',
+            'group': 'tuniccolor',
+            'widget': 'Checkbutton',
+            'default': 'unchecked',
+            'tooltip':'''\
+                    Deku Link's entire body becomes one color
                       '''
         }),
     Setting_Info('dekucolor', str, 0, False,
@@ -1297,49 +1313,24 @@ setting_infos = [
                       color from this list of colors.
                       'Completely Random': Choose a random
                       color from any color the N64 can draw.
-                      '''
+                      ''',
+            'dependency': lambda guivar: guivar['dekumorph'].get()
         }),
-    Setting_Info('dekuhatcolor', str, 0, False,
-        {
-            'default': 'Beige',
-            'const': 'Beige',
-            'nargs': '?',
-            'type': parse_custom_tunic_color,
-            'help': '''\
-                    Choose the color for Deku Link's Hat. (default: %(default)s)
-                    Color:              Make Deku Link's Hat this color.
-                    Random Choice:      Choose a random color from this list of colors.
-                    Completely Random: Choose a random color from any color the N64 can draw.
-                    '''
-        },
-        {
-            'text': 'Deku Link Hat Color',
-            'group': 'tuniccolor',
-            'widget': 'Combobox',
-            'default': 'Beige',
-            'options': get_tunic_color_options(),
-            'tooltip':'''\
-                      'Random Choice': Choose a random
-                      color from this list of colors.
-                      'Completely Random': Choose a random
-                      color from any color the N64 can draw.
-                      '''
-        }),
-    Setting_Info('dekupantscolor', str, 0, False,
+    Setting_Info('dekutuniccolor', str, 0, False,
         {
             'default': 'Teal',
             'const': 'Teal',
             'nargs': '?',
             'type': parse_custom_tunic_color,
             'help': '''\
-                    Choose the color for Deku Link's Pants. (default: %(default)s)
-                    Color:              Make Deku Link's Pants this color.
+                    Choose the color for Deku Link's Tunic. (default: %(default)s)
+                    Color:              Make Deku Link's Tunic this color.
                     Random Choice:      Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Deku Link Pants Color',
+            'text': 'Deku Link Tunic Color',
             'group': 'tuniccolor',
             'widget': 'Combobox',
             'default': 'Teal',
@@ -1403,73 +1394,64 @@ setting_infos = [
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('zorahatcolor', str, 0, False,
+    Setting_Info('zoramorph', bool, 1, True,
         {
-            'default': 'Orange',
-            'const': 'Orange',
-            'nargs': '?',
-            'type': parse_custom_tunic_color,
             'help': '''\
-                    Choose the color for Zora Link's Hat. (default: %(default)s)
-                    Color:              Make Zora Link's Hat this color.
-                    Random Choice:      Choose a random color from this list of colors.
-                    Completely Random: Choose a random color from any color the N64 can draw.
-                    '''
+                    Zora Link's entire body becomes one color
+                    ''',
+            'action': 'store_true'
         },
         {
-            'text': 'Zora Hat Color',
+            'text': 'Zora Morph Suit',
             'group': 'tuniccolor',
-            'widget': 'Combobox',
-            'default': 'Orange',
-            'options': get_tunic_color_options(),
+            'widget': 'Checkbutton',
+            'default': 'unchecked',
             'tooltip':'''\
-                      'Random Choice': Choose a random
-                      color from this list of colors.
-                      'Completely Random': Choose a random
-                      color from any color the N64 can draw.
+                    Zora Link's entire body becomes one color if checked
                       '''
         }),
-    Setting_Info('zorapantscolor', str, 0, False,
+        Setting_Info('zoracolor', str, 0, False,
         {
-            'default': 'Orange',
-            'const': 'Orange',
-            'nargs': '?',
-            'type': parse_custom_tunic_color,
-            'help': '''\
-                    Choose the color for Zora Link's Pants. (default: %(default)s)
-                    Color:              Make Zora Link's Pants this color.
-                    Random Choice:      Choose a random color from this list of colors.
-                    Completely Random: Choose a random color from any color the N64 can draw.
-                    '''
+        'default': 'Orange',
+        'const': 'Orange',
+        'nargs': '?',
+        'type': parse_custom_tunic_color,
+        'help': '''\
+        Choose the color for Zora Link's Morph Suit. (default: %(default)s)
+        Color:              Make Zora Link this color.
+        Random Choice:      Choose a random color from this list of colors.
+        Completely Random: Choose a random color from any color the N64 can draw.
+        '''
         },
         {
-            'text': 'Zora Pants Color',
-            'group': 'tuniccolor',
-            'widget': 'Combobox',
-            'default': 'Orange',
-            'options': get_tunic_color_options(),
-            'tooltip':'''\
-                      'Random Choice': Choose a random
-                      color from this list of colors.
-                      'Completely Random': Choose a random
-                      color from any color the N64 can draw.
-                      '''
+        'text': 'Zora Color',
+        'group': 'tuniccolor',
+        'widget': 'Combobox',
+        'default': 'Orange',
+        'options': get_tunic_color_options(),
+        'tooltip':'''\
+            'Random Choice': Choose a random
+            color from this list of colors.
+            'Completely Random': Choose a random
+            color from any color the N64 can draw.
+        ''',
+        'dependency': lambda guivar: guivar['zoramorph'].get()
         }),
-    Setting_Info('zoracolor', str, 0, False,
+    Setting_Info('zoratuniccolor', str, 0, False,
         {
             'default': 'Orange',
             'const': 'Orange',
             'nargs': '?',
             'type': parse_custom_tunic_color,
             'help': '''\
-                    Choose the color for Zora Link's Morph Suit. (default: %(default)s)
-                    Color:              Make Zora Link this color.
+                    Choose the color for Zora Link's Tunic. (default: %(default)s)
+                    Color:              Make Zora Link's Tunic this color.
                     Random Choice:      Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Zora Color',
+            'text': 'Zora Tunic Color',
             'group': 'tuniccolor',
             'widget': 'Combobox',
             'default': 'Orange',
@@ -1533,7 +1515,7 @@ setting_infos = [
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('humanswordcolor', str, 0, False,
+    Setting_Info('swordcolor', str, 0, False,
         {
             'default': 'Twitch Purple',
             'const': 'Twitch Purple',

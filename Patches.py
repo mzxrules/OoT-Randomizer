@@ -228,21 +228,23 @@ def patch_rom(world, rom):
     random.seed()
     # Human Link Colors
     # set_color(world, rom, [0x0116639C, 0x011668C4, 0x01166DCC, 0x01166FA4, 0x01167064, 0x0116766C, 0x01167AE4, 0x01167D1C, 0x011681EC], world.tunic_colors[0])
-    set_color(world, rom, [0x0116639C, 0x011668C4, 0x01166DCC], world.tunic_colors[1])
-    set_color(world, rom, [0x01166FA4, 0x01167064, 0x0116766C, 0x01167AE4], world.tunic_colors[0])
-    set_color(world, rom, [0x01167D1C, 0x011681EC], world.tunic_colors[2])
+    set_color(world, rom, [0x011681EC], world.tunic_colors[0])  # Hat
+    set_color(world, rom, [0x01166FA4, 0x01167064, 0x0116766C, 0x01167AE4, 0x01167D1C], world.tunic_colors[1])  # Shirt
+    set_color(world, rom, [0x0116639C, 0x011668C4, 0x01166DCC], world.tunic_colors[2]) # Pants
     # Deku Link Colors
-    # set_color(world, rom, [0x011A8EB2], world.tunic_palettes[0], 256, True)
-    # set_color(world, rom, [0x011A8F32], world.tunic_palettes[1], 32, True)
-    set_color(world, rom, [0x011A90B0], world.tunic_palettes[2], 1, True)
+    if world.dekumorph:
+        set_color(world, rom, [0x011A8EB2], world.tunic_palettes[0], 256, True)
+    set_color(world, rom, [0x011A9092], world.tunic_palettes[1], 14, True)
     # Goron Link Colors
-    set_color(world, rom, [0x0117C780, 0x01186EB8, 0x01186F38], world.tunic_palettes[3], 64, True)
-    set_color(world, rom, [0x0117C800], world.tunic_palettes[4], 64, True)
-    set_color(world, rom, [0x01197000], world.tunic_palettes[5], 256, True)
+    set_color(world, rom, [0x0117C780, 0x01186EB8, 0x01186F38], world.tunic_palettes[2], 64, True)
+    set_color(world, rom, [0x0117C800], world.tunic_palettes[3], 64, True)
+    # Zora Link
+    if world.zoramorph:
+        set_color(world, rom, [0x01197000], world.tunic_palettes[4], 256, True)
+    set_color(world, rom, [0x01197130], world.tunic_palettes[5], 28, True)
     set_color(world, rom, [0x0119E578], world.tunic_palettes[6], 256, True)
-    set_color(world, rom, [0x01197140], world.tunic_palettes[7], 32, True)
-    set_color(world, rom, [0x01197100], world.tunic_palettes[8], 32, True)
-    set_color(world, rom, [0x010FB0B0, 0x011A2228], world.tunic_palettes[9], 512, True)
+    # Zora Boomerang
+    set_color(world, rom, [0x010FB0B0, 0x011A2228], world.tunic_palettes[7], 512, True)
     # patch navi colors
 
     #Navi hints
@@ -608,6 +610,7 @@ bgm_sequence_ids = [
     (0x3C, 'Milk Bar'),
     (0x3E, 'Woods of Mystery'),
     (0x40, 'Gorman Race'),
+    (0x42, 'Gorman Bros.'),
     (0x43, 'Potion Shop'),
     (0x44, 'Store'),
     (0x45, 'Gaebora'),
@@ -662,7 +665,6 @@ short_bgm_sequence_ids = [
     (0x3D, 'Appear'),
     (0x3F, 'Goron Race Finish'),
     (0x41, 'Race Finish'),
-    (0x42, 'Gorman Bros.'),
     (0x47, 'Ocarina Song of Soaring'),
     (0x48, 'Ocarina Song of Healing'),
     (0x49, 'Inverted Song Time'),
