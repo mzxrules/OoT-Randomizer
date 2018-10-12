@@ -478,7 +478,7 @@ def global_rules(world):
     set_rule(world.get_location('WF Poisoned Central Room Gate Torch Using Fire Arrows'), lambda state: state.can_use('Fire Arrows'))
     set_rule(world.get_location('WF Clean Poison Water Using Fire Arrows'), lambda state: state.can_use('Fire Arrows'))
     set_rule(world.get_entrance('WF Clean Poison Water Using Fire Arrows Exit'), lambda state: state.can_use('Fire Arrows'))
-    set_rule(world.get_entrance('WF Central Room Front To Push Block Room'), lambda state: state.has('Small Key (Woodfall Temple)'))
+    set_rule(world.get_entrance('WF Poisoned Central Room Front To Push Block Room'), lambda state: state.has('Small Key (Woodfall Temple)'))
     set_rule(world.get_entrance('WF Poisoned Central Room Front To Upper'), lambda state: state.can_use('Hookshot'))
     set_rule(world.get_location('WF Stray Fairy Central Room SW Corner'), lambda state: state.stray_fairy_req())
     set_rule(world.get_entrance('WF Poisoned Central Room Fairy Platform To Front'), lambda state: state.any_form_but('Goron'))
