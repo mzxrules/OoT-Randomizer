@@ -478,15 +478,15 @@ def global_rules(world):
     set_rule(world.get_location('WF Poisoned Central Room Gate Torch Using Fire Arrows'), lambda state: state.can_use('Fire Arrows'))
     set_rule(world.get_location('WF Clean Poison Water Using Fire Arrows'), lambda state: state.can_use('Fire Arrows'))
     set_rule(world.get_entrance('WF Clean Poison Water Using Fire Arrows Exit'), lambda state: state.can_use('Fire Arrows'))
-    set_rule(world.get_entrance('WF Poisoned Central Room Front To Push Block Room'), lambda state: state.has('Small Key (Woodfall Temple)'))
-    set_rule(world.get_entrance('WF Poisoned Central Room Front To Upper'), lambda state: state.can_use('Hookshot'))
-    set_rule(world.get_location('WF Stray Fairy Central Room SW Corner'), lambda state: state.stray_fairy_req())
-    set_rule(world.get_entrance('WF Poisoned Central Room Fairy Platform To Front'), lambda state: state.any_form_but('Goron'))
-    set_rule(world.get_entrance('WF Poisoned Central Room Fairy Platform To Right'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Central Room SW To Push Block Room'), lambda state: state.has('Small Key (Woodfall Temple)'))
+    set_rule(world.get_entrance('WF Poisoned Central Room SW To Upper'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_location('WF Stray Fairy Central Room SE Corner'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_entrance('WF Poisoned Central Room Fairy Platform To SW'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Central Room Fairy Platform To East'), lambda state: state.any_form_but('Goron'))
     set_rule(world.get_entrance('WF Poisoned Central Room Fairy Platform To Upper'), lambda state: state.can_use('Hookshot'))
-    set_rule(world.get_entrance('WF Poisoned Central Room Right To Fairy Platform'), lambda state: state.any_form_but('Goron'))
-    set_rule(world.get_entrance('WF Poisoned Central Room Right To Upper'), lambda state: state.can_use('Hookshot'))
-    set_rule(world.get_entrance('WF Poisoned Central Room Right To Ladder Up'), lambda state: state.event('WF Poisoned Central Room Ladder Switch'))
+    set_rule(world.get_entrance('WF Poisoned Central Room East To Fairy Platform'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Central Room East To Upper'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Poisoned Central Room East To Ladder Up'), lambda state: state.event('WF Poisoned Central Room Ladder Switch'))
     set_rule(world.get_location('WF Stray Fairy Central Room Upper Bubble'),
              lambda state: state.stray_fairy_req(state.can_pop_balloon() or state.form('Human')))
     set_rule(world.get_location('WF Stray Fairy Central Room Upper Switch Chest'),
@@ -496,7 +496,7 @@ def global_rules(world):
     set_rule(world.get_location('WF Clean Poison Water'), lambda state: state.can_use('Bow'))
     set_rule(world.get_entrance('WF Clean Poison Water Exit'), lambda state: state.can_use('Bow'))
     set_rule(world.get_entrance('WF Poisoned Central Room Upper To Pre Boss Room'), lambda state: state.event('WF Poisoned Central Room Gate Torch Lit'))
-    set_rule(world.get_entrance('WF Poisoned Central Room Upper To Front'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Central Room Upper To SW'), lambda state: state.any_form_but('Goron'))
 
     set_rule(world.get_location('WF Stray Fairy Elevator Flower Room'),
              lambda state: state.can_pop_balloon() and (state.form('Deku') or state.can_use('Great Fairy Mask')) and state.stray_fairy_req())
