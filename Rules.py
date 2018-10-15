@@ -459,22 +459,16 @@ def global_rules(world):
 
     ## Lobby
     set_rule(world.get_location('WF Stray Fairy Entrance'), lambda state: state.stray_fairy_req(state.any_form_but('Goron')))
-    # not sure what forms can get this aside from human, but basically if you require the GFMask to get fairies, checks
-    # are done, otherwise you have to get to this fairy however you like, which... I think it's right by the entrance,
-    # so it should be possible with anyone? unless it's like just below the entrance, in which case we have to see
-    # which forms can get to it and require those regardless
 
     set_rule(world.get_location('WF Stray Fairy Lobby Chest'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
     set_rule(world.get_entrance('WF Entrance To Central Room'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Boss Warp'), lambda state: state.has('Odolwas Remains'))
 
     ## First Floor
     set_rule(world.get_location('WF Stray Fairy Central Room Deku Baba'), lambda state: state.stray_fairy_req())
-    set_rule(world.get_location('WF Stray Fairy Central Room Upper Bubble Long Range'), lambda state: state.can_use('Bow') and state.can_use('Great Fairy Mask'))
-    # this may be the one instance of needing to put the same thing in two different spots (the stray fairy at this
-    # check and the check in the upper region), since you can certainly get this fairy without getting to the upper
-    # region
-    # it may be able to be handled the same way that the mailbox hp in clock town is, but I'm not sure
-    # or it's not the only instance because of all the duplicate rooms, like clean/poison rooms
+    set_rule(world.get_entrance('WF Poisoned Central Room SW To Fairy Region'), lambda state: state.can_use('Bow') and state.can_use('Great Fairy Mask'))
+    # set_rule(world.get_location('WF Stray Fairy Central Room Upper Bubble'), lambda state: True)
+
     set_rule(world.get_location('WF Poisoned Central Room Gate Torch Using Fire Arrows'), lambda state: state.can_use('Fire Arrows'))
     set_rule(world.get_location('WF Clean Poison Water Using Fire Arrows'), lambda state: state.can_use('Fire Arrows'))
     set_rule(world.get_entrance('WF Clean Poison Water Using Fire Arrows Exit'), lambda state: state.can_use('Fire Arrows'))
@@ -487,7 +481,7 @@ def global_rules(world):
     set_rule(world.get_entrance('WF Poisoned Central Room East To Fairy Platform'), lambda state: state.any_form_but('Goron'))
     set_rule(world.get_entrance('WF Poisoned Central Room East To Upper'), lambda state: state.can_use('Hookshot'))
     set_rule(world.get_entrance('WF Poisoned Central Room East To Ladder Up'), lambda state: state.event('WF Poisoned Central Room Ladder Switch'))
-    set_rule(world.get_location('WF Stray Fairy Central Room Upper Bubble'),
+    set_rule(world.get_entrance('WF Poisoned Central Room Upper To Fairy Region'),
              lambda state: state.stray_fairy_req(state.can_pop_balloon() or state.form('Human')))
     set_rule(world.get_location('WF Stray Fairy Central Room Upper Switch Chest'),
              lambda state: state.form('Deku') and state.any_form_but('Deku') and state.stray_fairy_req())
@@ -498,16 +492,26 @@ def global_rules(world):
     set_rule(world.get_entrance('WF Poisoned Central Room Upper To Pre Boss Room'), lambda state: state.event('WF Poisoned Central Room Gate Torch Lit'))
     set_rule(world.get_entrance('WF Poisoned Central Room Upper To SW'), lambda state: state.any_form_but('Goron'))
 
-    set_rule(world.get_location('WF Stray Fairy Elevator Flower Room'),
-             lambda state: state.can_pop_balloon() and (state.form('Deku') or state.can_use('Great Fairy Mask')) and state.stray_fairy_req())
-    # ugh, there's kind of a lot to this one, if you can pop a balloon, then you still need a way to retrieve the fairy
-    # that can be either with the deku flowers or with the GFMask, even when the mask isn't required for any particular stray fairy
-    # seems kind of weird to add it on to this check, but if you don't, then it's just 3 things ANDed, one of which is
-    # the deku form, and there are certainly ways to get this SF without requiring the deku form..... probly
-
-    set_rule(world.get_location('WF Elevator Flower Room Key Chest'), lambda state: state.form('Deku'))
-    # zora might be tall enough to run through the poison water and climb up? not sure, should test
-    # todo: test ways to get to this key chest
+    # set_rule(world.get_location('WF Stray Fairy Elevator Room'), lambda state: True)
+    # this fairy is an open check because it's in its own logical region, with two exits leading to it that form the
+    # actual checks
+    set_rule(world.get_location('WF Activate Elevator From West Lower'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room West Lower To Fairy Region'), lambda state: state.can_pop_balloon() and state.can_use('Great Fairy Mask'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room West Lower To North Upper'), lambda state: (state.event('WF Elevator On') and state.form('Deku')))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room West Lower To SW Upper'), lambda state: (state.event('WF Elevator On') and state.form('Deku')))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room West Lower To East Lower'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room West Lower To Key Chest'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    # set_rule(world.get_location('WF Elevator Room Key Chest'), lambda state: True)
+    set_rule(world.get_location('WF Activate Elevator From East Lower'), lambda state: state.can_use('Bow'))
+    # ^ example of the same event needing to go in multiple spots; need to change to a logical region and have only a single item location?
+    set_rule(world.get_entrance('WF Poisoned Elevator Room East Lower To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room North Upper To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room North Upper To East Lower'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room North Upper To Key Chest'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room North Upper To Fairy Region'),
+             lambda state: state.form('Human') or state.form('Zora') or (state.form('Deku') and state.has('Magic Meter')))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room SW Upper To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room SW Upper To East Lower'), lambda state: state.can_use('Hookshot'))
 
     set_rule(world.get_location('WF Map Chest'),
              lambda state: state.form('Deku') or state.can_use('Bomb Bag') or state.form('Goron'))
