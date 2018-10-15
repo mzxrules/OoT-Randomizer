@@ -516,28 +516,41 @@ def global_rules(world):
     set_rule(world.get_location('WF Map Chest'),
              lambda state: state.form('Deku') or state.can_use('Bomb Bag') or state.form('Goron'))
     # possibly the blast mask can be used as well? in which case just change this to can_blast()
+    # can this actually be done strictly with deku? todo: more testing on this I think
 
     ## Push Block Bridge Room
-    set_rule(world.get_location('WF Stray Fairy Push Block Room Hive'),
-             lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Push Block Room Hive'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
     set_rule(world.get_location('WF Stray Fairy Push Block Room Skulltula'), lambda state: state.stray_fairy_req())
-    # I /think/ any form can kill a skulltula? maybe test this
+    set_rule(world.get_entrance('WF Poisoned Push Block Room Lower To Compass Room'), lambda state: state.can_use('Deku Sticks') or state.can_use('Fire Arrows'))
+    set_rule(world.get_entrance('WF Poisoned Push Block Room Lower To Upper'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Poisoned Push Block Room Upper To Lower'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
+    # yep, you can in fact light the right torches (aside from the compass room one) and hit the spider web with just the bow
+    # though honestly can_use('deku sticks') should maybe just be form('Human'); though for entrance rando, maybe not
+    set_rule(world.get_entrance('WF Poisoned Push Block Room Lower To Fairy Region'),
+             lambda state: state.stray_fairy_req(state.has_hearts(7) and (state.form('Human') or state.form('Zora'))))
 
-    set_rule(world.get_location('WF Stray Fairy Push Block Room Underwater'),
-             lambda state: state.stray_fairy_req()
-                and ((state.form('Human') or state.form('Zora')) and (state.swamp_cleaned() or state.has_hearts(6))))
-    set_rule(world.get_location('WF Compass Chest'),
-             lambda state: state.form('Zora')
-                           or (state.form('Deku') and state.has('Magic Meter'))
-                           or (state.form('Human') and state.can_pop_balloon()))
+    set_rule(world.get_entrance('WF Clean Push Block Room To Fairy Region'), lambda state: state.stray_fairy_req(state.form('Human') or state.form('Zora')))
 
-    ## Dark Puff Gauntlet
+    # set_rule(world.get_location('WF Stray Fairy Push Block Room Underwater'), lambda state: True)
+    # set_rule(world.get_location('WF Compass Chest'), lambda state: True)
+    # turns out anyone can kill dragonflies lol, so this is an open check
+    set_rule(world.get_entrance('WF Compass Room Clean Exit'), lambda state: state.event('Cleaned WF'))
+
+    ## Dark Puff Gauntlet and Dragonfly Room
     set_rule(world.get_location('WF Stray Fairy Dark Puffs'), lambda state: state.stray_fairy_req())
-    # I'm pretty sure any form can kill the puffs, the only one that would be hard is goron lol
+    set_rule(world.get_entrance('WF Dark Puff Gauntlet To Dragonfly Room'), lambda state: state.can_use('Deku Sticks') or state.can_use('Fire Arrows'))
+    set_rule(world.get_entrance('WF Dragonfly Room West To NE'), lambda state: state.form('Deku'))
+    # we /may/ want to require a way to kill the dragonflies here beyond deku flowering them? just because it might be
+    # too much of a pain normally; or not, who knows
+    set_rule(world.get_entrance('WF Dragonfly Room West To Central Room SW'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Dragonfly Room West To Central Room East'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Dragonfly Room West To Central Room Fairy Platform'), lambda state: state.any_form_but('Goron'))
 
-    ## Second Floor
+    ## Upper 1st Floor
     set_rule(world.get_location('WF Bow Chest'), lambda state: state.can_kill_lizalfos())
+    set_rule(world.get_entrance('WF Bow Room Clean Exit'), lambda state: state.event('Cleaned WF'))
     set_rule(world.get_location('WF Boss Key Chest'), lambda state: state.can_kill_gekkos())
+    set_rule(world.get_entrance('WF Boss Key Room Clean Exit'), lambda state: state.event('Cleaned WF'))
     # set_rule(world.get_location(''), lambda state: state)
 
     ## Pre-Boss Room

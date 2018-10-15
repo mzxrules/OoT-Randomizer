@@ -391,8 +391,8 @@ class CollectionState(object):
 
     def can_use(self, item):
         magic_items = ['Lens of Truth', 'Deku Bubble', 'Deity Beam']
-        magic_arrows = ['Fire Arrow', 'Ice Arrow', 'Light Arrow']
-        human_items = ['Bow', 'Hookshot', 'Magic Beans', 'Bomb Bag', 'Bombchu', 'Deku Stick', 'Deku Nut']
+        magic_arrows = ['Fire Arrows', 'Ice Arrows', 'Light Arrows']
+        human_items = ['Bow', 'Hookshot', 'Magic Beans', 'Bomb Bag', 'Bombchus', 'Deku Sticks', 'Deku Nuts']
         if item in magic_items:
             return self.has(item) and self.has('Magic Meter')
         elif item in human_items:

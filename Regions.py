@@ -166,7 +166,7 @@ def create_regions(world):
         # ugh maybe it should, it might have loading zones or smth ugh
 
         # TODO All of the Woodfall area
-        # also todo: figure out what the actual loading zones are because I'm about to create an unholy mess of logical regions
+        # also todo: figure out what the actual loading zones are because I'm about to create an unholy mess of logical regions - RO
         create_dungeon_region('WF Entrance Room (Poisoned)', ['WF Stray Fairy Entrance', 'WF Stray Fairy Lobby Chest'],
                               ['WF Poisoned Front Exit', 'WF Poisoned Entrance To Central Room', 'WF Boss Warp']),
 
@@ -193,7 +193,7 @@ def create_regions(world):
                               ['WF Poisoned Elevator Room West Lower To Fairy Region', 'WF Poisoned Elevator Room West Lower To North Upper',
                                'WF Poisoned Elevator Room West Lower To SW Upper', 'WF Poisoned Elevator Room West Lower To East Lower',
                                'WF Poisoned Elevator Room West Lower To Key Chest', 'WF Poisoned Elevator Room West Lower To Central Room']),
-        create_dungeon_region('WF Elevator Room East Lower (Poisoned)', ['WF Activate Elevator From East Lower'], ['WF Poisoned Elevator Room East Lower To Turtle Fight',
+        create_dungeon_region('WF Elevator Room East Lower (Poisoned)', ['WF Activate Elevator From East Lower'], ['WF Poisoned Elevator Room East Lower To Map Room',
                                 'WF Poisoned Elevator Room East Lower To West Lower']),
         create_dungeon_region('WF Elevator Room Key Chest Region (Poisoned)', ['WF Elevator Room Key Chest'], []),
         create_dungeon_region('WF Elevator Room North Upper (Poisoned)', [], ['WF Poisoned Elevator Room North Upper To West Lower',
@@ -203,6 +203,35 @@ def create_regions(world):
                         'WF Poisoned Elevator Room SW Upper To Bow Room', 'WF Poisoned Elevator Room SW Upper To West Lower',
                         'WF Poisoned Elevator Room SW Upper To East Lower']),
         create_dungeon_region('WF Elevator Room Stray Fairy Region (Poisoned)', ['WF Stray Fairy Elevator Room'], []),
+
+        create_dungeon_region('WF Map Room (Poisoned)', [], ['WF Poisoned Map Room Exit', 'WF Poisoned Map Room To Chest']),
+        create_dungeon_region('WF Map Room (Clean)', [], ['WF Clean Map Room Exit', 'WF Clean Map Room To Chest']),
+        create_dungeon_region('WF Map Room Chest Region', ['WF Map Chest'], []),
+        # I don't know if this room actually has poisoned/clean versions, todo: check loading zones
+
+        create_dungeon_region('WF Push Block Room Lower (Poisoned)', ['WF Stray Fairy Push Block Room Hive', 'WF Stray Fairy Push Block Room Skulltula'],
+                              ['WF Poisoned Push Block Room Lower To Central Room', 'WF Poisoned Push Block Room Lower To Compass Room',
+                               'WF Poisoned Push Block Room Lower To Upper', 'WF Poisoned Push Block Room Lower To Fairy Region']),
+        create_dungeon_region('WF Push Block Room Top Region (Poisoned)', [], ['WF Poisoned Push Block Room Upper To Dark Puffs', 'WF Poisoned Push Block Room Upper To Lower']),
+        create_dungeon_region('WF Push Block Room Fairy Region', ['WF Stray Fairy Push Block Room Underwater'], []),
+
+        create_dungeon_region('WF Compass Room', ['WF Compass Chest'], ['WF Compass Room Clean Exit', 'WF Compass Room Poisoned Exit']),
+
+        create_dungeon_region('WF Dark Puff Gauntlet', ['WF Stray Fairy Dark Puffs'],
+                              ['WF Dark Puff Gauntlet To Push Block Room', 'WF Dark Puff Gauntlet To Dragonfly Room']),
+
+        create_dungeon_region('WF Dragonfly Room West', [], ['WF Dragonfly Room NE To Dark Puffs', 'WF Dragonfly Room West To NE',
+                                'WF Dragonfly Room West To Central Room SW', 'WF Dragonfly Room West To Central Room East',
+                                'WF Dragonfly Room West To Central Room Fairy Platform']),
+        # the falling through the floor spots aren't loading zones, are they? if not, there needs to be cleaned/poisoned
+        # rooms here; if so, there need to be cleaned/poisoned exits
+        create_dungeon_region('WF Dragonfly Room NE', [], ['WF Dragonfly Room NE To West', 'WF Dragonfly Room NE To Central Room']),
+
+        create_dungeon_region('WF Bow Room', ['WF Bow Chest'], ['WF Bow Room Clean Exit', 'WF Bow Room Poisoned Exit']),
+        # I'm assuming here that this room doesn't have different versions, so it has 2 exits to poisoned/cleaned
+
+        create_dungeon_region('WF Boss Key Room', ['WF Boss Key Chest'], ['WF Boss Key Room Clean Exit', 'WF Boss Key Room Poisoned Exit']),
+
 
         # create_ow_region('Mountain Icicles', [], ['Termina Field North Exit', 'Termina Field From Mountain']),
         create_ow_region('Mountain Village Path South', [], ['Mountain Snowball Block', 'Mountain Path South Exit']),
