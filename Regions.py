@@ -169,13 +169,14 @@ def create_regions(world):
         # also todo: figure out what the actual loading zones are because I'm about to create an unholy mess of logical regions - RO
         create_dungeon_region('WF Entrance Room (Poisoned)', ['WF Stray Fairy Entrance', 'WF Stray Fairy Lobby Chest'],
                               ['WF Poisoned Front Exit', 'WF Poisoned Entrance To Central Room', 'WF Boss Warp']),
+        # actually dunno if this room needs poisoned/clean versions, but I'll just leave it like this for now
 
-        create_dungeon_region('WF Central Room SW Region (Poisoned)', ['WF Stray Fairy Central Room Deku Baba',
+        create_dungeon_region('WF Central Room SW Region (Poisoned)', ['WF Stray Fairy Cleaned Central Room Deku Baba',
                     'WF Clean Poison Water Using Fire Arrows', 'WF Poisoned Central Room Gate Torch Using Fire Arrows'],
                       ['WF Poisoned Central Room SW To Entrance Room', 'WF Poisoned Central Room SW To Push Block Room',
                        'WF Poisoned Central Room SW To Fairy Platform', 'WF Poisoned Central Room SW To Upper',
                        'WF Clean Poison Water Using Fire Arrows Exit', 'WF Poisoned Central Room SW To Fairy Region']),
-        create_dungeon_region('WF Central Room Fairy Platform (Poisoned)', ['WF Stray Fairy Central Room SE Corner'],
+        create_dungeon_region('WF Central Room Fairy Platform (Poisoned)', ['WF Stray Fairy Poisoned Central Room SE Corner'],
                       ['WF Poisoned Central Room Fairy Platform To SW', 'WF Poisoned Central Room Fairy Platform To East',
                        'WF Poisoned Central Room Fairy Platform To Upper']),
         create_dungeon_region('WF Central Room East Region (Poisoned)', [], ['WF Poisoned Central Room East To Fairy Platform',
@@ -189,20 +190,20 @@ def create_regions(world):
                          'WF Poisoned Central Room Upper To Fairy Region']),
         create_dungeon_region('WF Central Room Upper Bubble Fairy Region', ['WF Stray Fairy Central Room Upper Bubble'], []),
 
-        create_dungeon_region('WF Elevator Room West Lower (Poisoned)', ['WF Activate Elevator From West Lower'],
+        create_dungeon_region('WF Elevator Room West Lower (Poisoned)', ['WF Activate Elevator From Poisoned West Lower'],
                               ['WF Poisoned Elevator Room West Lower To Fairy Region', 'WF Poisoned Elevator Room West Lower To North Upper',
                                'WF Poisoned Elevator Room West Lower To SW Upper', 'WF Poisoned Elevator Room West Lower To East Lower',
                                'WF Poisoned Elevator Room West Lower To Key Chest', 'WF Poisoned Elevator Room West Lower To Central Room']),
-        create_dungeon_region('WF Elevator Room East Lower (Poisoned)', ['WF Activate Elevator From East Lower'], ['WF Poisoned Elevator Room East Lower To Map Room',
+        create_dungeon_region('WF Elevator Room East Lower (Poisoned)', ['WF Activate Elevator From Poisoned East Lower'], ['WF Poisoned Elevator Room East Lower To Map Room',
                                 'WF Poisoned Elevator Room East Lower To West Lower']),
-        create_dungeon_region('WF Elevator Room Key Chest Region (Poisoned)', ['WF Elevator Room Key Chest'], []),
+        create_dungeon_region('WF Elevator Room Key Chest Region (Poisoned)', ['WF Poisoned Elevator Room Key Chest'], []),
         create_dungeon_region('WF Elevator Room North Upper (Poisoned)', [], ['WF Poisoned Elevator Room North Upper To West Lower',
                         'WF Poisoned Elevator Room North Upper To East Lower', 'WF Poisoned Elevator Room North Upper To Key Chest',
                         'WF Poisoned Elevator Room North Upper To Fairy Region']),
         create_dungeon_region('WF Elevator Room SW Upper (Poisoned)', [], ['WF Poisoned Elevator Room SW Upper To Central Room',
                         'WF Poisoned Elevator Room SW Upper To Bow Room', 'WF Poisoned Elevator Room SW Upper To West Lower',
                         'WF Poisoned Elevator Room SW Upper To East Lower']),
-        create_dungeon_region('WF Elevator Room Stray Fairy Region (Poisoned)', ['WF Stray Fairy Elevator Room'], []),
+        create_dungeon_region('WF Elevator Room Stray Fairy Region', ['WF Stray Fairy Elevator Room'], []),
 
         create_dungeon_region('WF Map Room (Poisoned)', [], ['WF Poisoned Map Room Exit', 'WF Poisoned Map Room To Chest']),
         create_dungeon_region('WF Map Room (Clean)', [], ['WF Clean Map Room Exit', 'WF Clean Map Room To Chest']),
@@ -230,7 +231,65 @@ def create_regions(world):
         create_dungeon_region('WF Bow Room', ['WF Bow Chest'], ['WF Bow Room Clean Exit', 'WF Bow Room Poisoned Exit']),
         # I'm assuming here that this room doesn't have different versions, so it has 2 exits to poisoned/cleaned
 
-        create_dungeon_region('WF Boss Key Room', ['WF Boss Key Chest'], ['WF Boss Key Room Clean Exit', 'WF Boss Key Room Poisoned Exit']),
+        create_dungeon_region('WF Boss Key Room', ['WF Boss Key Chest', 'WF Don Gero Frog'], ['WF Boss Key Room Clean Exit', 'WF Boss Key Room Poisoned Exit']),
+
+        ###
+
+        create_dungeon_region('WF Pre Boss Room South', [], ['WF Pre Boss Room South To Central Room', 'WF Pre Boss Room South To Fairy 1',
+                                'WF Pre Boss Room South To Fairy 2', 'WF Pre Boss Room South To Fairy 3', 'WF Pre Boss Room South To Bubble Fairy',
+                                'WF Pre Boss Room South To North']),
+        create_dungeon_region('WF Pre Boss Room North', [], ['WF Pre Boss Room North To Boss Chamber', 'WF Pre Boss Room North To Fairy 1',
+                                'WF Pre Boss Room North To Fairy 2', 'WF Pre Boss Room North To Fairy 3', 'WF Pre Boss Room North To Bubble Fairy',
+                                'WF Pre Boss Room North To South']),
+        create_dungeon_region('WF Stray Fairy Pre Boss Room Alcoves 1 Fairy Region', ['WF Stray Fairy Pre Boss Room Alcoves 1'], []),
+        create_dungeon_region('WF Stray Fairy Pre Boss Room Alcoves 2 Fairy Region', ['WF Stray Fairy Pre Boss Room Alcoves 2'], []),
+        create_dungeon_region('WF Stray Fairy Pre Boss Room Alcoves 3 Fairy Region', ['WF Stray Fairy Pre Boss Room Alcoves 3'], []),
+        create_dungeon_region('WF Stray Fairy Pre Boss Room Bubble Fairy Region', ['WF Stray Fairy Pre Boss Room Bubble'], []),
+
+        create_dungeon_region('WF Boss Room', ['Beat Odolwa', 'Odolwa HC'], ['WF Odolwa Boss Exit']),
+
+        create_interior_region('Post Odolwa Giants Region', ['Song From Giants', 'Odolwas Remains'], ['Post Odolwa Exit']),
+        # so I'm not fully sure if this is how it works, but I don't know how else to do it, so I'll leave it like this
+        # for now; the post odolwa exit will lead to the princess room
+
+        create_dungeon_region('WF Princess Room', ['Deku Princess'], ['WF Princess Exit']),
+
+        # Cleaned Rooms
+        create_dungeon_region('WF Central Room SW Region (Cleaned)', ['WF Stray Fairy Cleaned Central Room Deku Baba',
+                                'WF Cleaned Central Room Gate Torch Using Fire Arrows'],
+                              ['WF Cleaned Central Room SW To Entrance Room', 'WF Cleaned Central Room SW To Push Block Room',
+                               'WF Cleaned Central Room SW To Fairy Platform', 'WF Cleaned Central Room SW To Upper',
+                               'WF Cleaned Central Room SW To Fairy Region']),
+        create_dungeon_region('WF Central Room Fairy Platform (Cleaned)', ['WF Stray Fairy Cleaned Central Room SE Corner'],
+                              ['WF Cleaned Central Room Fairy Platform To SW', 'WF Cleaned Central Room Fairy Platform To East',
+                               'WF Cleaned Central Room Fairy Platform To Upper']),
+        create_dungeon_region('WF Central Room East Region (Cleaned)', [], ['WF Cleaned Central Room East To Fairy Platform',
+                               'WF Cleaned Central Room East To Upper', 'WF Cleaned Central Room East To Ladder Up',
+                               'WF Cleaned Central Room East To Elevator Room']),
+        create_dungeon_region('WF Central Room Upper Region (Cleaned)', ['WF Stray Fairy Cleaned Central Room Upper Switch Chest',
+                               'WF Cleaned Central Room Ladder Switch'], ['WF Cleaned Central Room Upper To Pre Boss Room',
+                               'WF Cleaned Central Room Upper To Dragonfly Room', 'WF Cleaned Central Room Upper To Elevator Room',
+                               'WF Cleaned Central Room Upper To Fairy Platform', 'WF Cleaned Central Room Upper To East',
+                               'WF Cleaned Central Room Upper To SW', 'WF Cleaned Central Room Upper To Fairy Region']),
+
+        create_dungeon_region('WF Elevator Room West Lower (Cleaned)', ['WF Activate Elevator From Cleaned West Lower'],
+                              ['WF Cleaned Elevator Room West Lower To Fairy Region', 'WF Cleaned Elevator Room West Lower To North Upper',
+                               'WF Cleaned Elevator Room West Lower To SW Upper', 'WF Cleaned Elevator Room West Lower To East Lower',
+                               'WF Cleaned Elevator Room West Lower To Key Chest', 'WF Cleaned Elevator Room West Lower To Central Room']),
+        create_dungeon_region('WF Elevator Room East Lower (Cleaned)', ['WF Activate Elevator From Cleaned East Lower'],
+                              ['WF Cleaned Elevator Room East Lower To Map Room',
+                               'WF Cleaned Elevator Room East Lower To West Lower']),
+        create_dungeon_region('WF Elevator Room Key Chest Region (Cleaned)', ['WF Cleaned Elevator Room Key Chest'], []),
+        create_dungeon_region('WF Elevator Room North Upper (Cleaned)', [],
+                              ['WF Cleaned Elevator Room North Upper To West Lower',
+                               'WF Cleaned Elevator Room North Upper To East Lower',
+                               'WF Cleaned Elevator Room North Upper To Key Chest',
+                               'WF Cleaned Elevator Room North Upper To Fairy Region']),
+        create_dungeon_region('WF Elevator Room SW Upper (Cleaned)', [],
+                              ['WF Cleaned Elevator Room SW Upper To Central Room',
+                               'WF Cleaned Elevator Room SW Upper To Bow Room',
+                               'WF Cleaned Elevator Room SW Upper To West Lower',
+                               'WF Cleaned Elevator Room SW Upper To East Lower']),
 
 
         # create_ow_region('Mountain Icicles', [], ['Termina Field North Exit', 'Termina Field From Mountain']),
