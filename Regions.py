@@ -206,11 +206,14 @@ def create_regions(world):
         create_dungeon_region('WF Elevator Room Stray Fairy Region', ['WF Stray Fairy Elevator Room'], []),
 
         create_dungeon_region('WF Map Room (Poisoned)', [], ['WF Poisoned Map Room Exit', 'WF Poisoned Map Room To Chest']),
-        create_dungeon_region('WF Map Room (Clean)', [], ['WF Clean Map Room Exit', 'WF Clean Map Room To Chest']),
+        create_dungeon_region('WF Map Room (Cleaned)', [], ['WF Clean Map Room Exit', 'WF Clean Map Room To Chest']),
         create_dungeon_region('WF Map Room Chest Region', ['WF Map Chest'], []),
         # I don't know if this room actually has poisoned/clean versions, todo: check loading zones
+        # in general, it's not too hard to switch between the two
+        # split rooms are like this, two regions each with their own exit, no need to set a rule
+        # single rooms have two exits, one of which needs a rule
 
-        create_dungeon_region('WF Push Block Room Lower (Poisoned)', ['WF Stray Fairy Push Block Room Hive', 'WF Stray Fairy Push Block Room Skulltula'],
+        create_dungeon_region('WF Push Block Room Lower (Poisoned)', ['WF Stray Fairy Poisoned Push Block Room Hive', 'WF Stray Fairy Poisoned Push Block Room Skulltula'],
                               ['WF Poisoned Push Block Room Lower To Central Room', 'WF Poisoned Push Block Room Lower To Compass Room',
                                'WF Poisoned Push Block Room Lower To Upper', 'WF Poisoned Push Block Room Lower To Fairy Region']),
         create_dungeon_region('WF Push Block Room Top Region (Poisoned)', [], ['WF Poisoned Push Block Room Upper To Dark Puffs', 'WF Poisoned Push Block Room Upper To Lower']),
@@ -232,8 +235,6 @@ def create_regions(world):
         # I'm assuming here that this room doesn't have different versions, so it has 2 exits to poisoned/cleaned
 
         create_dungeon_region('WF Boss Key Room', ['WF Boss Key Chest', 'WF Don Gero Frog'], ['WF Boss Key Room Clean Exit', 'WF Boss Key Room Poisoned Exit']),
-
-        ###
 
         create_dungeon_region('WF Pre Boss Room South', [], ['WF Pre Boss Room South To Central Room', 'WF Pre Boss Room South To Fairy 1',
                                 'WF Pre Boss Room South To Fairy 2', 'WF Pre Boss Room South To Fairy 3', 'WF Pre Boss Room South To Bubble Fairy',
@@ -291,6 +292,19 @@ def create_regions(world):
                                'WF Cleaned Elevator Room SW Upper To West Lower',
                                'WF Cleaned Elevator Room SW Upper To East Lower']),
 
+        create_dungeon_region('WF Push Block Room Lower (Cleaned)',
+                              ['WF Stray Fairy Cleaned Push Block Room Hive', 'WF Stray Fairy Cleaned Push Block Room Skulltula'],
+                              ['WF Cleaned Push Block Room Lower To Central Room',
+                               'WF Cleaned Push Block Room Lower To Compass Room',
+                               'WF Cleaned Push Block Room Lower To Upper',
+                               'WF Cleaned Push Block Room Lower To Fairy Region']),
+        create_dungeon_region('WF Push Block Room Top Region (Cleaned)', [],
+                              ['WF Cleaned Push Block Room Upper To Dark Puffs',
+                               'WF Cleaned Push Block Room Upper To Lower']),
+
+
+        # Post woodfall cleaned swamp areas
+        #
 
         # create_ow_region('Mountain Icicles', [], ['Termina Field North Exit', 'Termina Field From Mountain']),
         create_ow_region('Mountain Village Path South', [], ['Mountain Snowball Block', 'Mountain Path South Exit']),

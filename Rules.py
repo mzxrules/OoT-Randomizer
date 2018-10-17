@@ -519,8 +519,8 @@ def global_rules(world):
     # can this actually be done strictly with deku? todo: more testing on this I think
 
     ## Push Block Bridge Room
-    set_rule(world.get_location('WF Stray Fairy Push Block Room Hive'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
-    set_rule(world.get_location('WF Stray Fairy Push Block Room Skulltula'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Poisoned Push Block Room Hive'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Poisoned Push Block Room Skulltula'), lambda state: state.stray_fairy_req())
     set_rule(world.get_entrance('WF Poisoned Push Block Room Lower To Compass Room'), lambda state: state.can_use('Deku Sticks') or state.can_use('Fire Arrows'))
     set_rule(world.get_entrance('WF Poisoned Push Block Room Lower To Upper'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
     set_rule(world.get_entrance('WF Poisoned Push Block Room Upper To Lower'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
@@ -606,7 +606,29 @@ def global_rules(world):
              lambda state: state.event('WF Central Room Gate Torch Lit'))
     set_rule(world.get_entrance('WF Cleaned Central Room Upper To SW'), lambda state: state.any_form_but('Goron'))
 
+    set_rule(world.get_location('WF Activate Elevator From Cleaned West Lower'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room West Lower To Fairy Region'), lambda state: state.can_pop_balloon() and state.can_use('Great Fairy Mask'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room West Lower To North Upper'), lambda state: (state.event('WF Elevator On') and state.form('Deku')))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room West Lower To SW Upper'), lambda state: (state.event('WF Elevator On') and state.form('Deku')))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room West Lower To East Lower'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room West Lower To Key Chest'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    set_rule(world.get_location('WF Activate Elevator From Cleaned East Lower'), lambda state: state.can_use('Bow'))
+    # ^ example of the same event needing to go in multiple spots; need to change to a logical region and have only a single item location?
+    set_rule(world.get_entrance('WF Cleaned Elevator Room East Lower To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room North Upper To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room North Upper To East Lower'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room North Upper To Key Chest'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room North Upper To Fairy Region'),
+             lambda state: state.form('Human') or state.form('Zora') or (state.form('Deku') and state.has('Magic Meter')))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room SW Upper To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room SW Upper To East Lower'), lambda state: state.can_use('Hookshot'))
 
+    set_rule(world.get_location('WF Stray Fairy Cleaned Push Block Room Hive'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Cleaned Push Block Room Skulltula'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_entrance('WF Cleaned Push Block Room Lower To Compass Room'), lambda state: state.can_use('Deku Sticks') or state.can_use('Fire Arrows'))
+    set_rule(world.get_entrance('WF Cleaned Push Block Room Lower To Upper'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Cleaned Push Block Room Upper To Lower'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Cleaned Push Block Room Lower To Fairy Region'), lambda state: state.stray_fairy_req((state.form('Human') or state.form('Zora'))))
 
 
     ### MOUNTAIN VILLAGE
