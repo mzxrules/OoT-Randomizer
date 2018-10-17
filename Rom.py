@@ -17,7 +17,7 @@ class LocalRom(object):
         self.last_address = None
 
         file = settings.rom
-        decomp_file = 'ZOOTDEC.z64'
+        decomp_file = 'ZMMDEC.z64'
 
         os.chdir(os.path.dirname(os.path.realpath(__file__)))
         #os.chdir(output_path(os.path.dirname(os.path.realpath(__file__))))
@@ -43,8 +43,8 @@ class LocalRom(object):
         # TODO: Figure out the appropriate CRCs for MM ROMs
         validCRC = [
             [ ], # Compressed
-            [ ], # Byteswap compressed
-            [ ], # Decompressed
+            [0xDA, 0x69, 0x83, 0xE7, 0x50, 0x67, 0x44, 0x58], # Decompressed MM?
+            [0xE9, 0x79, 0x55, 0xC6, 0xBC, 0x33, 0x8D, 0x38], # Compressed MM?
         ]
 
         # Validate ROM file
@@ -55,7 +55,7 @@ class LocalRom(object):
             raise RuntimeError('ROM file %s is not a valid MM 1.0 US ROM.' % file)
         elif len(self.buffer) < 0x2000000 or len(self.buffer) > (0x4000000) or file_name[1] not in ['.z64', '.n64']:
             # ROM is too big, or too small, or not a bad type
-            raise RuntimeError('ROM file %s is not a valid MM ? ROM.' % file)
+            raise RuntimeError('ROM file %s is not a valid MM 1.0 US ROM.' % file)
         elif len(self.buffer) == 0x2000000:
             # If Input ROM is compressed, then Decompress it
             subcall = []
@@ -157,8 +157,8 @@ class LocalRom(object):
             self.write_int32(startaddress + (i * 4), value)
 
     def write_to_file(self, file):
-        self.verify_dmadata()
-        self.update_crc()
+        # self.verify_dmadata()
+        # self.update_crc()
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 

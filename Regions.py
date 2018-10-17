@@ -168,6 +168,32 @@ def create_regions(world):
 
         create_ow_region('Woodfall Owl Platform', [], ['Woodfall Temple Entrance', 'GF Woodfall', 'Woodfall']),
 
+        create_dungeon_region('Woodfall Temple Lobby',
+            ['Woodfall Temple Lobby Stray Fairy', 'Woodfall Temple Lobby Stray Fairy Chest'],
+            ['Woodfall Temple Front Exit', 'Woodfall Temple Torch Platform']),
+        create_dungeon_region('Woodfall Temple Lower 1F',
+            ['Woodfall Temple Central Flower Pot Fairy', 'Woodfall Temple Beehive Stray Fairy',
+            'Woodfall Temple Central Flower Deku Baba', 'Woodfall Temple Deku Flower Elevator Beehive'
+            'Woodfall Temple Central Flower Stray Fairy Chest', 'Woodfall Temple Map Chest',
+            'Woodfall Temple Small Key Chest'],
+            ['Woodfall Temple Central Flower Torch', 'Woodfall Temple Small Key Door',
+            'Woodfall Temple Deku Flower Elevator']),
+        create_dungeon_region('Woodfall Temple Push Block Room',
+            ['Woodfall Temple Skulltula Fairy', 'Woodfall Temple Push Block Beehive'
+            'Woodfall Temple Push Block Bubble Fairy', 'Woodfall Temple Compass Chest'],
+            ['Woodfall Temple Small Key Door Backwards', 'Woodfall Temple Spiderweb']),
+        create_dungeon_region('Woodfall Temple Dark Puff Arena',
+            ['Woodfall Temple Dark Puff Killing Prize'],
+            ['Woodfall Temple Spiderweb Backwards', 'Woodfall Temple 2F Barred Door']),
+        create_dungeon_region('Woodfall Temple Upper 1F',
+            ['Woodfall Temple Central Flower Bubble Fairy', 'Woodfall Temple Bow Chest'],
+            ['Woodfall Temple Stairs Backwards', 'Woodfall Temple Central Flower Barred Door']),
+        create_dungeon_region('Woodfall Temple Gecko Arena',
+            ['Woodfall Temple Boss Key Chest', 'Woodfall Temple Frog Get']),
+        create_dungeon_region('Woodfall Temple Final Chamber',
+            ['Woodfall Temple Lower East Bubble Fairy', 'Woodfall Temple Upper East Bubble Fairy',
+            'Woodfall Temple West Bubble Fairy', 'Woodfall Temple Hot Bubble Fairy'],),
+
         create_interior_region('Woodfall Fairy Shrine', ['Woodfall GF Reward'], ['Woodfall']),
 
         # create_ow_region('Mountain Icicles', [], ['Termina Field North Exit', 'Termina Field From Mountain']),
