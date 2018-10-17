@@ -1,19 +1,14 @@
 import io
-import json
 import logging
 import os
 import platform
 import struct
 import subprocess
 import random
-import copy
 
-from Hints import writeGossipStoneHintsHints, buildBossRewardHints, buildGanonText, getSimpleHintNoPrefix
-from Utils import local_path, default_output_path, random_choices
+from Hints import buildGossipHints, buildBossRewardHints
+from Utils import local_path, output_path
 from Items import ItemFactory, item_data
-from Messages import *
-from OcarinaSongs import Song, str_to_song, replace_songs
-from MQ import patch_files, File, update_dmadata, insert_space, add_relocations
 
 TunicColors = {
     "Custom Color": [0, 0, 0],
@@ -89,6 +84,8 @@ def patch_rom(world, rom):
     # will be populated with data to be written to initial save
     # see initial_save.asm and config.asm for more details on specifics
     # or just use the following functions to add an entry to the table
+
+    # Initial Save Data
     initial_save_table = []
 
     # will set the bits of value to the offset in the save (or'ing them with what is already there)
@@ -156,8 +153,8 @@ def patch_rom(world, rom):
             # DOOT: find out what things we need to patch for this to work
             pass
         elif location.type == 'Boss':
-            rom.write_byte(locationaddress, itemid)
-            rom.write_byte(secondaryaddress, item_data[item.name][2])
+                rom.write_byte(locationaddress, itemid)
+                rom.write_byte(secondaryaddress, item_data[item.name][2])
 
     if world.shuffle_smallkeys == 'remove' or world.shuffle_bosskeys == 'remove':
         locked_doors = get_locked_doors(rom, world)
@@ -187,6 +184,8 @@ def patch_rom(world, rom):
     # rom.write_bytes(0xE2ADB2, [0x70, 0x7A])
     # rom.write_bytes(0xE2ADB6, [0x70, 0x57])
     # buildBossRewardHints(world, messages)
+
+
 
     # add song messages
     # add_song_messages(messages, world)
@@ -290,7 +289,7 @@ chestTypeMap = {
         #    small   big     boss
     0x0000: [0x5000, 0x0000, 0x2000], #Large
     0x1000: [0x7000, 0x1000, 0x1000], #Large, Appears, Clear Flag
-    0x2000: [0x5000, 0x0000, 0x2000], #Boss Key’s Chest
+    0x2000: [0x5000, 0x0000, 0x2000], #Boss Key's Chest
     0x3000: [0x8000, 0x3000, 0x3000], #Large, Falling, Switch Flag
     0x4000: [0x6000, 0x4000, 0x4000], #Large, Invisible
     0x5000: [0x5000, 0x0000, 0x2000], #Small
@@ -760,21 +759,19 @@ def set_color(world, rom, offsets, thisColor, length=1, pack=False):
                 rom.write_bytes(offset+(word*4), color)
 
 def configure_dungeon_info(rom, world):
-    mq_enable = world.quest == 'mixed'
     mapcompass_keysanity = world.settings.shuffle_mapcompass == 'keysanity' and world.settings.enhance_map_compass
 
-    bosses = ['Queen Gohma', 'King Dodongo', 'Barinade', 'Phantom Ganon',
-            'Volvagia', 'Morpha', 'Twinrova', 'Bongo Bongo']
+    bosses = [
+        "Odolwa",
+        "Goht",
+        "Gyorg",
+        "Twinmold"
+        ]
     dungeon_rewards = [boss_reward_index(world, boss) for boss in bosses]
 
-    codes = ['DT', 'DC', 'JB', 'FoT', 'FiT', 'WT', 'SpT', 'ShT',
-            'BW', 'IC', 'Tower (N/A)', 'GTG', 'Hideout (N/A)', 'GC']
-    dungeon_is_mq = [1 if world.dungeon_mq.get(c) else 0 for c in codes]
+    codes = ["WF", "SH", "GB", "ST"]
 
     rom.write_int32(rom.sym('cfg_dungeon_info_enable'), 1)
-    rom.write_int32(rom.sym('cfg_dungeon_info_mq_enable'), int(mq_enable))
-    rom.write_int32(rom.sym('cfg_dungeon_info_mq_need_map'), int(mapcompass_keysanity))
     rom.write_int32(rom.sym('cfg_dungeon_info_reward_need_compass'), int(mapcompass_keysanity))
     rom.write_int32(rom.sym('cfg_dungeon_info_reward_need_altar'), int(not mapcompass_keysanity))
     rom.write_bytes(rom.sym('cfg_dungeon_rewards'), dungeon_rewards)
-    rom.write_bytes(rom.sym('cfg_dungeon_is_mq'), dungeon_is_mq)
