@@ -370,10 +370,10 @@ def global_rules(world):
     set_rule(world.get_location('Saved Koume'), lambda state: state.has_bottle())
 
     # swamp tourist center clean water
-    set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: state.can_use('Bow') and state.event('Beat Odolwa'))
 
     set_rule(world.get_entrance('Octo Grotto Clean Exit'), lambda state: state.event('Beat Odolwa'))
-    set_rule(world.get_entrance('To Swamp Spider House'), lambda state: state.can_use('Fire Arrows'))
+    set_rule(world.get_entrance('Poisoned To Swamp Spider House'), lambda state: state.can_use('Fire Arrows'))
     set_rule(world.get_entrance('Lower Octo Region Trick To Upper Midpoint'), lambda state: state.can('Some Jumping Trick') and state.form('Human'))
     # I've seen this done as human, dunno the details, but the check is going to essentially look like this
     set_rule(world.get_entrance('Poisoned Octo Upper Near Palace To Midpoint'), lambda state: state.form('Deku'))
@@ -387,11 +387,11 @@ def global_rules(world):
     set_rule(world.get_entrance('Outer Palace To Octo Upper'), lambda state: state.form('Deku') or state.can('Gainer'))
     # does gainer work here? or is it strictly deku
 
-    set_rule(world.get_entrance('Poisoned Palace To Butler Race'), lambda state: state.form('Deku') or state.has_hearts(6))
+    set_rule(world.get_entrance('Poisoned Palace To Butler Race'), lambda state: state.form('Deku') or (state.has_hearts(6) and (state.form('Human') or state.form('Zora'))))
     set_rule(world.get_entrance('Outer Palace To Lower Courtyard'), lambda state: state.form('Deku') or (state.can('Deku Palace Guard Skip')))
     # not sure how the trick to get past the palace guards works, but it's essentially that option plus form(s)
 
-    set_rule(world.get_entrance('Outer Palace To Upper Courtyard'), lambda state: state.has_bottle() and state.has('Magic Beans'))
+    set_rule(world.get_entrance('Outer Palace To Upper Courtyard'), lambda state: state.has_bottle() and state.has('Magic Beans') and state.has_hearts(6))
     # set_rule(world.get_entrance('To Magic Beans'), lambda state: True)
     set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human'))
     # will he sell you the beans even if you don't have a bottle? it seems like he should
@@ -438,8 +438,8 @@ def global_rules(world):
 
     set_rule(world.get_location('Outside Woodfall 5 Rupee Chest'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
     set_rule(world.get_location('Woodfall Owl Statue (Poisoned)'), lambda state: state.form('Human'))
-    set_rule(world.get_entrance('Poisoned Owl Platform To Entrance'), lambda state: state.form('Deku') or state.has_hearts(10))
-    set_rule(world.get_entrance('Poisoned Owl Platform To Fountain Platform'), lambda state: state.form('Deku') or state.has_hearts(4))
+    set_rule(world.get_entrance('Poisoned Owl Platform To Entrance'), lambda state: state.form('Deku') or (state.has_hearts(10) and state.any_form_but('Goron')))
+    set_rule(world.get_entrance('Poisoned Owl Platform To Fountain Platform'), lambda state: state.form('Deku') or (state.has_hearts(4) and state.any_form_but('Goron')))
     set_rule(world.get_entrance('Poisoned Owl Platform To Temple Platform'), lambda state: state.form('Deku') and state.has('Sonata Of Awakening'))
 
     set_rule(world.get_entrance('Poisoned Woodfall Temple Platform To Owl Platform'), lambda state: state.form('Deku'))
@@ -447,7 +447,7 @@ def global_rules(world):
 
     set_rule(world.get_location('Outside Woodfall HP'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
     set_rule(world.get_entrance('Poisoned Fountain Platform To Owl Platform'), lambda state: state.form('Deku'))
-    set_rule(world.get_entrance('Poisoned Fountain Platform To Entrance'), lambda state: state.any_form_but('Deku') and state.has_hearts(10))
+    set_rule(world.get_entrance('Poisoned Fountain Platform To Entrance'), lambda state: state.form('Deku') or (state.has_hearts(10) and state.any_form_but('Goron')))
     set_rule(world.get_entrance('Poisoned Fountain Platform To Fountain'), lambda state: state.form('Deku') or state.can('Gainer'))
     # dunno if gainer actually works here, but it seems like the kind of spot where it would
 
@@ -629,6 +629,36 @@ def global_rules(world):
     set_rule(world.get_entrance('WF Cleaned Push Block Room Lower To Upper'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
     set_rule(world.get_entrance('WF Cleaned Push Block Room Upper To Lower'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
     set_rule(world.get_entrance('WF Cleaned Push Block Room Lower To Fairy Region'), lambda state: state.stray_fairy_req((state.form('Human') or state.form('Zora'))))
+
+    ## Cleaned swamp areas
+    set_rule(world.get_entrance('Cleaned To Swamp Spider House'), lambda state: state.can_use('Fire Arrows'))
+
+    set_rule(world.get_entrance('Cleaned Tourist Region Trick To Upper Midpoint'), lambda state: state.can('Some Jumping Trick') and state.form('Human'))
+
+    set_rule(world.get_entrance('Cleaned Outer Palace To Tourist Upper'), lambda state: state.form('Deku') or state.can('Gainer'))
+    set_rule(world.get_entrance('Cleaned Outer Palace To Lower Courtyard'), lambda state: state.form('Deku') or (state.can('Deku Palace Guard Skip')))
+    set_rule(world.get_entrance('Cleaned Palace To Butler Race'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('Cleaned Outer Palace To Upper Courtyard'), lambda state: state.has_bottle() and state.has('Magic Beans'))
+    set_rule(world.get_entrance('Cleaned Deku Palace Lower Courtyard To Upper'), lambda state: state.can('Deku Palace Courtyard Trick'))
+    set_rule(world.get_entrance('Cleaned Deku Palace Upper Courtyard To Throne Room Cage Region'), lambda state: state.form('Deku'))
+
+    set_rule(world.get_entrance('Cleaned Octo Upper Near Palace To Midpoint'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Octo Upper Midpoint To Near Palace'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Octo Upper Midpoint To Kaepora'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Octo Kaepora To Midpoint'), lambda state: state.form('Deku'))
+
+    set_rule(world.get_location('Outside Woodfall 20 Rupee Chest'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('Cleaned Outside Woodfall Entrance To Woodfall Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Outside Woodfall Entrance To Fountain Platform'), lambda state: state.form('Human') or state.form('Zora'))
+    set_rule(world.get_location('Woodfall Owl Statue (Cleaned)'), lambda state: state.form('Human'))
+    set_rule(world.get_entrance('Cleaned Owl Platform To Entrance'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('Cleaned Owl Platform To Fountain Platform'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('Cleaned Owl Platform To Temple Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Woodfall Temple Platform To Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Woodfall Temple Platform To Entrance'), lambda state: True)
+    set_rule(world.get_entrance('Cleaned Fountain Platform To Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Fountain Platform To Entrance'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('Cleaned Fountain Platform To Fountain'), lambda state: state.form('Deku') or state.can('Gainer'))
 
 
     ### MOUNTAIN VILLAGE

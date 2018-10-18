@@ -99,25 +99,28 @@ def create_regions(world):
 
         create_ow_region('Swamp Path', ['Swamp Path Bat Tree HP', 'Swamp Tingle Woodfall Map', 'Swamp Tingle Snowhead Map', 'Swamp Tingle Pic'],
                          ['Swamp Path To Termina Field', 'To Swamp Shooting Gallery',
-                          'Swamp Path To Southern Swamp (Poisoned)', 'Swamp Path To Southern Swamp (Clean)',
+                          'Swamp Path To Southern Swamp (Poisoned)', 'Swamp Path To Southern Swamp (Cleaned)',
                           'To Swamp Path Rupee Pit']),
         create_grotto_region('Swamp Path Rupee Pit', ['Swamp Path Rupee Pit Chest'], ['Swamp Path Rupee Pit Exit']),
         create_interior_region('Swamp Shooting Gallery', ['Swamp Shooting Gallery Quiver Prize', 'Swamp Shooting Gallery HP Prize'], ['Swamp Shooting Gallery Exit']),
 
         create_ow_region('Swamp Tourist Region (Poisoned)', ['Swamp Tourist Roof HP', 'Swamp Owl Statue', 'Kill Swamp Big Octo'],
-                         ['Tourist Region to Swamp path', 'Swamp Big Octo From Tourist Region',
-                          'To Swamp Tourist Centre', 'To Potion Shop', 'To Lost Woods']),
+                         ['Poisoned Tourist Region To Swamp Path', 'Swamp Big Octo From Tourist Region',
+                          'Poisoned To Swamp Tourist Centre', 'Poisoned To Potion Shop', 'Poisoned To Lost Woods']),
         create_interior_region('Swamp Tourist Centre', ['Swamp Tourist Free Product (?)', 'Pictograph Contest Winner',
-                                'Picto Box', 'Kill Swamp Big Octo With Boat'], ['Swamp Boat Ride', 'Tourist Centre Exit']),
-        create_interior_region('Swamp Potion Shop', ['Red Potion To Help Koume'], ['Swamp Potion Shop Exit']),
+                                'Picto Box', 'Kill Swamp Big Octo With Boat', 'Swamp Boat Archery HP'], ['Swamp Boat Ride',
+                                'Tourist Centre Poison Exit', 'Tourist Centre Clean Exit']),
+        create_interior_region('Swamp Potion Shop', ['Red Potion To Help Koume'], ['Swamp Potion Shop Poison Exit',
+                                                                                   'Swamp Potion Shop Clean Exit']),
         create_ow_region('Lost Woods', ['Checked Koume', 'Saved Koume'], ['Lost Woods Exit', 'But like, a LOT of them']),
         # oh jeez, we have to have an exit here for every exit in lost woods don't we? lol
         # also not actually sure if lost woods should be ow or interior
+        # oh god and there are 3 maps for this huh? -__-
         create_ow_region('Swamp Octo Region Lower (Poisoned)', ['Kill Swamp Big Octo From Palace'],
                          ['Swamp Big Octo From Octo Region', 'Octo Region to Deku Palace',
-                          'To Swamp Spider House', 'Lower Octo Region Trick To Upper Midpoint', 'To Octo Region Grotto']),
+                          'Poisoned To Swamp Spider House', 'Poisoned Lower Octo Region Trick To Upper Midpoint', 'Poisoned To Octo Region Grotto']),
         create_grotto_region('Octo Region Grotto', ['Octo Grotto 20 Rupee Chest'], ['Octo Grotto Clean Exit', 'Octo Grotto Poison Exit']),
-        create_interior_region('Swamp Spider House', ['spiders', 'so many spiders', 'Swamp Spider House Reward'], ['Swamp Spider House Clean Exit', 'Swamp Spider House Poisoned Exit']),
+        create_interior_region('Swamp Spider House', ['spiders', 'so many spiders', 'Swamp Spider House Reward'], ['Swamp Spider House Clean Exit', 'Swamp Spider House Poison Exit']),
         # a note about this poisoned region, while in the previous section of the swamp any form could get around, now
         # only deku can get around without needing health due to the poisoned water, so to deal with that, do with put
         # a heart requirement on the entrance to here? split it up into logical regions requiring health?
@@ -126,30 +129,24 @@ def create_regions(world):
         create_ow_region('Swamp Deku Palace Outer Region (Poisoned)', [], ['Poisoned Outer Palace To Lower Octo',
                         'Poisoned Outer Palace To Octo Upper', 'Poisoned Outer Palace To Lower Courtyard', 'Poisoned Palace To Butler Race',
                         'Poisoned Outer Palace To Upper Courtyard']),
-        create_interior_region('Butler Race', ['Butler Race Prize'], ['Butler Race Clean Exit', 'Butler Race Poisoned Exit']),
+        create_interior_region('Butler Race', ['Butler Race Prize'], ['Butler Race Clean Exit', 'Butler Race Poison Exit']),
 
         create_ow_region('Swamp Deku Palace Lower Courtyard (Poisoned)', ['Deku Palace Courtyard HP'], ['Poisoned Deku Palace Lower Courtyard To Outer Region',
-            'Poisoned Deku Palace Lower Courtyard To Main Throne Room', 'To Magic Beans', 'Deku Palace Lower Courtyard To Upper']),
-        create_grotto_region('Magic Bean Grotto', ['Magic Beans'], ['Magic Bean Grotto Clean Exit', 'Magic Bean Grotto Poisoned Exit']),
+            'Poisoned Deku Palace Lower Courtyard To Main Throne Room', 'Poisoned To Magic Beans', 'Poisoned Deku Palace Lower Courtyard To Upper']),
+        create_grotto_region('Magic Bean Grotto', ['Magic Beans'], ['Magic Bean Grotto Clean Exit', 'Magic Bean Grotto Poison Exit']),
 
-        create_ow_region('Swamp Deku Palace Upper Courtyard (Poisoned)', [], ['Deku Palace Upper Courtyard To Lower',
-            'Deku Palace Upper Courtyard To Outer Region', 'Deku Palace Upper Courtyard To Throne Room Cage Region']),
-        create_interior_region('Swamp Deku Palace Throne Room', ['Return Deku Princess'], ['Swamp Deku Palace Throne Room Clean Exit', 'Swamp Deku Palace Throne Room Poisoned Exit']),
-        create_interior_region('Swamp Deku Palace Cage Room', ['Song From Monkey'], ['Swamp Deku Palace Cage Room Clean Exit', 'Swamp Deku Palace Cage Room Poisoned Exit']),
+        create_ow_region('Swamp Deku Palace Upper Courtyard (Poisoned)', [], ['Poisoned Deku Palace Upper Courtyard To Lower',
+            'Poisoned Deku Palace Upper Courtyard To Outer Region', 'Poisoned Deku Palace Upper Courtyard To Throne Room Cage Region']),
+        create_interior_region('Swamp Deku Palace Throne Room', ['Return Deku Princess'], ['Swamp Deku Palace Throne Room Clean Exit', 'Swamp Deku Palace Throne Room Poison Exit']),
+        create_interior_region('Swamp Deku Palace Cage Room', ['Song From Monkey'], ['Swamp Deku Palace Cage Room Clean Exit', 'Swamp Deku Palace Cage Room Poison Exit']),
         # the throne room, is that actually a different map for poisoned vs clean water? todo: find out
 
         create_ow_region('Swamp Octo Region Upper Near Palace (Poisoned)', [], ['Poisoned Octo Upper Near Palace To Lower',
                                     'Poisoned Octo Upper To Deku Palace', 'Poisoned Octo Upper Near Palace To Midpoint']),
         create_ow_region('Swamp Octo Region Upper Midpoint (Poisoned)', [], ['Poisoned Octo Upper Midpoint To Near Palace',
                                     'Poisoned Octo Upper Midpoint To Lower', 'Poisoned Octo Upper Midpoint To Kaepora']),
-        create_ow_region('Swamp Octo Kaepora Region (Poisoned)', ['Song From Kaepora Gaebora'], ['Posoned Octo Kaepora To Lower',
+        create_ow_region('Swamp Octo Kaepora Region (Poisoned)', ['Song From Kaepora Gaebora'], ['Poisoned Octo Kaepora To Lower',
                                     'Poisoned Octo Kaepora To Midpoint', 'Poisoned Octo Kaepora To Woodfall']),
-        # exit 'Poisoned Octo Upper To Deku Palace': thinking- entrance rando, coming in from tourist swamp (getting
-        # through the octos isn't a loading zone, right? oh lordy), the exit into the outer palace from lower and upper
-        # parts of this region are different loading zones, right? which means splitting the upper region up further
-        # might be necessary; if the player can trick up to the upper part, a check still needs to be made to see if
-        # they can get across to the deku palace exit (and the SoS learn spot, both hard requiring deku I believe)
-        # I'll leave it as the 3 pieces for the upper region, they can be combined later easily enough
 
         create_ow_region('Outside Woodfall Entrance Region (Poisoned)', ['Outside Woodfall 20 Rupee Chest'],
                          ['Poisoned Outside Woodfall Entrance To Woodfall Owl Platform', 'Poisoned Outside Woodfall Entrance To Fountain Platform']),
@@ -159,13 +156,12 @@ def create_regions(world):
                         'Poisoned Woodfall Temple Platform To Entrance', 'Poisoned Woodfall Temple Platform Into Temple']),
         create_ow_region('Outside Woodfall Fairy Fountain Platform (Poisoned)', ['Outside Woodfall HP'],
                          ['Poisoned Fountain Platform To Owl Platform', 'Poisoned Fountain Platform To Entrance', 'Poisoned Fountain Platform To Fountain']),
-        create_interior_region('Woodfall Fairy Shrine', ['Woodfall GF Reward'], ['Woodfall Fountain Clean Exit', 'Woodfall Fountain Poisoned Exit']),
+        create_interior_region('Woodfall Fairy Shrine', ['Woodfall GF Reward'], ['Woodfall Fountain Clean Exit', 'Woodfall Fountain Poison Exit']),
 
         # create_ow_region('Boat Ride', [], ['Poison Swamp']),
         # should this actually be its own region? idek
         # ugh maybe it should, it might have loading zones or smth ugh
 
-        # TODO All of the Woodfall area
         # also todo: figure out what the actual loading zones are because I'm about to create an unholy mess of logical regions - RO
         create_dungeon_region('WF Entrance Room (Poisoned)', ['WF Stray Fairy Entrance', 'WF Stray Fairy Lobby Chest'],
                               ['WF Poisoned Front Exit', 'WF Poisoned Entrance To Central Room', 'WF Boss Warp']),
@@ -206,7 +202,7 @@ def create_regions(world):
         create_dungeon_region('WF Elevator Room Stray Fairy Region', ['WF Stray Fairy Elevator Room'], []),
 
         create_dungeon_region('WF Map Room (Poisoned)', [], ['WF Poisoned Map Room Exit', 'WF Poisoned Map Room To Chest']),
-        create_dungeon_region('WF Map Room (Cleaned)', [], ['WF Clean Map Room Exit', 'WF Clean Map Room To Chest']),
+        create_dungeon_region('WF Map Room (Cleaned)', [], ['WF Cleaned Map Room Exit', 'WF Cleaned Map Room To Chest']),
         create_dungeon_region('WF Map Room Chest Region', ['WF Map Chest'], []),
         # I don't know if this room actually has poisoned/clean versions, todo: check loading zones
         # in general, it's not too hard to switch between the two
@@ -219,7 +215,7 @@ def create_regions(world):
         create_dungeon_region('WF Push Block Room Top Region (Poisoned)', [], ['WF Poisoned Push Block Room Upper To Dark Puffs', 'WF Poisoned Push Block Room Upper To Lower']),
         create_dungeon_region('WF Push Block Room Fairy Region', ['WF Stray Fairy Push Block Room Underwater'], []),
 
-        create_dungeon_region('WF Compass Room', ['WF Compass Chest'], ['WF Compass Room Clean Exit', 'WF Compass Room Poisoned Exit']),
+        create_dungeon_region('WF Compass Room', ['WF Compass Chest'], ['WF Compass Room Clean Exit', 'WF Compass Room Poison Exit']),
 
         create_dungeon_region('WF Dark Puff Gauntlet', ['WF Stray Fairy Dark Puffs'],
                               ['WF Dark Puff Gauntlet To Push Block Room', 'WF Dark Puff Gauntlet To Dragonfly Room']),
@@ -231,10 +227,10 @@ def create_regions(world):
         # rooms here; if so, there need to be cleaned/poisoned exits
         create_dungeon_region('WF Dragonfly Room NE', [], ['WF Dragonfly Room NE To West', 'WF Dragonfly Room NE To Central Room']),
 
-        create_dungeon_region('WF Bow Room', ['WF Bow Chest'], ['WF Bow Room Clean Exit', 'WF Bow Room Poisoned Exit']),
+        create_dungeon_region('WF Bow Room', ['WF Bow Chest'], ['WF Bow Room Clean Exit', 'WF Bow Room Poison Exit']),
         # I'm assuming here that this room doesn't have different versions, so it has 2 exits to poisoned/cleaned
 
-        create_dungeon_region('WF Boss Key Room', ['WF Boss Key Chest', 'WF Don Gero Frog'], ['WF Boss Key Room Clean Exit', 'WF Boss Key Room Poisoned Exit']),
+        create_dungeon_region('WF Boss Key Room', ['WF Boss Key Chest', 'WF Don Gero Frog'], ['WF Boss Key Room Clean Exit', 'WF Boss Key Room Poison Exit']),
 
         create_dungeon_region('WF Pre Boss Room South', [], ['WF Pre Boss Room South To Central Room', 'WF Pre Boss Room South To Fairy 1',
                                 'WF Pre Boss Room South To Fairy 2', 'WF Pre Boss Room South To Fairy 3', 'WF Pre Boss Room South To Bubble Fairy',
@@ -304,7 +300,41 @@ def create_regions(world):
 
 
         # Post woodfall cleaned swamp areas
-        #
+        create_ow_region('Swamp Tourist Region (Cleaned)', ['Swamp Tourist Roof HP', 'Swamp Owl Statue'], ['Cleaned Tourist Region To Swamp Path',
+                        'Cleaned To Swamp Tourist Centre', 'Cleaned To Potion Shop', 'Cleaned To Lost Woods', 'Cleaned To Swamp Spider House',
+                        'Cleaned Tourist Region Trick To Upper Midpoint', 'Cleaned To Octo Region Grotto', 'Cleaned Tourist Region To Kaepora']),
+        create_ow_region('Swamp Deku Palace Outer Region (Cleaned)', [], ['Cleaned Outer Palace To Tourist Lower',
+                        'Cleaned Outer Palace To Tourist Upper', 'Cleaned Outer Palace To Lower Courtyard',
+                        'Cleaned Palace To Butler Race', 'Cleaned Outer Palace To Upper Courtyard']),
+        create_ow_region('Swamp Deku Palace Lower Courtyard (Cleaned)', ['Deku Palace Courtyard HP'],
+                         ['Cleaned Deku Palace Lower Courtyard To Outer Region',
+                          'Cleaned Deku Palace Lower Courtyard To Main Throne Room', 'Cleaned To Magic Beans',
+                          'Cleaned Deku Palace Lower Courtyard To Upper']),
+        create_ow_region('Swamp Deku Palace Upper Courtyard (Cleaned)', [], ['Cleaned Deku Palace Upper Courtyard To Lower',
+                        'Cleaned Deku Palace Upper Courtyard To Outer Region', 'Cleaned Deku Palace Upper Courtyard To Throne Room Cage Region']),
+        create_ow_region('Swamp Octo Region Upper Near Palace (Cleaned)', [],
+                         ['Cleaned Octo Upper Near Palace To Lower',
+                          'Cleaned Octo Upper To Deku Palace', 'Cleaned Octo Upper Near Palace To Midpoint']),
+        create_ow_region('Swamp Octo Region Upper Midpoint (Cleaned)', [],
+                         ['Cleaned Octo Upper Midpoint To Near Palace',
+                          'Cleaned Octo Upper Midpoint To Lower', 'Cleaned Octo Upper Midpoint To Kaepora']),
+        create_ow_region('Swamp Octo Kaepora Region (Cleaned)', ['Song From Kaepora Gaebora'],
+                         ['Cleaned Octo Kaepora To Lower',
+                          'Cleaned Octo Kaepora To Midpoint', 'Cleaned Octo Kaepora To Woodfall']),
+        create_ow_region('Outside Woodfall Entrance Region (Cleaned)', ['Outside Woodfall 20 Rupee Chest'],
+                         ['Cleaned Outside Woodfall Entrance To Woodfall Owl Platform',
+                          'Cleaned Outside Woodfall Entrance To Fountain Platform']),
+        create_ow_region('Woodfall Owl Platform (Cleaned)',
+                         ['Outside Woodfall 5 Rupee Chest', 'Woodfall Owl Statue (Cleaned)'],
+                         ['Cleaned Owl Platform To Entrance', 'Cleaned Owl Platform To Fountain Platform',
+                          'Cleaned Owl Platform To Temple Platform']),
+        create_ow_region('Outside Woodfall Temple Platform (Cleaned)', [],
+                         ['Cleaned Woodfall Temple Platform To Owl Platform',
+                          'Cleaned Woodfall Temple Platform To Entrance',
+                          'Cleaned Woodfall Temple Platform Into Temple']),
+        create_ow_region('Outside Woodfall Fairy Fountain Platform (Cleaned)', ['Outside Woodfall HP'],
+                         ['Cleaned Fountain Platform To Owl Platform', 'Cleaned Fountain Platform To Entrance',
+                          'Cleaned Fountain Platform To Fountain']),
 
         # create_ow_region('Mountain Icicles', [], ['Termina Field North Exit', 'Termina Field From Mountain']),
         create_ow_region('Mountain Village Path South', [], ['Mountain Snowball Block', 'Mountain Path South Exit']),
