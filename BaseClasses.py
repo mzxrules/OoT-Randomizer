@@ -40,9 +40,16 @@ class World(object):
         self.keysanity = self.shuffle_smallkeys != 'dungeon'
         self.check_beatable_only = not self.all_reachable
         # group a few others
-        self.tunic_colors = [self.kokiricolor, self.goroncolor, self.zoracolor]
-        self.navi_colors = [self.navicolordefault, self.navicolorenemy, self.navicolornpc, self.navicolorprop]
-        self.navi_hint_sounds = [self.navisfxoverworld, self.navisfxenemytarget]
+        self.tunic_colors = [self.hatcolor, self.shirtcolor, self.pantscolor,
+            self.deitycolor, self.swordcolor, self.deityswordcolor,
+            self.dekuspincolor, self.zoraslashcolor,
+            self.deitybeamcolor, self.boomerangtrail]
+        self.tunic_palettes = [self.dekucolor, self.dekutuniccolor,
+            self.goronhatcolor, self.goronpantscolor,
+            self.zoracolor, self.zoratuniccolor,
+            self.zorafincolor, self.boomerangcolor]
+        # self.navi_colors = [self.navicolordefault, self.navicolorenemy, self.navicolornpc, self.navicolorprop]
+        # self.navi_hint_sounds = [self.navisfxoverworld, self.navisfxenemytarget]
         self.can_take_damage = True
         self.keys_placed = False
         self.spoiler = Spoiler(self)
@@ -50,11 +57,11 @@ class World(object):
 
     def copy(self):
         ret = World(self.settings)
-        ret.skipped_trials = copy.copy(self.skipped_trials)
-        ret.dungeon_mq = copy.copy(self.dungeon_mq)
-        ret.big_poe_count = copy.copy(self.big_poe_count)
+        # ret.skipped_trials = copy.copy(self.skipped_trials)
+        # ret.dungeon_mq = copy.copy(self.dungeon_mq)
+        # ret.big_poe_count = copy.copy(self.big_poe_count)
         ret.can_take_damage = self.can_take_damage
-        ret.shop_prices = copy.copy(self.shop_prices)
+        # ret.shop_prices = copy.copy(self.shop_prices)
         ret.id = self.id
         from Regions import create_regions
         from Dungeons import create_dungeons
@@ -410,11 +417,10 @@ class CollectionState(object):
         return self.has('Buy Bombchu (5)') or self.has('Buy Bombchu (10)') or self.has('Buy Bombchu (20)') or self.can_reach('Bomb Shop')
     
     def has_bombchus(self):
-        return self.world.bombchus_in_logic and \
-                    ((any(pritem.startswith('Bombchus') for pritem in self.prog_items) and \
-                        self.can_buy_bombchus())) \
-            or (not self.world.bombchus_in_logic and self.has_bomb_bag() and \
-                        self.can_buy_bombchus())
+        if self.world.bombchus_in_logic:
+            return (any(pritem.startswith('Bombchus') for pritem in self.prog_items) and self.can_buy_bombchus())
+        else:
+            return self.has_bomb_bag() and self.can_buy_bombchus()
 
     def has_bombchus_item(self):
         return (self.world.bombchus_in_logic and \
