@@ -10,11 +10,11 @@ import os
 import struct
 
 from BaseClasses import World, CollectionState, Item
+from Regions import create_dungeons
 from EntranceShuffle import link_entrances
 from Rom import LocalRom
 from Patches import patch_rom
 from Regions import create_regions
-from Dungeons import create_dungeons
 from Rules import set_rules
 from Fill import distribute_items_restrictive
 from ItemList import generate_itempool

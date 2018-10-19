@@ -53,7 +53,6 @@ def global_rules(world):
     set_rule(world.get_entrance('Clock Tower Twisted Hallway'), False)
     set_rule(world.get_location('First Nut'), lambda state: state.form('Deku'))
     # set_rule(world.get_location('Clock Town GF Reward'), lambda state: state.has('CT SF', 1))
-    set_rule(world.get_location('Woodfall GF Reward'), lambda state: state.has('WF SF', 15))
     set_rule(world.get_location('Snowhead GF Reward'), lambda state: state.has('SH SF', 15))
     set_rule(world.get_location('Great Bay GF Reward'), lambda state: state.has('GB SF', 15))
     set_rule(world.get_location('Stone Tower GF Reward'), lambda state: state.has('ST SF', 15))
@@ -170,7 +169,7 @@ def global_rules(world):
 
     set_rule(world.get_location('Clock Town Tingle Clock Town Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Clock Town Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
-    # it's not the same balloon as for bombers, but the same checks apply
+    set_rule(world.get_location('Clock Town Tingle Pic'), lambda state: state.can_use('Picto Box'))
 
     set_rule(world.get_location('NCT Keaton HP'), lambda state: state.can_use('Keaton Mask'))
 
@@ -257,7 +256,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Clock Town East Gate'), lambda state: state.form('Human') or state.form('Goron') or state.form('Zora') or state.can('Clock Town Guard Skip'))
 
     ### TERMINA FIELD
-    set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: (state.has('Magic Beans') and state.has('Bottle')) or state.can('Goron Boost'))
+    set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: (state.has('Magic Beans') and state.has_bottle()) or state.can('Goron Boost'))
 
     set_rule(world.get_entrance('TF to Obs Over Fence'), lambda state: state.can('Goron Boost'))
     # I don't know if there's actually a way to get over this fence from TF, might only be the other way, so I might
@@ -317,7 +316,7 @@ def global_rules(world):
     # todo: test this
 
     set_rule(world.get_entrance('To East Pillar Grotto'),
-             lambda state: state.can_use('Bottle') and state.has('Magic Beans') and (state.form('Human') or state.form('Zora')))
+             lambda state: state.has_bottle() and state.has('Magic Beans') and (state.form('Human') or state.form('Zora')))
     # it's an open check once you're there, you just need a bottle, bean, water, and be able to jump to it from the bean
 
 
@@ -331,160 +330,335 @@ def global_rules(world):
 
     set_rule(world.get_location('Swamp Tingle Woodfall Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Swamp Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
-    # I can't actually remember the two maps tingle sells, I'll have to just go check that
+    set_rule(world.get_location('Swamp Tingle Pic'), lambda state: state.can_use('Picto Box'))
 
     # set_rule(world.get_location('Swamp Path Rupee Pit Chest'), lambda state: True)
     # there's apparently 20 rupees in a pit, it's probly just open, but I need to play again to check the details
 
     set_rule(world.get_location('Swamp Shooting Gallery Quiver Prize'), lambda state: state.can_use('Bow'))
-    set_rule(world.get_location('Swamp Shooting Gallery HP Prize'), lambda state: state.can_use('Bow') or state.options('NoHardestArchery'))
+    set_rule(world.get_location('Swamp Shooting Gallery HP Prize'), lambda state: state.can_use('Bow'))
+    # or state.options('NoHardestArchery')
+    # that doesn't work now that I think about it
+    # it means if the option is checked, this is treated as open, obviously wrong
+    # otherwise nothing can be placed there
+    # so todo: determine how to restrict progression items from this spot if the option is selected
+    # (there's probly a mechanism for this in testrunner's build)
+
+    set_rule(world.get_entrance('Swamp Path To Southern Swamp (Clean)'), lambda state: state.event('Beat Odolwa'))
 
     ## Southern Swamp
-    set_rule(world.get_location('Swamp Tourist Roof HP'), lambda state: state.can_reach(world.get_location('Swamp Business Scrub')) or state.can('SomeWeirdGoronTrickIDunno'))
+    set_rule(world.get_location('Swamp Tourist Roof HP'), lambda state: state.has('Town Title Deed') or state.can('Goron Boost'))
     # set_rule(world.get_location('Bottle From Kotate'), lambda state: True)
     # set_rule(world.get_location('Save Koume'), lambda state: True)
     set_rule(world.get_location('Swamp Owl Statue'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Kill Swamp Big Octo'), lambda state: state.can_use('Bow') or state.can_use('Hookshot') or state.form('Zora'))
+    set_rule(world.get_location('Kill Swamp Big Octo From Palace'), lambda state: state.can_use('Bow') or state.can_use('Hookshot'))
+    # what are all the ways this you can kill the big octo? note, using the boat cruise to kill it will be a separate
+    # check located in the tourist center
+
+    set_rule(world.get_entrance('Swamp Big Octo From Tourist Region'), lambda state: state.event('Swamp Big Octo Dead'))
+    set_rule(world.get_entrance('Swamp Big Octo From Octo Region'), lambda state: state.event('Swamp Big Octo Dead'))
 
     # swamp tourist center
-    set_rule(world.get_location('Pictograph Box'), lambda state: state.event('Saved Koume'))
+    set_rule(world.get_location('Picto Box'), lambda state: state.event('Saved Koume'))
+    set_rule(world.get_location('Pictograph Contest Winner'), lambda state: state.has('Tingle Pic') or state.has('Deku King Pic'))
+    set_rule(world.get_location('Kill Swamp Big Octo With Boat'), lambda state: state.event('Saved Koume'))
+    set_rule(world.get_entrance('Swamp Boat Ride'), lambda state: state.event('Saved Koume'))
+
+    # potion shop and lost woods
+    set_rule(world.get_location('Red Potion To Help Koume'), lambda state: state.event('Checked Koume'))
+    set_rule(world.get_location('Saved Koume'), lambda state: state.has_bottle())
 
     # swamp tourist center clean water
-    # set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: True)
+    set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: state.can_use('Bow') and state.event('Beat Odolwa'))
 
-    # set_rule(world.get_location('Picto Game HP'), lambda state: True)
-    # I think this check is just open, unless some forms can't use the picto box lol
-
-    # set_rule(world.get_location('Learn Song of Soaring'), lambda state: True)
-    # as far as I know, no matter what once you're in this area, you still need to use the deku flowers to get across
-    # to the spot where you learn the song
-    # actually... you can get to the spot from the outside woodfall zone
-    # ok so here's what's up, it's an open check, but it's in its own logical region; the lower part of this area is
-    # its own region with an exit to the top region /before/ the check, using that trick that lets you grab that ledge,
-    # then there's an exit from that region to the region with the learn spot gated by using the deku flowers
-    # that logical region has exits to the outside woodfall area (which has an open exit back to here) and down to the
-    # bottom of the area (since you can just drop down whenever)
-    # (I could be wrong about it being an open check tho, not sure what form requirements exist for the owl to teach it)
+    set_rule(world.get_entrance('Octo Grotto Clean Exit'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Poisoned To Swamp Spider House'), lambda state: state.can_use('Fire Arrows'))
+    set_rule(world.get_entrance('Lower Octo Region Trick To Upper Midpoint'), lambda state: state.can('Some Jumping Trick') and state.form('Human'))
+    # I've seen this done as human, dunno the details, but the check is going to essentially look like this
+    set_rule(world.get_entrance('Poisoned Octo Upper Near Palace To Midpoint'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Octo Upper Midpoint To Near Palace'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Octo Upper Midpoint To Kaepora'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Octo Kaepora To Midpoint'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Song From Kaepora Gaebora'), lambda state: state.has('Ocarina'))
+    # form req?
 
     ## Deku Palace
-    # set_rule(world.get_location('Deku Palace Garden HP'), lambda state: True)
+    set_rule(world.get_entrance('Outer Palace To Octo Upper'), lambda state: state.form('Deku') or state.can('Gainer'))
+    # does gainer work here? or is it strictly deku
 
-    set_rule(world.get_location('Learn Sonata of Awakening'), lambda state: state.form('Human') and state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Palace To Butler Race'), lambda state: state.form('Deku') or (state.has_hearts(6) and (state.form('Human') or state.form('Zora'))))
+    set_rule(world.get_entrance('Outer Palace To Lower Courtyard'), lambda state: state.form('Deku') or (state.can('Deku Palace Guard Skip')))
+    # not sure how the trick to get past the palace guards works, but it's essentially that option plus form(s)
+
+    set_rule(world.get_entrance('Outer Palace To Upper Courtyard'), lambda state: state.has_bottle() and state.has('Magic Beans') and state.has_hearts(6))
+    # set_rule(world.get_entrance('To Magic Beans'), lambda state: True)
+    set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human'))
+    # will he sell you the beans even if you don't have a bottle? it seems like he should
+    # todo: find out
+    set_rule(world.get_entrance('Magic Bean Grotto Clean Exit'), lambda state: state.event('Beat Odolwa'))
+
+    # set_rule(world.get_location('Deku Palace Courtyard HP'), lambda state: True)
+    set_rule(world.get_entrance('Deku Palace Lower Courtyard To Upper'), lambda state: state.can('Deku Palace Coutryard Trick'))
+    # not sure of the details on this, but I'm pretty sure it exists
+    set_rule(world.get_entrance('Deku Palace Upper Courtyard To Throne Room Cage Region'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Song From Monkey'), lambda state: state.form('Deku') and state.has('Ocarina'))
     # probly need to test the reqs for this, but apparently you need to talk to the monkey as link and then show him an
     # instrument that isn't the ocarina to learn it? I dunno
     # todo: test requirements for this
 
-    # post woodfall, butler race
-    set_rule(world.get_location('Mask of Scents'), lambda state: state.form('Human') and state.form('Deku') and state.has('Deku Princess') and state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Butler Race Clean Exit'), lambda state: state.event('Beat Odolwa'))
+
+    # post woodfall palace
+    set_rule(world.get_location('Returned Deku Princess'), lambda state: state.form('Deku') and state.has('Deku Princess'))
+    set_rule(world.get_location('Butler Race Prize'), lambda state: state.form('Human') and state.event('Returned Deku Princess') and state.event('Beat Odolwa'))
     # you know, I have no idea what the actual requirements are to do this lol
     # once you can get here, you can attempt the race, but I figure goron can't do it, zora probly not
     # so it's human and/or deku? todo: figure this out lol
-
-    set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human') and state.has('Bottle'))
 
     ## Swamp Spider House
     # oh god, so many spots
     # lots of them are probly just open though
     # I'mma get to this later, I'll do both the spider houses together
     set_rule(world.get_location('Swamp Spider House Mask of Truth'),
-             lambda state: state.can_use('Bottle') and state.form('Deku') and state.has('Sonata of Awakening') and state.can_pop_balloon() and state.can_use('Bomb Bag'))
+             lambda state: state.has_bottle() and state.form('Deku') and state.has('Sonata of Awakening') and state.can_pop_balloon() and state.can_use('Bomb Bag'))
     # there might be some other requirements to get all the skulls here, but I'm pretty sure you at least need a
     # bottle and to use deku flowers
+    set_rule(world.get_entrance('Swamp Spider House Clean Exit'), lambda state: state.event('Beat Odolwa'))
 
     ## Outside Woodfall Area
+    # todo: where can the hookshot get you in this area?
     set_rule(world.get_location('Outside Woodfall 20 Rupee Chest'),
-             lambda state: state.form('Deku') or (state.has_hearts(5) and (state.form('Human') or state.form('Zora'))) or state.can_use('Hookshot'))
+             lambda state: state.form('Deku') or (state.form('Human') and (state.has('Hookshot') or state.has_hearts(5))) or (state.form('Zora') and state.has_hearts(5)))
     # I think you can get to this one by toughing out the poison water as well as just being deku
     # or also with the hookshot? also do ice arrows freeze poison water?
     # todo: test ways to get to this chest
-    # p sure goron just can't get it lol
+    set_rule(world.get_entrance('Poisoned Outside Woodfall Entrance To Woodfall Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Outside Woodfall Entrance To Fountain Platform'), lambda state: (state.form('Human') or state.form('Zora')) and state.has_hearts(8))
 
-    set_rule(world.get_location('Outside Woodfall 5 rupees'), lambda state: state.form('Deku'))
+    set_rule(world.get_location('Outside Woodfall 5 Rupee Chest'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    set_rule(world.get_location('Woodfall Owl Statue (Poisoned)'), lambda state: state.form('Human'))
+    set_rule(world.get_entrance('Poisoned Owl Platform To Entrance'), lambda state: state.form('Deku') or (state.has_hearts(10) and state.any_form_but('Goron')))
+    set_rule(world.get_entrance('Poisoned Owl Platform To Fountain Platform'), lambda state: state.form('Deku') or (state.has_hearts(4) and state.any_form_but('Goron')))
+    set_rule(world.get_entrance('Poisoned Owl Platform To Temple Platform'), lambda state: state.form('Deku') and state.has('Sonata Of Awakening'))
+
+    set_rule(world.get_entrance('Poisoned Woodfall Temple Platform To Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Woodfall Temple Platform To Entrance'), lambda state: (state.form('Human') or state.form('Zora')) and state.has_hearts(5))
+
     set_rule(world.get_location('Outside Woodfall HP'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
-    # todo: test if hookshot can get these
+    set_rule(world.get_entrance('Poisoned Fountain Platform To Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Poisoned Fountain Platform To Entrance'), lambda state: state.form('Deku') or (state.has_hearts(10) and state.any_form_but('Goron')))
+    set_rule(world.get_entrance('Poisoned Fountain Platform To Fountain'), lambda state: state.form('Deku') or state.can('Gainer'))
+    # dunno if gainer actually works here, but it seems like the kind of spot where it would
 
-    set_rule(world.get_location('Woodfall Owl Statue'), lambda state: state.form('Human'))
+    set_rule(world.get_location('Woodfall GF Reward'), lambda state: state.has('WF SF', 15))
+    set_rule(world.get_entrance('Woodfall Fountain Clean Exit'), lambda state: state.event('Beat Odolwa'))
 
 
     ### WOODFALL TEMPLE
 
     ## Lobby
-    set_rule(world.get_location('WF Stray Fairy Entrance'), lambda state: state.stray_fairy_req())
-    # not sure what forms can get this aside from human, but basically if you require the GFMask to get fairies, checks
-    # are done, otherwise you have to get to this fairy however you like, which... I think it's right by the entrance,
-    # so it should be possible with anyone? unless it's like just below the entrance, in which case we have to see
-    # which forms can get to it and require those regardless
+    set_rule(world.get_location('WF Stray Fairy Entrance'), lambda state: state.stray_fairy_req(state.any_form_but('Goron')))
 
-    set_rule(world.get_location('WF Stray Fairy Lobby Chest'), lambda state: state.form('Deku') and state.stray_fairy_req())
-    # I /think/ the one you get from the chest can be picked up without the mask? we may want to have an option to
-    # require the mask to pick up any of the fairies, because damn it makes it a lot easier, heh
+    set_rule(world.get_location('WF Stray Fairy Lobby Chest'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Entrance To Central Room'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Boss Warp'), lambda state: state.has('Odolwas Remains'))
 
     ## First Floor
-    set_rule(world.get_location('WF Stray Fairy Central Room Deku Baba'), lambda state: state.stray_fairy_req())
-    set_rule(world.get_location('WF Stray Fairy Central Room SW Corner'),
-             lambda state: (state.form('Deku') or (state.has_hearts(4) and (state.form('Human') or state.form('Zora'))))
-                           and state.stray_fairy_req())
-    # this actually might have to be changed later on depending on if we split this room into logical regions
-    # since I'm pretty sure it's easier to get to this fairy from the top section, heh
+    set_rule(world.get_location('WF Stray Fairy Poisoned Central Room Deku Baba'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_entrance('WF Poisoned Central Room SW To Fairy Region'), lambda state: state.can_use('Bow') and state.can_use('Great Fairy Mask'))
+    # set_rule(world.get_location('WF Stray Fairy Central Room Upper Bubble'), lambda state: True)
 
-    set_rule(world.get_location('WF Stray Fairy Elevator Flower Room'),
-             lambda state: state.can_pop_balloon() and (state.form('Deku') or state.can_use('Great Fairy Mask')) and state.stray_fairy_req())
-    # ugh, there's kind of a lot to this one, if you can pop a balloon, then you still need a way to retrieve the fairy
-    # that can be either with the deku flowers or with the GFMask, even when the mask isn't required for any particular stray fairy
-    # seems kind of weird to add it on to this check, but if you don't, then it's just 3 things ANDed, one of which is
-    # the deku form, and there are certainly ways to get this SF without requiring the deku form..... probly
+    set_rule(world.get_location('WF Poisoned Central Room Gate Torch Using Fire Arrows'), lambda state: state.can_use('Fire Arrows'))
+    set_rule(world.get_location('WF Clean Poison Water Using Fire Arrows'), lambda state: state.can_use('Fire Arrows'))
+    set_rule(world.get_entrance('WF Clean Poison Water Using Fire Arrows Exit'), lambda state: state.can_use('Fire Arrows'))
+    set_rule(world.get_entrance('WF Poisoned Central Room SW To Push Block Room'), lambda state: state.has('Small Key (Woodfall Temple)'))
+    set_rule(world.get_entrance('WF Poisoned Central Room SW To Upper'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_location('WF Stray Fairy Poisoned Central Room SE Corner'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_entrance('WF Poisoned Central Room Fairy Platform To SW'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Central Room Fairy Platform To East'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Central Room Fairy Platform To Upper'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Poisoned Central Room East To Fairy Platform'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Central Room East To Upper'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Poisoned Central Room East To Ladder Up'), lambda state: state.event('WF Central Room Ladder Switch'))
+    set_rule(world.get_entrance('WF Poisoned Central Room Upper To Fairy Region'),
+             lambda state: state.stray_fairy_req(state.can_pop_balloon() or state.form('Human')))
+    set_rule(world.get_location('WF Stray Fairy Poisoned Central Room Upper Switch Chest'),
+             lambda state: state.form('Deku') and state.any_form_but('Deku') and state.stray_fairy_req())
+    # for reference: these two are good examples of how the stray fairy req fxn works
+    set_rule(world.get_location('WF Poisoned Central Room Ladder Switch'), lambda state: state.any_form_but('Deku'))
+    set_rule(world.get_location('WF Clean Poison Water'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Clean Poison Water Exit'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Poisoned Central Room Upper To Pre Boss Room'), lambda state: state.event('WF Central Room Gate Torch Lit'))
+    set_rule(world.get_entrance('WF Poisoned Central Room Upper To SW'), lambda state: state.any_form_but('Goron'))
 
-    set_rule(world.get_location('WF Elevator Flower Room Key Chest'), lambda state: state.form('Deku'))
-    # zora might be tall enough to run through the poison water and climb up? not sure, should test
-    # todo: test ways to get to this key chest
+    # set_rule(world.get_location('WF Stray Fairy Elevator Room'), lambda state: True)
+    # this fairy is an open check because it's in its own logical region, with two exits leading to it that form the
+    # actual checks
+    set_rule(world.get_location('WF Activate Elevator From Poisoned West Lower'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room West Lower To Fairy Region'), lambda state: state.can_pop_balloon() and state.can_use('Great Fairy Mask'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room West Lower To North Upper'), lambda state: (state.event('WF Elevator On') and state.form('Deku')))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room West Lower To SW Upper'), lambda state: (state.event('WF Elevator On') and state.form('Deku')))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room West Lower To East Lower'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room West Lower To Key Chest'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    # set_rule(world.get_location('WF Elevator Room Key Chest'), lambda state: True)
+    set_rule(world.get_location('WF Activate Elevator From Poisoned East Lower'), lambda state: state.can_use('Bow'))
+    # ^ example of the same event needing to go in multiple spots; need to change to a logical region and have only a single item location?
+    set_rule(world.get_entrance('WF Poisoned Elevator Room East Lower To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room North Upper To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room North Upper To East Lower'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room North Upper To Key Chest'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room North Upper To Fairy Region'),
+             lambda state: state.form('Human') or state.form('Zora') or (state.form('Deku') and state.has('Magic Meter')))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room SW Upper To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Poisoned Elevator Room SW Upper To East Lower'), lambda state: state.can_use('Hookshot'))
 
     set_rule(world.get_location('WF Map Chest'),
              lambda state: state.form('Deku') or state.can_use('Bomb Bag') or state.form('Goron'))
     # possibly the blast mask can be used as well? in which case just change this to can_blast()
+    # can this actually be done strictly with deku? todo: more testing on this I think
 
     ## Push Block Bridge Room
-    set_rule(world.get_location('WF Stray Fairy Push Block Room Hive'),
-             lambda state: state.can_pop_balloon() and state.stray_fairy_req())
-    set_rule(world.get_location('WF Stray Fairy Push Block Room Skulltula'), lambda state: state.stray_fairy_req())
-    # I /think/ any form can kill a skulltula? maybe test this
+    set_rule(world.get_location('WF Stray Fairy Poisoned Push Block Room Hive'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Poisoned Push Block Room Skulltula'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_entrance('WF Poisoned Push Block Room Lower To Compass Room'), lambda state: state.can_use('Deku Sticks') or state.can_use('Fire Arrows'))
+    set_rule(world.get_entrance('WF Poisoned Push Block Room Lower To Upper'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Poisoned Push Block Room Upper To Lower'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
+    # yep, you can in fact light the right torches (aside from the compass room one) and hit the spider web with just the bow
+    # though honestly can_use('deku sticks') should maybe just be form('Human'); though for entrance rando, maybe not
+    set_rule(world.get_entrance('WF Poisoned Push Block Room Lower To Fairy Region'),
+             lambda state: state.stray_fairy_req(state.has_hearts(7) and (state.form('Human') or state.form('Zora'))))
 
-    set_rule(world.get_location('WF Stray Fairy Push Block Room Underwater'),
-             lambda state: state.stray_fairy_req()
-                and ((state.form('Human') or state.form('Zora')) and (state.swamp_cleaned() or state.has_hearts(6))))
-    set_rule(world.get_location('WF Compass Chest'),
-             lambda state: state.form('Zora')
-                           or (state.form('Deku') and state.has('Magic Meter'))
-                           or (state.form('Human') and state.can_pop_balloon()))
+    set_rule(world.get_entrance('WF Clean Push Block Room To Fairy Region'), lambda state: state.stray_fairy_req(state.form('Human') or state.form('Zora')))
 
-    ## Dark Puff Gauntlet
+    # set_rule(world.get_location('WF Stray Fairy Push Block Room Underwater'), lambda state: True)
+    # set_rule(world.get_location('WF Compass Chest'), lambda state: True)
+    # turns out anyone can kill dragonflies lol, so this is an open check
+    set_rule(world.get_entrance('WF Compass Room Clean Exit'), lambda state: state.event('Cleaned WF'))
+
+    ## Dark Puff Gauntlet and Dragonfly Room
     set_rule(world.get_location('WF Stray Fairy Dark Puffs'), lambda state: state.stray_fairy_req())
-    # I'm pretty sure any form can kill the puffs, the only one that would be hard is goron lol
+    set_rule(world.get_entrance('WF Dark Puff Gauntlet To Dragonfly Room'), lambda state: state.can_use('Deku Sticks') or state.can_use('Fire Arrows'))
+    set_rule(world.get_entrance('WF Dragonfly Room West To NE'), lambda state: state.form('Deku'))
+    # we /may/ want to require a way to kill the dragonflies here beyond deku flowering them? just because it might be
+    # too much of a pain normally; or not, who knows
+    set_rule(world.get_entrance('WF Dragonfly Room West To Central Room SW'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Dragonfly Room West To Central Room East'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Dragonfly Room West To Central Room Fairy Platform'), lambda state: state.any_form_but('Goron'))
 
-    ## Second Floor
-    set_rule(world.get_location('WF Stray Fairy Central Room Upper Bubble'),
-             lambda state: state.can_pop_balloon() and state.stray_fairy_req())
-    set_rule(world.get_location('WF Stray Fairy Central Room Upper Switch Chest'),
-             lambda state: state.stray_fairy_req() and state.form('Deku'))
+    ## Upper 1st Floor
     set_rule(world.get_location('WF Bow Chest'), lambda state: state.can_kill_lizalfos())
+    set_rule(world.get_entrance('WF Bow Room Clean Exit'), lambda state: state.event('Cleaned WF'))
     set_rule(world.get_location('WF Boss Key Chest'), lambda state: state.can_kill_gekkos())
+    set_rule(world.get_location('WF Don Gero Frog'), lambda state: state.can_use('Don Gero Mask'))
+    set_rule(world.get_entrance('WF Boss Key Room Clean Exit'), lambda state: state.event('Cleaned WF'))
     # set_rule(world.get_location(''), lambda state: state)
 
     ## Pre-Boss Room
-    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Alcoves 1'), lambda state: state.stray_fairy_req() and state.form('Deku'))
-    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Alcoves 2'), lambda state: state.stray_fairy_req() and state.form('Deku'))
-    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Alcoves 3'), lambda state: state.stray_fairy_req() and state.form('Deku'))
-    set_rule(world.get_location('WF Stray Fairy Pre Boss Room Bubble'),
-             lambda state: state.stray_fairy_req() and state.can_pop_balloon()
-                           and state.form('Deku') and state.can_use('Great Fairy Mask'))
-    # this one might just hard require the GFMask, not sure how to get to it at all
+    set_rule(world.get_entrance('WF Pre Boss Room South To Fairy 1'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_entrance('WF Pre Boss Room South To Fairy 2'), lambda state: state.stray_fairy_req())
+    # yes this is actually an open check, the ledge juts out far enough that any form can angle a jump to it
+    # including goron lol, it's a bit tricky but you can roll and land on it
+    # I actually didn't test deku, but deku can obviously make it regardless lol
+    # which actually means the one in the lower alcove on that side is also just open
+    set_rule(world.get_entrance('WF Pre Boss Room South To Fairy 3'),
+             lambda state: state.stray_fairy_req(state.form('Deku')) or (state.can_pop_balloon() and state.can_use('Great Fairy Mask')))
+    set_rule(world.get_entrance('WF Pre Boss Room South To Bubble Fairy'), lambda state: (state.can_use('Bow') and state.stray_fairy_req(state.form('Deku')))
+                                                                            or (state.can_pop_balloon() and state.can_use('Great Fairy Mask')))
+    set_rule(world.get_entrance('WF Pre Boss Room South To North'), lambda state: state.form('Deku') and (state.can_use('Hookshot') or state.can_use('Bow')))
+    set_rule(world.get_entrance('WF Pre Boss Room North To Fairy 1'), lambda state: state.can_pop_balloon() and state.can_use('Great Fairy Mask'))
+    set_rule(world.get_entrance('WF Pre Boss Room North To Fairy 2'), lambda state: state.can_pop_balloon() and state.can_use('Great Fairy Mask'))
+    set_rule(world.get_entrance('WF Pre Boss Room North To Fairy 3'), lambda state: state.can_pop_balloon() and state.can_use('Great Fairy Mask'))
+    set_rule(world.get_entrance('WF Pre Boss Room North To Bubble Fairy'), lambda state: state.can_pop_balloon() and state.can_use('Great Fairy Mask'))
+    set_rule(world.get_entrance('WF Pre Boss Room North To South'), lambda state: state.form('Deku'))
 
     ## Boss: Odolwa
-    set_rule(world.get_location('Odolwas Remains'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Beat Odolwa'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Odolwa HC'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Odolwa Boss Exit'), lambda state: state.can_use('Bow'))
     # todo: figure out all the ways to kill odolwa
     # you probly hard need to use the bow, which means most other checks aren't needed
     # but yeah, gotta figure out all the ways to beat this
+    # set_rule(world.get_location('Odolwas Remains'), lambda state: True)
 
     ## Post Odolwa Princess Room
-    set_rule(world.get_location('Woodfall Princess'), lambda state: state.can_use('Bottle'))
+    set_rule(world.get_location('Deku Princess'), lambda state: state.has_bottle() and state.form('Human'))
+
+    # Cleaned Rooms
+    set_rule(world.get_location('WF Stray Fairy Cleaned Central Room Deku Baba'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_location('WF Cleaned Central Room Gate Torch Using Fire Arrows'), lambda state: state.can_use('Fire Arrows'))
+    set_rule(world.get_entrance('WF Cleaned Central Room SW To Push Block Room'), lambda state: state.has('Small Key (Woodfall Temple)'))
+    set_rule(world.get_entrance('WF Cleaned Central Room SW To Upper'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Cleaned Central Room SW To Fairy Region'), lambda state: state.can_use('Bow') and state.can_use('Great Fairy Mask'))
+    set_rule(world.get_location('WF Stray Fairy Cleaned Central Room SE Corner'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_entrance('WF Cleaned Central Room Fairy Platform To SW'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Cleaned Central Room Fairy Platform To East'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Cleaned Central Room Fairy Platform To Upper'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Cleaned Central Room East To Fairy Platform'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Cleaned Central Room East To Upper'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Cleaned Central Room East To Ladder Up'), lambda state: state.event('WF Central Room Ladder Switch'))
+    set_rule(world.get_entrance('WF Cleaned Central Room Upper To Fairy Region'),
+             lambda state: state.stray_fairy_req(state.can_pop_balloon() or state.form('Human')))
+    set_rule(world.get_location('WF Stray Fairy Cleaned Central Room Upper Switch Chest'),
+             lambda state: state.form('Deku') and state.any_form_but('Deku') and state.stray_fairy_req())
+    set_rule(world.get_location('WF Cleaned Central Room Ladder Switch'), lambda state: state.any_form_but('Deku'))
+    set_rule(world.get_entrance('WF Cleaned Central Room Upper To Pre Boss Room'),
+             lambda state: state.event('WF Central Room Gate Torch Lit'))
+    set_rule(world.get_entrance('WF Cleaned Central Room Upper To SW'), lambda state: state.any_form_but('Goron'))
+
+    set_rule(world.get_location('WF Activate Elevator From Cleaned West Lower'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room West Lower To Fairy Region'), lambda state: state.can_pop_balloon() and state.can_use('Great Fairy Mask'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room West Lower To North Upper'), lambda state: (state.event('WF Elevator On') and state.form('Deku')))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room West Lower To SW Upper'), lambda state: (state.event('WF Elevator On') and state.form('Deku')))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room West Lower To East Lower'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room West Lower To Key Chest'), lambda state: state.form('Deku') or state.can_use('Hookshot'))
+    set_rule(world.get_location('WF Activate Elevator From Cleaned East Lower'), lambda state: state.can_use('Bow'))
+    # ^ example of the same event needing to go in multiple spots; need to change to a logical region and have only a single item location?
+    set_rule(world.get_entrance('WF Cleaned Elevator Room East Lower To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room North Upper To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room North Upper To East Lower'), lambda state: state.can_use('Hookshot'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room North Upper To Key Chest'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room North Upper To Fairy Region'),
+             lambda state: state.form('Human') or state.form('Zora') or (state.form('Deku') and state.has('Magic Meter')))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room SW Upper To West Lower'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('WF Cleaned Elevator Room SW Upper To East Lower'), lambda state: state.can_use('Hookshot'))
+
+    set_rule(world.get_location('WF Stray Fairy Cleaned Push Block Room Hive'), lambda state: state.can_pop_balloon() and state.stray_fairy_req())
+    set_rule(world.get_location('WF Stray Fairy Cleaned Push Block Room Skulltula'), lambda state: state.stray_fairy_req())
+    set_rule(world.get_entrance('WF Cleaned Push Block Room Lower To Compass Room'), lambda state: state.can_use('Deku Sticks') or state.can_use('Fire Arrows'))
+    set_rule(world.get_entrance('WF Cleaned Push Block Room Lower To Upper'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Cleaned Push Block Room Upper To Lower'), lambda state: state.can_use('Deku Sticks') or state.can_use('Bow'))
+    set_rule(world.get_entrance('WF Cleaned Push Block Room Lower To Fairy Region'), lambda state: state.stray_fairy_req((state.form('Human') or state.form('Zora'))))
+
+    ## Cleaned swamp areas
+    set_rule(world.get_entrance('Cleaned To Swamp Spider House'), lambda state: state.can_use('Fire Arrows'))
+
+    set_rule(world.get_entrance('Cleaned Tourist Region Trick To Upper Midpoint'), lambda state: state.can('Some Jumping Trick') and state.form('Human'))
+
+    set_rule(world.get_entrance('Cleaned Outer Palace To Tourist Upper'), lambda state: state.form('Deku') or state.can('Gainer'))
+    set_rule(world.get_entrance('Cleaned Outer Palace To Lower Courtyard'), lambda state: state.form('Deku') or (state.can('Deku Palace Guard Skip')))
+    set_rule(world.get_entrance('Cleaned Palace To Butler Race'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('Cleaned Outer Palace To Upper Courtyard'), lambda state: state.has_bottle() and state.has('Magic Beans'))
+    set_rule(world.get_entrance('Cleaned Deku Palace Lower Courtyard To Upper'), lambda state: state.can('Deku Palace Courtyard Trick'))
+    set_rule(world.get_entrance('Cleaned Deku Palace Upper Courtyard To Throne Room Cage Region'), lambda state: state.form('Deku'))
+
+    set_rule(world.get_entrance('Cleaned Octo Upper Near Palace To Midpoint'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Octo Upper Midpoint To Near Palace'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Octo Upper Midpoint To Kaepora'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Octo Kaepora To Midpoint'), lambda state: state.form('Deku'))
+
+    set_rule(world.get_location('Outside Woodfall 20 Rupee Chest'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('Cleaned Outside Woodfall Entrance To Woodfall Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Outside Woodfall Entrance To Fountain Platform'), lambda state: state.form('Human') or state.form('Zora'))
+    set_rule(world.get_location('Woodfall Owl Statue (Cleaned)'), lambda state: state.form('Human'))
+    set_rule(world.get_entrance('Cleaned Owl Platform To Entrance'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('Cleaned Owl Platform To Fountain Platform'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('Cleaned Owl Platform To Temple Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Woodfall Temple Platform To Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Woodfall Temple Platform To Entrance'), lambda state: True)
+    set_rule(world.get_entrance('Cleaned Fountain Platform To Owl Platform'), lambda state: state.form('Deku'))
+    set_rule(world.get_entrance('Cleaned Fountain Platform To Entrance'), lambda state: state.any_form_but('Goron'))
+    set_rule(world.get_entrance('Cleaned Fountain Platform To Fountain'), lambda state: state.form('Deku') or state.can('Gainer'))
 
 
     ### MOUNTAIN VILLAGE
@@ -498,7 +672,7 @@ def global_rules(world):
     # stuff that would strictly be used by the crawler to determine placement
     # we'll see
 
-    set_rule(world.get_location('Goron Grave Hot Spring Water'), lambda state: state.can_use('Bottle'))
+    set_rule(world.get_location('Goron Grave Hot Spring Water'), lambda state: state.has_bottle())
     # something is definitely gonna have to be tweaked in order to keep this (and the goron elder) check in, especially
     # accounting for entrance shuffle
     # I think only goron is fast enough to make it from here to the elder, but if entrances are shuffled, there needs
@@ -532,6 +706,7 @@ def global_rules(world):
     ## Frozen Lake
     set_rule(world.get_location('Mountain Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Mountain Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Mountain Tingle Pic'), lambda state: state.can_use('Picto Box'))
     set_rule(world.get_location('First Half Goron Lullaby'), lambda state: (state.can_blast() or state.form('Goron')) and state.can_use('Hot Spring Water'))
     # not sure if he'll actually teach you the half song if you're not a goron todo: test form requirements
 
@@ -620,6 +795,7 @@ def global_rules(world):
     set_rule(world.get_location('Milk Road Keaton HP'), lambda state: state.can_use('Keaton Mask'))
     set_rule(world.get_location('Milk Road Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Milk Road Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Milk Road Tingle Pic'), lambda state: state.can_use('Picto Box'))
     set_rule(world.get_location('Milk Road Owl Statue'), lambda state: state.form('Human'))
 
     ## Romani Ranch
@@ -643,6 +819,7 @@ def global_rules(world):
     set_rule(world.get_location('Great Bay Owl Statue'), lambda state: state.form('Human'))
     set_rule(world.get_location('Great Bay Tingle Great Bay Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Great Bay Tingle Ikana Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Great Bay Tingle Pic'), lambda state: state.can_use('Picto Box'))
     # set_rule(world.get_location('Rupee Pit'), lambda state: True)
 
     set_rule(world.get_location('Ocean Spider House HP'), lambda state: state.can_use('Bow') and state.has('Hookshot') and state.has('Captains Hat'))
@@ -653,8 +830,8 @@ def global_rules(world):
     set_rule(world.get_location('Ocean Spider House Giant Wallet'), lambda state: state.can_use('Fire Arrows') and state.has('Hookshot') and state.has('Bomb Bag'))
     # todo these later
 
-    set_rule(world.get_location('Great Bay Lab Fish Feeding HP'), lambda state: state.can_use('Bottle'))
-    set_rule(world.get_location('Great Bay Seahorse From Fisherman'), lambda state: state.has('Picto Box') and state.has('Bottle'))
+    set_rule(world.get_location('Great Bay Lab Fish Feeding HP'), lambda state: state.has_bottle())
+    set_rule(world.get_location('Great Bay Seahorse From Fisherman'), lambda state: state.has('Picto Box') and state.has_bottle())
     set_rule(world.get_location('Learn New Wave Bossa Nova'), lambda state: state.form('Zora') and state.has('Zora Egg', 7))
     set_rule(world.get_location('Great Bay High Cliff HP'), lambda state: state.can_use('Hookshot') and state.has('Spring Water') and state.has('Magic Beans'))
     set_rule(world.get_location('Great Bay Jumping Game HP'), lambda state: state.event('Beat Gyorg') and state.can_use('Hookshot') and (state.form('Human') or state.form('Zora')))
@@ -664,7 +841,7 @@ def global_rules(world):
     # set_rule(world.get_location('Great Bay Bombchu Pit'), lambda state: True)
     set_rule(world.get_location('Great Bay Temple Owl Statue'), lambda state: state.form('Human'))
     set_rule(world.get_location('Zora Hall 5 Rupees From Stagehand'), lambda state: True)
-    set_rule(world.get_location('Zora Hall 20 Rupees From Lulu Stalker'), lambda state: state.can_use('Bottle'))
+    set_rule(world.get_location('Zora Hall 20 Rupees From Lulu Stalker'), lambda state: state.has_bottle())
     set_rule(world.get_location('Beaver Race Bottle'), lambda state: state.form('Zora'))
     set_rule(world.get_location('Beaver Race HP'), lambda state: state.form('Zora'))
     set_rule(world.get_location('Zora Hall Song HP'), lambda state: state.form('Human'))
@@ -680,10 +857,10 @@ def global_rules(world):
 
     set_rule(world.get_location('Gerudo Fortress Tower Hub 20 Rupee Chest'), lambda state: state.can_use('Hookshot'))
     set_rule(world.get_location('Hookshot'), lambda state: state.can_use('Bow'))
-    set_rule(world.get_location('Zora Egg 1'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
-    set_rule(world.get_location('Zora Egg 2'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
-    set_rule(world.get_location('Zora Egg 3'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
-    set_rule(world.get_location('Zora Egg 4'), lambda state: state.can_use('Bottle') and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 1'), lambda state: state.has_bottle() and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 2'), lambda state: state.has_bottle() and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 3'), lambda state: state.has_bottle() and state.form('Zora') and state.can_use('Hookshot'))
+    set_rule(world.get_location('Zora Egg 4'), lambda state: state.has_bottle() and state.form('Zora') and state.can_use('Hookshot'))
     set_rule(world.get_location('Gerudo Fortress 100 Rupee Chest'), lambda state: state.can_use('Hookshot') or state.can_use('Bow') or state.can_use('Stone Mask'))
     # set_rule(world.get_location(''), lambda state: state)
 
@@ -743,7 +920,7 @@ def global_rules(world):
     set_rule(world.get_location('Ikana Entrance Bombchu Pit'), lambda state: state.form('Goron'))
     # todo: check this spot in the game
 
-    set_rule(world.get_location('Stone Mask'), lambda state: state.can_epona() and state.has('Bottle') and state.can_use('Lens of Truth'))
+    set_rule(world.get_location('Stone Mask'), lambda state: state.can_epona() and state.has_bottle() and state.can_use('Lens of Truth'))
 
     set_rule(world.get_location('Ikana Graveyard Bombchu Pit'), lambda state: state.can_blast())
     # todo: test if blast mask works here
@@ -762,6 +939,7 @@ def global_rules(world):
     set_rule(world.get_location('Ikana Canyon Owl Statue'), lambda state: state.can_use('Bow') and state.has('Ice Arrows') and state.has('Hookshot'))
     set_rule(world.get_location('Ikana Tingle Ikana Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Ikana Tingle Clock Town Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Ikana Tingle Pic'), lambda state: state.can_use('Picto Box'))
     # really this check depends on the logical area the statue is in; if it's just in the whole map, then there's a
     # bunch of reqs, but if it's in the upper region, then it's open
     # I'll leave it open for now, but we'll have to check in on this at some point
@@ -776,11 +954,11 @@ def global_rules(world):
 
     ## Beneath the Well
     set_rule(world.get_location('Beneath the Well 50 Rupee Chest 1'),
-             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Blue Potion') and state.lens_req())
+             lambda state: state.can_use('Gibdo Mask') and state.has_bottle() and state.has('Blue Potion') and state.lens_req())
     set_rule(world.get_location('Beneath the Well 50 Rupee Chest 2'),
-             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Magic Beans', 5) and state.can_use('Deku Sticks'))
+             lambda state: state.can_use('Gibdo Mask') and state.has_bottle() and state.has('Magic Beans', 5) and state.can_use('Deku Sticks'))
     set_rule(world.get_location('Mirror Shield'),
-             lambda state: state.can_use('Gibdo Mask') and state.has('Bottle') and state.has('Blue Potion') and
+             lambda state: state.can_use('Gibdo Mask') and state.has_bottle() and state.has('Blue Potion') and
                            state.has('Magic Beans') and state.has('Bow') and state.has('Bomb Bag') and
                            (state.has('Eponas Song') or state.has('Romani Mask')) and state.has('Fire Arrows'))
     # not actually as bad as I initially thought

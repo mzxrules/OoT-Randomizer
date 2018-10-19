@@ -42,9 +42,16 @@ class World(object):
         self.keysanity = self.shuffle_smallkeys != 'dungeon'
         self.check_beatable_only = not self.all_reachable
         # group a few others
-        self.tunic_colors = [self.kokiricolor, self.goroncolor, self.zoracolor]
-        self.navi_colors = [self.navicolordefault, self.navicolorenemy, self.navicolornpc, self.navicolorprop]
-        self.navi_hint_sounds = [self.navisfxoverworld, self.navisfxenemytarget]
+        self.tunic_colors = [self.hatcolor, self.shirtcolor, self.pantscolor,
+            self.deitycolor, self.swordcolor, self.deityswordcolor,
+            self.dekuspincolor, self.zoraslashcolor,
+            self.deitybeamcolor, self.boomerangtrail]
+        self.tunic_palettes = [self.dekucolor, self.dekutuniccolor,
+            self.goronhatcolor, self.goronpantscolor,
+            self.zoracolor, self.zoratuniccolor,
+            self.zorafincolor, self.boomerangcolor]
+        # self.navi_colors = [self.navicolordefault, self.navicolorenemy, self.navicolornpc, self.navicolorprop]
+        # self.navi_hint_sounds = [self.navisfxoverworld, self.navisfxenemytarget]
         self.can_take_damage = True
         self.keys_placed = False
         self.spoiler = Spoiler(self)
@@ -52,11 +59,11 @@ class World(object):
 
     def copy(self):
         ret = World(self.settings)
-        ret.skipped_trials = copy.copy(self.skipped_trials)
-        ret.dungeon_mq = copy.copy(self.dungeon_mq)
-        ret.big_poe_count = copy.copy(self.big_poe_count)
+        # ret.skipped_trials = copy.copy(self.skipped_trials)
+        # ret.dungeon_mq = copy.copy(self.dungeon_mq)
+        # ret.big_poe_count = copy.copy(self.big_poe_count)
         ret.can_take_damage = self.can_take_damage
-        ret.shop_prices = copy.copy(self.shop_prices)
+        # ret.shop_prices = copy.copy(self.shop_prices)
         ret.id = self.id
         from Regions import create_regions
         from Dungeons import create_dungeons
@@ -108,20 +115,6 @@ class World(object):
                     location.item.world = self
         for item in [item for dungeon in self.dungeons for item in dungeon.all_items]:
             item.world = self
-
-    def random_shop_prices(self):
-        shop_item_indexes = ['7', '5', '8', '6']
-        self.shop_prices = {}
-        for region in self.regions:
-            if self.shopsanity == 'random':
-                shop_item_count = random.randint(0,4)
-            else:
-                shop_item_count = int(self.shopsanity)
-
-            for location in region.locations:
-                if location.type == 'Shop':
-                    if location.name[-1:] in shop_item_indexes[:shop_item_count]:
-                        self.shop_prices[location.name] = int(random.betavariate(1.5, 2) * 60) * 5
 
     # Checks if `regionname` is actually a Region
     # If not, will try to find that name in `World.regions` if
@@ -419,8 +412,8 @@ class CollectionState(object):
 
     def can_use(self, item):
         magic_items = ['Lens of Truth', 'Deku Bubble', 'Deity Beam']
-        magic_arrows = ['Fire Arrow', 'Ice Arrow', 'Light Arrow']
-        human_items = ['Bow', 'Hookshot', 'Magic Beans']
+        magic_arrows = ['Fire Arrows', 'Ice Arrows', 'Light Arrows']
+        human_items = ['Bow', 'Hookshot', 'Magic Beans', 'Bomb Bag', 'Bombchus', 'Deku Sticks', 'Deku Nuts']
         if item in magic_items:
             return self.has(item) and self.has('Magic Meter')
         elif item in human_items:
@@ -438,11 +431,10 @@ class CollectionState(object):
         return self.has('Buy Bombchu (5)') or self.has('Buy Bombchu (10)') or self.has('Buy Bombchu (20)') or self.can_reach('Bomb Shop')
     
     def has_bombchus(self):
-        return self.world.bombchus_in_logic and \
-                    ((any(pritem.startswith('Bombchus') for pritem in self.prog_items) and \
-                        self.can_buy_bombchus())) \
-            or (not self.world.bombchus_in_logic and self.has_bomb_bag() and \
-                        self.can_buy_bombchus()))
+        if self.world.bombchus_in_logic:
+            return (any(pritem.startswith('Bombchus') for pritem in self.prog_items) and self.can_buy_bombchus())
+        else:
+            return self.has_bomb_bag() and self.can_buy_bombchus()
 
     def has_bombchus_item(self):
         return (self.world.bombchus_in_logic and \
@@ -497,8 +489,10 @@ class CollectionState(object):
     def can_wear(self, mask):
         return self.form('Human') and self.has(mask)
 
-    def stray_fairy_req(self):
-        return self.can_use('Great Fairy Mask') or not self.options('ReqGFMask')
+    def stray_fairy_req(self, test=True):
+        return self.can_use('Great Fairy Mask') or (not self.options('ReqGFMask') and test)
+    # I think this is what's actually correct for optionally requiring gf mask for all fairies: a test is passed to this
+    # fxn which is only needed if you can't use the gf mask and you're not required to
 
     def lens_req(self):
         return (self.can_use('Lens of Truth') and self.has('Magic Meter')) or not self.options('ReqLens')
