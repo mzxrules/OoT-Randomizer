@@ -1,7 +1,9 @@
 import copy
 from enum import Enum, unique
 import logging
-from collections import OrderedDict
+from collections import OrderedDict, Counter, defaultdict
+from version import __version__ as OoTRVersion
+import random
 
 """
 World object:
@@ -41,14 +43,15 @@ class World(object):
         self.check_beatable_only = not self.all_reachable
         # group a few others
         self.tunic_colors = [self.hatcolor, self.shirtcolor, self.pantscolor,
-            self.deitycolor, self.swordcolor, self.deityswordcolor,
+            self.swordcolor, self.deityswordcolor,
             self.dekuspincolor, self.zoraslashcolor,
             self.deitybeamcolor, self.boomerangtrail]
         self.tunic_palettes = [self.dekucolor, self.dekutuniccolor,
             self.goronhatcolor, self.goronpantscolor,
             self.zoracolor, self.zoratuniccolor,
-            self.zorafincolor, self.boomerangcolor]
-        # self.navi_colors = [self.navicolordefault, self.navicolorenemy, self.navicolornpc, self.navicolorprop]
+            self.zorafincolor, self.boomerangcolor,
+            self.deitycolor]
+        # self.tatl_colors = [self.tatlcolordefault, self.tatlcolorenemy, self.tatlcolornpc, self.tatlcolorprop, self.tatlcolorboss]
         # self.navi_hint_sounds = [self.navisfxoverworld, self.navisfxenemytarget]
         self.can_take_damage = True
         self.keys_placed = False
@@ -101,6 +104,18 @@ class World(object):
     def initialize_regions(self):
         for region in self.regions:
             region.world = self
+            for location in region.locations:
+                location.world = self
+
+    def initialize_items(self):
+        for item in self.itempool:
+            item.world = self
+        for region in self.regions:
+            for location in region.locations:
+                if location.item != None:
+                    location.item.world = self
+        for item in [item for dungeon in self.dungeons for item in dungeon.all_items]:
+            item.world = self
 
     # Checks if `regionname` is actually a Region
     # If not, will try to find that name in `World.regions` if
@@ -398,8 +413,8 @@ class CollectionState(object):
 
     def can_use(self, item):
         magic_items = ['Lens of Truth', 'Deku Bubble', 'Deity Beam']
-        magic_arrows = ['Fire Arrow', 'Ice Arrow', 'Light Arrow']
-        human_items = ['Bow', 'Hookshot', 'Magic Beans']
+        magic_arrows = ['Fire Arrows', 'Ice Arrows', 'Light Arrows']
+        human_items = ['Bow', 'Hookshot', 'Magic Beans', 'Bomb Bag', 'Bombchus', 'Deku Sticks', 'Deku Nuts']
         if item in magic_items:
             return self.has(item) and self.has('Magic Meter')
         elif item in human_items:
@@ -415,7 +430,7 @@ class CollectionState(object):
 
     def can_buy_bombchus(self):
         return self.has('Buy Bombchu (5)') or self.has('Buy Bombchu (10)') or self.has('Buy Bombchu (20)') or self.can_reach('Bomb Shop')
-    
+
     def has_bombchus(self):
         if self.world.bombchus_in_logic:
             return (any(pritem.startswith('Bombchus') for pritem in self.prog_items) and self.can_buy_bombchus())

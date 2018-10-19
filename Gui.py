@@ -3,15 +3,21 @@ from argparse import Namespace
 from glob import glob
 import json
 import random
+import re
 import os
 import shutil
-from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Entry, Spinbox, Button, filedialog, messagebox, ttk
+from tkinter import Scale, Checkbutton, OptionMenu, Toplevel, LabelFrame, Radiobutton, PhotoImage, Tk, BOTH, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, N, S, NW, Entry, Spinbox, Button, filedialog, messagebox, ttk, HORIZONTAL, Toplevel
+from tkinter.colorchooser import *
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
-from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
-from Main import main, __version__ as ESVersion
-from Utils import is_bundled, local_path, output_path, open_file
+from GuiUtils import ToolTips, set_icon, BackgroundTask, BackgroundTaskProgress, Dialog
+from Main import main
+from Utils import is_bundled, local_path, default_output_path, open_file, check_version
+from Patches import get_tunic_color_options, get_tatl_color_options
+from Settings import Settings, setting_infos
+from version import __version__ as ESVersion
+import webbrowser
 
 def settings_to_guivars(settings, guivars):
     for info in setting_infos:
@@ -84,15 +90,27 @@ def guiMain(settings=None):
     set_icon(mainWindow)
 
     notebook = ttk.Notebook(mainWindow)
-    randomizerWindow = ttk.Frame(notebook)
+    frames['rom_tab'] = ttk.Frame(notebook)
+    frames['rules_tab'] = ttk.Frame(notebook)
+    frames['logic_tab'] = ttk.Frame(notebook)
+    frames['other_tab'] = ttk.Frame(notebook)
+    frames['aesthetic_tab'] = ttk.Frame(notebook)
+    frames['aesthetic_tab_left'] = Frame(frames['aesthetic_tab'])
+    frames['aesthetic_tab_right'] = Frame(frames['aesthetic_tab'])
     adjustWindow = ttk.Frame(notebook)
     customWindow = ttk.Frame(notebook)
-    notebook.add(randomizerWindow, text='Randomize')
-    notebook.pack()
+    notebook.add(frames['rom_tab'], text='ROM Options')
+    notebook.add(frames['rules_tab'], text='Main Rules')
+    notebook.add(frames['logic_tab'], text='Detailed Logic')
+    notebook.add(frames['other_tab'], text='Other')
+    notebook.add(frames['aesthetic_tab'], text='Cosmetics')
 
-    # Shared Controls
+    #######################
+    # randomizer controls #
+    #######################
 
-    farBottomFrame = Frame(mainWindow)
+    # hold the results of the user's decisions here
+    guivars = {}
 
     # hierarchy
     ############
@@ -113,9 +131,9 @@ def guiMain(settings=None):
     #Aesthetics tab
     frames['cosmetics'] = LabelFrame(frames['aesthetic_tab'], text='General', labelanchor=NW)
     frames['tuniccolor'] = LabelFrame(frames['aesthetic_tab_left'], text='Tunic Color', labelanchor=NW)
-    frames['navicolor']  = LabelFrame(frames['aesthetic_tab_right'], text='Navi Color',  labelanchor=NW)
+    frames['tatlcolor']  = LabelFrame(frames['aesthetic_tab_right'], text='Tatl Color',  labelanchor=NW)
     frames['lowhp']      = LabelFrame(frames['aesthetic_tab_left'], text='Low HP SFX',  labelanchor=NW)
-    frames['navihint']   = LabelFrame(frames['aesthetic_tab_right'], text='Navi SFX', labelanchor=NW)
+    frames['tatlhint']   = LabelFrame(frames['aesthetic_tab_right'], text='Tatl SFX', labelanchor=NW)
 
 
     # shared
@@ -226,90 +244,155 @@ def guiMain(settings=None):
         if rom != '':
             guivars['output_dir'].set(rom)
 
-    openOutputButton = Button(farBottomFrame, text='Open Output Directory', command=open_output)
+    outputDialogFrame = Frame(frames['rom_tab'])
+    outputDirLabel = Label(outputDialogFrame, text='Output Directory')
+    guivars['output_dir'] = StringVar(value='')
+    outputDirEntry = Entry(outputDialogFrame, textvariable=guivars['output_dir'], width=40)
+    outputDirButton = Button(outputDialogFrame, text='Select Dir', command=output_dir_select, width=10)
+    outputDirLabel.pack(side=LEFT, padx=(3,0))
+    outputDirEntry.pack(side=LEFT, padx=3)
+    outputDirButton.pack(side=LEFT)
+    outputDialogFrame.pack(side=TOP, anchor=W, padx=5, pady=(5,1))
 
     if os.path.exists(local_path('README.html')):
         def open_readme():
             open_file(local_path('README.html'))
-        openReadmeButton = Button(farBottomFrame, text='Open Documentation', command=open_readme)
-        openReadmeButton.pack(side=LEFT)
+        openReadmeButton = Button(outputDialogFrame, text='Open Documentation', command=open_readme)
+        openReadmeButton.pack(side=LEFT, padx=5)
 
-    farBottomFrame.pack(side=BOTTOM, fill=X, padx=5, pady=5)
+    outputDialogFrame.pack(side=TOP, anchor=W, pady=3)
 
-    # randomizer controls
+    countDialogFrame = Frame(frames['rom_tab'])
+    countLabel = Label(countDialogFrame, text='Generation Count')
+    guivars['count'] = StringVar()
+    countSpinbox = Spinbox(countDialogFrame, from_=1, to=100, textvariable=guivars['count'], width=3)
 
-    topFrame = Frame(randomizerWindow)
-    rightHalfFrame = Frame(topFrame)
-    checkBoxFrame = Frame(rightHalfFrame)
-
-    createSpoilerVar = IntVar()
-    createSpoilerCheckbutton = Checkbutton(checkBoxFrame, text="Create Spoiler Log", variable=createSpoilerVar)
-    suppressRomVar = IntVar()
-    suppressRomCheckbutton = Checkbutton(checkBoxFrame, text="Do not create patched Rom", variable=suppressRomVar)
-    compressRomVar = IntVar()
-    compressRomCheckbutton = Checkbutton(checkBoxFrame, text="Compress patched Rom", variable=compressRomVar)
-    openForestVar = IntVar()
-    openForestCheckbutton = Checkbutton(checkBoxFrame, text="Open Forest", variable=openForestVar)
-    openDoorVar = IntVar()
-    openDoorCheckbutton = Checkbutton(checkBoxFrame, text="Open Door of Time", variable=openDoorVar)
-    dungeonItemsVar = IntVar()
-    dungeonItemsCheckbutton = Checkbutton(checkBoxFrame, text="Place Dungeon Items (Compasses/Maps)", onvalue=0, offvalue=1, variable=dungeonItemsVar)
-    beatableOnlyVar = IntVar()
-    beatableOnlyCheckbutton = Checkbutton(checkBoxFrame, text="Only ensure seed is beatable, not all items must be reachable", variable=beatableOnlyVar)
-    hintsVar = IntVar()
-    hintsCheckbutton = Checkbutton(checkBoxFrame, text="Gossip Stone Hints with Stone of Agony", variable=hintsVar)
-
-    createSpoilerCheckbutton.pack(expand=True, anchor=W)
-    suppressRomCheckbutton.pack(expand=True, anchor=W)
-    compressRomCheckbutton.pack(expand=True, anchor=W)
-    openForestCheckbutton.pack(expand=True, anchor=W)
-    openDoorCheckbutton.pack(expand=True, anchor=W)
-    dungeonItemsCheckbutton.pack(expand=True, anchor=W)
-    beatableOnlyCheckbutton.pack(expand=True, anchor=W)
-    hintsCheckbutton.pack(expand=True, anchor=W)
-
-    fileDialogFrame = Frame(rightHalfFrame)
-
-    romDialogFrame = Frame(fileDialogFrame)
-    baseRomLabel = Label(romDialogFrame, text='Base Rom')
-    romVar = StringVar()
-    romEntry = Entry(romDialogFrame, textvariable=romVar)
-
-    def RomSelect():
-        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".z64", ".n64")), ("All Files", "*")])
-        romVar.set(rom)
-    romSelectButton = Button(romDialogFrame, text='Select Rom', command=RomSelect)
-
-    baseRomLabel.pack(side=LEFT)
-    romEntry.pack(side=LEFT)
-    romSelectButton.pack(side=LEFT)
-
-    romDialogFrame.pack()
-
-    checkBoxFrame.pack()
-    fileDialogFrame.pack()
-
-    drowDownFrame = Frame(topFrame)
+    countLabel.pack(side=LEFT)
+    countSpinbox.pack(side=LEFT, padx=2)
+    countDialogFrame.pack(side=TOP, anchor=W, padx=5, pady=(1,1))
 
 
-    bridgeFrame = Frame(drowDownFrame)
-    bridgeVar = StringVar()
-    bridgeVar.set('medallions')
-    bridgeOptionMenu = OptionMenu(bridgeFrame, bridgeVar, 'medallions', 'vanilla', 'dungeons', 'open')
-    bridgeOptionMenu.pack(side=RIGHT)
-    bridgeLabel = Label(bridgeFrame, text='Rainbow Bridge Requirement')
-    bridgeLabel.pack(side=LEFT)
+    # build gui
+    ############
 
-    bridgeFrame.pack(expand=True, anchor=E)
+    widgets = {}
 
-    bottomFrame = Frame(randomizerWindow)
+    for info in setting_infos:
+        if info.gui_params:
+            if info.gui_params['widget'] == 'Checkbutton':
+                # determine the initial value of the checkbox
+                default_value = 1 if info.gui_params['default'] == "checked" else 0
+                # create a variable to access the box's state
+                guivars[info.name] = IntVar(value=default_value)
+                # create the checkbox
+                widgets[info.name] = Checkbutton(frames[info.gui_params['group']], text=info.gui_params['text'], variable=guivars[info.name], justify=LEFT, wraplength=190, command=show_settings)
+                widgets[info.name].pack(expand=False, anchor=W)
+            if info.gui_params['widget'] == 'SpecialCheckbutton':
+                # determine the initial value of the checkbox
+                default_value = 1 if info.gui_params['default'] == "checked" else 0
+                # create a variable to access the box's state
+                guivars[info.name] = IntVar(value=default_value)
+                # create the checkbox
+                widgets[info.name] = Checkbutton(frames[info.gui_params['group']], text=info.gui_params['text'], variable=guivars[info.name], justify=LEFT, wraplength=190, command=show_settings_special)
+                widgets[info.name].pack(expand=False, anchor=W)
+            elif info.gui_params['widget'] == 'Combobox':
+                # create the variable to store the user's decision
+                guivars[info.name] = StringVar(value=info.gui_params['default'])
+                # create the option menu
+                widgets[info.name] = Frame(frames[info.gui_params['group']])
+                # dropdown = OptionMenu(widgets[info.name], guivars[info.name], *(info['options']))
+                if isinstance(info.gui_params['options'], list):
+                    info.gui_params['options'] = dict(zip(info.gui_params['options'], info.gui_params['options']))
+                dropdown = ttk.Combobox(widgets[info.name], textvariable=guivars[info.name], values=list(info.gui_params['options'].keys()), state='readonly', width=30)
+                dropdown.bind("<<ComboboxSelected>>", show_settings)
+                dropdown.pack(side=BOTTOM, anchor=W)
+                # label the option
+                if 'text' in info.gui_params:
+                    label = Label(widgets[info.name], text=info.gui_params['text'])
+                    label.pack(side=LEFT, anchor=W, padx=5)
+                # pack the frame
+                widgets[info.name].pack(expand=False, side=TOP, anchor=W, padx=3, pady=3)
+            elif info.gui_params['widget'] == 'Radiobutton':
+                # create the variable to store the user's decision
+                guivars[info.name] = StringVar(value=info.gui_params['default'])
+                # create the option menu
+                widgets[info.name] = LabelFrame(frames[info.gui_params['group']], text=info.gui_params['text'] if 'text' in info.gui_params else info["name"], labelanchor=NW)
+                if isinstance(info.gui_params['options'], list):
+                    info.gui_params['options'] = dict(zip(info.gui_params['options'], info.gui_params['options']))
+                # setup orientation
+                side = TOP
+                anchor = W
+                if "horizontal" in info.gui_params and info.gui_params["horizontal"]:
+                    side = LEFT
+                    anchor = N
+                # add the radio buttons
+                for option in info.gui_params["options"]:
+                    radio_button = Radiobutton(widgets[info.name], text=option, value=option, variable=guivars[info.name], justify=LEFT, wraplength=190, indicatoron=False, command=show_settings)
+                    radio_button.pack(expand=True, side=side, anchor=anchor)
+                # pack the frame
+                widgets[info.name].pack(expand=False, side=TOP, anchor=W, padx=3, pady=3)
+            elif info.gui_params['widget'] == 'Scale':
+                # create the variable to store the user's decision
+                guivars[info.name] = IntVar(value=info.gui_params['default'])
+                # create the option menu
+                widgets[info.name] = Frame(frames[info.gui_params['group']])
+                # dropdown = OptionMenu(widgets[info.name], guivars[info.name], *(info['options']))
+                minval = 'min' in info.gui_params and info.gui_params['min'] or 0
+                maxval = 'max' in info.gui_params and info.gui_params['max'] or 100
+                stepval = 'step' in info.gui_params and info.gui_params['step'] or 1
+                scale = Scale(widgets[info.name], variable=guivars[info.name], from_=minval, to=maxval, tickinterval=stepval, resolution=stepval, showvalue=0, orient=HORIZONTAL, sliderlength=15, length=200, command=show_settings)
+                scale.pack(side=BOTTOM, anchor=W)
+                # label the option
+                if 'text' in info.gui_params:
+                    label = Label(widgets[info.name], text=info.gui_params['text'])
+                    label.pack(side=LEFT, anchor=W, padx=5)
+                # pack the frame
+                widgets[info.name].pack(expand=False, side=TOP, anchor=W, padx=3, pady=3)
+            elif info.gui_params['widget'] == 'Entry':
+                # create the variable to store the user's decision
+                guivars[info.name] = StringVar(value=info.gui_params['default'])
+                # create the option menu
+                widgets[info.name] = Frame(frames[info.gui_params['group']])
 
-    seedLabel = Label(bottomFrame, text='Seed #')
-    seedVar = StringVar()
-    seedEntry = Entry(bottomFrame, textvariable=seedVar)
-    countLabel = Label(bottomFrame, text='Count')
-    countVar = StringVar()
-    countSpinbox = Spinbox(bottomFrame, from_=1, to=100, textvariable=countVar)
+                entry = Entry(widgets[info.name], textvariable=guivars[info.name], width=30)
+                entry.pack(side=BOTTOM, anchor=W)
+                # label the option
+                if 'text' in info.gui_params:
+                    label = Label(widgets[info.name], text=info.gui_params['text'])
+                    label.pack(side=LEFT, anchor=W, padx=5)
+                # pack the frame
+                widgets[info.name].pack(expand=False, side=TOP, anchor=W, padx=3, pady=3)
+
+            if 'tooltip' in info.gui_params:
+                ToolTips.register(widgets[info.name], info.gui_params['tooltip'])
+
+
+    # pack the hierarchy
+
+    frames['logic'].pack( fill=BOTH, expand=True, anchor=N, side=RIGHT, pady=(5,1) )
+    frames['open'].pack(  fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
+    frames['world'].pack( fill=BOTH, expand=True, anchor=W, side=BOTTOM, pady=(5,1) )
+
+    # Logic tab
+    frames['rewards'].pack(fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1) )
+    frames['tricks'].pack( fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1) )
+
+    #Other Tab
+    frames['convenience'].pack(fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1) )
+    frames['other'].pack(      fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1) )
+
+    #Aesthetics tab
+    frames['cosmetics'].pack(fill=BOTH, expand=True, anchor=W, side=TOP)
+    frames['aesthetic_tab_left'].pack( fill=BOTH, expand=True, anchor=W, side=LEFT)
+    frames['aesthetic_tab_right'].pack(fill=BOTH, expand=True, anchor=W, side=RIGHT)
+
+    #Aesthetics tab - Left Side
+    frames['tuniccolor'].pack(fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
+    frames['lowhp'].pack(     fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
+
+    #Aesthetics tab - Right Side
+    frames['tatlcolor'].pack( fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
+    frames['tatlhint'].pack(  fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
 
 
     notebook.pack(fill=BOTH, expand=True, padx=5, pady=5)
@@ -357,66 +440,60 @@ def guiMain(settings=None):
             main(settings, window)
 
     def generateRom():
-        guiargs = Namespace
-        guiargs.seed = int(seedVar.get()) if seedVar.get() else None
-        guiargs.count = int(countVar.get()) if countVar.get() != '1' else None
-        guiargs.bridge = bridgeVar.get()
-        guiargs.create_spoiler = bool(createSpoilerVar.get())
-        guiargs.suppress_rom = bool(suppressRomVar.get())
-        guiargs.compress_rom = bool(compressRomVar.get())
-        guiargs.open_forest = bool(openForestVar.get())
-        guiargs.open_door_of_time = bool(openDoorVar.get())
-        guiargs.nodungeonitems = bool(dungeonItemsVar.get())
-        guiargs.beatableonly = bool(beatableOnlyVar.get())
-        guiargs.hints = bool(hintsVar.get())
-        guiargs.rom = romVar.get()
-        try:
-            if guiargs.count is not None:
-                seed = guiargs.seed
-                for _ in range(guiargs.count):
-                    main(seed=seed, args=guiargs)
-                    seed = random.randint(0, 999999999)
-            else:
-                main(seed=guiargs.seed, args=guiargs)
-        except Exception as e:
-            messagebox.showerror(title="Error while creating seed", message=str(e))
+        settings = guivars_to_settings(guivars)
+        if settings.count is not None:
+            BackgroundTaskProgress(mainWindow, "Generating Seed...", multiple_run, settings)
         else:
-            messagebox.showinfo(title="Success", message="Rom patched successfully")
+            BackgroundTaskProgress(mainWindow, "Generating Seed...", main, settings)
 
-    generateButton = Button(bottomFrame, text='Generate Patched Rom', command=generateRom)
+    generateSeedFrame = Frame(mainWindow)
+    generateButton = Button(generateSeedFrame, text='Generate Patched Rom', command=generateRom)
 
-    seedLabel.pack(side=LEFT)
+    seedLabel = Label(generateSeedFrame, text='Seed')
+    guivars['seed'] = StringVar()
+    seedEntry = Entry(generateSeedFrame, textvariable=guivars['seed'], width=25)
+    seedLabel.pack(side=LEFT, padx=(55, 5))
     seedEntry.pack(side=LEFT)
-    countLabel.pack(side=LEFT, padx=(5, 0))
-    countSpinbox.pack(side=LEFT)
     generateButton.pack(side=LEFT, padx=(5, 0))
 
-    openOutputButton.pack(side=RIGHT)
+    generateSeedFrame.pack(side=BOTTOM, anchor=W, padx=5, pady=10)
 
-    drowDownFrame.pack(side=LEFT)
-    rightHalfFrame.pack(side=RIGHT)
-    topFrame.pack(side=TOP)
-    bottomFrame.pack(side=BOTTOM)
+    guivars['checked_version'] = StringVar()
 
-    if args is not None:
+    if settings is not None:
         # load values from commandline args
-        createSpoilerVar.set(int(args.create_spoiler))
-        suppressRomVar.set(int(args.suppress_rom))
-        compressRomVar.set(int(args.compress_rom))
-        if args.nodungeonitems:
-            dungeonItemsVar.set(int(not args.nodungeonitems))
-        openForestVar.set(int(args.open_forest))
-        openDoorVar.set(int(args.open_door_of_time))
-        beatableOnlyVar.set(int(args.beatableonly))
-        hintsVar.set(int(args.hints))
-        if args.count:
-            countVar.set(str(args.count))
-        if args.seed:
-            seedVar.set(str(args.seed))
-        bridgeVar.set(args.bridge)
-        romVar.set(args.rom)
+        settings_to_guivars(settings, guivars)
+    else:
+        # try to load saved settings
+        try:
+            settingsFile = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.sav')
+            with open(settingsFile) as f:
+                settings = Settings( json.load(f) )
+                settings.update_seed("")
+                settings_to_guivars(settings, guivars)
+        except:
+            pass
 
+    show_settings()
+
+    def gui_check_version():
+        task = BackgroundTask(mainWindow, check_version, guivars['checked_version'].get())
+        while task.running:
+            mainWindow.update()
+
+        if task.status:
+            dialog = Dialog(mainWindow, title="Version Error", question=task.status, oktext='Don\'t show again', canceltext='OK')
+            if dialog.result:
+                guivars['checked_version'].set(ESVersion)
+
+    mainWindow.after(1000, gui_check_version)
     mainWindow.mainloop()
+
+    # save settings on close
+    with open('settings.sav', 'w') as outfile:
+        settings = guivars_to_settings(guivars)
+        json.dump(settings.__dict__, outfile)
+
 
 if __name__ == '__main__':
     guiMain()
