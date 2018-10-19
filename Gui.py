@@ -14,7 +14,7 @@ from urllib.request import urlopen
 from GuiUtils import ToolTips, set_icon, BackgroundTask, BackgroundTaskProgress, Dialog
 from Main import main
 from Utils import is_bundled, local_path, default_output_path, open_file, check_version
-from Patches import get_tunic_color_options, get_navi_color_options
+from Patches import get_tunic_color_options, get_tatl_color_options
 from Settings import Settings, setting_infos
 from version import __version__ as ESVersion
 import webbrowser
@@ -131,9 +131,9 @@ def guiMain(settings=None):
     #Aesthetics tab
     frames['cosmetics'] = LabelFrame(frames['aesthetic_tab'], text='General', labelanchor=NW)
     frames['tuniccolor'] = LabelFrame(frames['aesthetic_tab_left'], text='Tunic Color', labelanchor=NW)
-    frames['navicolor']  = LabelFrame(frames['aesthetic_tab_right'], text='Navi Color',  labelanchor=NW)
+    frames['tatlcolor']  = LabelFrame(frames['aesthetic_tab_right'], text='Tatl Color',  labelanchor=NW)
     frames['lowhp']      = LabelFrame(frames['aesthetic_tab_left'], text='Low HP SFX',  labelanchor=NW)
-    frames['navihint']   = LabelFrame(frames['aesthetic_tab_right'], text='Navi SFX', labelanchor=NW)
+    frames['tatlhint']   = LabelFrame(frames['aesthetic_tab_right'], text='Tatl SFX', labelanchor=NW)
 
 
     # shared
@@ -391,8 +391,8 @@ def guiMain(settings=None):
     frames['lowhp'].pack(     fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
 
     #Aesthetics tab - Right Side
-    frames['navicolor'].pack( fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
-    frames['navihint'].pack(  fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
+    frames['tatlcolor'].pack( fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
+    frames['tatlhint'].pack(  fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
 
 
     notebook.pack(fill=BOTH, expand=True, padx=5, pady=5)

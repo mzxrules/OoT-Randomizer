@@ -5,7 +5,7 @@ import re
 import random
 import hashlib
 
-from Patches import get_tunic_color_options, get_navi_color_options
+from Patches import get_tunic_color_options, get_tatl_color_options
 from version import __version__
 from Utils import random_choices
 
@@ -166,12 +166,12 @@ def parse_custom_tunic_color(s):
     else:
         raise argparse.ArgumentTypeError('Invalid color specified')
 
-def parse_custom_navi_color(s):
+def parse_custom_tatl_color(s):
     if s == 'Custom Color':
         raise argparse.ArgumentTypeError('Specify custom color by using \'Custom (#xxxxxx)\'')
     elif re.match(r'^Custom \(#[A-Fa-f0-9]{6}\)$', s):
         return re.findall(r'[A-Fa-f0-9]{6}', s)[0]
-    elif s in get_navi_color_options():
+    elif s in get_tatl_color_options():
         return s
     else:
         raise argparse.ArgumentTypeError('Invalid color specified')
@@ -1530,7 +1530,7 @@ setting_infos = [
         },
         {
             'text': 'Sword Slash Color',
-            'group': 'navicolor',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
             'default': 'Twitch Purple',
             'options': get_tunic_color_options(),
@@ -1608,7 +1608,7 @@ setting_infos = [
         },
         {
             'text': 'Zora Boomerang Color',
-            'group': 'navihint',
+            'group': 'tatlhint',
             'widget': 'Combobox',
             'default': 'Azure Blue',
             'options': get_tunic_color_options(),
@@ -1634,7 +1634,7 @@ setting_infos = [
         },
         {
             'text': 'Zora Boomerang Trail Color',
-            'group': 'navihint',
+            'group': 'tatlhint',
             'widget': 'Combobox',
             'default': 'Black',
             'options': get_tunic_color_options(),
@@ -1660,7 +1660,7 @@ setting_infos = [
         },
         {
             'text': 'Fierce Deity Sword Slash Color',
-            'group': 'navihint',
+            'group': 'tatlhint',
             'widget': 'Combobox',
             'default': 'Gold',
             'options': get_tunic_color_options(),
@@ -1686,7 +1686,7 @@ setting_infos = [
         },
         {
             'text': 'Fierce Deity Sword Beam Color',
-            'group': 'navicolor',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
             'default': 'Zora Blue',
             'options': get_tunic_color_options(),
@@ -1697,25 +1697,25 @@ setting_infos = [
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('navicolordefault', str, 0, False,
+    Setting_Info('tatlcolordefault', str, 0, False,
         {
             'default': 'White',
             'const': 'White',
             'nargs': '?',
-            'type': parse_custom_navi_color,
+            'type': parse_custom_tatl_color,
             'help': '''\
-                    Choose the color for Navi when she is idle. (default: %(default)s)
-                    Color:             Make the Navi this color.
+                    Choose the color for Tatl when she is idle. (default: %(default)s)
+                    Color:             Make the Tatl this color.
                     Random Choice:     Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Navi Idle',
-            'group': 'navicolor',
+            'text': 'Tatl Idle',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
             'default': 'White',
-            'options': get_navi_color_options(),
+            'options': get_tatl_color_options(),
             'tooltip':'''\
                       'Random Choice': Choose a random
                       color from this list of colors.
@@ -1723,25 +1723,25 @@ setting_infos = [
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('navicolorenemy', str, 0, False,
+    Setting_Info('tatlcolorenemy', str, 0, False,
         {
             'default': 'Yellow',
             'const': 'Yellow',
             'nargs': '?',
-            'type': parse_custom_navi_color,
+            'type': parse_custom_tatl_color,
             'help': '''\
-                    Choose the color for Navi when she is targeting an enemy. (default: %(default)s)
-                    Color:             Make the Navi this color.
+                    Choose the color for Tatl when she is targeting an enemy. (default: %(default)s)
+                    Color:             Make the Tatl this color.
                     Random Choice:     Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Navi Targeting Enemy',
-            'group': 'navicolor',
+            'text': 'Tatl Targeting Enemy',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
             'default': 'Yellow',
-            'options': get_navi_color_options(),
+            'options': get_tatl_color_options(),
             'tooltip':'''\
                       'Random Choice': Choose a random
                       color from this list of colors.
@@ -1749,25 +1749,25 @@ setting_infos = [
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('navicolornpc', str, 0, False,
+    Setting_Info('tatlcolornpc', str, 0, False,
         {
             'default': 'Light Blue',
             'const': 'Light Blue',
             'nargs': '?',
-            'type': parse_custom_navi_color,
+            'type': parse_custom_tatl_color,
             'help': '''\
-                    Choose the color for Navi when she is targeting an NPC. (default: %(default)s)
-                    Color:             Make the Navi this color.
+                    Choose the color for Tatl when she is targeting an NPC. (default: %(default)s)
+                    Color:             Make the Tatl this color.
                     Random Choice:     Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Navi Targeting NPC',
-            'group': 'navicolor',
+            'text': 'Tatl Targeting NPC',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
             'default': 'Light Blue',
-            'options': get_navi_color_options(),
+            'options': get_tatl_color_options(),
             'tooltip':'''\
                       'Random Choice': Choose a random
                       color from this list of colors.
@@ -1775,25 +1775,25 @@ setting_infos = [
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('navicolorprop', str, 0, False,
+    Setting_Info('tatlcolorprop', str, 0, False,
         {
             'default': 'Green',
             'const': 'Green',
             'nargs': '?',
-            'type': parse_custom_navi_color,
+            'type': parse_custom_tatl_color,
             'help': '''\
-                    Choose the color for Navi when she is targeting a prop. (default: %(default)s)
-                    Color:             Make the Navi this color.
+                    Choose the color for Tatl when she is targeting a prop. (default: %(default)s)
+                    Color:             Make the Tatl this color.
                     Random Choice:     Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Navi Targeting Prop',
-            'group': 'navicolor',
+            'text': 'Tatl Targeting Prop',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
             'default': 'Green',
-            'options': get_navi_color_options(),
+            'options': get_tatl_color_options(),
             'tooltip':'''\
                       'Random Choice': Choose a random
                       color from this list of colors.
@@ -1801,22 +1801,48 @@ setting_infos = [
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('navisfxoverworld', str, 0, False,
+    Setting_Info('tatlcolorboss', str, 0, False,
+        {
+            'default': 'Green',
+            'const': 'Green',
+            'nargs': '?',
+            'type': parse_custom_tatl_color,
+            'help': '''\
+                    Choose the color for Tatl when she is targeting a boss. (default: %(default)s)
+                    Color:             Make the Tatl this color.
+                    Random Choice:     Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Tatl Targeting Boss',
+            'group': 'tatlcolor',
+            'widget': 'Combobox',
+            'default': 'Green',
+            'options': get_tatl_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Comepletely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('tatlsfxoverworld', str, 0, False,
         {
             'default': 'Default',
             'const': 'Default',
             'nargs': '?',
-            'choices': ['Default', 'Notification', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Navi - Hey!', 'Navi - Random', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
+            'choices': ['Default', 'Notification', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Tatl - Hey!', 'Tatl - Random', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
             'help': '''\
-                    Select the sound effect that plays when Navi has a hint. (default: %(default)s)
+                    Select the sound effect that plays when Tatl has a hint. (default: %(default)s)
                     Sound:         Replace the sound effect with the chosen sound.
                     Random Choice: Replace the sound effect with a random sound from this list.
-                    None:          Eliminate Navi hint sounds.
+                    None:          Eliminate Tatl hint sounds.
                     '''
         },
         {
-            'text': 'Navi Hint',
-            'group': 'navihint',
+            'text': 'Tatl Hint',
+            'group': 'tatlhint',
             'widget': 'Combobox',
             'default': 'Default',
             'options': [
@@ -1828,30 +1854,30 @@ setting_infos = [
                 'Tamborine',
                 'Recovery Heart',
                 'Carrot Refill',
-                'Navi - Hey!',
-                'Navi - Random',
+                'Tatl - Hey!',
+                'Tatl - Random',
                 'Zelda - Gasp',
                 'Cluck',
                 'Mweep!',
                 'None',
             ]
         }),
-        Setting_Info('navisfxenemytarget', str, 0, False,
+        Setting_Info('tatlsfxenemytarget', str, 0, False,
         {
             'default': 'Default',
             'const': 'Default',
             'nargs': '?',
-            'choices': ['Default', 'Notification', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Navi - Hey!', 'Navi - Random', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
+            'choices': ['Default', 'Notification', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Tatl - Hey!', 'Tatl - Random', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
             'help': '''\
                     Select the sound effect that plays when targeting an enemy. (default: %(default)s)
                     Sound:         Replace the sound effect with the chosen sound.
                     Random Choice: Replace the sound effect with a random sound from this list.
-                    None:          Eliminate Navi hint sounds.
+                    None:          Eliminate Tatl hint sounds.
                     '''
         },
         {
-            'text': 'Navi Enemy Target',
-            'group': 'navihint',
+            'text': 'Tatl Enemy Target',
+            'group': 'tatlhint',
             'widget': 'Combobox',
             'default': 'Default',
             'options': [
@@ -1863,8 +1889,8 @@ setting_infos = [
                 'Tamborine',
                 'Recovery Heart',
                 'Carrot Refill',
-                'Navi - Hey!',
-                'Navi - Random',
+                'Tatl - Hey!',
+                'Tatl - Random',
                 'Zelda - Gasp',
                 'Cluck',
                 'Mweep!',
@@ -1876,7 +1902,7 @@ setting_infos = [
             'default': 'Default',
             'const': 'Default',
             'nargs': '?',
-            'choices': ['Default', 'Softer Beep', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Navi - Hey!', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
+            'choices': ['Default', 'Softer Beep', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Tatl - Hey!', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
             'help': '''\
                     Select the sound effect that loops at low health. (default: %(default)s)
                     Sound:         Replace the sound effect with the chosen sound.
@@ -1898,7 +1924,7 @@ setting_infos = [
                 'Tamborine',
                 'Recovery Heart',
                 'Carrot Refill',
-                'Navi - Hey!',
+                'Tatl - Hey!',
                 'Zelda - Gasp',
                 'Cluck',
                 'Mweep!',

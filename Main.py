@@ -69,58 +69,49 @@ def main(settings, window=dummy_window()):
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 1))
         logger.info('Creating Overworld')
-        if world.quest == 'master':
-            for dungeon in world.dungeon_mq:
-                world.dungeon_mq[dungeon] = True
-        elif world.quest == 'mixed':
-            for dungeon in world.dungeon_mq:
-                world.dungeon_mq[dungeon] = random.choice([True, False])
-        else:
-            for dungeon in world.dungeon_mq:
-                world.dungeon_mq[dungeon] = False
-        create_regions(world)
+        # create_regions(world)
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 2))
         logger.info('Creating Dungeons')
-        create_dungeons(world)
+        # create_dungeons(world)
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 3))
         logger.info('Linking Entrances')
-        link_entrances(world)
+        # link_entrances(world)
 
-        if settings.shopsanity != 'off':
-            world.random_shop_prices()
+        # if settings.shopsanity != 'off':
+        #    world.random_shop_prices()
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 4))
         logger.info('Calculating Access Rules.')
-        set_rules(world)
+        # set_rules(world)
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 5))
         logger.info('Generating Item Pool.')
-        generate_itempool(world)
+        # generate_itempool(world)
 
     window.update_status('Placing the Items')
     logger.info('Fill the world.')
-    distribute_items_restrictive(window, worlds)
+    # distribute_items_restrictive(window, worlds)
     window.update_progress(35)
 
     if settings.create_spoiler:
         window.update_status('Calculating Spoiler Data')
         logger.info('Calculating playthrough.')
-        create_playthrough(worlds)
+        # create_playthrough(worlds)
         window.update_progress(50)
     if settings.hints != 'none':
         window.update_status('Calculating Hint Data')
         CollectionState.update_required_items(worlds)
-        buildGossipHints(worlds[settings.player_num - 1])
+        # buildGossipHints(worlds[settings.player_num - 1])
         window.update_progress(55)
 
     logger.info('Patching ROM.')
 
     if settings.world_count > 1:
-        outfilebase = 'OoT_%s_%s_W%dP%d' % (worlds[0].settings_string, worlds[0].seed, worlds[0].world_count, worlds[0].player_num)
+        outfilebase = 'MM_%s_%s_W%dP%d' % (worlds[0].settings_string, worlds[0].seed, worlds[0].world_count, worlds[0].player_num)
     else:
-        outfilebase = 'OoT_%s_%s' % (worlds[0].settings_string, worlds[0].seed)
+        outfilebase = 'MM_%s_%s' % (worlds[0].settings_string, worlds[0].seed)
 
     output_dir = default_output_path(settings.output_dir)
 
@@ -216,7 +207,7 @@ def create_playthrough(worlds):
             state_list[location.item.world.id].collect(location.item)
             required_locations.append(location)
 
-    # in the second phase, we cull each sphere such that the game is still beatable, reducing each 
+    # in the second phase, we cull each sphere such that the game is still beatable, reducing each
     # range of influence to the bare minimum required inside it. Effectively creates a min play
     for location in reversed(required_locations):
         # we remove the item at location and check if game is still beatable
@@ -233,7 +224,7 @@ def create_playthrough(worlds):
 
         # remove the item from the world and test if the game is still beatable
         if CollectionState.can_beat_game(state_list):
-            # cull entries for spoiler walkthrough at end 
+            # cull entries for spoiler walkthrough at end
             required_locations.remove(location)
         else:
             # still required, got to keep it around
@@ -251,4 +242,3 @@ def create_playthrough(worlds):
     # we can finally output our playthrough
     for world in old_worlds:
         world.spoiler.playthrough = OrderedDict([(str(i + 1), {location: location.item for location in sphere}) for i, sphere in enumerate(collection_spheres)])
-

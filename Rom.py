@@ -21,11 +21,11 @@ class LocalRom(object):
 
         os.chdir(os.path.dirname(os.path.realpath(__file__)))
         #os.chdir(output_path(os.path.dirname(os.path.realpath(__file__))))
-
+        '''
         with open(local_path('data/symbols.json'), 'r') as stream:
             symbols = json.load(stream)
             self.symbols = { name: int(addr, 16) for name, addr in symbols.items() }
-
+        '''
         try:
             # Read decompressed file if it exists
             self.read_rom(decomp_file)

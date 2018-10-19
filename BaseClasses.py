@@ -43,14 +43,15 @@ class World(object):
         self.check_beatable_only = not self.all_reachable
         # group a few others
         self.tunic_colors = [self.hatcolor, self.shirtcolor, self.pantscolor,
-            self.deitycolor, self.swordcolor, self.deityswordcolor,
+            self.swordcolor, self.deityswordcolor,
             self.dekuspincolor, self.zoraslashcolor,
             self.deitybeamcolor, self.boomerangtrail]
         self.tunic_palettes = [self.dekucolor, self.dekutuniccolor,
             self.goronhatcolor, self.goronpantscolor,
             self.zoracolor, self.zoratuniccolor,
-            self.zorafincolor, self.boomerangcolor]
-        # self.navi_colors = [self.navicolordefault, self.navicolorenemy, self.navicolornpc, self.navicolorprop]
+            self.zorafincolor, self.boomerangcolor,
+            self.deitycolor]
+        # self.tatl_colors = [self.tatlcolordefault, self.tatlcolorenemy, self.tatlcolornpc, self.tatlcolorprop, self.tatlcolorboss]
         # self.navi_hint_sounds = [self.navisfxoverworld, self.navisfxenemytarget]
         self.can_take_damage = True
         self.keys_placed = False
@@ -429,7 +430,7 @@ class CollectionState(object):
 
     def can_buy_bombchus(self):
         return self.has('Buy Bombchu (5)') or self.has('Buy Bombchu (10)') or self.has('Buy Bombchu (20)') or self.can_reach('Bomb Shop')
-    
+
     def has_bombchus(self):
         if self.world.bombchus_in_logic:
             return (any(pritem.startswith('Bombchus') for pritem in self.prog_items) and self.can_buy_bombchus())

@@ -7,7 +7,7 @@ import subprocess
 import random
 
 from Hints import buildGossipHints, buildBossRewardHints
-from Utils import local_path, output_path
+from Utils import local_path, output_path, random_choices
 from Items import ItemFactory, item_data
 
 TunicColors = {
@@ -45,7 +45,7 @@ TunicColors = {
     "Lumen": [80, 140, 240],
 }
 
-NaviColors = {
+TatlColors = {
     "Custom Color": [0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00],
     "Gold": [0xFE, 0xCC, 0x3C, 0xFF, 0xFE, 0xC0, 0x07, 0x00],
     "White": [0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00],
@@ -74,11 +74,11 @@ def get_tunic_colors():
 def get_tunic_color_options():
     return ["Random Choice", "Completely Random"] + get_tunic_colors()
 
-def get_navi_colors():
-    return list(NaviColors.keys())
+def get_tatl_colors():
+    return list(TatlColors.keys())
 
-def get_navi_color_options():
-    return ["Random Choice", "Completely Random"] + get_navi_colors()
+def get_tatl_color_options():
+    return ["Random Choice", "Completely Random"] + get_tatl_colors()
 
 def patch_rom(world, rom):
     # will be populated with data to be written to initial save
@@ -130,7 +130,7 @@ def patch_rom(world, rom):
 
     # DOOT: Update for MM
     # Write item overrides
-    override_table = get_override_table(world)
+    # override_table = get_override_table(world)
     # rom.write_bytes(0x3481000, sum(override_table, []))
     # rom.write_byte(0x03481C00, world.id + 1) # Write player ID
 
@@ -217,18 +217,18 @@ def patch_rom(world, rom):
     # actually write the save table to rom
     # write_save_table(rom)
 
+    # re-seed for aesthetic effects. They shouldn't be affected by the generation seed
+    random.seed()
     # patch music
     if world.background_music == 'random':
         randomize_music(rom)
     elif world.background_music == 'off':
         disable_music(rom)
 
-    # re-seed for aesthetic effects. They shouldn't be affected by the generation seed
-    random.seed()
     # Human Link Colors
     # set_color(world, rom, [0x0116639C, 0x011668C4, 0x01166DCC, 0x01166FA4, 0x01167064, 0x0116766C, 0x01167AE4, 0x01167D1C, 0x011681EC], world.tunic_colors[0])
-    set_color(world, rom, [0x011681EC], world.tunic_colors[0])  # Hat
-    set_color(world, rom, [0x01166FA4, 0x01167064, 0x0116766C, 0x01167AE4, 0x01167D1C], world.tunic_colors[1])  # Shirt
+    set_color(world, rom, [0x01167AE4], world.tunic_colors[0])  # Hat
+    set_color(world, rom, [0x01166FA4, 0x01167064, 0x0116766C, 0x01167D1C, 0x011681EC], world.tunic_colors[1])  # Shirt
     set_color(world, rom, [0x0116639C, 0x011668C4, 0x01166DCC], world.tunic_colors[2]) # Pants
     # Deku Link Colors
     if world.dekumorph:
@@ -244,9 +244,38 @@ def patch_rom(world, rom):
     set_color(world, rom, [0x0119E578], world.tunic_palettes[6], 256, True)
     # Zora Boomerang
     set_color(world, rom, [0x010FB0B0, 0x011A2228], world.tunic_palettes[7], 512, True)
-    # patch navi colors
+    # Fierce Deity Tunic
+    set_color(world, rom, [0x01155128], world.tunic_palettes[8], 16, True)
+    # patch tatl colors
+    Tatl = [
+        (world.tatlcolordefault, [0x00C451D4]), # Default
+        (world.tatlcolorenemy,   [0x00C451EC]), # Enemy
+        (world.tatlcolornpc,     [0x00C451E4]), # NPC
+        (world.tatlcolorprop,    [0x00C451C4, 0x00C451CC, 0x00C451DC,
+                                  0x00C451F4, 0x00C451FC, 0x00C45204,
+                                  0x00C45214, 0x00C4521C, 0x00C45224]), # Everything else
+        (world.tatlcolorboss, [0x00C4520C]), # Boss
+    ]
+    tatlList = get_tatl_colors()
 
-    #Navi hints
+    for tatl_option, tatl_addresses in Tatl:
+        # choose a random choice for the whole group
+        if tatl_option == 'Random Choice':
+            tatl_option = random.choice(tatlList)
+        for address in tatl_addresses:
+            # completely random is random for every subgroup
+            if tatl_option == 'Completely Random':
+                color = [random.getrandbits(8), random.getrandbits(8), random.getrandbits(8), 0xFF,
+                         random.getrandbits(8), random.getrandbits(8), random.getrandbits(8), 0x00]
+            # grab the color from the list
+            elif tatl_option in TatlColors:
+                color = TatlColors[tatl_option]
+            # build color from hex code
+            else:
+                color = list(int(tatl_option[i:i+2], 16) for i in (0, 2 ,4))
+                color = color + [0xFF] + color + [0x00]
+            rom.write_bytes(address, color)
+    #Tatl hints
 
     #Low health beep
 
@@ -560,7 +589,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
 
 # Woops
 # Format: (Title, Sequence ID)
-bgm_sequence_ids = [
+looped_bgm_sequence_ids = [
     (0x02, 'Termina Field'),
     (0x03, 'Forest Chase'),
     (0x04, 'Majora\'s Theme'),
@@ -569,7 +598,6 @@ bgm_sequence_ids = [
     (0x07, 'Inverted Stone Tower Temple'),
     (0x09, 'Title'),
     (0x0A, 'Mask Salesman'),
-    (0x0B, 'Song of Healing'),
     (0x0C, 'Southern Swamp'),
     (0x0D, 'Aliens'),
     (0x0E, 'Mini Game'),
@@ -617,7 +645,6 @@ bgm_sequence_ids = [
     (0x50, 'Sword Training'),
     (0x53, 'Bremen March'),
     (0x54, 'Ballad of the Wind Fish'),
-    (0x55, 'Song of Soaring'),
     (0x56, 'Milk Bar Duplicate'),
     (0x57, 'Final Hours'),
     (0x58, 'Mikau\'s Tale'),
@@ -638,17 +665,17 @@ bgm_sequence_ids = [
     (0x71, 'Kamaro\'s Dance'),
     (0x72, 'Cremia\'s Wagon'),
     (0x73, 'Keaton'),
-    (0x74, 'End Credits'),
+    # (0x74, 'End Credits'),
     (0x75, 'Forest Ambush Duplicate'),
     (0x76, 'Title Screen'),
     (0x7B, 'To The Moon'),
     (0x7C, 'Bye Giants'),
     (0x7D, 'Tatl and Tael'),
-    (0x7E, 'Moon Destruction'),
     (0x7F, 'End Credits 2')
 ]
 short_bgm_sequence_ids = [
     (0x08, 'Event Failed'),
+    (0x0B, 'Song of Healing'),
     (0x19, 'Event Clear'),
     (0x20, 'Game Over'),
     (0x21, 'Boss Clear'),
@@ -675,6 +702,7 @@ short_bgm_sequence_ids = [
     (0x4F, 'Oath to Order'),
     (0x51, 'Ocarina Goron Lullaby Intro'),
     (0x52, 'New Song'),
+    (0x55, 'Song of Soaring'),
     (0x59, 'Single Guitar Chord'),
     (0x5B, 'Ocarina Sonata of Awakening'),
     (0x5C, 'Ocarina Goron Lullaby'),
@@ -688,6 +716,7 @@ short_bgm_sequence_ids = [
     (0x77, 'Surfacing Woodfall'),
     (0x78, 'Woodfall Clear'),
     (0x79, 'Snowhead Clear'),
+    (0x7E, 'Moon Destruction'),
 ]
 
 def randomize_music_sequence_ids(rom, sequence_ids):
@@ -709,7 +738,7 @@ def randomize_music_sequence_ids(rom, sequence_ids):
 
 
 def randomize_music(rom):
-    randomize_music_sequence_ids( rom, bgm_sequence_ids )
+    randomize_music_sequence_ids( rom, looped_bgm_sequence_ids )
     randomize_music_sequence_ids( rom, short_bgm_sequence_ids )
 
    # Write Fairy Fountain instrument to File Select (uses same track but different instrument set pointer for some reason)
@@ -750,7 +779,6 @@ def set_color(world, rom, offsets, thisColor, length=1, pack=False):
             green = int( color[1] / 8 )
             blue = int( color[2] / 8 )
             packedColor = 0x1 | (blue << 1) | (green << 6) | (red<< 11)
-            print( color, '->', hex(packedColor) )
 
             for short in range(length):
                 rom.write_int16(offset+(short*2), packedColor)
