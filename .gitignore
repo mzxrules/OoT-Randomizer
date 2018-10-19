@@ -1,3 +1,6 @@
+*.sublime-project
+*.sublime-workspace
+__pycache__
 .*.sw*
 .sw*
 *.pyc
@@ -7,5 +10,3 @@ ARCHIVE.bin
 output/*
 *.z64
 *.z64.bak
-*.sublime-project
-*.sublime-workspace
