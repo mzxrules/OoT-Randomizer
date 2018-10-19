@@ -252,22 +252,3 @@ def fill_bosses(world, bossCount=4):
         loc = prize_locs.pop()
         world.push_item(loc, item, False)
         world.get_location(loc).event = True
-
-        raise FillError('Unable to place songs')
-def fill_bosses(world, bossCount=4):
-    boss_rewards = ItemFactory(rewardlist)
-    boss_locations = [world.get_location('Odolwa'), world.get_location('Goht'), world.get_location('Gyorg'), world.get_location('Twinmold')]
-    placed_prizes = [loc.item.name for loc in boss_locations if loc.item is not None]
-    unplaced_prizes = [item for item in boss_rewards if item.name not in placed_prizes]
-    empty_boss_locations = [loc for loc in boss_locations if loc.item is None]
-    prizepool = list(unplaced_prizes)
-    prize_locs = list(empty_boss_locations)
-
-    while bossCount:
-        bossCount -= 1
-        random.shuffle(prizepool)
-        random.shuffle(prize_locs)
-        item = prizepool.pop()
-        loc = prize_locs.pop()
-        world.push_item(loc, item, False)
-        world.get_location(loc).event = True

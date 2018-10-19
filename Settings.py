@@ -1496,8 +1496,8 @@ setting_infos = [
             'nargs': '?',
             'type': parse_custom_tunic_color,
             'help': '''\
-                    Choose the color for Link's Zora Tunic. (default: %(default)s)
-                    Color:              Make the Zora Tunic this color.
+                    Choose the color for Fierce Deity Link's Sword Slash. (default: %(default)s)
+                    Color:              Make the Fierce Deity sword slash this color.
                     Random Choice:      Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
@@ -1506,7 +1506,7 @@ setting_infos = [
             'text': 'Fierce Deity Tunic Color',
             'group': 'tuniccolor',
             'widget': 'Combobox',
-            'default': 'Zora Blue',
+            'default': 'Gold',
             'options': get_tunic_color_options(),
             'tooltip':'''\
                       'Random Choice': Choose a random

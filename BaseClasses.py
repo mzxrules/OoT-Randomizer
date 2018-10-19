@@ -490,10 +490,8 @@ class CollectionState(object):
     def can_wear(self, mask):
         return self.form('Human') and self.has(mask)
 
-    def stray_fairy_req(self, test=True):
-        return self.can_use('Great Fairy Mask') or (not self.options('ReqGFMask') and test)
-    # I think this is what's actually correct for optionally requiring gf mask for all fairies: a test is passed to this
-    # fxn which is only needed if you can't use the gf mask and you're not required to
+    def stray_fairy_req(self):
+        return self.can_use('Great Fairy Mask') or not self.options('ReqGFMask')
 
     def lens_req(self):
         return (self.can_use('Lens of Truth') and self.has('Magic Meter')) or not self.options('ReqLens')

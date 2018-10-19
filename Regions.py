@@ -138,12 +138,30 @@ def create_regions(world):
         create_grotto_region('TF Dodongo Grotto', ['TF Dodongo Grotto HP'], ['TF Dodongo Grotto Exit']),
         create_grotto_region('TF Deku Baba Pit', ['TF Deku Baba Pit Chest'], ['TF Deku Baba Pit Exit']),
 
-        create_ow_region('Swamp Path', ['Swamp Path Bat Tree HP', 'Swamp Tingle Woodfall Map', 'Swamp Tingle Snowhead Map', 'Swamp Tingle Pic'],
+        create_ow_region('Swamp Path', ['Swamp Path Bat Tree HP', 'Swamp Tingle Woodfall Map', 'Swamp Tingle Snowhead Map'],
                          ['Swamp Path To Termina Field', 'To Swamp Shooting Gallery',
-                          'Swamp Path To Southern Swamp (Poisoned)', 'Swamp Path To Southern Swamp (Cleaned)',
+                          'Swamp Path To Southern Swamp (Poisoned)', 'Swamp Path To Southern Swamp (Clean)',
                           'To Swamp Path Rupee Pit']),
         create_grotto_region('Swamp Path Rupee Pit', ['Swamp Path Rupee Pit Chest'], ['Swamp Path Rupee Pit Exit']),
         create_interior_region('Swamp Shooting Gallery', ['Swamp Shooting Gallery Quiver Prize', 'Swamp Shooting Gallery HP Prize'], ['Swamp Shooting Gallery Exit']),
+
+        create_ow_region('Southern Swamp Tourist Region (Poisoned)', ['Swamp Tourist Roof HP', 'Swamp Owl Statue'],
+                         ['Tourist Region to Swamp path', 'Swamp Big Octo From Tourist Region',
+                          'Tourist Centre Big Octo', 'To Swamp Tourist Centre', 'Tourist Region To Potion Shop Region']),
+        create_ow_region('Southern Swamp Potion Shop Region (Poisoned)', [],
+                         ['Potion Shop Region to Tourist Region', 'Potion Shop Region To Potion Shop', 'To Lost Woods']),
+        create_ow_region('Southern Swamp Deku Palace Region', [],
+                         ['Palace Region to Tourist Region', 'Palace Region to Deku Palace', 'some other exits I think I dunno']),
+
+        create_interior_region('Swamp Tourist Centre', ['Swamp Tourist Free Product', 'Pictograph Contest Winner'], ['Boat Ride', 'Southern Swamp']),
+        create_ow_region('Boat Ride', [], ['Poison Swamp']),
+        create_ow_region('Poison Swamp', [], ['Swamp Exit to Deku Palace', 'Swamp Spider House Entrance']),
+        # TODO Give an exit
+        create_interior_region('Swamp Spider House'),
+        create_ow_region('Deku Palace', ['Deku Palace HP'], ['Deku Palace Back Entrance', 'Deku Palace Chamber Entrance']),
+        create_interior_region('Deku Palace Royal Chamber'),
+        create_interior_region('Deku Palace Shrine'),
+        # TODO All of the Woodfall area
 
         create_ow_region('Swamp Tourist Region (Poisoned)', ['Swamp Tourist Roof HP', 'Swamp Owl Statue', 'Kill Swamp Big Octo'],
                          ['Poisoned Tourist Region To Swamp Path', 'Swamp Big Octo From Tourist Region',
