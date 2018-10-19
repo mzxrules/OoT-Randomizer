@@ -46,13 +46,12 @@ def create_dungeons(world):
 def create_regions(world):
     # TODO: finish out this whole thing (what I'm currently working on)
     world.regions = [
-        create_ow_region('Beginning',[], ['Cursed Underground']),
+        create_ow_region('Beginning', ['First Nut'], ['Cursed Underground']),
         create_interior_region('Deku Flower Tutorial Area', [], ['Clock Tower Twisted Hallway']),
         create_interior_region('Clock Tower Basement',
-            ['Remove the Cursed Mask', 'Song from HMS'],
+            ['Remove the Cursed Mask', 'Song From HMS'],
             ['Clock Tower Exit', 'Clock Tower Twisted Hallway Backwards']),
 
-        # TODO: Suffix Entrance to all of these
         create_ow_region('South Clock Town',
             ['SCT 20 Rupee Chest', 'Festival Tower Rupee Chest',
             'Clock Town Owl Statue', 'Clock Tower Platform HP', 'Clock Town Business Scrub'],
@@ -85,7 +84,7 @@ def create_regions(world):
             ['Stock Pot Inn Roof Exit', 'Stock Pot Inn Front Door']),
         create_interior_region('Mayors Office', ['Expert Person Solver Takes the Case', 'Mayor HP'], ['Mayors Office Exit']),
         create_interior_region('Bomber Tunnel', ['Bomber Tunnel Chest'], ['Bomber Tunnel Exit', 'Tunnel Balloon From ECT']),
-        create_interior_region('Astral Observatory', ['Moon Cry'], ['Tunnel Balloon From Observatory', 'Astral Observatory Exit']),
+        create_interior_region('Astral Observatory', ['Moon Cry', 'Watch Business Scrub Fly'], ['Tunnel Balloon From Observatory', 'Astral Observatory Exit']),
         create_ow_region('Astral Observatory Deck', ['Moons Tear'], ['Observatory Deck to Inside', 'Astral Observatory Fence']),
 
         create_ow_region('West Clock Town',
@@ -103,7 +102,7 @@ def create_regions(world):
         create_interior_region('Swordsmans School', ['Sword School HP'], ['Swordsmans School Exit']),
 
         create_ow_region('North Clock Town',
-            ['Bombers Notebook', 'Bomber Code', 'NCT Tree HP', 'Clock Town Tingle Clock Town Map',
+            ['Bomber Notebook', 'Bomber Code', 'NCT Tree HP', 'Clock Town Tingle Clock Town Map',
             'Clock Town Tingle Woodfall Map', 'Foil Sakon', 'NCT Keaton HP', 'Clock Town Tingle Pic'],
             ['To GF Clock Town', 'To Deku Playground', 'Clock Town North Gate',
             'NCT Exit to SCT', 'NCT Exit to ECT', 'North Mailbox']),
@@ -208,7 +207,7 @@ def create_regions(world):
                               ['WF Poisoned Front Exit', 'WF Poisoned Entrance To Central Room', 'WF Boss Warp']),
         # actually dunno if this room needs poisoned/clean versions, but I'll just leave it like this for now
 
-        create_dungeon_region('WF Central Room SW Region (Poisoned)', ['WF Stray Fairy Cleaned Central Room Deku Baba',
+        create_dungeon_region('WF Central Room SW Region (Poisoned)', ['WF Stray Fairy Poisoned Central Room Deku Baba',
                     'WF Clean Poison Water Using Fire Arrows', 'WF Poisoned Central Room Gate Torch Using Fire Arrows'],
                       ['WF Poisoned Central Room SW To Entrance Room', 'WF Poisoned Central Room SW To Push Block Room',
                        'WF Poisoned Central Room SW To Fairy Platform', 'WF Poisoned Central Room SW To Upper',
@@ -219,7 +218,7 @@ def create_regions(world):
         create_dungeon_region('WF Central Room East Region (Poisoned)', [], ['WF Poisoned Central Room East To Fairy Platform',
                         'WF Poisoned Central Room East To Upper', 'WF Poisoned Central Room East To Ladder Up',
                         'WF Poisoned Central Room East To Elevator Room']),
-        create_dungeon_region('WF Central Room Upper Region (Poisoned)', [ 'WF Stray Fairy Central Room Upper Switch Chest',
+        create_dungeon_region('WF Central Room Upper Region (Poisoned)', ['WF Stray Fairy Poisoned Central Room Upper Switch Chest',
                                             'WF Poisoned Central Room Ladder Switch', 'WF Clean Poison Water'],
                         ['WF Poisoned Central Room Upper To Pre Boss Room', 'WF Poisoned Central Room Upper To Dragonfly Room',
                          'WF Poisoned Central Room Upper To Elevator Room', 'WF Poisoned Central Room Upper To Fairy Platform',
@@ -482,10 +481,10 @@ location_table = {
     'Milk Road Owl Statue': (None, None, None, 'Statue'),
     'Swamp Owl Statue': (None, None, None, 'Statue'),
     'Woodfall Owl Statue': (None, None, None, 'Statue'),
-    'Song from Skull Kid': (None, None, None, 'Song'),
-    'Song from HMS': (None, None, None, 'Song'),
-    'Song from Romani': (None, None, None, 'Song'),
-    'Song from Monkey': (None, None, None, 'Song'),
+    'Song From Skull Kid': (None, None, None, 'Song'),
+    'Song From HMS': (None, None, None, 'Song'),
+    'Song From Romani': (None, None, None, 'Song'),
+    'Song From Monkey': (None, None, None, 'Song'),
     'Song on Owl Tablet': (None, None, None, 'Song'),
     'Song from Baby Goron': (None, None, None, 'Song'),
     'Song from Baby Zoras': (None, None, None, 'Song'),
