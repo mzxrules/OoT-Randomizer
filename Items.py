@@ -114,7 +114,7 @@ item_table = {
     "Goht's Remains": (True, False, 'Event', None, None),
     "Gyorg's Remains": (True, False, 'Event', None, None),
     "Twinmold's Remains": (True, False, 'Event', None, None),
-    "Majoras Mask': (True, False, 'Event', None, None)
+    "Majoras Mask": (True, False, 'Event', None, None)
     }
 
 item_data = {

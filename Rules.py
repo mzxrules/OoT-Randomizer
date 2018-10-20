@@ -53,6 +53,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Clock Tower Twisted Hallway'), False)
     set_rule(world.get_location('First Nut'), lambda state: state.form('Deku'))
     # set_rule(world.get_location('Clock Town GF Reward'), lambda state: state.has('CT SF', 1))
+    set_rule(world.get_location('Woodfall GF Reward'), lambda state: state.has('WF SF', 15))
     set_rule(world.get_location('Snowhead GF Reward'), lambda state: state.has('SH SF', 15))
     set_rule(world.get_location('Great Bay GF Reward'), lambda state: state.has('GB SF', 15))
     set_rule(world.get_location('Stone Tower GF Reward'), lambda state: state.has('ST SF', 15))

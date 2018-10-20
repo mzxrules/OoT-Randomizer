@@ -21,11 +21,11 @@ class LocalRom(object):
 
         os.chdir(os.path.dirname(os.path.realpath(__file__)))
         #os.chdir(output_path(os.path.dirname(os.path.realpath(__file__))))
-
+        '''
         with open(local_path('data/symbols.json'), 'r') as stream:
             symbols = json.load(stream)
             self.symbols = { name: int(addr, 16) for name, addr in symbols.items() }
-
+        '''
         try:
             # Read decompressed file if it exists
             self.read_rom(decomp_file)
@@ -42,9 +42,9 @@ class LocalRom(object):
     def decompress_rom_file(self, file, decomp_file):
         # TODO: Figure out the appropriate CRCs for MM ROMs
         validCRC = [
-            [ ], # Compressed
-            [0xDA, 0x69, 0x83, 0xE7, 0x50, 0x67, 0x44, 0x58], # Decompressed MM?
             [0xE9, 0x79, 0x55, 0xC6, 0xBC, 0x33, 0x8D, 0x38], # Compressed MM?
+            [ ], # Byteswap compressed
+            [0xDA, 0x69, 0x83, 0xE7, 0x50, 0x67, 0x44, 0x58], # Decompressed MM?
         ]
 
         # Validate ROM file
