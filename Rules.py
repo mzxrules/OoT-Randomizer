@@ -76,7 +76,8 @@ def global_rules(world):
     # Ledge Rupee Chest' if we want lol
 
     ### SOUTH CLOCK TOWN
-    set_rule(world.get_location('Clock Town Business Scrub'), lambda state: state.has('Moons Tear'))
+    set_rule(world.get_location('Clock Town Business Scrub Item'), lambda state: state.has('Moons Tear'))
+    set_rule(world.get_location('Clock Town Business Scrub Trade Done'), lambda state: state.has('Moons Tear'))
     set_rule(world.get_location('Clock Tower Platform HP'), lambda state: state.form('Human') or state.form('Zora') or (state.form('Deku') and (state.has('Moons Tear') or state.can('Gainer'))))
 
     set_rule(world.get_location('Festival Tower Rupee Chest'), lambda state: state.can_use('Hookshot') or (state.form('Deku') and state.has('Moons Tear')))
@@ -84,7 +85,7 @@ def global_rules(world):
                 or (state.form('Deku') and state.has('Moons Tear') and (state.form('Human') or state.form('Zora'))))
 
     set_rule(world.get_location('Dropped Ocarina'), lambda state: state.can_pop_balloon())
-    set_rule(world.get_location('Song from Skull Kid'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Song From Skull Kid'), lambda state: state.can_pop_balloon())
     # is this right? it looks like the check is just to hit skull kid in the air, functionally the same as popping a balloon lol
     set_rule(world.get_entrance('End of First Cycle'), lambda state: state.has('Song of Time'))
     set_rule(world.get_entrance('Moon Portal'),
@@ -790,7 +791,8 @@ def global_rules(world):
     ## Milk Road
     set_rule(world.get_location('Milk Road Keaton HP'), lambda state: state.can_use('Keaton Mask'))
     set_rule(world.get_location('Milk Road Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
-    set_rule(world.get_location('Milk Road Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Milk Road Tingle Other Map'), lambda state: state.can_pop_balloon())
+    # whoops, left in a dupe, gotta look up what map this actually is
     set_rule(world.get_location('Milk Road Tingle Pic'), lambda state: state.can_use('Picto Box'))
     set_rule(world.get_location('Milk Road Owl Statue'), lambda state: state.form('Human'))
 
