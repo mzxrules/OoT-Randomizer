@@ -386,7 +386,8 @@ def global_rules(world):
     set_rule(world.get_entrance('Poisoned Outer Palace To Lower Courtyard'), lambda state: state.form('Deku') or (state.can('Deku Palace Guard Skip')))
     # not sure how the trick to get past the palace guards works, but it's essentially that option plus form(s)
 
-    set_rule(world.get_entrance('Poisoned Outer Palace To Upper Courtyard'), lambda state: state.has_bottle() and state.has('Magic Beans') and state.has_hearts(6))
+    set_rule(world.get_entrance('Poisoned Outer Palace To Upper Courtyard'), lambda state: state.has_bottle() and state.has('Magic Beans')
+                                    and (state.form('Deku') or (state.has_hearts(6) and state.any_form_but('Goron'))))
     # set_rule(world.get_entrance('To Magic Beans'), lambda state: True)
     set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human'))
     # will he sell you the beans even if you don't have a bottle? it seems like he should
