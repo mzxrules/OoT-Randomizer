@@ -85,7 +85,7 @@ def global_rules(world):
                 or (state.form('Deku') and state.has('Moons Tear') and (state.form('Human') or state.form('Zora'))))
 
     set_rule(world.get_location('Dropped Ocarina'), lambda state: state.can_pop_balloon())
-    set_rule(world.get_location('Song From Skull Kid'), lambda state: state.can_pop_balloon())
+    set_rule(world.get_location('Song From Skull Kid'), lambda state: state.can_pop_balloon() and state.has('Ocarina of Time'))
     # is this right? it looks like the check is just to hit skull kid in the air, functionally the same as popping a balloon lol
     set_rule(world.get_entrance('End of First Cycle'), lambda state: state.has('Song of Time'))
     set_rule(world.get_entrance('Moon Portal'),
@@ -254,7 +254,7 @@ def global_rules(world):
     ### TERMINA FIELD
     set_rule(world.get_entrance('Astral Observatory Fence'), lambda state: (state.has('Magic Beans') and state.has_bottle()) or state.can('Goron Boost'))
 
-    set_rule(world.get_entrance('TF to Obs Over Fence Maybe'), lambda state: state.can('Goron Boost'))
+    set_rule(world.get_entrance('TF to Obs Over Fence Maybe'), lambda state: state.can('Goron Boost') and state.has('Ocarina of Time'))
     # I don't know if there's actually a way to get over this fence from TF, might only be the other way, so I might
     # have remove this later
 
@@ -343,7 +343,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Swamp Path To Southern Swamp (Cleaned)'), lambda state: state.event('Defeat Odolwa'))
 
     ## Southern Swamp
-    set_rule(world.get_location('Swamp Tourist Roof HP'), lambda state: state.has('Town Title Deed') or state.can('Goron Boost'))
+    set_rule(world.get_location('Swamp Tourist Roof HP'), lambda state: (state.has('Town Title Deed') and state.form('Human')) or state.can('Goron Boost'))
     # set_rule(world.get_location('Bottle From Kotate'), lambda state: True)
     # set_rule(world.get_location('Save Koume'), lambda state: True)
     set_rule(world.get_location('Swamp Owl Statue'), lambda state: state.form('Human'))
