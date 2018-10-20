@@ -504,8 +504,6 @@ location_table = {
     "Claim Goht's Heart": (None, None, None, 'Collectable'),
     "Claim Gyorg's Remains": (None, None, None, 'Collectable'),
     "Claim Gyorg's Heart": (None, None, None, 'Collectable'),
-    "Claim Odolwa's Remains": (None, None, None, 'Collectable'),
-    "Claim Odolwa's Heart": (None, None, None, 'Collectable'),
     'Defeat Odolwa': (None, None, None, 'Event'),
     'Defeat Goht': (None, None, None, 'Event'),
     'Defeat Gyorg': (None, None, None, 'Event'),

@@ -339,7 +339,7 @@ def global_rules(world):
     # so todo: determine how to restrict progression items from this spot if the option is selected
     # (there's probly a mechanism for this in testrunner's build)
 
-    set_rule(world.get_entrance('Swamp Path To Southern Swamp (Cleaned)'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Swamp Path To Southern Swamp (Cleaned)'), lambda state: state.event('Defeat Odolwa'))
 
     ## Southern Swamp
     set_rule(world.get_location('Swamp Tourist Roof HP'), lambda state: state.has('Town Title Deed') or state.can('Goron Boost'))
@@ -365,9 +365,9 @@ def global_rules(world):
     set_rule(world.get_location('Saved Koume'), lambda state: state.has_bottle())
 
     # swamp tourist center clean water
-    set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: state.can_use('Bow') and state.event('Beat Odolwa'))
+    set_rule(world.get_location('Swamp Boat Archery HP'), lambda state: state.can_use('Bow') and state.event('Defeat Odolwa'))
 
-    set_rule(world.get_entrance('Octo Grotto Clean Exit'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Octo Grotto Clean Exit'), lambda state: state.event('Defeat Odolwa'))
     set_rule(world.get_entrance('Poisoned To Swamp Spider House'), lambda state: state.can_use('Fire Arrows'))
     set_rule(world.get_entrance('Poisoned Lower Octo Region Trick To Upper Midpoint'), lambda state: state.can('Some Jumping Trick') and state.form('Human'))
     # I've seen this done as human, dunno the details, but the check is going to essentially look like this
@@ -392,7 +392,7 @@ def global_rules(world):
     set_rule(world.get_location('Magic Beans'), lambda state: state.form('Human'))
     # will he sell you the beans even if you don't have a bottle? it seems like he should
     # todo: find out
-    set_rule(world.get_entrance('Magic Bean Grotto Clean Exit'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Magic Bean Grotto Clean Exit'), lambda state: state.event('Defeat Odolwa'))
 
     # set_rule(world.get_location('Deku Palace Courtyard HP'), lambda state: True)
     set_rule(world.get_entrance('Poisoned Deku Palace Lower Courtyard To Upper'), lambda state: state.can('Deku Palace Coutryard Trick'))
@@ -403,11 +403,11 @@ def global_rules(world):
     # instrument that isn't the ocarina to learn it? I dunno
     # todo: test requirements for this
 
-    set_rule(world.get_entrance('Butler Race Clean Exit'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Butler Race Clean Exit'), lambda state: state.event('Defeat Odolwa'))
 
     # post woodfall palace
     set_rule(world.get_location('Return Deku Princess'), lambda state: state.form('Deku') and state.has('Deku Princess'))
-    set_rule(world.get_location('Butler Race Prize'), lambda state: state.form('Human') and state.event('Returned Deku Princess') and state.event('Beat Odolwa'))
+    set_rule(world.get_location('Butler Race Prize'), lambda state: state.form('Human') and state.event('Returned Deku Princess') and state.event('Defeat Odolwa'))
     # you know, I have no idea what the actual requirements are to do this lol
     # once you can get here, you can attempt the race, but I figure goron can't do it, zora probly not
     # so it's human and/or deku? todo: figure this out lol
@@ -420,7 +420,7 @@ def global_rules(world):
              lambda state: state.has_bottle() and state.form('Deku') and state.has('Sonata of Awakening') and state.can_pop_balloon() and state.can_use('Bomb Bag'))
     # there might be some other requirements to get all the skulls here, but I'm pretty sure you at least need a
     # bottle and to use deku flowers
-    set_rule(world.get_entrance('Swamp Spider House Clean Exit'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Swamp Spider House Clean Exit'), lambda state: state.event('Defeat Odolwa'))
 
     ## Outside Woodfall Area
     # todo: where can the hookshot get you in this area?
@@ -448,7 +448,7 @@ def global_rules(world):
     # dunno if gainer actually works here, but it seems like the kind of spot where it would
 
     set_rule(world.get_location('Woodfall GF Reward'), lambda state: state.has('WF SF', 15))
-    set_rule(world.get_entrance('Woodfall Fountain Clean Exit'), lambda state: state.event('Beat Odolwa'))
+    set_rule(world.get_entrance('Woodfall Fountain Clean Exit'), lambda state: state.event('Defeat Odolwa'))
 
 
     ### WOODFALL TEMPLE
@@ -569,7 +569,7 @@ def global_rules(world):
     set_rule(world.get_entrance('WF Pre Boss Room North To South'), lambda state: state.form('Deku'))
 
     ## Boss: Odolwa
-    set_rule(world.get_location('Beat Odolwa'), lambda state: state.can_use('Bow'))
+    set_rule(world.get_location('Defeat Odolwa'), lambda state: state.can_use('Bow'))
     set_rule(world.get_location('Odolwa HC'), lambda state: state.can_use('Bow'))
     set_rule(world.get_entrance('WF Odolwa Boss Exit'), lambda state: state.can_use('Bow'))
     # todo: figure out all the ways to kill odolwa
