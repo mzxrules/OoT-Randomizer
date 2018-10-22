@@ -72,13 +72,13 @@ def get_tunic_colors():
     return list(TunicColors.keys())
 
 def get_tunic_color_options():
-    return ["Random Choice", "Completely Random"] + get_tunic_colors()
+    return [ "Default", "Random Choice", "Completely Random" ] + get_tunic_colors()
 
 def get_tatl_colors():
     return list(TatlColors.keys())
 
 def get_tatl_color_options():
-    return ["Random Choice", "Completely Random"] + get_tatl_colors()
+    return [ "Default", "Random Choice", "Completely Random" ] + get_tatl_colors()
 
 def patch_rom(world, rom):
 
@@ -774,7 +774,10 @@ def set_color(world, rom, offsets, thisColor, length=1, pack=False):
     colorList = get_tunic_colors()
     randomColors = random_choices(colorList, k=3)
     randColor = [random.getrandbits(8), random.getrandbits(8), random.getrandbits(8)]
-    if thisColor == 'Completely Random':
+
+    if thisColor == 'Default':
+        return
+    elif thisColor == 'Completely Random':
         color = randColor
     else:
         # handle random
