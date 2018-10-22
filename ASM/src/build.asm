@@ -1,8 +1,8 @@
 .n64
 .relativeinclude on
 
-.create "../roms/patched.z64", 0
-.incbin "../roms/base.z64"
+.create "../roms/mm/patched.z64", 0
+.incbin "../roms/mm/base.z64"
 
 ;==================================================================================================
 ; Base game editing region
@@ -10,7 +10,6 @@
 
 .include "boot.asm"
 .include "hacks.asm"
-.include "malon.asm"
 
 ;==================================================================================================
 ; New code region
