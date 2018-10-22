@@ -33,24 +33,25 @@ os.chdir(run_dir)
 
 c_sym_types = {}
 
-with open('build/c_symbols.txt', 'r') as f:
-    for line in f:
-        m = re.match('''
-                ^
-                [0-9a-fA-F]+
-                .*
-                \.
-                ([^\s]+)
-                \s+
-                [0-9a-fA-F]+
-                \s+
-                ([^.$][^\s]+)
-                \s+$
-            ''', line, re.VERBOSE)
-        if m:
-            sym_type = m.group(1)
-            name = m.group(2)
-            c_sym_types[name] = 'code' if sym_type == 'text' else 'data'
+if os.path.isfile('build/c_symbols.txt'):
+    with open('build/c_symbols.txt', 'r') as f:
+        for line in f:
+            m = re.match('''
+                    ^
+                    [0-9a-fA-F]+
+                    .*
+                    \.
+                    ([^\s]+)
+                    \s+
+                    [0-9a-fA-F]+
+                    \s+
+                    ([^.$][^\s]+)
+                    \s+$
+                ''', line, re.VERBOSE)
+            if m:
+                sym_type = m.group(1)
+                name = m.group(2)
+                c_sym_types[name] = 'code' if sym_type == 'text' else 'data'
 
 symbols = {}
 
