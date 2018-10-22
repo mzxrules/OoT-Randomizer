@@ -158,7 +158,7 @@ class LocalRom(object):
 
     def write_to_file(self, file):
         # self.verify_dmadata()
-        # self.update_crc()
+        self.update_crc()
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 

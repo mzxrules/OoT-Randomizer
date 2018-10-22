@@ -81,6 +81,19 @@ def get_tatl_color_options():
     return ["Random Choice", "Completely Random"] + get_tatl_colors()
 
 def patch_rom(world, rom):
+
+    rom_patch_path = 'data/rom_patch.txt'
+    if os.path.isfile(rom_patch_path):
+        with open(local_path(rom_patch_path), 'r') as stream:
+            for line in stream:
+                address, value = [int(x, 16) for x in line.split(',')]
+                rom.write_byte(address, value)
+
+    # Write Randomizer title screen logo
+    #with open(local_path('data/title.bin'), 'rb') as stream:
+    #    titleBytes = stream.read()
+    #    rom.write_bytes(0x01795300, titleBytes)
+
     # will be populated with data to be written to initial save
     # see initial_save.asm and config.asm for more details on specifics
     # or just use the following functions to add an entry to the table
