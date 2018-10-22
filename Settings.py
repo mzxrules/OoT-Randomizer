@@ -5,7 +5,7 @@ import re
 import random
 import hashlib
 
-# from Patches import get_tunic_color_options, get_navi_color_options
+from Patches import get_tunic_color_options, get_tatl_color_options
 from version import __version__
 from Utils import random_choices
 
@@ -166,19 +166,19 @@ def parse_custom_tunic_color(s):
     else:
         raise argparse.ArgumentTypeError('Invalid color specified')
 
-def parse_custom_navi_color(s):
+def parse_custom_tatl_color(s):
     if s == 'Custom Color':
         raise argparse.ArgumentTypeError('Specify custom color by using \'Custom (#xxxxxx)\'')
     elif re.match(r'^Custom \(#[A-Fa-f0-9]{6}\)$', s):
         return re.findall(r'[A-Fa-f0-9]{6}', s)[0]
-    elif s in get_navi_color_options():
+    elif s in get_tatl_color_options():
         return s
     else:
         raise argparse.ArgumentTypeError('Invalid color specified')
 
 # a list of the possible settings
 setting_infos = [
-    Setting_Info('check_version', bool, 0, False, 
+    Setting_Info('check_version', bool, 0, False,
     {
         'help': '''\
                 Checks if you are on the latest version
@@ -219,11 +219,11 @@ setting_infos = [
                     Use to select world to generate when there are multiple worlds.
                     ''',
             'type': int}),
-    Setting_Info('create_spoiler', bool, 1, True, 
+    Setting_Info('create_spoiler', bool, 1, True,
         {
             'help': 'Output a Spoiler File',
             'action': 'store_true'
-        }, 
+        },
         {
             'text': 'Create Spoiler Log',
             'group': 'rom_tab',
@@ -234,7 +234,7 @@ setting_infos = [
                       Enabling this will change the seed.
                       '''
         }),
-    Setting_Info('compress_rom', str, 2, False, 
+    Setting_Info('compress_rom', str, 2, False,
         {
             'default': 'True',
             'const': 'True',
@@ -259,143 +259,94 @@ setting_infos = [
                 'No ROM Output': 'None',
             },
             'tooltip':'''\
-                      The first time compressed generation will take a while 
-                      but subsequent generations will be quick. It is highly 
-                      recommended to compress or the game will crash 
+                      The first time compressed generation will take a while
+                      but subsequent generations will be quick. It is highly
+                      recommended to compress or the game will crash
                       frequently except on real N64 hardware.
                       '''
         }),
-    Setting_Info('open_forest', bool, 1, True, 
+    Setting_Info('open_moon', bool, 1, True,
         {
             'help': '''\
-                    Mido no longer blocks the path to the Deku Tree and
-                    the Kokiri boy no longer blocks the path out of the forest.
+                    A gate no longer blocks the way back through the
+                    twisted hallway in the Clock Tower. Going back
+                    through here takes you to the moon. Talking to Majora
+                    warps you back into the Clock Tower.
                     ''',
             'action': 'store_true'
         },
         {
-            'text': 'Open Forest',
+            'text': 'Open Moon',
             'group': 'open',
             'widget': 'Checkbutton',
             'default': 'checked',
             'tooltip':'''\
-                      Can leave the Kokiri Forest without beating the 
-                      Deku Tree. When this option is off, the Kokiri 
-                      Sword and Slingshot are always available somewhere 
-                      in the forest.
+                    A gate no longer blocks the way back through the
+                    twisted hallway in the Clock Tower. Going back
+                    through here takes you to the moon. Talking to Majora
+                    warps you back into the Clock Tower. The cutscene
+                    leading the moon warps you straight to Majora
                       '''
         }),
-    Setting_Info('open_kakariko', bool, 1, True, 
+    Setting_Info('skip_first_cycle', bool, 1, True,
         {
             'help': '''\
-                    The gate in Kakariko Village to Death Mountain Trail
-                    is always open, instead of needing Zelda's Letter.
+                    Start the game in clock tower with the Ocarina in hand
                     ''',
             'action': 'store_true'
         },
         {
-            'text': 'Open Kakariko Gate',
+            'text': 'Skip First Cycle',
             'group': 'open',
             'widget': 'Checkbutton',
-            'default': 'unchecked',
+            'default': 'checked',
             'tooltip':'''\
-                      The gate in Kakariko Village to Death Mountain Trail
-                      is always open, instead of needing Zelda's Letter.
-
-                      Either way, the gate is always open as adult.
+                    Ocarina starts placed in your inventory
                       '''
         }),
-    Setting_Info('open_door_of_time', bool, 1, True, 
+    Setting_Info('oath', str, 2, True,
         {
-            'help': '''
-                    The Door of Time is open from the beginning of the game.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'Open Door of Time',
-            'group': 'open',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      The Door of Time starts opened instead of needing to
-                      play the Song of Time. Setting closed will mean there
-                      is a child section before becoming adult, so there is
-                      more structure.
-                      '''
-        }),
-    Setting_Info('gerudo_fortress', str, 2, True, 
-        {
-            'default': 'normal',
-            'const': 'normal',
+            'default': 'remains',
+            'const': 'remains',
             'nargs': '?',
-            'choices': ['normal', 'fast', 'open'],
-            'help': '''Select how much of Gerudo Fortress is required. (default: %(default)s)
-                       Normal: Free all four carpenters to get the Gerudo Card.
-                       Fast:   Free only the carpenter closest to Link's prison to get the Gerudo Card.
-                       Open:   Start with the Gerudo Card and all it's benefits.
+            'choices': ['remains', 'masks', 'rewards', 'dungeons', 'hundo', 'open'],
+            'help': '''\
+                    Select requirement to be taught the Oath to Order. (default: %(default)s)
+                    Remains:    Collect all four boss remains.
+                    Masks:  Collect all 24 masks.
+                    Rewards:    Collect all Stray Fairy rewards.
+                    Dungeons:   Collect all boss remains and Stray Fairy rewards.
+                    Hundo:  Collect all boss remains, masks, and fairy rewards.
+                    Open:   The song will be known upon starting the game.
                     '''
         },
         {
-            'text': 'Gerudo Fortress',
+            'text': '',
             'group': 'open',
             'widget': 'Combobox',
-            'default': 'Default Behavior',
+            'default': 'Remains',
             'options': {
-                'Default Behavior': 'normal',
-                'Rescue one carpenter': 'fast',
-                'Start with Gerudo Card': 'open',
+                'Remains' : 'remains',
+                'All Masks' : 'masks',
+                'Stray Fairy Rewards' : 'rewards',
+                'Complete Dungeons' : 'dungeons',
+                '100%' : 'hundo',
+                'Open' : 'open'
             },
             'tooltip':'''\
-                      'Rescue one carpenter': Only the bottom left
-                      carpenter must be rescued.
-
-                      'Start with Gerudo Card': The carpenters are rescued from
-                      the start of the game, and the player starts with the Gerudo
-                      Card in the inventory allowing access to Gerudo Training Grounds.
+                    Remains: All boss remains.
+                    All Masks:  All masks.
+                    Stray Fairy Rewards: All Stray Fairy rewards.
+                    Complete Dungeons: All boss remains and Stray Fairy rewards.
+                    100%: All boss remains, masks, and fairy rewards.
+                    Open:   The song will be known upon starting the game.
                       '''
         }),
-    Setting_Info('bridge', str, 2, True, 
-        {
-            'default': 'medallions',
-            'const': 'medallions',
-            'nargs': '?',
-            'choices': ['medallions', 'vanilla', 'dungeons', 'open'],
-            'help': '''\
-                    Select requirement to spawn the Rainbow Bridge to reach Ganon's Castle. (default: %(default)s)
-                    Medallions:    Collect all six medallions to create the bridge.
-                    Vanilla:       Collect only the Shadow and Spirit Medallions and then view the Light Arrow cutscene.
-                    All Dungeons:  Collect all spiritual stones and all medallions to create the bridge.
-                    Open:          The bridge will spawn without an item requirement.
-                    '''
-        },
-        {
-            'text': 'Rainbow Bridge Requirement',
-            'group': 'open',
-            'widget': 'Combobox',
-            'default': 'All medallions',
-            'options': {
-                'All dungeons': 'dungeons',
-                'All medallions': 'medallions',
-                'Vanilla requirements': 'vanilla',
-                'Always open': 'open',
-            },
-            'tooltip':'''\
-                      'All dungeons': All Medallions and Stones
-
-                      'All medallions': All 6 Medallions only
-
-                      'Vanilla requirements': Spirit and Shadow 
-                      Medallions and the Light Arrows
-
-                      'Always open': Rainbow Bridge is always present
-                      '''
-        }),
-    Setting_Info('all_reachable', bool, 1, True, 
+    Setting_Info('all_reachable', bool, 1, True,
         {
             'help': '''\
-                    When disabled, only check if the game is beatable with 
-                    placement. Do not ensure all locations are reachable. 
+                    When disabled, only check if the game is beatable with
+                    placement. Do not ensure all locations are reachable.
                     ''',
             'action': 'store_true'
         },
@@ -408,15 +359,15 @@ setting_infos = [
                       When this option is enabled, the randomizer will
                       guarantee that every item is obtainable, and every
                       location is reachable.
-                      
+
                       When disabled, only required items and locations
                       to beat the game will be guaranteed reachable.
-                      
+
                       Even when enabled, some locations may still be able
                       to hold the keys needed to reach them.
                       '''
-        }),     
-    Setting_Info('bombchus_in_logic', bool, 1, True, 
+        }),
+    Setting_Info('bombchus_in_logic', bool, 1, True,
         {
             'help': '''\
                     Bombchus will be considered in logic. This has a few effects:
@@ -436,19 +387,19 @@ setting_infos = [
 
                       The first Bombchu pack will always be 20.
                       Subsequent packs will be 5 or 10 based on
-                      how many you have. 
+                      how many you have.
 
-                      Bombchus can be purchased for 60/99/180 
+                      Bombchus can be purchased for 60/99/180
                       rupees once they are been found.
 
                       Bombchu Bowling opens with Bombchus.
                       Bombchus are available at Kokiri Shop
-                      and the Bazaar. Bombchu refills cannot 
+                      and the Bazaar. Bombchu refills cannot
                       be bought until Bombchus have been
                       obtained.
                       ''',
         }),
-    Setting_Info('one_item_per_dungeon', bool, 1, True, 
+    Setting_Info('one_item_per_dungeon', bool, 1, True,
         {
             'help': '''\
                     Each dungeon will have exactly one major item.
@@ -471,51 +422,7 @@ setting_infos = [
                       not count as major items.
                       ''',
         }),
-    Setting_Info('trials_random', bool, 1, True, 
-        {
-            'help': '''\
-                    Sets the number of trials must be cleared to enter 
-                    Ganon's Tower to a random value.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'Random Number of Ganon\'s Trials',
-            'group': 'open',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Sets a random number of trials to
-                      enter Ganon's Tower.
-                      '''
-        }),
-    Setting_Info('trials', int, 3, True, 
-        {
-            'default': 6,
-            'const': 6,
-            'nargs': '?',
-            'choices': [0, 1, 2, 3, 4, 5, 6],
-            'help': '''\
-                    Select how many trials must be cleared to enter Ganon's Tower.
-                    The trials you must complete will be selected randomly.
-                    ''',
-            'type': int                    
-        },
-        {
-            'group': 'open',
-            'widget': 'Scale',
-            'default': 6,
-            'min': 0,
-            'max': 6,
-            'random': True,
-            'tooltip':'''\
-                      Trials are randomly selected. If hints are
-                      enabled, then there will be hints for which
-                      trials need to be completed.
-                      ''',
-            'dependency': lambda guivar: not guivar['trials_random'].get(),
-        }),
-    Setting_Info('no_escape_sequence', bool, 1, True, 
+    Setting_Info('no_escape_sequence', bool, 1, True,
         {
             'help': '''\
                     The tower collapse escape sequence between Ganondorf and Ganon will be skipped.
@@ -523,16 +430,16 @@ setting_infos = [
             'action': 'store_true'
         },
         {
-            'text': 'Skip Tower Collapse Escape Sequence',
+            'text': 'Skip Moon Stopping Cutscene',
             'group': 'convenience',
             'widget': 'Checkbutton',
             'default': 'unchecked',
             'tooltip':'''\
-                      The tower collapse escape sequence between 
-                      Ganondorf and Ganon will be skipped.
+                      The moon stopping cutscene that follows the playing of the
+                      Oath to Order will be skipped.
                       '''
         }),
-    Setting_Info('no_guard_stealth', bool, 1, True, 
+    Setting_Info('no_pirate_bees', bool, 1, True,
         {
             'help': '''\
                     The crawlspace into Hyrule Castle will take you straight to Zelda.
@@ -540,19 +447,19 @@ setting_infos = [
             'action': 'store_true'
         },
         {
-            'text': 'Skip Interior Castle Guard Stealth Sequence',
+            'text': 'Skip Pirate Clearing Sequence',
             'group': 'convenience',
             'widget': 'Checkbutton',
             'default': 'unchecked',
             'tooltip':'''\
-                      The crawlspace into Hyrule Castle goes
-                      straight to Zelda, skipping the guards.
+                      The pirates are cleared from the Hookshot room.
                       '''
         }),
-    Setting_Info('no_epona_race', bool, 1, True, 
+    Setting_Info('no_epona_race', bool, 1, True,
         {
             'help': '''\
-                    Having Epona's Song will allow you to summon Epona without racing Ingo.
+                    Having Epona's Song will allow you to summon
+                    Epona without accessing Romani Ranch.
                     ''',
             'action': 'store_true'
         },
@@ -563,10 +470,10 @@ setting_infos = [
             'default': 'unchecked',
             'tooltip':'''\
                       Epona can be summoned with Epona's Song
-                      without needing to race Ingo.
+                      without accessing Romani Ranch.
                       '''
         }),
-    Setting_Info('fast_chests', bool, 1, True, 
+    Setting_Info('fast_chests', bool, 1, True,
         {
             'help': '''\
                     Makes all chests open without the large chest opening cutscene
@@ -583,47 +490,46 @@ setting_infos = [
                       the animation time is slow for major items.
                       '''
         }),
-    Setting_Info('big_poe_count_random', bool, 1, True, 
+    Setting_Info('zora_egg_count_random', bool, 1, True,
         {
             'help': '''\
-                    Sets a random number of Big Poes to receive an item from the buyer.
+                    Sets a random number of Zora Eggs to receive an item from the buyer.
                     ''',
             'action': 'store_true'
         },
         {
-            'text': 'Random Big Poe Target Count',
+            'text': 'Random Zora Egg Count',
             'group': 'convenience',
             'widget': 'Checkbutton',
             'default': 'unchecked',
             'tooltip':'''\
-                      The Poe buyer will give a reward for turning 
-                      in a random number of Big Poes.
+                      Some Zora Eggs will already be spawned into the Marine Research Lab
                       '''
         }),
-    Setting_Info('big_poe_count', int, 4, True, 
+    Setting_Info('zora_egg_count', int, 4, True,
         {
-            'default': 10,
-            'const': 10,
+            'default': 7,
+            'const': 7,
             'nargs': '?',
-            'choices': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            'choices': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
             'help': '''\
-                    Select the number of Big Poes to receive an item from the buyer.
+                    Select the number of Zora Eggs to receive the New Wave Bossa Nova.
                     ''',
             'type': int,
         },
         {
             'group': 'convenience',
             'widget': 'Scale',
-            'default': 10,
+            'default': 7,
             'min': 1,
-            'max': 10,
+            'max': 18,
             'tooltip':'''\
-                      The Poe buyer will give a reward for turning 
-                      in the chosen number of Big Poes.
+                      The Baby Zoras will sing for turning
+                      in the chosen number of Zora Eggs.
                       ''',
-            'dependency': lambda guivar: not guivar['big_poe_count_random'].get(),
+            'dependency': lambda guivar: not guivar['zora_egg_count_random'].get(),
         }),
-    Setting_Info('free_scarecrow', bool, 1, True, 
+    Setting_Info('free_scarecrow', bool, 1, True,
         {
             'help': '''\
                     Start with the scarecrow song. You do not need
@@ -638,11 +544,11 @@ setting_infos = [
             'widget': 'Checkbutton',
             'default': 'unchecked',
             'tooltip':'''\
-                      Skips needing to go to Lake Hylia as both
-                      child and adult to learn Scarecrow Song.
+                      Skips needing to show the scarecrow
+                      your ocarina to learn Scarecrow Song.
                       '''
         }),
-    Setting_Info('scarecrow_song', str, 0, False, 
+    Setting_Info('scarecrow_song', str, 0, False,
         {
             'default': 'DAAAAAAA',
             'const': 'DAAAAAAA',
@@ -658,72 +564,34 @@ setting_infos = [
             'default': 'DAAAAAAA',
             'dependency': lambda guivar: guivar['free_scarecrow'].get(),
             'tooltip':'''\
-                      Song must be 8 notes long and have at least 
+                      Song must be 8 notes long and have at least
                       two different notes.
-                      Valid notes are: 
-                      'A': A Button 
+                      Valid notes are:
+                      'A': A Button
                       'D': C-Down
                       'U': C-Up
-                      'L': C-Left 
+                      'L': C-Left
                       'R': C-Right
                       '''
         }),
-    Setting_Info('shuffle_kokiri_sword', bool, 1, True, 
+    Setting_Info('shuffle_ocarina', bool, 1, True,
         {
             'help': '''\
-                    Shuffles the Kokiri Sword into the pool.
+                    Shuffles the Ocarina of Time into the pool.
                     ''',
             'action': 'store_true'
         },
         {
-            'text': 'Shuffle Kokiri Sword',
+            'text': 'Shuffle Ocarina of Time',
             'group': 'logic',
             'widget': 'Checkbutton',
             'default': 'checked',
             'tooltip':'''\
-                      Disabling this will make the Kokiri Sword
+                      Disabling this will make the Ocarina of Time
                       always available at the start.
                       '''
         }),
-    Setting_Info('shuffle_weird_egg', bool, 1, True, 
-        {
-            'help': '''\
-                    Shuffles the Weird Egg item from Malon into the pool.
-                    This means that you need to find the egg before going Zelda.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'Shuffle Weird Egg',
-            'group': 'logic',
-            'widget': 'Checkbutton',
-            'default': 'checked',
-            'tooltip':'''\
-                      You need to find the egg before going Zelda.
-                      This means the Weird Egg locks the rewards from
-                      Impa, Saria, Malon, and Talon.
-                      '''
-        }),
-    Setting_Info('shuffle_ocarinas', bool, 1, True, 
-        {
-            'help': '''\
-                    Shuffles the Fairy Ocarina and the Ocarina of Time into the pool.
-                    This means that you need to find an ocarina before playing songs. 
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'Shuffle Ocarinas',
-            'group': 'logic',
-            'widget': 'Checkbutton',
-            'default': 'checked',
-            'tooltip':'''\
-                      The Fairy Ocarina and Ocarina of Time are
-                      randomized. One will be required before 
-                      songs can be played. 
-                      '''
-        }),
-    Setting_Info('shuffle_song_items', bool, 1, True, 
+    Setting_Info('shuffle_song_items', bool, 1, True,
         {
             'help': '''\
                     Shuffles the songs with with rest of the item pool so that
@@ -740,31 +608,9 @@ setting_infos = [
             'tooltip':'''\
                       Songs can appear anywhere as normal items,
                       not just at vanilla song locations.
-                      '''
+                      ''',
         }),
-    Setting_Info('shuffle_gerudo_card', bool, 1, True, 
-        {
-            'help': '''\
-                    Shuffles the Gerudo Card into the item pool.
-                    The Gerudo Card does not stop guards from throwing you in jail.
-                    It only grants access to Gerudo Training Grounds after all carpenters
-                    have been rescued. This option does nothing if "gerudo_fortress" is "open".
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'Shuffle Gerudo Card',
-            'group': 'logic',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'dependency': lambda guivar: guivar['gerudo_fortress'].get() != 'Start with Gerudo Card',
-            'tooltip':'''\
-                      Gerudo Membership Card is required to
-                      enter Gerudo Training Grounds. It is
-                      effectively the Boss Key of Gerudo Fortress.
-                      '''
-        }),
-    Setting_Info('shuffle_scrubs', bool, 1, True, 
+    Setting_Info('shuffle_scrubs', bool, 1, True,
         {
             'help': '''\
                     All Deku Scrub Salesmen will give a random item.
@@ -782,8 +628,8 @@ setting_infos = [
                       Deku Scrub Salesmen. The prices
                       are all reduced to 10 Rupees.
                       '''
-        }),    
-    Setting_Info('shopsanity', str, 3, True, 
+        }),
+    Setting_Info('shopsanity', str, 3, True,
         {
             'default': 'off',
             'const': 'off',
@@ -823,23 +669,23 @@ setting_infos = [
                       side. This means that every shop will have more
                       possible item locations. So +2 means 2 items
                       per shop.
-                      
+
                       (Random): Each shop will have a random number
                       of non-shop items, up to a maximum of 4.
-                      
+
                       The non-shop items have no requirements except
                       money, while the normal shop items (such as
                       200/300 rupee tunics) have normal vanilla
                       requirements. This means that, for example,
                       as a child you cannot buy 200/300 rupee
                       tunics, but you can buy non-shop tunics.
-                      
+
                       Non-shop bombchus will unlock the chu slot
                       in your inventory, which, if bombchus are in
                       logic, is needed to buy chu refills. If not in
                       logic, the bomb bag is required.
                       '''
-        }),       
+        }),
     Setting_Info('shuffle_mapcompass', str, 2, True,
         {
         'default': 'dungeon',
@@ -868,11 +714,11 @@ setting_infos = [
                       This will add a small amount of money and
                       refill items to the pool.
 
-                      'Dungeon': Maps and Compasses can only appear 
+                      'Dungeon': Maps and Compasses can only appear
                       in their respective dungeon.
 
                       'Anywhere': Maps and Compasses can appear
-                      anywhere in the world. 
+                      anywhere in the world.
 
                       Setting 'Remove' or 'Anywhere' will add 2
                       more possible locations to each Dungeons.
@@ -905,10 +751,10 @@ setting_infos = [
             'tooltip':'''\
                       'Remove': Small Keys are removed. All locked
                       doors in dungeons will be unlocked. An easier
-                      mode. 
+                      mode.
 
-                      'Dungeon': Small Keys can only appear in their 
-                      respective dungeon. If Fire Temple is not a 
+                      'Dungeon': Small Keys can only appear in their
+                      respective dungeon. If Fire Temple is not a
                       Master Quest dungeon, the door to the Boss Key
                       chest will be unlocked
 
@@ -947,9 +793,9 @@ setting_infos = [
             'tooltip':'''\
                       'Remove': Boss Keys are removed. All locked
                       doors in dungeons will be unlocked. An easier
-                      mode. 
+                      mode.
 
-                      'Dungeon': Boss Keys can only appear in their 
+                      'Dungeon': Boss Keys can only appear in their
                       respective dungeon.
 
                       'Anywhere': Boss Keys can appear
@@ -962,7 +808,7 @@ setting_infos = [
                       for a milder Keysanity experience.
                       '''
         }),
-    Setting_Info('enhance_map_compass', bool, 1, True, 
+    Setting_Info('enhance_map_compass', bool, 1, True,
         {
             'help': '''\
                     Gives the Map and Compass extra functionality.
@@ -986,27 +832,8 @@ setting_infos = [
                     is set to 'Anywhere'
                       ''',
             'dependency': lambda guivar: guivar['shuffle_mapcompass'].get() == 'Maps/Compasses: Anywhere',
-        }),    
-    Setting_Info('unlocked_ganondorf', bool, 1, True, 
-        {
-            'help': '''\
-                    The Boss Key door in Ganon's Tower will start unlocked.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'Remove Ganon\'s Boss Door Lock',
-            'group': 'logic',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Best when used when reducing the number of 
-                      Trials to less than 6 to prevent needing
-                      to do them all anyways looking for the key.
-                      ''',
-            'dependency': lambda guivar: guivar['shuffle_bosskeys'].get() != 'Boss Keys: Remove (Keysy)',
-        }),    
-    Setting_Info('tokensanity', str, 2, True, 
+        }),
+    Setting_Info('tokensanity', str, 2, True,
         {
             'default': 'off',
             'const': 'off',
@@ -1031,7 +858,7 @@ setting_infos = [
                 'All Tokens': 'all',
             },
             'tooltip':'''\
-                      Token reward from Gold Skulltulas are 
+                      Token reward from Gold Skulltulas are
                       shuffled into the pool.
 
                       'Dungeon Only': This only shuffles
@@ -1043,340 +870,41 @@ setting_infos = [
                       'All Tokens': Effectively adds 100
                       new locations for items to appear.
                       '''
-        }), 
-    Setting_Info('quest', str, 2, True, 
-        {
-            'default': 'vanilla',
-            'const': 'vanilla',
-            'nargs': '?',
-            'choices': ['vanilla', 'master', 'mixed'],
-            'help': '''\
-                    Select requirement to spawn the Rainbow Bridge to reach Ganon's Castle. (default: %(default)s)
-                    Vanilla:       Dungeons will be the original Ocarina of Time dungeons.
-                    Master:        Dungeons will be in the form of the Master Quest.
-                    Mixed:         Each dungeon will randomly be either standard or Master Quest.
-                    '''
-        },
-        {
-            'text': 'Dungeon Quest',
-            'group': 'world',
-            'widget': 'Combobox',
-            'default': 'Vanilla',
-            'options': {
-                'Vanilla': 'vanilla',
-                'Master Quest': 'master',
-                'Mixed': 'mixed',
-            },
-            'tooltip':'''\
-                      'Vanilla': Dungeons will be in their
-                      default OoT form.
-
-                      'Master Quest': Dungeons will be in the
-                      form found in OoT: Master Quest.
-
-                      'Mixed': Each dungeon will have a
-                      random chance to be in either form.
-                      ''',
         }),
-    Setting_Info('logic_skulltulas', int, 3, True, 
-        {
-            'default': 50,
-            'const': 50,
-            'nargs': '?',
-            'choices': [0, 10, 20, 30, 40, 50],
-            'help': '''\
-                    Choose the maximum number of Gold Skulltula Tokens you will be expected to collect.
-                    ''',
-            'type': int
-        },
-        {
-            'text': 'Maximum expected Skulltula tokens',
-            'group': 'rewards',
-            'widget': 'Scale',
-            'default': 50,
-            'min': 0,
-            'max': 50,
-            'step': 10,
-            'tooltip':'''\
-                      Choose the maximum number of Gold Skulltula
-                      Tokens you will be expected to collect.
-                      '''
-        }),
-    Setting_Info('logic_no_night_tokens_without_suns_song', bool, 1, True, 
+    Setting_Info('logic_no_zora_eggs', bool, 1, True,
         {
             'help': '''\
-                    You will not be expected to collect nighttime-only skulltulas
-                    unless you have Sun's Song
+                    You will not be expected to collect 7 zora eggs.
                     ''',
             'action': 'store_true'
         },
         {
-            'text': 'No Nighttime Skulltulas without Sun\'s Song',
+            'text': 'No Zora Eggs',
             'group': 'rewards',
             'widget': 'Checkbutton',
             'default': 'unchecked',
             'tooltip':'''\
-                      GS Tokens that can only be obtained
-                      during the night expect you to have Sun's
-                      Song to collect them. This prevents needing
-                      to wait until night for some locations.
+                      The Baby Zoras will not have an important item
                       '''
         }),
-    Setting_Info('logic_no_big_poes', bool, 1, True, 
+    Setting_Info('logic_no_perfect_archery', bool, 1, True,
         {
             'help': '''\
-                    You will not be expected to collect 10 big poes.
+                    You will not be expected to win the second prize for the shooting galleries.
                     ''',
             'action': 'store_true'
         },
         {
-            'text': 'No Big Poes',
+            'text': 'No Perfect Shooting Galleries',
             'group': 'rewards',
             'widget': 'Checkbutton',
             'default': 'unchecked',
             'tooltip':'''\
-                      The Big Poe vendor will not have a
-                      required item.
+                      Beating the shooting galleries for a second
+                      time will not yield a required item.
                       '''
         }),
-    Setting_Info('logic_no_child_fishing', bool, 1, True, 
-        {
-            'help': '''\
-                    You will not be expected to obtain the child fishing reward.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'No Child Fishing',
-            'group': 'rewards',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Fishing does not work correctly on
-                      Bizhawk.
-                      '''
-        }),
-    Setting_Info('logic_no_adult_fishing', bool, 1, True, 
-        {
-            'help': '''\
-                    You will not be expected to obtain the adult fishing reward.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'No Adult Fishing',
-            'group': 'rewards',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Fishing does not work correctly on
-                      Bizhawk.
-                      '''
-        }),
-    Setting_Info('logic_no_trade_skull_mask', bool, 1, True, 
-        {
-            'help': '''\
-                    You will not be expected to show the Skull Mask at the forest stage.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'No Skull Mask reward',
-            'group': 'rewards',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Showing off the Skull Mask will
-                      not yield a required item.
-                      '''
-        }),
-    Setting_Info('logic_no_trade_mask_of_truth', bool, 1, True, 
-        {
-            'help': '''\
-                    You will not be expected to show the Mask of Truth at the forest stage.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'No Mask of Truth reward',
-            'group': 'rewards',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Showing off the Mask of Truth
-                      will not yield a required item.
-                      '''
-        }),
-    Setting_Info('logic_no_1500_archery', bool, 1, True, 
-        {
-            'help': '''\
-                    You will not be expected to win the 1500 point horseback archery reward.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'No 1500 Horseback Archery',
-            'group': 'rewards',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Scoring 1500 points at horseback
-                      archery will not yield a required item.
-                      '''
-        }),
-    Setting_Info('logic_no_memory_game', bool, 1, True, 
-        {
-            'help': '''\
-                    You will not be expected to play the ocarina memory game in Lost Woods.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'No Lost Woods Memory Game',
-            'group': 'rewards',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Playing the ocarina memory game
-                      will not yield a required item.
-                      '''
-        }),
-    Setting_Info('logic_no_second_dampe_race', bool, 1, True, 
-        {
-            'help': '''\
-                    You will not be expected to race Dampe a second time.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'No Racing Dampe a second time',
-            'group': 'rewards',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      The second Dampe race will
-                      not yield a required item.
-                      '''
-        }),
-    Setting_Info('logic_no_trade_biggoron', bool, 1, True, 
-        {
-            'help': '''\
-                    You will not be expected to show the Claim Check to Biggoron.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'No Biggoron reward',
-            'group': 'rewards',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Showing the Claim Check to Biggoron
-                      will not yield a required item.
-                      '''
-        }),
-    Setting_Info('logic_earliest_adult_trade', str, 4, True, 
-        {
-            'default': 'pocket_egg',
-            'const': 'always',
-            'nargs': '?',
-            'choices': [
-                'pocket_egg',
-                'pocket_cucco', 
-                'cojiro', 
-                'odd_mushroom', 
-                'poachers_saw', 
-                'broken_sword', 
-                'prescription', 
-                'eyeball_frog', 
-                'eyedrops', 
-                'claim_check'],
-            'help': '''\
-                    Select the earliest item that can appear in the adult trade sequence:
-                    'pocket_egg'
-                    'pocket_cucco'
-                    'cojiro'
-                    'odd_mushroom'
-                    'poachers_saw'
-                    'broken_sword'
-                    'prescription'
-                    'eyeball_frog'
-                    'eyedrops'
-                    'claim_check'
-                    '''
-        },
-        {
-            'text': 'Adult Trade Sequence',
-            'group': 'rewards',
-            'widget': 'Combobox',
-            'dependency': lambda guivar: not guivar['logic_no_trade_biggoron'].get(),
-            'default': 'Earliest: Pocket Egg',
-            'options': {
-                'Earliest: Pocket Egg': 'pocket_egg',
-                'Earliest: Pocket Cucco': 'pocket_cucco', 
-                'Earliest: Cojiro': 'cojiro', 
-                'Earliest: Odd Mushroom': 'odd_mushroom', 
-                'Earliest: Poachers Saw': 'poachers_saw', 
-                'Earliest: Broken Sword': 'broken_sword', 
-                'Earliest: Prescription': 'prescription', 
-                'Earliest: Eyeball Frog': 'eyeball_frog', 
-                'Earliest: Eyedrops': 'eyedrops', 
-                'Earliest: Claim Check': 'claim_check'},
-            'tooltip':'''\
-                      Select the earliest item that can appear in the adult trade sequence.
-                      '''
-        }),
-    Setting_Info('logic_latest_adult_trade', str, 4, True, 
-        {
-            'default': 'claim_check',
-            'const': 'always',
-            'nargs': '?',
-            'choices': [
-                'pocket_egg',
-                'pocket_cucco', 
-                'cojiro', 
-                'odd_mushroom', 
-                'poachers_saw', 
-                'broken_sword', 
-                'prescription', 
-                'eyeball_frog', 
-                'eyedrops', 
-                'claim_check'],
-            'help': '''\
-                    Select the latest item that can appear in the adult trade sequence:
-                    'pocket_egg'
-                    'pocket_cucco'
-                    'cojiro'
-                    'odd_mushroom'
-                    'poachers_saw'
-                    'broken_sword'
-                    'prescription'
-                    'eyeball_frog'
-                    'eyedrops'
-                    'claim_check'
-                    '''
-        },
-        {
-            'group': 'rewards',
-            'widget': 'Combobox',
-            'dependency': lambda guivar: not guivar['logic_no_trade_biggoron'].get(),
-            'default': 'Latest: Claim Check',
-            'options': {
-                'Latest: Pocket Egg': 'pocket_egg',
-                'Latest: Pocket Cucco': 'pocket_cucco', 
-                'Latest: Cojiro': 'cojiro', 
-                'Latest: Odd Mushroom': 'odd_mushroom', 
-                'Latest: Poachers Saw': 'poachers_saw', 
-                'Latest: Broken Sword': 'broken_sword', 
-                'Latest: Prescription': 'prescription', 
-                'Latest: Eyeball Frog': 'eyeball_frog', 
-                'Latest: Eyedrops': 'eyedrops', 
-                'Latest: Claim Check': 'claim_check'},
-            'tooltip':'''\
-                      Select the latest item that can appear in the adult trade sequence.
-                      '''
-        }),
-    Setting_Info('logic_tricks', bool, 1, True, 
+    Setting_Info('logic_tricks', bool, 1, True,
         {
             'help': '''\
                     Enable various tricks.
@@ -1393,164 +921,33 @@ setting_infos = [
                       Still does not require glitches.
                       '''
         }),
-    Setting_Info('logic_man_on_roof', bool, 1, True, 
+    Setting_Info('logic_goron_boost', bool, 1, True,
         {
             'help': '''\
-                    The man on the roof will not require the Hookshot in logic.
+                    Goron Boost could be required to get places
                     ''',
             'action': 'store_true'
         },
         {
-            'text': 'Man on Roof without Hookshot',
+            'text': 'Goron Boost',
             'group': 'tricks',
             'widget': 'Checkbutton',
             'default': 'unchecked',
             'tooltip':'''\
-                      Can be reached by side-hopping off
-                      the watchtower.
+                      Take damage from a bomb while doing a
+                      ground pound as Goron Link
                       '''
         }),
-    Setting_Info('logic_child_deadhand', bool, 1, True, 
-        {
-            'help': '''\
-                    Deadhand in the Bottom of the Well will not require the Kokiri sword in logic.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'Child Deadhand without Kokiri Sword',
-            'group': 'tricks',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Requires 9 sticks or 5 jump slashes.
-                      '''
-        }),
-    Setting_Info('logic_dc_jump', bool, 1, True, 
-        {
-            'help': '''\
-                    Jumping towards the Bomb Bag chest in Dodongo's Cavern as an adult
-                    will not require Hover Boots in logic.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'Dodongo\'s Cavern spike trap room jump without Hover Boots',
-            'group': 'tricks',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Jump is adult only.
-                      '''
-        }),
-    Setting_Info('logic_windmill_poh', bool, 1, True, 
-        {
-            'help': '''\
-                    Getting the Piece of Heart in the windmill as an adult will require nothing in logic.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': 'Windmill PoH as adult with nothing',
-            'group': 'tricks',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Can jump up to the spinning platform from
-                      below as adult.
-                      '''
-        }),
-    Setting_Info('logic_crater_bean_poh_with_hovers', bool, 1, True, 
-        {
-            'help': '''\
-                    The Piece of Heart in Death Mountain Crater that normally requires the bean to
-                    reach will optionally require the Hover Boots in logic.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': "Crater's bean PoH with Hover Boots",
-            'group': 'tricks',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Hover from the top of the crater.
-                      '''
-        }),
-    Setting_Info('logic_zora_with_cucco', bool, 1, True, 
-        {
-            'help': '''\
-                    Zora's Domain can be entered with a Cucco as child in logic.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': "Zora's Domain entry with Cucco",
-            'group': 'tricks',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Can fly behind the waterfall with 
-                      a cucco as child.
-                      '''
-        }),
-    Setting_Info('logic_zora_with_hovers', bool, 1, True, 
-        {
-            'help': '''\
-                    Zora's Domain can be entered with Hover Boots as Adult in logic.
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': "Zora's Domain entry with Hover Boots",
-            'group': 'tricks',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Can hover behind the waterfall as adult.
-                      This is very difficult.
-                      '''
-        }),
-    Setting_Info('logic_fewer_tunic_requirements', bool, 1, True, 
-        {
-            'help': '''\
-                    Allows the following possible without Goron or Zora Tunic:
-                    Enter Water Temple
-                    Enter Fire Temple
-                    Zoras Fountain Bottom Freestanding PoH
-                    Gerudo Training Grounds Underwater Silver Rupee Chest
-                    ''',
-            'action': 'store_true'
-        },
-        {
-            'text': "Fewer Tunic Requirements",
-            'group': 'tricks',
-            'widget': 'Checkbutton',
-            'default': 'unchecked',
-            'tooltip':'''\
-                      Allows the following possible without Tunics:
-                      - Enter Water Temple. The key below the center
-                      pillar still requires Zora Tunic.
-                      - Enter Fire Temple. Only the first floor is
-                      accessible, and not Volvagia.
-                      - Zoras Fountain Bottom Freestanding PoH.
-                      Might not have enough health to resurface.
-                      - Gerudo Training Grounds Underwater 
-                      Silver Rupee Chest. May need to make multiple
-                      trips.
-                      '''
-        }),
-    Setting_Info('logic_lens', str, 2, True, 
+    Setting_Info('logic_lens', str, 2, True,
         {
             'default': 'all',
             'const': 'always',
             'nargs': '?',
-            'choices': ['chest', 'chest-wasteland', 'all'],
+            'choices': ['darmani', 'all'],
             'help': '''\
                     Choose what expects the Lens of Truth:
                     all:              All lens spots expect the lens (except those that did not in the original game)
-                    chest-wasteland:  Only wasteland and chest minigame expect the lens
-                    chest:            Only the chest minigame expects the lens
+                    darmani:            Only picking up Darmani's item requires the lens
                     '''
         },
         {
@@ -1564,7 +961,7 @@ setting_infos = [
                 'Only Chest Minigame': 'chest',
             },
             'tooltip':'''\
-                      'Required everywhere': every invisible or 
+                      'Required everywhere': every invisible or
                       fake object will expect you to have the
                       Lens of Truth and Magic. The exception is
                       passing through the first wall in Bottom of
@@ -1574,7 +971,7 @@ setting_infos = [
                       the ghost guide across the Haunted Wasteland.
                       '''
         }),
-    Setting_Info('ocarina_songs', bool, 1, True, 
+    Setting_Info('ocarina_songs', bool, 1, True,
         {
             'help': '''\
                     Randomizes the notes need to play for each ocarina song.
@@ -1593,7 +990,7 @@ setting_infos = [
                       typically more difficult.
                       '''
         }),
-    Setting_Info('correct_chest_sizes', bool, 1, True, 
+    Setting_Info('correct_chest_sizes', bool, 1, True,
         {
             'help': '''\
                     Updates the chest sizes to match their contents.
@@ -1608,14 +1005,14 @@ setting_infos = [
             'widget': 'Checkbutton',
             'default': 'unchecked',
             'tooltip':'''\
-                      Chests will be large if they contain a major 
-                      item, and small if they don't. Allows skipping 
+                      Chests will be large if they contain a major
+                      item, and small if they don't. Allows skipping
                       chests if they are small. However, skipping
                       small chests will mean having low health,
                       ammo, and rupees, so doing so is a risk.
                       '''
         }),
-    Setting_Info('clearer_hints', bool, 1, True, 
+    Setting_Info('clearer_hints', bool, 1, True,
         {
             'help': '''\
                     The hints provided by Gossip Stones are
@@ -1633,7 +1030,7 @@ setting_infos = [
                       be very direct if this option is enabled.
                       '''
         }),
-    Setting_Info('hints', str, 2, True, 
+    Setting_Info('hints', str, 2, True,
         {
             'default': 'none',
             'const': 'agony',
@@ -1674,7 +1071,7 @@ setting_infos = [
                       required to beat the game.
                       '''
         }),
-    Setting_Info('text_shuffle', str, 2, True, 
+    Setting_Info('text_shuffle', str, 2, True,
         {
             'default': 'none',
             'const': 'none',
@@ -1708,7 +1105,7 @@ setting_infos = [
                       so that the price of the item can be known.
                       '''
         }),
-    Setting_Info('difficulty', str, 2, True, 
+    Setting_Info('difficulty', str, 2, True,
         {
             'default': 'normal',
             'const': 'normal',
@@ -1740,13 +1137,13 @@ setting_infos = [
                       and Double Defense are removed.
 
                       'Very Hard': Heart Containers, Heart,
-                      Pieces, Double Magic, Double Defense, 
+                      Pieces, Double Magic, Double Defense,
                       and Nayru's Love are removed.
 
                       'OHKO': Link dies in one hit.
                       '''
         }),
-    Setting_Info('default_targeting', str, 1, False, 
+    Setting_Info('default_targeting', str, 1, False,
         {
             'default': 'hold',
             'const': 'always',
@@ -1798,62 +1195,486 @@ setting_infos = [
                        '''
         }),
 
-    Setting_Info('kokiricolor', str, 0, False, 
+    Setting_Info('hatcolor', str, 0, False,
         {
-            'default': 'Kokiri Green',
-            'const': 'Kokiri Green',
+            'default': 'White',
+            'const': 'White',
             'nargs': '?',
             'type': parse_custom_tunic_color,
             'help': '''\
-                    Choose the color for Link's Kokiri Tunic. (default: %(default)s)
-                    Color:              Make the Kokiri Tunic this color.
+                    Choose the color for Link's Hat. (default: %(default)s)
+                    Color:              Make the Link's Hat this color.
                     Random Choice:      Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Kokiri Tunic Color',
+            'text': 'Link Hat Color',
             'group': 'tuniccolor',
             'widget': 'Combobox',
-            'default': 'Kokiri Green',
+            'default': 'White',
             'options': get_tunic_color_options(),
             'tooltip':'''\
-                      'Random Choice': Choose a random 
+                      'Random Choice': Choose a random
                       color from this list of colors.
-                      'Completely Random': Choose a random 
+                      'Completely Random': Choose a random
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('goroncolor', str, 0, False, 
+    Setting_Info('shirtcolor', str, 0, False,
         {
             'default': 'Goron Red',
             'const': 'Goron Red',
             'nargs': '?',
             'type': parse_custom_tunic_color,
             'help': '''\
-                    Choose the color for Link's Goron Tunic. (default: %(default)s)
-                    Color:              Make the Goron Tunic this color.
+                    Choose the color for Link's Shirt. (default: %(default)s)
+                    Color:              Make Link's Shirt this color.
                     Random Choice:      Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Goron Tunic Color',
+            'text': 'Link Shirt Color',
             'group': 'tuniccolor',
             'widget': 'Combobox',
             'default': 'Goron Red',
             'options': get_tunic_color_options(),
             'tooltip':'''\
-                      'Random Choice': Choose a random 
+                      'Random Choice': Choose a random
                       color from this list of colors.
-                      'Completely Random': Choose a random 
+                      'Completely Random': Choose a random
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('zoracolor', str, 0, False, 
+    Setting_Info('pantscolor', str, 0, False,
         {
             'default': 'Zora Blue',
             'const': 'Zora Blue',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Link's Pants. (default: %(default)s)
+                    Color:              Make Link's Pants this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Link Pants Color',
+            'group': 'tuniccolor',
+            'widget': 'Combobox',
+            'default': 'Zora Blue',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('dekumorph', bool, 1, True,
+        {
+            'help': '''\
+                    Deku Link's entire body becomes one color
+                    ''',
+            'action': 'store_true'
+        },
+        {
+            'text': 'Deku Morph Suit',
+            'group': 'tuniccolor',
+            'widget': 'Checkbutton',
+            'default': 'unchecked',
+            'tooltip':'''\
+                    Deku Link's entire body becomes one color
+                      '''
+        }),
+    Setting_Info('dekucolor', str, 0, False,
+        {
+            'default': 'Beige',
+            'const': 'Beige',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Deku Link. (default: %(default)s)
+                    Color:              Make Deku Link this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Deku Link Color',
+            'group': 'tuniccolor',
+            'widget': 'Combobox',
+            'default': 'Beige',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      ''',
+            'dependency': lambda guivar: guivar['dekumorph'].get()
+        }),
+    Setting_Info('dekutuniccolor', str, 0, False,
+        {
+            'default': 'Teal',
+            'const': 'Teal',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Deku Link's Tunic. (default: %(default)s)
+                    Color:              Make Deku Link's Tunic this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Deku Link Tunic Color',
+            'group': 'tuniccolor',
+            'widget': 'Combobox',
+            'default': 'Teal',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('goronhatcolor', str, 0, False,
+        {
+            'default': 'Vivid Cyan',
+            'const': 'Vivid Cyan',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Goron Link's Hat. (default: %(default)s)
+                    Color:              Make Goron Link's Hat this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Goron Link Hat Color',
+            'group': 'tuniccolor',
+            'widget': 'Combobox',
+            'default': 'Vivid Cyan',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('goronpantscolor', str, 0, False,
+        {
+            'default': 'Blood Red',
+            'const': 'Blood Red',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Goron Link's Pants. (default: %(default)s)
+                    Color:              Make Goron Link's Pants this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Goron Link Pants Color',
+            'group': 'tuniccolor',
+            'widget': 'Combobox',
+            'default': 'Blood Red',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('zoramorph', bool, 1, True,
+        {
+            'help': '''\
+                    Zora Link's entire body becomes one color
+                    ''',
+            'action': 'store_true'
+        },
+        {
+            'text': 'Zora Morph Suit',
+            'group': 'tuniccolor',
+            'widget': 'Checkbutton',
+            'default': 'unchecked',
+            'tooltip':'''\
+                    Zora Link's entire body becomes one color if checked
+                      '''
+        }),
+        Setting_Info('zoracolor', str, 0, False,
+        {
+        'default': 'Orange',
+        'const': 'Orange',
+        'nargs': '?',
+        'type': parse_custom_tunic_color,
+        'help': '''\
+        Choose the color for Zora Link's Morph Suit. (default: %(default)s)
+        Color:              Make Zora Link this color.
+        Random Choice:      Choose a random color from this list of colors.
+        Completely Random: Choose a random color from any color the N64 can draw.
+        '''
+        },
+        {
+        'text': 'Zora Color',
+        'group': 'tuniccolor',
+        'widget': 'Combobox',
+        'default': 'Orange',
+        'options': get_tunic_color_options(),
+        'tooltip':'''\
+            'Random Choice': Choose a random
+            color from this list of colors.
+            'Completely Random': Choose a random
+            color from any color the N64 can draw.
+        ''',
+        'dependency': lambda guivar: guivar['zoramorph'].get()
+        }),
+    Setting_Info('zoratuniccolor', str, 0, False,
+        {
+            'default': 'Orange',
+            'const': 'Orange',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Zora Link's Tunic. (default: %(default)s)
+                    Color:              Make Zora Link's Tunic this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Zora Tunic Color',
+            'group': 'tuniccolor',
+            'widget': 'Combobox',
+            'default': 'Orange',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('zorafincolor', str, 0, False,
+        {
+            'default': 'Blood Orange',
+            'const': 'Blood Orange',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Zora Link's Fins. (default: %(default)s)
+                    Color:              Make the Zora Fins this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Zora Fin Color',
+            'group': 'tuniccolor',
+            'widget': 'Combobox',
+            'default': 'Blood Orange',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('deitycolor', str, 0, False,
+        {
+            'default': 'Sonic Blue',
+            'const': 'Sonic Blue',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Fierce Deity Link's Sword Slash. (default: %(default)s)
+                    Color:              Make the Fierce Deity sword slash this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Fierce Deity Tunic Color',
+            'group': 'tuniccolor',
+            'widget': 'Combobox',
+            'default': 'Gold',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('swordcolor', str, 0, False,
+        {
+            'default': 'Twitch Purple',
+            'const': 'Twitch Purple',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Link's Sword Slash. (default: %(default)s)
+                    Color:              Make the sword slash this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Sword Slash Color',
+            'group': 'tatlcolor',
+            'widget': 'Combobox',
+            'default': 'Twitch Purple',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('dekuspincolor', str, 0, False,
+        {
+            'default': 'Rose Pink',
+            'const': 'Rose Pink',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Deku Link's spin attack. (default: %(default)s)
+                    Color:              Make the spin trail this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Deku Spin Trail Color',
+            'group': 'tuniccolor',
+            'widget': 'Combobox',
+            'default': 'Rose Pink',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('zoraslashcolor', str, 0, False,
+        {
+            'default': 'Blood Orange',
+            'const': 'Blood Orange',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Zora Link's Slash Attack. (default: %(default)s)
+                    Color:              Make the Zora Attack Trail this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Zora Attack Color',
+            'group': 'tuniccolor',
+            'widget': 'Combobox',
+            'default': 'Blood Orange',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('boomerangcolor', str, 0, False,
+        {
+            'default': 'Azure Blue',
+            'const': 'Azure Blue',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Zora Link's Boomerangs. (default: %(default)s)
+                    Color:              Make the Zora Boomerangs this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Zora Boomerang Color',
+            'group': 'tatlhint',
+            'widget': 'Combobox',
+            'default': 'Azure Blue',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('boomerangtrail', str, 0, False,
+        {
+            'default': 'Black',
+            'const': 'Black',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Zora Link's Boomerang Trails. (default: %(default)s)
+                    Color:              Make the Zora Boomerang Trails this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Zora Boomerang Trail Color',
+            'group': 'tatlhint',
+            'widget': 'Combobox',
+            'default': 'Black',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('deityswordcolor', str, 0, False,
+        {
+            'default': 'Gold',
+            'const': 'Gold',
+            'nargs': '?',
+            'type': parse_custom_tunic_color,
+            'help': '''\
+                    Choose the color for Fierce Deity Link's Sword Slash. (default: %(default)s)
+                    Color:              Make the Fierce Deity sword slash this color.
+                    Random Choice:      Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
+                    '''
+        },
+        {
+            'text': 'Fierce Deity Sword Slash Color',
+            'group': 'tatlhint',
+            'widget': 'Combobox',
+            'default': 'Gold',
+            'options': get_tunic_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Completely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
+        }),
+    Setting_Info('deitybeamcolor', str, 0, False,
+        {
+            'default': 'Hot Pink',
+            'const': 'Hot Pink',
             'nargs': '?',
             'type': parse_custom_tunic_color,
             'help': '''\
@@ -1864,198 +1685,224 @@ setting_infos = [
                     '''
         },
         {
-            'text': 'Zora Tunic Color',
-            'group': 'tuniccolor',
+            'text': 'Fierce Deity Sword Beam Color',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
             'default': 'Zora Blue',
             'options': get_tunic_color_options(),
             'tooltip':'''\
-                      'Random Choice': Choose a random 
+                      'Random Choice': Choose a random
                       color from this list of colors.
-                      'Completely Random': Choose a random 
+                      'Completely Random': Choose a random
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('navicolordefault', str, 0, False, 
+    Setting_Info('tatlcolordefault', str, 0, False,
         {
             'default': 'White',
             'const': 'White',
             'nargs': '?',
-            'type': parse_custom_navi_color,
+            'type': parse_custom_tatl_color,
             'help': '''\
-                    Choose the color for Navi when she is idle. (default: %(default)s)
-                    Color:             Make the Navi this color.
+                    Choose the color for Tatl when she is idle. (default: %(default)s)
+                    Color:             Make the Tatl this color.
                     Random Choice:     Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Navi Idle',
-            'group': 'navicolor',
+            'text': 'Tatl Idle',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
             'default': 'White',
-            'options': get_navi_color_options(),
+            'options': get_tatl_color_options(),
             'tooltip':'''\
-                      'Random Choice': Choose a random 
+                      'Random Choice': Choose a random
                       color from this list of colors.
-                      'Comepletely Random': Choose a random 
+                      'Comepletely Random': Choose a random
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('navicolorenemy', str, 0, False, 
+    Setting_Info('tatlcolorenemy', str, 0, False,
         {
             'default': 'Yellow',
             'const': 'Yellow',
             'nargs': '?',
-            'type': parse_custom_navi_color,
+            'type': parse_custom_tatl_color,
             'help': '''\
-                    Choose the color for Navi when she is targeting an enemy. (default: %(default)s)
-                    Color:             Make the Navi this color.
+                    Choose the color for Tatl when she is targeting an enemy. (default: %(default)s)
+                    Color:             Make the Tatl this color.
                     Random Choice:     Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Navi Targeting Enemy',
-            'group': 'navicolor',
+            'text': 'Tatl Targeting Enemy',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
             'default': 'Yellow',
-            'options': get_navi_color_options(),
+            'options': get_tatl_color_options(),
             'tooltip':'''\
-                      'Random Choice': Choose a random 
+                      'Random Choice': Choose a random
                       color from this list of colors.
-                      'Comepletely Random': Choose a random 
+                      'Comepletely Random': Choose a random
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('navicolornpc', str, 0, False, 
+    Setting_Info('tatlcolornpc', str, 0, False,
         {
             'default': 'Light Blue',
             'const': 'Light Blue',
             'nargs': '?',
-            'type': parse_custom_navi_color,
+            'type': parse_custom_tatl_color,
             'help': '''\
-                    Choose the color for Navi when she is targeting an NPC. (default: %(default)s)
-                    Color:             Make the Navi this color.
+                    Choose the color for Tatl when she is targeting an NPC. (default: %(default)s)
+                    Color:             Make the Tatl this color.
                     Random Choice:     Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Navi Targeting NPC',
-            'group': 'navicolor',
+            'text': 'Tatl Targeting NPC',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
             'default': 'Light Blue',
-            'options': get_navi_color_options(),
+            'options': get_tatl_color_options(),
             'tooltip':'''\
-                      'Random Choice': Choose a random 
+                      'Random Choice': Choose a random
                       color from this list of colors.
-                      'Comepletely Random': Choose a random 
+                      'Comepletely Random': Choose a random
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('navicolorprop', str, 0, False, 
+    Setting_Info('tatlcolorprop', str, 0, False,
         {
             'default': 'Green',
             'const': 'Green',
             'nargs': '?',
-            'type': parse_custom_navi_color,
+            'type': parse_custom_tatl_color,
             'help': '''\
-                    Choose the color for Navi when she is targeting a prop. (default: %(default)s)
-                    Color:             Make the Navi this color.
+                    Choose the color for Tatl when she is targeting a prop. (default: %(default)s)
+                    Color:             Make the Tatl this color.
                     Random Choice:     Choose a random color from this list of colors.
                     Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Navi Targeting Prop',
-            'group': 'navicolor',
+            'text': 'Tatl Targeting Prop',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
             'default': 'Green',
-            'options': get_navi_color_options(),
+            'options': get_tatl_color_options(),
             'tooltip':'''\
-                      'Random Choice': Choose a random 
+                      'Random Choice': Choose a random
                       color from this list of colors.
-                      'Comepletely Random': Choose a random 
+                      'Comepletely Random': Choose a random
                       color from any color the N64 can draw.
                       '''
         }),
-    Setting_Info('navisfxoverworld', str, 0, False, 
+    Setting_Info('tatlcolorboss', str, 0, False,
         {
-            'default': 'Default',
-            'const': 'Default',
+            'default': 'Green',
+            'const': 'Green',
             'nargs': '?',
-            'choices': ['Default', 'Notification', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Navi - Hey!', 'Navi - Random', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
+            'type': parse_custom_tatl_color,
             'help': '''\
-                    Select the sound effect that plays when Navi has a hint. (default: %(default)s)
-                    Sound:         Replace the sound effect with the chosen sound.
-                    Random Choice: Replace the sound effect with a random sound from this list.
-                    None:          Eliminate Navi hint sounds.
+                    Choose the color for Tatl when she is targeting a boss. (default: %(default)s)
+                    Color:             Make the Tatl this color.
+                    Random Choice:     Choose a random color from this list of colors.
+                    Completely Random: Choose a random color from any color the N64 can draw.
                     '''
         },
         {
-            'text': 'Navi Hint',
-            'group': 'navihint',
+            'text': 'Tatl Targeting Boss',
+            'group': 'tatlcolor',
             'widget': 'Combobox',
-            'default': 'Default',
-            'options': [
-                'Random Choice', 
-                'Default', 
-                'Notification', 
-                'Rupee', 
-                'Timer', 
-                'Tamborine', 
-                'Recovery Heart', 
-                'Carrot Refill', 
-                'Navi - Hey!',
-                'Navi - Random',
-                'Zelda - Gasp', 
-                'Cluck', 
-                'Mweep!', 
-                'None',
-            ]
+            'default': 'Green',
+            'options': get_tatl_color_options(),
+            'tooltip':'''\
+                      'Random Choice': Choose a random
+                      color from this list of colors.
+                      'Comepletely Random': Choose a random
+                      color from any color the N64 can draw.
+                      '''
         }),
-        Setting_Info('navisfxenemytarget', str, 0, False, 
+    Setting_Info('tatlsfxoverworld', str, 0, False,
         {
             'default': 'Default',
             'const': 'Default',
             'nargs': '?',
-            'choices': ['Default', 'Notification', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Navi - Hey!', 'Navi - Random', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
+            'choices': ['Default', 'Notification', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Tatl - Hey!', 'Tatl - Random', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
+            'help': '''\
+                    Select the sound effect that plays when Tatl has a hint. (default: %(default)s)
+                    Sound:         Replace the sound effect with the chosen sound.
+                    Random Choice: Replace the sound effect with a random sound from this list.
+                    None:          Eliminate Tatl hint sounds.
+                    '''
+        },
+        {
+            'text': 'Tatl Hint',
+            'group': 'tatlhint',
+            'widget': 'Combobox',
+            'default': 'Default',
+            'options': [
+                'Random Choice',
+                'Default',
+                'Notification',
+                'Rupee',
+                'Timer',
+                'Tamborine',
+                'Recovery Heart',
+                'Carrot Refill',
+                'Tatl - Hey!',
+                'Tatl - Random',
+                'Zelda - Gasp',
+                'Cluck',
+                'Mweep!',
+                'None',
+            ]
+        }),
+        Setting_Info('tatlsfxenemytarget', str, 0, False,
+        {
+            'default': 'Default',
+            'const': 'Default',
+            'nargs': '?',
+            'choices': ['Default', 'Notification', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Tatl - Hey!', 'Tatl - Random', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
             'help': '''\
                     Select the sound effect that plays when targeting an enemy. (default: %(default)s)
                     Sound:         Replace the sound effect with the chosen sound.
                     Random Choice: Replace the sound effect with a random sound from this list.
-                    None:          Eliminate Navi hint sounds.
+                    None:          Eliminate Tatl hint sounds.
                     '''
         },
         {
-            'text': 'Navi Enemy Target',
-            'group': 'navihint',
+            'text': 'Tatl Enemy Target',
+            'group': 'tatlhint',
             'widget': 'Combobox',
             'default': 'Default',
             'options': [
-                'Random Choice', 
-                'Default', 
-                'Notification', 
-                'Rupee', 
-                'Timer', 
-                'Tamborine', 
-                'Recovery Heart', 
-                'Carrot Refill', 
-                'Navi - Hey!',
-                'Navi - Random',
-                'Zelda - Gasp', 
-                'Cluck', 
-                'Mweep!', 
+                'Random Choice',
+                'Default',
+                'Notification',
+                'Rupee',
+                'Timer',
+                'Tamborine',
+                'Recovery Heart',
+                'Carrot Refill',
+                'Tatl - Hey!',
+                'Tatl - Random',
+                'Zelda - Gasp',
+                'Cluck',
+                'Mweep!',
                 'None',
             ]
         }),
-    Setting_Info('healthSFX', str, 0, False, 
+    Setting_Info('healthSFX', str, 0, False,
         {
             'default': 'Default',
             'const': 'Default',
             'nargs': '?',
-            'choices': ['Default', 'Softer Beep', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Navi - Hey!', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
+            'choices': ['Default', 'Softer Beep', 'Rupee', 'Timer', 'Tamborine', 'Recovery Heart', 'Carrot Refill', 'Tatl - Hey!', 'Zelda - Gasp', 'Cluck', 'Mweep!', 'Random', 'None'],
             'help': '''\
                     Select the sound effect that loops at low health. (default: %(default)s)
                     Sound:         Replace the sound effect with the chosen sound.
@@ -2069,22 +1916,22 @@ setting_infos = [
             'widget': 'Combobox',
             'default': 'Default',
             'options': [
-                'Random Choice', 
-                'Default', 
-                'Softer Beep', 
-                'Rupee', 
-                'Timer', 
-                'Tamborine', 
-                'Recovery Heart', 
-                'Carrot Refill', 
-                'Navi - Hey!', 
-                'Zelda - Gasp', 
-                'Cluck', 
-                'Mweep!', 
+                'Random Choice',
+                'Default',
+                'Softer Beep',
+                'Rupee',
+                'Timer',
+                'Tamborine',
+                'Recovery Heart',
+                'Carrot Refill',
+                'Tatl - Hey!',
+                'Zelda - Gasp',
+                'Cluck',
+                'Mweep!',
                 'None',
             ],
             'tooltip':'''\
-                      'Random Choice': Choose a random 
+                      'Random Choice': Choose a random
                       sound from this list.
                       'Default': Beep. Beep. Beep.
                       '''
