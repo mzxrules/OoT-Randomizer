@@ -12,15 +12,6 @@ def link_entrances(world):
             connect_simple(world, exitname, regionname)
         for exitname, regionname in default_dungeon_connections:
             connect_simple(world, exitname, regionname)
-        targets = list(Fairy_List)
-        destinations = list(Fairy_List)
-        random.shuffle(targets)
-        random.shuffle(destinations)
-        Fairy_Pairs = []
-        for i in range (0, 6):
-            Fairy_Pairs.append((targets[i], destinations[i]))
-        for i in range (0, 6):
-            connect_fairy(world, Fairy_Pairs[i][0], Fairy_Pairs[i][1])
     else:
         raise NotImplementedError('Shuffling not supported yet')
 
@@ -91,118 +82,90 @@ def connect_fairy(world, entrancename, exitname):
 
 # these are connections that cannot be shuffled and always exist.
 # They logically separate areas that do not cross loading zones
-mandatory_connections = [ ('Cursed Underground', 'Clock Tower'),
-                                                ('South Mailbox', 'Mailbox'),
-                                                ('East Mailbox', 'Mailbox'),
-                                                ('North Mailbox', 'Mailbox'),
-                                                ('Tunnel Balloon From Observatory', 'Bomber Tunnel'),
-                                                ('Tunnel Balloon From ECT', 'Astral Observatory'),
-                                                ('Termina Field North Exit', 'Path to Mountain Village South'),
-                                                ('Termina Field From Mountain', 'Termina Field'),
-                                                ('Mountain Snowball Block', 'Path to Mountain Village North'),
-                                                ('Mountain Snowball Block Backwards', 'Path to Mountain Village South'),
-                                                ('Great Bay Gate', 'Great Bay Coast'),
-                        ]
+mandatory_connections = [ 
+    ('Cursed Underground', 'Clock Tower'),
+    ('South Mailbox', 'Mailbox'),
+    ('East Mailbox', 'Mailbox'),
+    ('North Mailbox', 'Mailbox'),
+    ('Tunnel Balloon From Observatory', 'Bomber Tunnel'),
+    ('Tunnel Balloon From ECT', 'Astral Observatory'),
+    ('Termina Field North Exit', 'Path to Mountain Village South'),
+    ('Termina Field From Mountain', 'Termina Field'),
+    ('Mountain Snowball Block', 'Path to Mountain Village North'),
+    ('Mountain Snowball Block Backwards', 'Path to Mountain Village South'),
+    ('Great Bay Gate', 'Great Bay Coast'),
+    ]
 
 # these connections are the pairs of owl statues that may be shuffled
-owl_statue_connections = [('', '')
-                        ]
 
 # entrances that cross a loading zone and may be shuffled
-default_connections = [('Clock Tower Exit', 'South Clock Town'),
-                                        ('Clock Tower Twisted Hallway', 'Clock Tower'),
-                                        ('Clock Tower Twisted Hallway Backwards', 'Deku Flower Tutorial Area'),
-                                        ('Clock Tower Entrance', 'Clock Tower'),
-                                        ('Clock Tower Carnival Door', 'Clock Tower Rooftop'),
-                                        ('SCT Top Exit to WCT', 'West Clock Town'),
-                                        ('SCT Bottom Exit to WCT', 'West Clock Town'),
-                                        ('SCT Exit to NCT', 'SCT Exit to NCT', 'North Clock Town'),
-                                        ('SCT Bottom Exit to ECT', 'East Clock Town'),
-                                        ('SCT Top Exit to ECT', 'East Clock Town'),
-                                        ('Clock Town South Gate', 'Termina Field'),
-                                        ('SCT Exit to Laundry Pool', 'Laundry Pool'),
-                                        ('Honey and Darling', 'Honey and Darling'),
-                                        ('Treasure Chest Shop', 'Treasure Chest Shop'),
-                                        ('Town Shooting Gallery', 'Town Shooting Gallery'),
-                                        ('Milk Bar', 'Milk Bar'),
-                                        ('Stock Pot Inn', 'Stock Pot Inn'),
-                                        ('Stock Pot Inn Secret Entrance', 'Stock Pot Inn'),
-                                        ('Mayors Office', 'Mayors Office'),
-                                        ('Bomber Bouncer', 'Bomber Tunnel'),
-                                        ('Honey and Darling Exit', 'East Clock Town'),
-                                        ('Treasure Chest Shop Exit', 'East Clock Town'),
-                                        ('Town Shooting Gallery Exit', 'East Clock Town'),
-                                        ('Milk Bar Exit', 'East Clock Town'),
-                                        ('Stock Pot Inn Roof', 'East Clock Town'),
-                                        ('Stock Pot Inn Front Door', 'East Clock Town'),
-                                        ('Mayors Office Exit', 'East Clock Town'),
-                                        ('Bomber Tunnel Exit', 'East Clock Town'),
-                                        ('ECT Top Exit to SCT', 'South Clock Town'),
-                                        ('ECT Bottom Exit to SCT', 'South Clock Town'),
-                                        ('ECT Exit to NCT', 'North Clock Town'),
-                                        ('Clock Town East Gate', 'Termina Field'),
-                                        ('Curiosity Shop', 'Curiosity Shop'),
-                                        ('Trading Post', 'Trading Post'),
-                                        ('Bomb Shop', 'Bomb Shop'),
-                                        ('Post Office', 'Post Office'),
-                                        ('Lottery Shop', 'Lottery Shop'),
-                                        ('Swordsmans School', 'Swordsmans School'),
-                                        ('Curiosity Shop Exit', 'West Clock Town'),
-                                        ('Trading Post Exit', 'West Clock Town'),
-                                        ('Bomb Shop Exit', 'West Clock Town'),
-                                        ('Post Office Exit', 'West Clock Town'),
-                                        ('Lottery Shop Exit', 'WestClock Town'),
-                                        ('Swordsmans School Exit', 'West Clock Town'),
-                                        ('Clock Town West Gate', 'Termina Field'),
-                                        ('WCT Top Exit to SCT', 'South Clock Town'),
-                                        ('WCT Bottom Exit to SCT', 'South Clock Town'),
-                                        ('Deku Playground', 'Deku Playground'),
-                                        ('Deku Playground Exit', 'North Clock Town'),
-                                        ('GF Clock Town', 'Clock Town Fairy Shrine'),
-                                        ('South Gate to Clock Town', 'South Clock Town'),
-                                        ('North Gate to Clock Town', 'North Clock Town'),
-                                        ('West Gate to Clock Town', 'West Clock Town'),
-                                        ('East Gate to Clock Town', 'East Clock Town'),
-                                        ('Termina Field to Swamp', 'Path to Swamp'),
-                                        ('Termina Field to Ikana', 'Path to Ikana'),
-
-                                        ('GF Woodfall', 'Woodfall Fairy Shrine'),
-
-                                        ('Mountain Icicles', 'Path to Mountain Village South'),
-                                        ('Mountain Icicles Backwards', 'Path to Mountain Village South'),
-                                        ('Mountain Village Entrance', 'Mountain Village'),
-                                        (''),
-                                        ('GF Snowhead', 'Snowhead Fairy Shrine'),
-
-                                        ('GF Great Bay', 'Great Bay Fairy Shrine'),
-
-                                        ('GF Stone Tower', 'Stone Tower Fairy Shrine'),
-                                        ]
+default_connections = [
+    ('Clock Tower Exit', 'South Clock Town'),
+    ('Clock Tower Twisted Hallway', 'Clock Tower'),
+    ('Clock Tower Twisted Hallway Backwards', 'Deku Flower Tutorial Area'),
+    ('Clock Tower Entrance', 'Clock Tower'),
+    ('Clock Tower Carnival Door', 'Clock Tower Rooftop'),
+    ('SCT Top Exit to WCT', 'West Clock Town'),
+    ('SCT Bottom Exit to WCT', 'West Clock Town'),
+    ('SCT Exit to NCT', 'SCT Exit to NCT', 'North Clock Town'),
+    ('SCT Bottom Exit to ECT', 'East Clock Town'),
+    ('SCT Top Exit to ECT', 'East Clock Town'),
+    ('Clock Town South Gate', 'Termina Field'),
+    ('SCT Exit to Laundry Pool', 'Laundry Pool'),
+    ('Honey and Darling', 'Honey and Darling'),
+    ('Treasure Chest Shop', 'Treasure Chest Shop'),
+    ('Town Shooting Gallery', 'Town Shooting Gallery'),
+    ('Milk Bar', 'Milk Bar'),
+    ('Stock Pot Inn', 'Stock Pot Inn'),
+    ('Stock Pot Inn Secret Entrance', 'Stock Pot Inn'),
+    ('Mayors Office', 'Mayors Office'),
+    ('Bomber Bouncer', 'Bomber Tunnel'),
+    ('Honey and Darling Exit', 'East Clock Town'),
+    ('Treasure Chest Shop Exit', 'East Clock Town'),
+    ('Town Shooting Gallery Exit', 'East Clock Town'),
+    ('Milk Bar Exit', 'East Clock Town'),
+    ('Stock Pot Inn Roof', 'East Clock Town'),
+    ('Stock Pot Inn Front Door', 'East Clock Town'),
+    ('Mayors Office Exit', 'East Clock Town'),
+    ('Bomber Tunnel Exit', 'East Clock Town'),
+    ('ECT Top Exit to SCT', 'South Clock Town'),
+    ('ECT Bottom Exit to SCT', 'South Clock Town'),
+    ('ECT Exit to NCT', 'North Clock Town'),
+    ('Clock Town East Gate', 'Termina Field'),
+    ('Curiosity Shop', 'Curiosity Shop'),
+    ('Trading Post', 'Trading Post'),
+    ('Bomb Shop', 'Bomb Shop'),
+    ('Post Office', 'Post Office'),
+    ('Lottery Shop', 'Lottery Shop'),
+    ('Swordsmans School', 'Swordsmans School'),
+    ('Curiosity Shop Exit', 'West Clock Town'),
+    ('Trading Post Exit', 'West Clock Town'),
+    ('Bomb Shop Exit', 'West Clock Town'),
+    ('Post Office Exit', 'West Clock Town'),
+    ('Lottery Shop Exit', 'WestClock Town'),
+    ('Swordsmans School Exit', 'West Clock Town'),
+    ('Clock Town West Gate', 'Termina Field'),
+    ('WCT Top Exit to SCT', 'South Clock Town'),
+    ('WCT Bottom Exit to SCT', 'South Clock Town'),
+    ('Deku Playground', 'Deku Playground'),
+    ('Deku Playground Exit', 'North Clock Town'),
+    ('GF Clock Town', 'Clock Town Fairy Shrine'),
+    ('South Gate to Clock Town', 'South Clock Town'),
+    ('North Gate to Clock Town', 'North Clock Town'),
+    ('West Gate to Clock Town', 'West Clock Town'),
+    ('East Gate to Clock Town', 'East Clock Town'),
+    ('Termina Field to Swamp', 'Path to Swamp'),
+    ('Termina Field to Ikana', 'Path to Ikana'),
+    ('GF Woodfall', 'Woodfall Fairy Shrine'),
+    ('Mountain Icicles', 'Path to Mountain Village South'),
+    ('Mountain Icicles Backwards', 'Path to Mountain Village South'),
+    ('Mountain Village Entrance', 'Mountain Village'),
+    ('GF Snowhead', 'Snowhead Fairy Shrine'),
+    ('GF Great Bay', 'Great Bay Fairy Shrine'),
+    ('GF Stone Tower', 'Stone Tower Fairy Shrine'),
+    ]
 
 # dungeon entrance links
-default_dungeon_connections = [('Woodfall Temple Entrance', 'Woodfall Temple Lobby'),
-                              ]
-
-# Fairy Fountain exit IDs
-# (entrance, exit)
-
-Fairy_List = ['Clock Town Fairy',
-              'Woodfall Fairy',
-              'Snowhead Fairy',
-              'Great Bay Fairy',
-              'Stone Tower Fairy']
-
-Fairy_IDs = {'Clock Town Fairy': (0x0588, 0xBEFD82),
-             'Woodfall Fairy': (0x04C2, 0xBEFD6C),
-             'Snowhead Fairy': (0x04BE, 0xBEFD6A),
-             'Great Bay Fairy': (0x0315, 0xBEFD68),
-             'Stone Tower Fairy': (0x0371, 0xBEFD7E)}
-
-# Fairy Fountain exit addresses
-# (entrance, exit)
-
-Fairy_addresses = {'Clock Town Fairy': (0x2186114, 0x218D644, 0x218D644, 0x057C),
-                   'Woodfall Fairy': (0x21F60E0, 0x21F60E0, 0x21F60E0, 0x0340),
-                   'Snowhead Fairy': (0x292B0B4, 0x292B0B4, 0x292B0B4, 0x0340),
-                   'Great Bay Fairy': (0x22470FE, 0x224E31A, 0x224E31A, 0x0482),
-                   'Stone Tower Fairy': (0x221D104, 0x222467C, 0x222467C, 0x045B)}
+default_dungeon_connections = [
+    ('Woodfall Temple Entrance', 'Woodfall Temple Lobby'),
+    ]

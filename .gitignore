@@ -1,5 +1,12 @@
 *.sublime-project
 *.sublime-workspace
+__pycache__
+.*.sw*
+.sw*
 *.pyc
-*.n64
+/.vs
+settings.sav
+ARCHIVE.bin
+output/*
 *.z64
+*.z64.bak
