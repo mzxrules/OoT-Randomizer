@@ -33,24 +33,25 @@ os.chdir(run_dir)
 
 c_sym_types = {}
 
-with open('build/c_symbols.txt', 'r') as f:
-    for line in f:
-        m = re.match('''
-                ^
-                [0-9a-fA-F]+
-                .*
-                \.
-                ([^\s]+)
-                \s+
-                [0-9a-fA-F]+
-                \s+
-                ([^.$][^\s]+)
-                \s+$
-            ''', line, re.VERBOSE)
-        if m:
-            sym_type = m.group(1)
-            name = m.group(2)
-            c_sym_types[name] = 'code' if sym_type == 'text' else 'data'
+if os.path.isfile('build/c_symbols.txt'):
+    with open('build/c_symbols.txt', 'r') as f:
+        for line in f:
+            m = re.match('''
+                    ^
+                    [0-9a-fA-F]+
+                    .*
+                    \.
+                    ([^\s]+)
+                    \s+
+                    [0-9a-fA-F]+
+                    \s+
+                    ([^.$][^\s]+)
+                    \s+$
+                ''', line, re.VERBOSE)
+            if m:
+                sym_type = m.group(1)
+                name = m.group(2)
+                c_sym_types[name] = 'code' if sym_type == 'text' else 'data'
 
 symbols = {}
 
@@ -96,4 +97,4 @@ if pj64_sym_path:
             f.write('{0},{1},{2}\n'.format(sym['address'], sym['type'], sym_name))
 
 # Diff ROMs
-create_diff('roms/base.z64', 'roms/patched.z64', '../data/rom_patch.txt')
+create_diff('roms/mm/base.z64', 'roms/mm/patched.z64', '../data/rom_patch.txt')

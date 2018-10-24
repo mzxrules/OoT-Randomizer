@@ -219,7 +219,7 @@ def guiMain(settings=None):
 
     romDialogFrame = Frame(fileDialogFrame)
     baseRomLabel = Label(romDialogFrame, text='Base ROM')
-    guivars['rom'] = StringVar(value='ZOOTDEC.z64')
+    guivars['rom'] = StringVar(value='ZMMDEC.z64')
     romEntry = Entry(romDialogFrame, textvariable=guivars['rom'], width=40)
 
     def RomSelect():

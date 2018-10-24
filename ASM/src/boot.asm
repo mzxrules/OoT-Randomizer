@@ -1,7 +1,3 @@
-; Update CRC
-.org 0x10
-    .word 0x9345AE5B, 0x97DB4131
-
 ; Add dmatable entries for new code
 .org 0xD260
     .word 0x03480000, 0x03485000, 0x03480000, 0
