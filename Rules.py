@@ -265,7 +265,7 @@ def global_rules(world):
     # dunno if there's a form requirement when you actually talk to them, but I'm gonna assume human for now
     # todo: test form requirements
 
-    set_rule(world.get_entrance('TF Mountain Icicles'), lambda state: state.can_use('Bow') or state.form('Goron'))
+    set_rule(world.get_entrance('TF Mountain Icicles'), lambda state: state.can_use('Bow'))
     set_rule(world.get_entrance('TF Great Bay Gate'), lambda state: (state.form('Human') and state.has('Eponas Song'))
                                                                     or state.can('Some Goron Trick probly'))
 
@@ -661,8 +661,24 @@ def global_rules(world):
 
     ### MOUNTAIN VILLAGE
 
+    ## MV Path
+    set_rule(world.get_entrance('MV Path South Snowball Block'), lambda state: state.can_use('Fire Arrows') or state.can_blast() or state.form('Goron'))
+    set_rule(world.get_entrance('MV Path North Snowball Block'), lambda state: state.any_form_but('Deku'))
+
     ## Mountain Village
-    set_rule(world.get_location('Goron Mask'), lambda state: state.has('Song of Healing') and state.can_use('Lens of Truth'))
+    set_rule(world.get_location('Don Gero Mask'), lambda state: state.has('Rock Sirloin'))
+    # gonna need some way to check that you can actually get the sirloin to this guy after entrance shuffle, lol
+    # or maybe not? could just have the rock sirloin be an event check?
+    # spoiler alert: RO *loves* him some events apparently
+
+    set_rule(world.get_location('Frozen Mountain Village Owl Statue'), lambda state: state.form('Human'))
+    set_rule(world.get_entrance('Frozen MV Lower To Top'), lambda state: state.lens_req() and state.any_form_but('Goron'))
+    set_rule(world.get_location('Razor Sword Upgrade'), lambda state: state.event('Defeat Ghot') and state.has('Adult Wallet') and state.has('Razor Sword'))
+    set_rule(world.get_location('Gilded Sword Upgrade'), lambda state: state.event('Defeat Ghot') and state.has('Adult Wallet') and state.has('Gold Dust'))
+    set_rule(world.get_entrance('Smithy Thawed Exit'), lambda state: state.event('Defeat Ghot'))
+
+    set_rule(world.get_location('Lead Darmani Up'), lambda state: state.can_use('Lens of Truth') and state.event('Led Darmani Across the Lake'))
+    set_rule(world.get_location('Goron Mask'), lambda state: state.has('Song of Healing') and state.can_use('Lens of Truth') and state.event('Led Darmani Up'))
     # this probly needs to be investigated (do you actually need the lens once you've gotten the ghost there?) and we
     # should determine how we want to track this check, since you have to follow the ghost through various areas
     # I kiiiind of want to add a ton of extra stuff for myself to do, like world state checks that just don't get
@@ -684,51 +700,82 @@ def global_rules(world):
     # him at the grave
     # anyway
 
-    set_rule(world.get_location('Don Gero Mask'), lambda state: state.has('Rock Sirloin'))
-    # gonna need some way to check that you can actually get the sirloin to this guy after entrance shuffle, lol
-
     set_rule(world.get_location('Mountain Village 20 Rupee Chest Behind Waterfall'), lambda state: state.event('Beat Ghot') and state.lens_req())
 
     set_rule(world.get_location('Mountain Village 20 Rupee Pit'), lambda state: state.event('Beat Ghot') and (state.form('Goron') or state.lens_req()))
     # this one may not be a chest, I should check it
 
-    set_rule(world.get_location('Gilded Sword'), lambda state: state.event('Beat Ghot') and state.has('Gold Dust'))
-    # it's probly best to just assume you can always get the razor sword
-
     set_rule(world.get_location('Mountain Village Keaton HP'), lambda state: state.can_use('Keaton Mask') and state.event('Beat Ghot'))
 
-    set_rule(world.get_location('Don Gero HP'), lambda state: state.event('Beat Ghot') and state.can_kill_gekkos() and state.has('Ice Arrows'))
-    # maybe need to check the reqs on this, but I think we can assume if you can beat ghot and both gekkos,
-    # you can get to all the frogs and get this HP
+    set_rule(world.get_location('Frog Choir HP'), lambda state: state.event('Beat Ghot') and
+                    (False not in [state.event(x) for x in ['Don Gero Town Frog', 'WF Don Gero Frog', '', '', '']]))
+    # event names TBD
 
     ## Frozen Lake
     set_rule(world.get_location('Mountain Tingle Snowhead Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Mountain Tingle Romani Ranch Map'), lambda state: state.can_pop_balloon())
     set_rule(world.get_location('Mountain Tingle Pic'), lambda state: state.can_use('Picto Box'))
-    set_rule(world.get_location('First Half Goron Lullaby'), lambda state: (state.can_blast() or state.form('Goron')) and state.can_use('Hot Spring Water'))
+    set_rule(world.get_location('Half Goron Lullaby First Day'),
+             lambda state: ((state.can_blast() or state.form('Goron')) and state.can_use('Hot Spring Water')) or state.can_use('Fire Arrows'))
     # not sure if he'll actually teach you the half song if you're not a goron todo: test form requirements
 
-    set_rule(world.get_location('Frozen Lake HP'), lambda state: state.event('Beat Ghot') and state.form('Zora'))
+    set_rule(world.get_entrance('Frozen Lake To Grotto Platform'), lambda state: state.form('Goron'))
+    set_rule(world.get_entrance('Frozen Lake Grotto Platform To Goron Race Platform'), lambda state: state.form('Goron'))
+    # are there any tricks to get up these slopes? I feel like there probly are
+    set_rule(world.get_entrance('Frozen Lake Grotto Platform To Grotto'), lambda state: state.can_blast())
+    # set_rule(world.get_location('Mountain Lake Grotto Chest'), lambda state: True)
+    set_rule(world.get_entrance('Mountain Lake Grotto Thawed Exit'), lambda state: state.event('Defeat Ghot'))
 
-    set_rule(world.get_location('Frozen Lake Bombchu Pit'), lambda state: state.event('Beat Ghot') and state.form('Goron'))
+    set_rule(world.get_entrance('Frozen Lake Goron Race Platform To Goron Race'), lambda state: state.can_use('Powder Keg'))
+
+    set_rule(world.get_entrance('Frozen Lake To Hot Springs'), lambda state: state.can_use('Hot Spring Water') or state.can_use('Fire Arrows'))
+    set_rule(world.get_location('Lead Darmani Across the Lake'), lambda state: state.can_use('Lens of Truth') and state.event('Led Darmani Through Village'))
+
+    set_rule(world.get_location('Thawed Lake HP'), lambda state: state.event('Beat Ghot') and state.form('Zora'))
+    set_rule(world.get_location('Thawed Lake Bombchu Pit'), lambda state: state.event('Beat Ghot') and state.form('Goron'))
     # I should check this one too, dunno if it's a chest or what; also is goron the only one who can get to this pit?
+    # is this the same as the 'frozen lake grotto'? tbd (I'll find out once I finish this area, ez); if it is, then no check here, it's just the open check in the grotto as above
 
     set_rule(world.get_location('Goron Race Gold Dust Bottle'), lambda state: state.event('Beat Ghot') and state.form('Goron'))
     # set_rule(world.get_location(''), lambda state: state)
 
     ## Goron Village
     set_rule(world.get_location('Biggest Bomb Bag'), lambda state: state.form('Goron') and state.has('Adult Wallet'))
+    set_rule(world.get_location('Mountain Business Scrub HP'), lambda state: state.has('Swamp Title Deed') and state.form('Deku'))
+    set_rule(world.get_location('Start Leading Darmani'), lambda state: state.can_use('Lens of Truth'))
+    # form requirements maybe? dunno
+
+    set_rule(world.get_entrance('Frozen Goron Village Outer To Lens Cave Region'), lambda state: (state.form('Human') or state.form('Zora')))
+    # scrub can't make the jumps, right?
+    set_rule(world.get_entrance('Frozen Lens Cave Region To Main'), lambda state: (state.form('Human') or state.form('Zora')) and state.lens_req())
+
     # set_rule(world.get_location('Lens of Truth'), lambda state: True)
     set_rule(world.get_location('Lens of Truth Cave Invisible Chest'), lambda state: state.lens_req())
     set_rule(world.get_location('Lens of Truth Cave Boulder Chest'), lambda state: state.can_blast())
 
     set_rule(world.get_location('Learn Goron Lullaby'), lambda state: state.form('Goron') and state.has('First Half Goron Lullaby'))
     set_rule(world.get_location('Rock Sirloin'), lambda state: state.can_use('Deku Stick') and state.form('Goron'))
-    # set_rule(world.get_location(''), lambda state: state)
+    # we could maybe allow fire arrows here? but there are a lot of torches and they're fairly spread out
+    # so maybe have the option to allow it
+    set_rule(world.get_entrance('Goron Village Inner Thawed Exit'), lambda state: state.event('Defeat Ghot'))
 
     ## Snowhead and Path To
-    set_rule(world.get_location('Path To Snowhead HP'), lambda state: state.form('Goron') and state.can_use('Hookshot') and state.lens_req())
+    set_rule(world.get_location('Path To Snowhead HP'), lambda state: state.can_use('Hookshot') and state.can_use('Lens of Truth')
+                                                                      and (state.form('Human') or state.form('Zora')))
+    # would anyone really want to let logic place stuff here without the lens?
+    set_rule(world.get_entrance('Frozen Snowhead Path MV Side To Mid'), lambda state: state.form('Goron'))
+    set_rule(world.get_entrance('Frozen Snowhead Path Mid To MV Side'), lambda state: state.form('Goron'))
+    set_rule(world.get_entrance('Frozen Snowhead Path Mid To SH Side'), lambda state: state.form('Goron'))
+    set_rule(world.get_entrance('Frozen Snowhead Path SH Side To Mid'), lambda state: state.form('Goron'))
+
     set_rule(world.get_location('Snowhead Owl Statue'), lambda state: state.form('Human'))
+    set_rule(world.get_entrance('Frozen Outside SH Owl To Central'), lambda state: state.form('Goron') and state.has('Goron Lullaby'))
+    # set_rule(world.get_entrance('Frozen Outside SH Central To Owl'), lambda state: True)
+    # it's only for entrance rando, but I can't test this entrance atm, since you'd have to load in from SH or the fairy
+    # fountain; can you just roll across? todo: test getting back across the narrow part with the goron still there
+    set_rule(world.get_entrance('Frozen Outside SH Central To Entrance'), lambda state: True)
+    # so you can definitely just walk up here and avoid the snowballs, but maybe it's too much of a pain? I dunno,
+    # do we want to hard or optionally require anything here?
 
 
     ### SNOWHEAD TEMPLE

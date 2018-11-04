@@ -124,7 +124,7 @@ def create_regions(world):
             'TF Great Bay Gate', 'West Gate to Clock Town',
             'TF to Ikana', 'East Gate to Clock Town', 'TF to Obs Over Fence Maybe',
             'To TF Peahat Grotto', 'To TF Beehive Grotto', 'To East Pillar Grotto', 'To TF Business Scrub Grotto',
-            'To Swamp Gossips', 'To Mountain Gossips', 'To Ocean Gossips',
+            'To Swamp Gossips', 'To Mountain Gossips', 'To Ocean Gossips', 'TF To Thawed MV Path (maybe needed?)',
             'To Canyon Gossips', 'To Dodongo Grotto', 'To TF Deku Baba Pit', 'TF To Milk Road']),
         create_grotto_region('TF Peahat Grotto', ['TF Peahat Grotto HP'], ['TF Peahat Grotto Exit']),
         create_grotto_region('TF Beehive Grotto', ['TF Beehive Grotto HP'], ['TF Beehive Grotto Exit']),
@@ -338,7 +338,6 @@ def create_regions(world):
                               ['WF Cleaned Push Block Room Upper To Dark Puffs',
                                'WF Cleaned Push Block Room Upper To Lower']),
 
-
         # Post woodfall cleaned swamp areas
         create_ow_region('Swamp Tourist Region (Cleaned)', ['Swamp Tourist Roof HP', 'Swamp Owl Statue'], ['Cleaned Tourist Region To Swamp Path',
                         'Cleaned To Swamp Tourist Centre', 'Cleaned To Potion Shop', 'Cleaned To Lost Woods', 'Cleaned To Swamp Spider House',
@@ -376,11 +375,51 @@ def create_regions(world):
                          ['Cleaned Fountain Platform To Owl Platform', 'Cleaned Fountain Platform To Entrance',
                           'Cleaned Fountain Platform To Fountain']),
 
-        # create_ow_region('Mountain Icicles', [], ['Termina Field North Exit', 'Termina Field From Mountain']),
-        create_ow_region('Mountain Village Path South', [], ['Mountain Snowball Block', 'Mountain Path South Exit']),
-        create_ow_region('Path to Mountain Village North', [], ['Mountain Path North Exit', 'Mountain Snowball Block']),
+        ## Mountain Village
+        create_ow_region('Mountain Village Path South (Frozen)', [], ['MV Path South Snowball Block', 'MV Path South To TF']),
+        create_ow_region('Path to Mountain Village North (Frozen)', [], ['MV Path North To MV', 'MV Path North Snowball Block']),
+
+        create_ow_region('Mountain Village Lower (Frozen)', ['Don Gero Mask', 'Frozen Mountain Village Owl Statue', 'Lead Darmani Up'],
+                         ['Frozen MV To MV Path North', 'Frozen MV Lower To Top', 'Frozen MV Lower To Lake',
+                          'Frozen MV Lower To Snowhead Path', 'Frozen MV Lower To Smithy']),
+        create_ow_region('Mountain Village Top (Frozen)', [], ['Frozen MV Top To Lower', 'Frozen MV Top To Hot Spring']),
+        create_interior_region('Smithy', ['Razor Sword Upgrade', 'Gilded Sword Upgrade'], ['Smithy Frozen Exit', 'Smithy Thawed Exit']),
+        # are there two maps for the smithy?
+
+        create_ow_region('Mountain Lake Main (Frozen)', ['Mountain Tingle Snowhead Map', 'Mountain Tingle Romani Ranch Map',
+                                'Mountain Tingle Pic', 'Half Goron Lullaby First Day', 'Lead Darmani Across The Lake'],
+                ['Frozen Lake To MV', 'Frozen Lake To Goron Village Outside', 'Frozen Lake To Hot Springs', 'Frozen Lake To Grotto Platform']),
+        create_ow_region('Mountain Lake Grotto Platform (Frozen)', [], ['Frozen Lake Grotto Platform To Goron Race Platform',
+                        'Frozen Lake Grotto Platform To Main', 'Frozen Lake Grotto Platform To Grotto']),
+        create_ow_region('Mountain Lake Goron Race Platform (Frozen)', [],
+                         ['Frozen Lake Goron Race Platform To Goron Race', 'Frozen Lake Goron Race Platform To Main']),
+        create_grotto_region('Mountain Lake Grotto', ['Mountain Lake Grotto Chest'],
+                             ['Mountain Lake Grotto Frozen Exit', 'Mountain Lake Grotto Thawed Exit']),
+        create_ow_region('Goron Racetrack (Frozen)', [], ['Frozen Goron Race Exit']),
+        create_ow_region('Goron Racetrack (Thawed)', ['Goron Race Prize'], ['Thawed Goron Race Exit']),
+        # is this ow or interior?
+
+        create_ow_region('Goron Village Outer Main (Frozen)', ['Start Leading Darmani', 'Mountain Business Scrub HP', 'Biggest Bomb Bag',
+                'Something from the big goron, not sure what yet; does he give anything in winter? tbd'],
+                ['Frozen Goron Village Outer To Lake', 'Frozen Goron Village Outer To Inner', 'Frozen Goron Village Outer To Lens Cave Region']),
+        create_ow_region('Goron Village Outer Lens Cave Region (Frozen)', [], ['Frozen Lens Cave Region To Lens Cave', 'Frozen Lens Cave Region To Main']),
+        create_interior_region('Goron Village Inner', ['Song From Baby Goron', 'Rock Sirloin'],
+                               ['Goron Village Inner Frozen Exit', 'Goron Village Inner Thawed Exit', 'Goron Village Inner To Shop']),
+        # one map here? two?
+        create_interior_region('Goron Village Shop', [], ['Goron Village Shop Exit']),
+
+        create_ow_region('Snowhead Path MV Side (Frozen)', [], ['Frozen Snowhead Path To MV', 'Frozen Snowhead Path MV Side To Mid']),
+        create_ow_region('Snowhead Path Mid Region (Frozen)', [''], ['Frozen Snowhead Path Mid To MV Side', 'Frozen Snowhead Path Mid To SH Side']),
+        create_ow_region('Snowhead Path Snowhead Side (Frozen)', [], ['Frozen Snowhead Path SH Side To SH', 'Frozen Snowhead Path SH Side To Mid']),
+
+        create_ow_region('Outside Snowhead Owl Region (Frozen)', ['Snowhead Owl Statue'],
+                         ['Frozen Outside SH Owl To SH Path', 'Frozen Outside SH Owl To Central']),
+        create_ow_region('Outside Snowhead Central Region (Frozen)', [], ['Frozen Outside SH Central To Owl',
+                'Frozen Outside SH Central To Fairy Shrine', 'Frozen Outside SH Central To Entrance']),
+        create_ow_region('Outside Snowhead Entrance Region (Frozen)', [], ['Frozen Outside SH To Central', 'Frozen Outside SH To SH']),
+
         create_ow_region('Mountain Village',
-            ['Frog Choir'],
+            [],  # frog choir hp will be found in the thawed version of this map
             ['Mountain Smithy', 'Goron Shrine', 'MV Exit to Snowhead',
             'MV Exit to Goron Village', 'MV Exit to Termina Field']),
         create_ow_region('Path to Goron Village'),
@@ -624,7 +663,7 @@ location_table = {
     'WF Stray Fairy Cleaned Push Block Room Hive': (None, None, None, 'Unknown'),
     'WF Stray Fairy Cleaned Push Block Room Skulltula': (None, None, None, 'Unknown'),
     'Woodfall Owl Statue (Cleaned)': (None, None, None, 'Unknown'),
-    'Frog Choir': (None, None, None, 'Unknown'),
+    'Frog Choir HP': (None, None, None, 'Unknown'),
     'Snowhead GF Reward': (None, None, None, 'Unknown'),
     'Beaver Bottle': (None, None, None, 'Unknown'),
     'Beaver HP': (None, None, None, 'Unknown'),
@@ -642,6 +681,7 @@ location_table = {
     'Milk Road Owl Statue': (None, None, None, 'Statue'),
     'Swamp Owl Statue': (None, None, None, 'Statue'),
     'Woodfall Owl Statue': (None, None, None, 'Statue'),
+    'Mountain Village Owl Statue': (None, None, None, 'Statue'),
     'Song From Skull Kid': (None, None, None, 'Song'),
     'Song From HMS': (None, None, None, 'Song'),
     'Song From Romani': (None, None, None, 'Song'),
