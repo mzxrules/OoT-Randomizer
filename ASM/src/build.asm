@@ -4,27 +4,32 @@
 .create "../roms/mm/patched.z64", 0
 .incbin "../roms/mm/base.z64"
 
+.include "constants.asm"
+
+; Add dmatable entry for the payload code
+.orga 0x205F0
+    .word G_PAYLOAD_VROM, (G_PAYLOAD_VROM + G_PAYLOAD_SIZE), G_PAYLOAD_VROM, 0
+
 ;==================================================================================================
 ; Base game editing region
 ;==================================================================================================
 
 ;.include "boot.asm"
-.include "hacks.asm"
+.include "code.asm"
 
 ;==================================================================================================
 ; New code region
 ;==================================================================================================
 
-;.headersize (0x80400000 - 0x03480000)
+.headersize (G_PAYLOAD_ADDR - G_PAYLOAD_VROM)
 
-;.include "constants.asm"
 
-;.org 0x80400000
-;.area 0x1000
-;.include "init.asm"
+.org G_PAYLOAD_ADDR
+.area 0x1000
+.include "init.asm"
 ;DebugOutput:
 ;.include "debug.asm"
-;.endarea
+.endarea
 
 ;.org 0x80401000
 ;.area 0x1000, 0
