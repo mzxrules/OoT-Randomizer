@@ -1178,7 +1178,7 @@ setting_infos = [
         },
         {
             'text': 'Background Music',
-            'group': 'cosmetics',
+            'group': 'sound',
             'widget': 'Combobox',
             'default': 'Normal',
             'options': {
@@ -1282,7 +1282,7 @@ setting_infos = [
         },
         {
             'text': 'Deku Morph Suit',
-            'group': 'tuniccolor',
+            'group': 'color',
             'widget': 'Checkbutton',
             'default': 'unchecked',
             'tooltip':'''\
@@ -1304,7 +1304,7 @@ setting_infos = [
         },
         {
             'text': 'Deku Link Color',
-            'group': 'tuniccolor',
+            'group': 'color',
             'widget': 'Combobox',
             'default': 'Beige',
             'options': get_tunic_color_options(),
@@ -1403,7 +1403,7 @@ setting_infos = [
         },
         {
             'text': 'Zora Morph Suit',
-            'group': 'tuniccolor',
+            'group': 'color',
             'widget': 'Checkbutton',
             'default': 'unchecked',
             'tooltip':'''\
@@ -1425,7 +1425,7 @@ setting_infos = [
         },
         {
         'text': 'Zora Color',
-        'group': 'tuniccolor',
+        'group': 'color',
         'widget': 'Combobox',
         'default': 'Orange',
         'options': get_tunic_color_options(),
@@ -1489,6 +1489,32 @@ setting_infos = [
                       color from any color the N64 can draw.
                       '''
         }),
+        Setting_Info('boomerangcolor', str, 0, False,
+        {
+        'default': 'Azure Blue',
+        'const': 'Azure Blue',
+        'nargs': '?',
+        'type': parse_custom_tunic_color,
+        'help': '''\
+        Choose the color for Zora Link's Boomerangs. (default: %(default)s)
+        Color:              Make the Zora Boomerangs this color.
+        Random Choice:      Choose a random color from this list of colors.
+        Completely Random: Choose a random color from any color the N64 can draw.
+        '''
+        },
+        {
+        'text': 'Zora Boomerang Color',
+        'group': 'tuniccolor',
+        'widget': 'Combobox',
+        'default': 'Azure Blue',
+        'options': get_tunic_color_options(),
+        'tooltip':'''\
+        'Random Choice': Choose a random
+        color from this list of colors.
+        'Completely Random': Choose a random
+        color from any color the N64 can draw.
+        '''
+        }),
     Setting_Info('deitycolor', str, 0, False,
         {
             'default': 'Sonic Blue',
@@ -1530,7 +1556,7 @@ setting_infos = [
         },
         {
             'text': 'Sword Slash Color',
-            'group': 'tatlcolor',
+            'group': 'decoration',
             'widget': 'Combobox',
             'default': 'Twitch Purple',
             'options': get_tunic_color_options(),
@@ -1556,7 +1582,7 @@ setting_infos = [
         },
         {
             'text': 'Deku Spin Trail Color',
-            'group': 'tuniccolor',
+            'group': 'decoration',
             'widget': 'Combobox',
             'default': 'Rose Pink',
             'options': get_tunic_color_options(),
@@ -1582,35 +1608,9 @@ setting_infos = [
         },
         {
             'text': 'Zora Attack Color',
-            'group': 'tuniccolor',
+            'group': 'decoration',
             'widget': 'Combobox',
             'default': 'Blood Orange',
-            'options': get_tunic_color_options(),
-            'tooltip':'''\
-                      'Random Choice': Choose a random
-                      color from this list of colors.
-                      'Completely Random': Choose a random
-                      color from any color the N64 can draw.
-                      '''
-        }),
-    Setting_Info('boomerangcolor', str, 0, False,
-        {
-            'default': 'Azure Blue',
-            'const': 'Azure Blue',
-            'nargs': '?',
-            'type': parse_custom_tunic_color,
-            'help': '''\
-                    Choose the color for Zora Link's Boomerangs. (default: %(default)s)
-                    Color:              Make the Zora Boomerangs this color.
-                    Random Choice:      Choose a random color from this list of colors.
-                    Completely Random: Choose a random color from any color the N64 can draw.
-                    '''
-        },
-        {
-            'text': 'Zora Boomerang Color',
-            'group': 'tatlhint',
-            'widget': 'Combobox',
-            'default': 'Azure Blue',
             'options': get_tunic_color_options(),
             'tooltip':'''\
                       'Random Choice': Choose a random
@@ -1634,7 +1634,7 @@ setting_infos = [
         },
         {
             'text': 'Zora Boomerang Trail Color',
-            'group': 'tatlhint',
+            'group': 'decoration',
             'widget': 'Combobox',
             'default': 'Black',
             'options': get_tunic_color_options(),
@@ -1660,7 +1660,7 @@ setting_infos = [
         },
         {
             'text': 'Fierce Deity Sword Slash Color',
-            'group': 'tatlhint',
+            'group': 'decoration',
             'widget': 'Combobox',
             'default': 'Gold',
             'options': get_tunic_color_options(),
@@ -1686,7 +1686,7 @@ setting_infos = [
         },
         {
             'text': 'Fierce Deity Sword Beam Color',
-            'group': 'tatlcolor',
+            'group': 'decoration',
             'widget': 'Combobox',
             'default': 'Zora Blue',
             'options': get_tunic_color_options(),
@@ -1712,7 +1712,7 @@ setting_infos = [
         },
         {
             'text': 'Tatl Idle',
-            'group': 'tatlcolor',
+            'group': 'color',
             'widget': 'Combobox',
             'default': 'White',
             'options': get_tatl_color_options(),
@@ -1738,7 +1738,7 @@ setting_infos = [
         },
         {
             'text': 'Tatl Targeting Enemy',
-            'group': 'tatlcolor',
+            'group': 'color',
             'widget': 'Combobox',
             'default': 'Yellow',
             'options': get_tatl_color_options(),
@@ -1764,7 +1764,7 @@ setting_infos = [
         },
         {
             'text': 'Tatl Targeting NPC',
-            'group': 'tatlcolor',
+            'group': 'color',
             'widget': 'Combobox',
             'default': 'Light Blue',
             'options': get_tatl_color_options(),
@@ -1790,7 +1790,7 @@ setting_infos = [
         },
         {
             'text': 'Tatl Targeting Prop',
-            'group': 'tatlcolor',
+            'group': 'color',
             'widget': 'Combobox',
             'default': 'Green',
             'options': get_tatl_color_options(),
@@ -1816,7 +1816,7 @@ setting_infos = [
         },
         {
             'text': 'Tatl Targeting Boss',
-            'group': 'tatlcolor',
+            'group': 'color',
             'widget': 'Combobox',
             'default': 'Green',
             'options': get_tatl_color_options(),
@@ -1842,7 +1842,7 @@ setting_infos = [
         },
         {
             'text': 'Tatl Hint',
-            'group': 'tatlhint',
+            'group': 'sound',
             'widget': 'Combobox',
             'default': 'Default',
             'options': [
@@ -1877,7 +1877,7 @@ setting_infos = [
         },
         {
             'text': 'Tatl Enemy Target',
-            'group': 'tatlhint',
+            'group': 'sound',
             'widget': 'Combobox',
             'default': 'Default',
             'options': [
@@ -1912,7 +1912,7 @@ setting_infos = [
         },
         {
             'text': 'Low Health SFX',
-            'group': 'lowhp',
+            'group': 'sound',
             'widget': 'Combobox',
             'default': 'Default',
             'options': [

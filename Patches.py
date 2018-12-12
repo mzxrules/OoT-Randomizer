@@ -7,6 +7,7 @@ import subprocess
 import random
 
 from Hints import buildGossipHints, buildBossRewardHints
+from Messages import read_messages, remove_unused_messages, update_item_messages, repack_messages, shuffle_messages
 from Utils import local_path, output_path, random_choices
 from Items import ItemFactory, item_data
 
@@ -139,7 +140,7 @@ def patch_rom(world, rom):
 
     # Load Message and Shop Data
     messages = read_messages(rom)
-     # remove_unused_messages(messages)
+    remove_unused_messages(messages)
 
     # Sets hooks for gossip stone changes
     if world.hints != 'none':
@@ -208,17 +209,15 @@ def patch_rom(world, rom):
     # add_song_messages(messages, world)
 
     # reduce item message lengths
-    # update_item_messages(messages, world)
+    update_item_messages(messages, world)
 
     # DOOT: create a third wallet for MM
-    # repack_messages(rom, messages)
+    repack_messages(rom, messages)
     # write_shop_items(rom, shop_item_file.start + 0x1DEC, shop_items)
 
     # text shuffle
-    if world.text_shuffle == 'except_hints':
-        pass # shuffle_messages(rom, except_hints=True)
-    elif world.text_shuffle == 'complete':
-        pass # shuffle_messages(rom, except_hints=False)
+    if world.text_shuffle == 'complete':
+        shuffle_messages(rom, except_hints=False)
 
     # output a text dump, for testing...
     #with open('keysanity_' + str(world.seed) + '_dump.txt', 'w', encoding='utf-16') as f:

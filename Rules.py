@@ -79,7 +79,7 @@ def global_rules(world):
     # is this right? it looks like the check is just to hit skull kid in the air, functionally the same as popping a balloon lol
     set_rule(world.get_entrance('End of First Cycle'), lambda state: state.has('Song of Time'))
     set_rule(world.get_entrance('Moon Portal'),
-             lambda state: [state.has(x) for x in ['Oath to Order', 'Odolwas Remains', 'Ghots Remains', 'Gyorgs Remains', 'Twinmolds Remains']].count(True) == 5)
+             lambda state: [state.has(x) for x in ['Oath to Order', 'Odolwas Remains', 'Gohts Remains', 'Gyorgs Remains', 'Twinmolds Remains']].count(True) == 5)
     set_rule(world.get_entrance('To Clock Tower Rooftop'), lambda state: state.form('Human') or state.form('Zora') or (state.form('Deku') and (state.has('Moons Tear') or state.can('Gainer'))))
 
     set_rule(world.get_location('Clock Town Owl Statue'), lambda state: state.form('Human'))
@@ -91,37 +91,47 @@ def global_rules(world):
     set_rule(world.get_location('Listen To Guru Guru'), lambda state: state.form('Human') or state.form('Zora') or state.form('Goron'))
     set_rule(world.get_location('Don Gero Town Frog'), lambda state: state.can_use('Don Gero Mask'))
 
+    # I believe all that's needed is Letter to Kafei or you can trick in with Zora or Fierce Deity combined with Human Link and a sword
     # set_rule(world.get_entrance('Curiosity Backroom Entrance'), lambda state: state.event('Something about the a+k quest'))
+    # these two match requirements for Backroom Entrance, but should be unnecessary if we're putting a logic restriction on the entrance
     # set_rule(world.get_location('Keaton Mask From Kafei'), lambda state: state.event('Something about the a+k quest'))
     # set_rule(world.get_location('Letter From Kafei'), lambda state: state.event('Something about the a+k quest'))
+    # should only require Letter to Kafei
     # set_rule(world.get_location('Pendant From Kafei'), lambda state: state.event('Something about the a+k quest'))
     # *sigh* this quest
     # todo: gestures vaguely at everything about this quest
-
+    # Couple Mask is pendant by Final 11:30 am, Letter to Kafei by Second 9 am, Sun Mask (to be inserted as an event)
+    # Letter From Anju would be Kafei Mask and (Room Key or Deku or Zora or FD)
 
     ### WEST CLOCK TOWN
     set_rule(world.get_location('Rosa Sisters HP'), lambda state: state.can_use('Kamaro Mask'))
 
     # you might not need to be human to get this, but I'd bet the shop owner won't sell to other forms, at least deku
+    # Bomb Shop owner doesn't care at all, he'll sell to anybody
     # set_rule(world.get_location('Buy Bomb Bag'), lambda state: True)
     # this can be tested easily
 
     # obviously, this and similar 'tests' might not be necessary at all
     # set_rule(world.get_location('Bank 200 Rupee Prize'), lambda state: True)
+    # I would heavily suggest access to largest wallet and (gold dust or  big poe or light arrows) considered as an option
     # set_rule(world.get_location('Bank HP'), lambda state: True)
 
-    # set_rule(world.get_location('Hidden Owl Statue'), lambda state: state.can_do_some_glitch_or_something())
+    # set_rule(world.get_location('Hidden Owl Statue'), lambda state: state.can('Bomb Hover'))
     # I actually have no idea what the check is here lol
+    # just hovering -eY
 
     set_rule(world.get_location('Buy Bigger Bomb Bag'), lambda state: state.form('Human') or state.form('Zora') or state.has('Adult Wallet'))
     # adult wallet is a req because if you don't rescue the old lady from sakon, the big bomb bag shows up in the
     # curiosity shop on the final day (still might be form restrictions?)
+    # I'd probably make curiosity shop and bomb shop Big Bomb Bag  into separate locations -eY
 
+    # If we're going to consider starting without the sword, we may want a has_sword() type method
     set_rule(world.get_location('Sword School HP'), lambda state: state.form('Human'))
 
     # i swear this should be an optional trick, it's so hard without the bunny hood lol
     # set_rule(world.get_location('Counting Is Hard'), lambda state: True)
     # sigh alright we'll make this open lol
+    # definitely going in as optional -eY
 
     set_rule(world.get_location('Buy All Night Mask'), lambda state: state.form('Human') and state.has('Giants Wallet'))
     # you need to save the bomb lady from sakon and this will be in the curio shop on the final day for 500 rupees
@@ -256,7 +266,7 @@ def global_rules(world):
 
     set_rule(world.get_entrance('TF Mountain Icicles'), lambda state: state.can_use('Bow') or state.form('Goron'))
     set_rule(world.get_entrance('TF Great Bay Gate'), lambda state: (state.form('Human') and state.has('Eponas Song'))
-                                                                    or state.can('Some Goron Trick probly'))
+                                                                    or state.can('Goron Boost'))
 
     set_rule(world.get_location('Moons Tear'), lambda state: state.event('Moon Cry'))
 
