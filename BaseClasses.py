@@ -386,11 +386,11 @@ class CollectionState(object):
     # Count how many duplicates of an item are in `.prog_items`
     # (Used in `heart_count` and `has`)
     def item_count(self, item):
-    	return self.prog_items[item]
+        return self.prog_items[item]
 
     # Checks if explosions are possible given the current state.
     def can_blast(self):
-        return self.form('Human') and (self.has_explosives() or self.has('Blast Mask'))
+        return (self.form('Human') and (self.has_bombs() or self.has_bombchus() or self.can_use('Blast Mask'))) or self.can_use('Powder Keg')
 
     def has_nuts(self):
         return self.has('Buy Deku Nut (5)') or self.has('Buy Deku Nut (10)') or self.has('Deku Nut Drop')
@@ -442,10 +442,10 @@ class CollectionState(object):
             or (not self.world.bombchus_in_logic and self.has_bomb_bag())
 
     def has_explosives(self):
-        return self.has_bombs() or self.has_bombchus() or can_wear('Blast Mask') or self.can_use('Powder Keg')
+        return self.has_bombs() or self.has_bombchus() or self.can_use('Blast Mask') or self.can_use('Powder Keg')
 
     def can_smash(self):
-        return self.has_explosives() or self.form('Goron')
+        return self.can_blast() or self.form('Goron')
 
     def can_dive(self):
         return self.form('Zora')
