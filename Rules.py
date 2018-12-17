@@ -495,7 +495,7 @@ def global_rules(world):
     set_rule(world.get_location('Mountain Village Keaton HP'), lambda state: state.can_use('Keaton Mask') and state.event('Defeat Goht'))
 
     set_rule(world.get_location('Frog Choir HP'), lambda state: state.event('Defeat Goht') and
-                    (False not in [state.event(x) for x in ['Town Frog', 'WFT Frog', 'Swamp Frog', 'GBT Frog']]))
+                    (False not in [state.event(x) for x in ['Town Frog', 'Woodfall Temple Frog', 'Swamp Frog', 'Great Bay Temple Frog']]))
     # event names TBD
 
     ## Frozen Lake
@@ -504,7 +504,10 @@ def global_rules(world):
     set_rule(world.get_location('Mountain Tingle Pic'), lambda state: state.can_use('Picto Box'))
     # depending on how this gets implemented, we may need separate this further, since the actor might be entirely different each day
     # need to also verify that we've heard the Baby Goron Crying event
-    set_rule(world.get_location('Lullaby Intro First Two Days'),
+    # TODO: need to code this DRYer
+    set_rule(world.get_location('Lullaby Intro First Day'),
+             lambda state: ((state.can_blast() or state.form('Goron')) and state.can_use('Hot Spring Water')) or state.can_use('Fire Arrows'))
+    set_rule(world.get_location('Lullaby Intro Second Day'),
              lambda state: ((state.can_blast() or state.form('Goron')) and state.can_use('Hot Spring Water')) or state.can_use('Fire Arrows'))
     set_rule(world.get_location('Lullaby Intro Final Day'),
              lambda state: ((state.can_blast() or state.form('Goron')) and state.can_use('Hot Spring Water')) or state.can_use('Fire Arrows'))
