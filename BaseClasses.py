@@ -67,7 +67,7 @@ class World(object):
         # ret.shop_prices = copy.copy(self.shop_prices)
         ret.id = self.id
         from Regions import create_dungeons, create_regions
-        from Rules import set_rules, set_shop_rules
+        from Rules import set_rules
         create_regions(ret)
         create_dungeons(ret)
         set_rules(ret)
@@ -96,7 +96,7 @@ class World(object):
         # copy progress items in state
         ret.state.prog_items = copy.copy(self.state.prog_items)
 
-        set_shop_rules(ret)
+        # set_shop_rules(ret)
 
         return ret
 
@@ -310,9 +310,10 @@ class CollectionState(object):
         ret.region_cache = copy.copy(self.region_cache)
         ret.location_cache = copy.copy(self.location_cache)
         ret.entrance_cache = copy.copy(self.entrance_cache)
-        ret.events = copy.copy(self.events)
-        ret.path = copy.copy(self.path)
-        ret.locations_checked = copy.copy(self.locations_checked)
+        # ret.events = copy.copy(self.events)
+        # ret.path = copy.copy(self.path)
+        ret.collected_locations = copy.copy(self.collected_locations)
+        ret.recursion_count = copy.copy(self.recursion_count)
         return ret
 
     '''
@@ -490,15 +491,15 @@ class CollectionState(object):
         return self.form('Human') and self.has(mask)
 
     def stray_fairy_req(self, test=True):
-        return self.can_use('Great Fairy Mask') or (not self.options('ReqGFMask') and test)
+        return self.can_use('Great Fairy Mask') # or (not self.options('ReqGFMask') and test)
     # I think this is what's actually correct for optionally requiring gf mask for all fairies: a test is passed to this
     # fxn which is only needed if you can't use the gf mask and you're not required to
 
     def lens_req(self):
-        return (self.can_use('Lens of Truth') and self.has('Magic Meter')) or not self.options('ReqLens')
+        return (self.can_use('Lens of Truth') and self.has('Magic Meter')) # or not self.options('ReqLens')
 
     def dog_track_MoT_req(self):
-        return self.can_use('Mask of Truth') or not self.options('DogTrackMoT')
+        return self.can_use('Mask of Truth') # or not self.options('DogTrackMoT')
 
     def can_kill_lizalfos(self):
         # I figure they use lizalfos as a miniboss enough that this is a check worth abstracting
@@ -525,7 +526,7 @@ class CollectionState(object):
         return self.has(item)
 
     def can_epona(self):
-        return self.has('Eponas Song') and (self.form('Human') or self.options('EponaGlitchesOrSomething'))
+        return self.has('Eponas Song') and (self.form('Human')) # or self.options('EponaGlitchesOrSomething'))
 
     # Checks to see if balloons are poppable.
     def can_pop_balloon(self):
@@ -537,7 +538,7 @@ class CollectionState(object):
     def can(self, trick):
         # still don't know exactly how this should work, but the idea is to have a collection of tricks the user has
         # selected as allowed
-        return self.tricks[trick]
+        return True # self.tricks[trick]
 
 
     # Gives the number of current full hearts
@@ -755,8 +756,8 @@ class Region(object):
     def can_reach(self, state):
         for entrance in self.entrances:
             if state.can_reach(entrance):
-                if not self in state.path:
-                    state.path[self] = (self.name, state.path.get(entrance, None))
+                # if not self in state.path:
+                #     state.path[self] = (self.name, state.path.get(entrance, None))
                 return True
         return False
 
@@ -854,7 +855,7 @@ class Dungeon(object):
     # Returns all Small and Boss keys of this Dungeon
     @property
     def keys(self):
-        return self.small_keys + ([self.boss_key] if self.boss_key else [])
+        return (self.small_keys + self.boss_key if self.boss_key else self.keys)
 
     # Returns all items in this Dungeon (Keys and others)
     @property
@@ -968,6 +969,14 @@ class Item(object):
     def key(self):
         return self.type == 'SmallKey' or self.type == 'BossKey'
 
+    @property
+    def smallkey(self):
+        return self.type == 'SmallKey'
+
+    @property
+    def bosskey(self):
+        return self.type == 'BossKey'
+
     # DEPRECATED DEPRECATED DEPRECATED DEPRECATED
     # `crystal` not used anywhere. I opt for removing this function
     # DEPRECATED DEPRECATED DEPRECATED DEPRECATED
@@ -1011,7 +1020,7 @@ class Spoiler(object):
         self.hints = {}
 
     def parse_data(self):
-        spoiler_locations = [location for location in self.world.get_locations() if not location.event]
+        spoiler_locations = [location for location in self.world.get_locations() if location.type != 'Event']
         sort_order = {"Song": 0, "Boss": -1}
         # Sort all items first, then songs, then bosses
         spoiler_locations.sort(key=lambda item: sort_order.get(item.type, 1))
@@ -1026,7 +1035,7 @@ class Spoiler(object):
     def to_file(self, filename):
         self.parse_data()
         with open(filename, 'w') as outfile:
-            outfile.write('OoT Randomizer Version %s  -  Seed: %s\n\n' % (self.version, self.settings.seed))
+            outfile.write('MM Randomizer Version %s  -  Seed: %s\n\n' % (self.version, self.settings.seed))
             outfile.write('Settings (%s):\n%s' % (self.settings.get_settings_string(), self.settings.get_settings_display()))
 
             if self.settings.world_count > 1:
@@ -1036,16 +1045,16 @@ class Spoiler(object):
             outfile.write('\n'.join(['%s: %s' % (location, item) for (location, item) in self.locations['other locations'].items()]))
             outfile.write('\n\nPlaythrough:\n\n')
             outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
-            outfile.write('\n\nPaths:\n\n')
-
-            path_listings = []
-            for location, path in sorted(self.paths.items()):
-                path_lines = []
-                for region, exit in path:
-                    if exit is not None:
-                        path_lines.append("{} -> {}".format(region, exit))
-                    else:
-                        path_lines.append(region)
-                path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
-
-            outfile.write('\n'.join(path_listings))
+            # outfile.write('\n\nPaths:\n\n')
+            #
+            # path_listings = []
+            # for location, path in sorted(self.paths.items()):
+            #     path_lines = []
+            #     for region, exit in path:
+            #         if exit is not None:
+            #             path_lines.append("{} -> {}".format(region, exit))
+            #         else:
+            #             path_lines.append(region)
+            #     path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
+            #
+            # outfile.write('\n'.join(path_listings))

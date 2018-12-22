@@ -84,7 +84,7 @@ def main(settings, window=dummy_window()):
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 4))
         logger.info('Calculating Access Rules.')
-        # set_rules(world)
+        set_rules(world)
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 5))
         logger.info('Generating Item Pool.')
@@ -92,13 +92,13 @@ def main(settings, window=dummy_window()):
 
     window.update_status('Placing the Items')
     logger.info('Fill the world.')
-    # distribute_items_restrictive(window, worlds)
+    distribute_items_restrictive(worlds[0])
     window.update_progress(35)
 
     if settings.create_spoiler:
         window.update_status('Calculating Spoiler Data')
         logger.info('Calculating playthrough.')
-        # create_playthrough(worlds)
+        create_playthrough(worlds)
         window.update_progress(50)
     if settings.hints != 'none':
         window.update_status('Calculating Hint Data')

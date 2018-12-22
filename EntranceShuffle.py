@@ -171,17 +171,19 @@ default_connections = [
     ('To Deku Playground', 'Deku Playground'),
     ('Deku Playground Exit', 'North Clock Town'),
     ('To GF Clock Town', 'Clock Town Fairy Shrine'),
+
     ('South Gate To Clock Town', 'South Clock Town'),
     ('North Gate To Clock Town', 'North Clock Town'),
     ('West Gate To Clock Town', 'West Clock Town'),
     ('East Gate To Clock Town', 'East Clock Town'),
+    
+    ('TF To Observatory Over Fence', 'Astral Observatory Deck'),
+
     ('TF To Swamp', 'Swamp Path'),
+    ('Fountain Platform To Fountain', 'Woodfall Fairy Shrine'),
+
     ('TF To Mountain', 'Path To Mountain Village South'),
     ('TF From Mountain', 'Beyond The Icicles'),
-    ('TF To Ikana', 'Path To Ikana'),
-
-    ('Poisoned Fountain Platform To Fountain', 'Woodfall Fairy Shrine'),
-
     ('Mountain Path North Exit', 'Mountain Village Lower (Frozen)'),
     ('Frozen MV To MV Path North', 'Path To Mountain Village North'),
     ('Frozen MV To Smithy', 'Smithy'),
@@ -218,6 +220,8 @@ default_connections = [
     ('TF From Great Bay Coast', 'Beyond Great Bay Gate'),
     ('TF To Great Bay Coast', 'Great Bay Coast'),
     ('GF Great Bay', 'Great Bay Fairy Shrine'),
+
+    ('TF To Ikana', 'Path To Ikana'),
     ('GF Stone Tower', 'Stone Tower Fairy Shrine'),
     ]
 

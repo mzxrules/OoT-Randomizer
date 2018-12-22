@@ -24,11 +24,11 @@ extra_masks = [
     "Keaton Mask",
     "Bremen Mask",
     "Bunny Hood",
-    "Don Geros Mask",
+    "Don Gero's Mask",
     "Mask of Scents",
     "Romani Mask",
     "Circus Leader Mask",
-    "Couple Mask",
+    "Couple's Mask",
     "Mask of Truth",
     "Kamaro's Mask",
     "Garo Mask",
@@ -42,7 +42,7 @@ songlist = [
     "Song of Time",
     "Song of Healing",
     "Song of Soaring",
-    "Eponas Song",
+    "Epona's Song",
     "Song of Storms",
     "Sonata of Awakening",
     "Goron Lullaby",
@@ -58,7 +58,7 @@ stray_fairy_locations = (
     ["GB-SF{0}".format(i) for i in range(1,16)] +
     ["ST-SF{0}".format(i) for i in range(1,16)])
 
-tradeitems = (['Moon Tear', 'Town Title Deed', 'Swamp Title Deed', 'Mountain Title Deed', 'Ocean Title Deed'])
+tradeitems = (["Moon's Tear", 'Town Title Deed', 'Swamp Title Deed', 'Mountain Title Deed', 'Ocean Title Deed'])
 
 extraitems = [
     "Kokiri Sword",
@@ -76,8 +76,9 @@ extraitems = [
     "Lens of Truth",
     "Bomb Bag",
     "Big Bomb Bag",
+    "Biggest Bomb Bag",
     "Adult Wallet",
-    "Giant Wallet",
+    "Giant Wallet"
 ]
 
 WF_vanilla = (['Recovery Heart'] * 2)
@@ -118,13 +119,24 @@ vanilla_shop_items = {
     # TODO: Fill out the rest
 }
 
-titledeeds = {
-    'Sad Moon Crater': "Moon's Tear",
-    # TODO: fill out the rest
+trade_items = {
+    'Moon Tear Crater': "Moon's Tear",
+    'Clock Town Deku Salesman': 'Land Title Deed',
+    'Swamp Deku Salesman': 'Swamp Title Deed',
+    'Mountain Deku Salesman': 'Mountain Title Deed',
+    'Ocean Deku Salesman': 'Ocean Title Deed',
+    'Canyon Deku Salesman': 'Rupees (200)',
+    'Have you seen this man?': 'Letter To Kafei',
+    'Item From Kafei': 'Pendant of Memories',
+    'Keaton Mask From Kafei': 'Kafei Mask',
+    'Letter From Kafei': 'Letter To Mama',
+    'We Shall Greet The Morning Together': "Couple's Mask"
 }
 
 npc_items = {
     # TODO: List all locations which give items by NPC, and set them to give that specific item
+    'Gift From Hungry Goron': "Don Gero's Mask",
+
 }
 
 eventlocations = {
@@ -158,9 +170,9 @@ def generate_itempool(world):
         world.push_item(location, ItemFactory(item, world))
         world.get_location(location).event = True
 
-    # fill_bosses(world)
+    fill_bosses(world)
 
-    # world.initialize_items()
+    world.initialize_items()
 
 '''
 This is where we decide what items to place and how
@@ -168,21 +180,21 @@ This is where we decide what items to place and how
 def get_pool_core(world):
     pool = []
     placed_items = {}
-    '''
-        # Used to place an item randomly into the pool
-        pool.append('Kokiri Sword')
-        # Used to place a specific item in a specific location
-         placed_items['Kokiri Sword Chest'] = 'Kokiri Sword'
-         # Adds x items to the pool which are not progression items
-        pool.extend(get_junk_item(37))
-        # locations_with_items is a list of key value pairs where
-        #   the key is the location name for an item
-        #   the value is the item being placed at that location
-        placed_items.update(locations_with_items)
-        # tells the logic that you start out with the given item
-        world.state.collect(item)
-    '''
-    pool.extend(songlist)
+    # # Used to place an item randomly into the pool
+    # pool.append('Kokiri Sword')
+    # # Used to place a specific item in a specific location
+    #     placed_items['Kokiri Sword Chest'] = 'Kokiri Sword'
+    #     # Adds x items to the pool which are not progression items
+    # pool.extend(get_junk_item(37))
+    # # locations_with_items is a list of key value pairs where
+    # #   the key is the location name for an item
+    # #   the value is the item being placed at that location
+    # placed_items.update(locations_with_items)
+    # # tells the logic that you start out with the given item
+    # world.state.collect(item)
+    # pool.extend(songlist)
+    pool.extend( alwaysitems )
+    # placed_items.update( trade_items )
 
     if world.shuffle_mapcompass == 'remove':
         for item in [item for dungeon in world.dungeons for item in dungeon.dungeon_items]:
@@ -235,8 +247,10 @@ def fill_songs(world, attempts=15):
 
 def fill_bosses(world, bossCount=4):
     boss_rewards = ItemFactory(rewardlist)
-    boss_locations = [world.get_location('Odolwas Remains'), world.get_location('Gohts Remains'), world.get_location('Gyorgs Remains'), world.get_location('Twinmolds Remains')]
-    print( boss_rewards, boss_locations )
+    boss_locations = [world.get_location('Remains From Odolwa'), 
+                      world.get_location('Remains From Goht'), 
+                      world.get_location('Remains From Gyorg'), 
+                      world.get_location('Remains From Twinmold')]
     placed_prizes = [loc.item.name for loc in boss_locations if loc.item is not None]
     unplaced_prizes = [item for item in boss_rewards if item.name not in placed_prizes]
     empty_boss_locations = [loc for loc in boss_locations if loc.item is None]

@@ -160,7 +160,8 @@ def patch_rom(world, rom):
     # Patch songs and boss rewards
     for location in world.get_locations():
         item = location.item
-        itemid = copy.copy(item.code)
+        # itemid = copy.copy(item.code)
+        itemid = None
         locationaddress = location.address
         secondaryaddress = location.address2
 
@@ -209,10 +210,10 @@ def patch_rom(world, rom):
     # add_song_messages(messages, world)
 
     # reduce item message lengths
-    update_item_messages(messages, world)
+    # update_item_messages(messages, world)
 
     # DOOT: create a third wallet for MM
-    repack_messages(rom, messages)
+    # repack_messages(rom, messages)
     # write_shop_items(rom, shop_item_file.start + 0x1DEC, shop_items)
 
     # text shuffle

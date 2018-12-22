@@ -148,7 +148,6 @@ def find_message_byte(rom, start, limit, find_byte = 0xBF):
         while offset < limit:
             next_char = rom.read_byte(offset)
             if next_char == find_byte: # message end code
-                # print( hex( offset - start ) )
                 return offset - start
             offset += 1
         return limit - offset
@@ -330,7 +329,7 @@ class Message():
             self.rupees = bytes_to_int(self.header[5:7])
         self.raw_text = raw_text
         if hasattr( self, "header" ):
-            print( '\n', header, '\nText: ', raw_text, '\n' )
+            pass
         self.index = index
         self.id = id
         self.offset = offset
@@ -666,7 +665,6 @@ def shuffle_messages(rom, except_hints=True, always_allow_skip=True):
     textbox_group = []
     for code, _ in enumerate(TEXT_BOX_TYPES):
         textbox_group.append( list( filter( lambda m: m.box_type == code, textboxes ) ) )
-    print( textboxes )
 
     def shuffle_group(group):
         group_permutation = [i for i, _ in enumerate(group)]
