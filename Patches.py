@@ -132,11 +132,20 @@ def patch_rom(world, rom):
     # will overwrite the byte at offset with the given value
     def write_save_table(rom):
         nonlocal initial_save_table
-
+        initial_save_table += [0, 0, 0, 0] #terminator
         table_len = len(initial_save_table)
-        if table_len > 0x400:
-            raise Exception("The Initial Save Table has exceeded it's maximum capacity: 0x%03X/0x400" % table_len)
-        rom.write_bytes(0x3481800, initial_save_table)
+
+        start = rom.sym("INITIAL_SAVE_DATA")
+        end = rom.sym("INITIAL_SAVE_DATA_END")
+        size = end - start
+        print("Initial save table capacity: 0x{:03X}/0x{:03X}".format(table_len, size))
+        if table_len > size:
+            raise Exception("The initial save table has exceeded it's maximum capacity: 0x{:03X}/0x{:03X}".format(table_len, size))
+        rom.write_bytes(start, initial_save_table)
+
+    # set initial save data
+
+    write_byte_to_save(0x22, 1) # tatl flag
 
     # Load Message and Shop Data
     messages = read_messages(rom)
@@ -232,7 +241,7 @@ def patch_rom(world, rom):
         pass # replace_songs(rom, scarecrow_song)
 
     # actually write the save table to rom
-    # write_save_table(rom)
+    write_save_table(rom)
 
     # re-seed for aesthetic effects. They shouldn't be affected by the generation seed
     random.seed()
@@ -752,7 +761,7 @@ def randomize_music_sequence_ids(rom, sequence_ids):
     # Write Music data back in random ordering
     for bgm in sequence_ids:
         bgm_sequence, bgm_instrument = bgm_data.pop()
-        rom.write_bytes(0xC77B80+ (bgm[0] * 0x10), bgm_sequence)
+        rom.write_bytes(0xC77B80 + (bgm[0] * 0x10), bgm_sequence)
         rom.write_int16(0xC77A62 + (bgm[0] * 2), bgm_instrument)
 
 
