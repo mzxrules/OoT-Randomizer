@@ -88,7 +88,7 @@ def patch_rom(world, rom):
         with open(local_path(rom_patch_path), 'r') as stream:
             for line in stream:
                 address, value = [int(x, 16) for x in line.split(',')]
-                rom.write_byte(address, value)
+                rom.write_int32(address, value)
 
     # Open the door into the back of the Clock Tower
     rom.write_int16(0x2CD60CE, 0xFFBA)
