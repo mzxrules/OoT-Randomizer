@@ -83,7 +83,7 @@ def get_tatl_color_options():
 
 def patch_rom(world, rom):
 
-    rom_patch_path = 'data/rom_patch.txt'
+    rom_patch_path = 'data/generated/rom_patch.txt'
     if os.path.isfile(rom_patch_path):
         with open(local_path(rom_patch_path), 'r') as stream:
             for line in stream:
