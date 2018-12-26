@@ -24,8 +24,10 @@
 .headersize (G_PAYLOAD_ADDR - G_PAYLOAD_VROM)
 
 .org G_PAYLOAD_ADDR
+.include "config.asm"
 .include "init.asm"
 .include "every_frame.asm"
+.include "initial_save.asm"
 
 
 ;.importobj "../build/bundle.o"

@@ -23,13 +23,12 @@ ITEM_OVERRIDES:
 ; This table describes what extra data should be written when a new save file is created. It must be terminated with
 ; four 0x00 bytes (which will happen by default as long as you don't fill the allotted space).
 ;
-; Row format (4 bytes):
-; AAAATTVV
-; AAAA = Offset from the start of the save data
-; TT = Type (0x00 = or value with current value, 0x01 = set the byte to the given value)
-; VV = Value to write to the save
+; Format (4 bytes):
+; /* 0x00 */ s16 offset; //offset from the start of the save data
+; /* 0x02 */ u8 type; // 0x00 = bitwise OR value with current value, 0x01 = write value
+; /* 0x03 */ u8 value;
 
-.area 0x400, 0
+.area 0x200, 0
 INITIAL_SAVE_DATA:
 .endarea
 
@@ -46,3 +45,4 @@ PLAYER_NAMES:
 
 ; Special items
 
+.align 0x10
