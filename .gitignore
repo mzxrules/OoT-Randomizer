@@ -1,5 +1,6 @@
 *.sublime-project
 *.sublime-workspace
+.vscode/settings.json
 __pycache__
 .*.sw*
 .sw*

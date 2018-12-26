@@ -8,8 +8,8 @@ def fill_restrictive(world, base_state, locations, itempool):
     def sweep_from_pool():
         new_state = base_state.copy()
         for item in itempool:
-            new_state.collect(item, True)
-        new_state.sweep_for_events()
+            new_state.collect(item)
+        # new_state.sweep_for_events()
         return new_state
 
     while itempool and locations:

@@ -94,6 +94,7 @@ def guiMain(settings=None):
     frames['rules_tab'] = ttk.Frame(notebook)
     frames['logic_tab'] = ttk.Frame(notebook)
     frames['other_tab'] = ttk.Frame(notebook)
+    frames['tunic_tab'] = ttk.Frame(notebook)
     frames['aesthetic_tab'] = ttk.Frame(notebook)
     frames['aesthetic_tab_left'] = Frame(frames['aesthetic_tab'])
     frames['aesthetic_tab_right'] = Frame(frames['aesthetic_tab'])
@@ -103,6 +104,7 @@ def guiMain(settings=None):
     notebook.add(frames['rules_tab'], text='Main Rules')
     notebook.add(frames['logic_tab'], text='Detailed Logic')
     notebook.add(frames['other_tab'], text='Other')
+    notebook.add(frames['tunic_tab'], text='Tunics')
     notebook.add(frames['aesthetic_tab'], text='Cosmetics')
 
     #######################
@@ -116,25 +118,27 @@ def guiMain(settings=None):
     ############
 
     #Rules Tab
-    frames['open']   = LabelFrame(frames['rules_tab'], text='Open',   labelanchor=NW)
-    frames['world']  = LabelFrame(frames['rules_tab'], text='World',   labelanchor=NW)
-    frames['logic']  = LabelFrame(frames['rules_tab'], text='Shuffle',  labelanchor=NW)
+    frames['open'] = LabelFrame(frames['rules_tab'], text='Open',   labelanchor=NW)
+    frames['world'] = LabelFrame(frames['rules_tab'], text='World',   labelanchor=NW)
+    frames['logic'] = LabelFrame(frames['rules_tab'], text='Shuffle',  labelanchor=NW)
 
     # Logic tab
     frames['rewards'] = LabelFrame(frames['logic_tab'], text='Remove Specific Locations', labelanchor=NW)
-    frames['tricks']  = LabelFrame(frames['logic_tab'], text='Specific expected tricks', labelanchor=NW)
+    frames['tricks'] = LabelFrame(frames['logic_tab'], text='Specific expected tricks', labelanchor=NW)
 
     #Other Tab
     frames['convenience'] = LabelFrame(frames['other_tab'], text='Speed Ups', labelanchor=NW)
-    frames['other']       = LabelFrame(frames['other_tab'], text='Misc',      labelanchor=NW)
+    frames['other'] = LabelFrame(frames['other_tab'], text='Misc',      labelanchor=NW)
+
+    # Tunics Tab
+    frames['tuniccolor'] = LabelFrame(frames['tunic_tab'], text='Tunic Colors', labelanchor=NW)
+    frames['decoration'] = LabelFrame(frames['tunic_tab'], text='Form Decorations', labelanchor=NW)
 
     #Aesthetics tab
     frames['cosmetics'] = LabelFrame(frames['aesthetic_tab'], text='General', labelanchor=NW)
-    frames['tuniccolor'] = LabelFrame(frames['aesthetic_tab_left'], text='Tunic Color', labelanchor=NW)
-    frames['tatlcolor']  = LabelFrame(frames['aesthetic_tab_right'], text='Tatl Color',  labelanchor=NW)
-    frames['lowhp']      = LabelFrame(frames['aesthetic_tab_left'], text='Low HP SFX',  labelanchor=NW)
-    frames['tatlhint']   = LabelFrame(frames['aesthetic_tab_right'], text='Tatl SFX', labelanchor=NW)
-
+    frames['color']  = LabelFrame(frames['aesthetic_tab_right'], text='Misc Colors',  labelanchor=NW)
+    frames['sound']      = LabelFrame(frames['aesthetic_tab_left'], text='Music and SFX',  labelanchor=NW)
+    frames['textbox']   = LabelFrame(frames['aesthetic_tab_left'], text='Textbox Shuffle', labelanchor=NW)
 
     # shared
     settingsFrame = Frame(mainWindow)
@@ -381,18 +385,21 @@ def guiMain(settings=None):
     frames['convenience'].pack(fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1) )
     frames['other'].pack(      fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1) )
 
+    # Tunic Tab
+    frames['tuniccolor'].pack(fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1) )
+    frames['decoration'].pack(fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1) )
+
     #Aesthetics tab
-    frames['cosmetics'].pack(fill=BOTH, expand=True, anchor=W, side=TOP)
+    # frames['cosmetics'].pack(fill=BOTH, expand=True, anchor=W, side=TOP)
     frames['aesthetic_tab_left'].pack( fill=BOTH, expand=True, anchor=W, side=LEFT)
     frames['aesthetic_tab_right'].pack(fill=BOTH, expand=True, anchor=W, side=RIGHT)
 
     #Aesthetics tab - Left Side
-    frames['tuniccolor'].pack(fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
-    frames['lowhp'].pack(     fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
+    frames['sound'].pack(     fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
+    frames['textbox'].pack(  fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
 
     #Aesthetics tab - Right Side
-    frames['tatlcolor'].pack( fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
-    frames['tatlhint'].pack(  fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
+    frames['color'].pack( fill=BOTH, expand=True, anchor=W, side=TOP, pady=(5,1) )
 
 
     notebook.pack(fill=BOTH, expand=True, padx=5, pady=5)

@@ -6,70 +6,49 @@ from Items import ItemFactory
 
 #This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 #Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
-alwaysitems = ([
-    'Kokiri Sword', 
-    'Gilded Sword', 
-    'Great Fairy Sword', 
-    'Hylian Shield', 
-    'Mirror Shield',
-    'Deku Mask', 
-    'Goron Mask', 
-    'Zora Mask', 
-    'Fierce Deity Mask',
-    'Postmans Hat', 
-    'Blast Mask', 
-    'Great Fairy Mask', 
-    'All Night Mask', 
-    'Stone Mask',
-    'Keaton Mask', 
-    'Bremen Mask', 
-    'Bunny Hood', 
-    'Don Geros Mask', 
-    'Mask of Scents',
-    'Romani Mask', 
-    'Circus Leader Mask', 
-    'Couple Mask', 
-    'Mask of Truth',
-    'Kamaros Mask', 
-    'Garo Mask', 
-    'Captains Hat', 
-    'Gibdo Mask', 
-    'Giant Mask',
-    'Bow', 
-    'Large Quiver', 
-    'Largest Quiver',
-    'Fire Arrows', 
-    'Ice Arrows', 
-    'Light Arrows',
-    'Powder Keg', 
-    'Pictograph Box', 
-    'Lens of Truth', 
-    'Hookshot',
-    'Bomb Bag', 
-    'Big Bomb Bag',
-    'Adult Wallet',
-    'Giant Wallet',
-    'Bottle with Gold Dust',
-    'Bottle with Red Potion',
-    'Bottle with Milk', 
-    'Bottle with Chateau Romani']
-    + ['Bottle'] * 2
-    + ['Piece of Heart'] * 52 
-    + ['Heart Container'] * 4)
+alwaysitems = [
+    "Mirror Shield",
+    "Deku Mask",
+    "Goron Mask",
+    "Zora Mask",
+    "Light Arrows",
+    "Hookshot"
+]
 
-notmapcompass = ['Ice Trap'] * 8
+extra_masks = [
+    "Postman's Hat",
+    "Blast Mask",
+    "Great Fairy Mask",
+    "All Night Mask",
+    "Stone Mask",
+    "Keaton Mask",
+    "Bremen Mask",
+    "Bunny Hood",
+    "Don Gero's Mask",
+    "Mask of Scents",
+    "Romani Mask",
+    "Circus Leader Mask",
+    "Couple's Mask",
+    "Mask of Truth",
+    "Kamaro's Mask",
+    "Garo Mask",
+    "Captain's Hat",
+    "Gibdo Mask",
+    "Giant Mask"]
+
+notmapcompass = ["Ice Trap"] * 8
 rewardlist = ["Odolwa's Remains", "Goht's Remains", "Gyorg's Remains", "Twinmold's Remains"]
 songlist = [
-    'Song of Time', 
-    'Song of Healing', 
-    'Song of Soaring', 
-    'Eponas Song',
-    'Song of Storms', 
-    'Sonata of Awakening', 
-    'Goron Lullaby', 
-    'New Wave Bossa Nova',
-    'Elegy of Emptiness', 
-    'Oath to Order']
+    "Song of Time",
+    "Song of Healing",
+    "Song of Soaring",
+    "Epona's Song",
+    "Song of Storms",
+    "Sonata of Awakening",
+    "Goron Lullaby",
+    "New Wave Bossa Nova",
+    "Elegy of Emptiness",
+    "Oath to Order"]
 
 # TODO: this could need to be aligned with the location_table
 
@@ -79,8 +58,28 @@ stray_fairy_locations = (
     ["GB-SF{0}".format(i) for i in range(1,16)] +
     ["ST-SF{0}".format(i) for i in range(1,16)])
 
-tradeitems = (['Moon Tear', 'Town Title Deed', 'Swamp Title Deed', 'Mountain Title Deed', 'Ocean Title Deed'])
+tradeitems = (["Moon's Tear", 'Town Title Deed', 'Swamp Title Deed', 'Mountain Title Deed', 'Ocean Title Deed'])
 
+extraitems = [
+    "Kokiri Sword",
+    "Gilded Sword",
+    "Great Fairy Sword",
+    "Hylian Shield",
+    "Fierce Deity Mask",
+    "Bow",
+    "Large Quiver",
+    "Largest Quiver",
+    "Fire Arrows",
+    "Ice Arrows",
+    "Powder Keg",
+    "Pictograph Box",
+    "Lens of Truth",
+    "Bomb Bag",
+    "Big Bomb Bag",
+    "Biggest Bomb Bag",
+    "Adult Wallet",
+    "Giant Wallet"
+]
 
 WF_vanilla = (['Recovery Heart'] * 2)
 SH_vanilla = (['Recovery Heart'] * 2)
@@ -89,16 +88,16 @@ ST_vanilla = (['Recovery Heart'] * 2)
 PF_vanilla = (['Recovery Heart'] * 2)
 
 normal_bottles = [
-    'Bottle',
-    'Bottle with Milk',
-    'Bottle with Red Potion',
-    'Bottle with Green Potion',
-    'Bottle with Blue Potion',
-    'Bottle with Fairy',
-    'Bottle with Fish',
-    'Bottle with Bugs',
-    'Bottle with Poe',
-    'Bottle with Big Poe']
+    "Bottle",
+    "Bottle with Milk",
+    "Bottle with Red Potion",
+    "Bottle with Green Potion",
+    "Bottle with Blue Potion",
+    "Bottle with Fairy",
+    "Bottle with Fish",
+    "Bottle with Bugs",
+    "Bottle with Poe",
+    "Bottle with Big Poe"]
 
 normal_bottle_count = 6
 
@@ -120,13 +119,24 @@ vanilla_shop_items = {
     # TODO: Fill out the rest
 }
 
-titledeeds = {
-    'Sad Moon Crater': "Moon's Tear",
-    # TODO: fill out the rest
+trade_items = {
+    'Moon Tear Crater': "Moon's Tear",
+    'Clock Town Deku Salesman': 'Land Title Deed',
+    'Swamp Deku Salesman': 'Swamp Title Deed',
+    'Mountain Deku Salesman': 'Mountain Title Deed',
+    'Ocean Deku Salesman': 'Ocean Title Deed',
+    'Canyon Deku Salesman': 'Rupees (200)',
+    'Have you seen this man?': 'Letter To Kafei',
+    'Item From Kafei': 'Pendant of Memories',
+    'Keaton Mask From Kafei': 'Kafei Mask',
+    'Letter From Kafei': 'Letter To Mama',
+    'We Shall Greet The Morning Together': "Couple's Mask"
 }
 
 npc_items = {
     # TODO: List all locations which give items by NPC, and set them to give that specific item
+    'Gift From Hungry Goron': "Don Gero's Mask",
+
 }
 
 eventlocations = {
@@ -155,7 +165,7 @@ def get_junk_item(count=1):
 def generate_itempool(world):
     # set up item pool
     (pool, placed_items) = get_pool_core(world)
-    world.itempool = ItemFactory(pool, world)
+    world.itempool = ItemFactory(pool)
     for (location, item) in placed_items.items():
         world.push_item(location, ItemFactory(item, world))
         world.get_location(location).event = True
@@ -170,21 +180,21 @@ This is where we decide what items to place and how
 def get_pool_core(world):
     pool = []
     placed_items = {}
-    '''
-        # Used to place an item randomly into the pool
-        pool.append('Kokiri Sword')
-        # Used to place a specific item in a specific location
-         placed_items['Kokiri Sword Chest'] = 'Kokiri Sword'
-         # Adds x items to the pool which are not progression items
-        pool.extend(get_junk_item(37))
-        # locations_with_items is a list of key value pairs where
-        #   the key is the location name for an item
-        #   the value is the item being placed at that location
-        placed_items.update(locations_with_items)
-        # tells the logic that you start out with the given item
-        world.state.collect(item)
-    '''
-    pool.extend(songlist)
+    # # Used to place an item randomly into the pool
+    # pool.append('Kokiri Sword')
+    # # Used to place a specific item in a specific location
+    #     placed_items['Kokiri Sword Chest'] = 'Kokiri Sword'
+    #     # Adds x items to the pool which are not progression items
+    # pool.extend(get_junk_item(37))
+    # # locations_with_items is a list of key value pairs where
+    # #   the key is the location name for an item
+    # #   the value is the item being placed at that location
+    # placed_items.update(locations_with_items)
+    # # tells the logic that you start out with the given item
+    # world.state.collect(item)
+    # pool.extend(songlist)
+    pool.extend( alwaysitems )
+    # placed_items.update( trade_items )
 
     if world.shuffle_mapcompass == 'remove':
         for item in [item for dungeon in world.dungeons for item in dungeon.dungeon_items]:
@@ -203,16 +213,16 @@ def get_pool_core(world):
 def fill_songs(world, attempts=15):
     songs = ItemFactory(songlist)
     song_locations = [
-        world.get_location('Song from Skull Kid'), 
-        world.get_location('Song from HMS'), 
-        world.get_location('Song from Owl Tablet'), 
-        world.get_location('Song from Romani'), 
-        world.get_location('Song at Grave'), 
-        world.get_location('Song from Monkey'), 
-        world.get_location('Song from Baby Goron'), 
-        world.get_location('Song from Goron Elder'), 
-        world.get_location('Song from Zora Eggs'), 
-        world.get_location('Song from Igos'), 
+        world.get_location('Song from Skull Kid'),
+        world.get_location('Song from HMS'),
+        world.get_location('Song from Owl Tablet'),
+        world.get_location('Song from Romani'),
+        world.get_location('Song at Grave'),
+        world.get_location('Song from Monkey'),
+        world.get_location('Song from Baby Goron'),
+        world.get_location('Song from Goron Elder'),
+        world.get_location('Song from Zora Eggs'),
+        world.get_location('Song from Igos'),
         world.get_location('Song from the Giants')]
     placed_prizes = [loc.item.name for loc in song_locations if loc.item is not None]
     unplaced_prizes = [song for song in songs if song.name not in placed_prizes]
@@ -237,7 +247,10 @@ def fill_songs(world, attempts=15):
 
 def fill_bosses(world, bossCount=4):
     boss_rewards = ItemFactory(rewardlist)
-    boss_locations = [world.get_location('Odolwa'), world.get_location('Goht'), world.get_location('Gyorg'), world.get_location('Twinmold')]
+    boss_locations = [world.get_location('Remains From Odolwa'), 
+                      world.get_location('Remains From Goht'), 
+                      world.get_location('Remains From Gyorg'), 
+                      world.get_location('Remains From Twinmold')]
     placed_prizes = [loc.item.name for loc in boss_locations if loc.item is not None]
     unplaced_prizes = [item for item in boss_rewards if item.name not in placed_prizes]
     empty_boss_locations = [loc for loc in boss_locations if loc.item is None]
