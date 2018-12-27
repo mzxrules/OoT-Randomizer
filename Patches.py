@@ -112,7 +112,8 @@ def patch_rom(world, rom):
 
         if filter and not filter(value):
             return
-
+        
+        print("| {:08x} {:04x} {:02x}".format(0x801EF670 + offset, offset, value))
         initial_save_table += [(offset & 0xFF00) >> 8, offset & 0xFF, 0x00, value]
 
     # will overwrite the byte at offset with the given value
@@ -121,13 +122,26 @@ def patch_rom(world, rom):
 
         if filter and not filter(value):
             return
-
+        
+        print("W {:08x} {:04x} {:02x}".format(0x801EF670 + offset, offset, value))
         initial_save_table += [(offset & 0xFF00) >> 8, offset & 0xFF, 0x01, value]
 
     # will overwrite the byte at offset with the given value
     def write_bytes_to_save(offset, bytes, filter=None):
         for i, value in enumerate(bytes):
             write_byte_to_save(offset + i, value, filter)
+
+    def flag_to_offset(flag):
+        offset = (flag // 0x20) * 4
+        w = (flag & 0x18) >> 3
+        return offset + 3 - w
+
+    def write_switch_flag(scene, flag, filter=None):
+        offset = 0xF8 + (scene * 0x1C) + 4 + flag_to_offset(flag)
+        bit = flag & 0x7
+        value = 1 << bit
+        write_bits_to_save(offset, value, filter)
+
 
     # will overwrite the byte at offset with the given value
     def write_save_table(rom):
@@ -145,7 +159,9 @@ def patch_rom(world, rom):
 
     # set initial save data
 
-    write_byte_to_save(0x22, 1) # tatl flag
+    write_byte_to_save(0x22, 1)     # tatl flag
+    write_bits_to_save(0xF33, 4)    # first time outside clock town
+    write_switch_flag(99, 0x00)     # meet Happy Mask Shop Salesman
 
     # Load Message and Shop Data
     messages = read_messages(rom)
