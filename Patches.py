@@ -10,6 +10,7 @@ from Hints import buildGossipHints, buildBossRewardHints
 from Messages import read_messages, remove_unused_messages, update_item_messages, repack_messages, shuffle_messages
 from Utils import local_path, output_path, random_choices
 from Items import ItemFactory, item_data
+from InitialSave import InitialSave
 
 TunicColors = {
     "Custom Color": [0, 0, 0],
@@ -103,65 +104,14 @@ def patch_rom(world, rom):
     # see initial_save.asm and config.asm for more details on specifics
     # or just use the following functions to add an entry to the table
 
-    # Initial Save Data
-    initial_save_table = []
+    # Set Initial Save Data
+    save = InitialSave()
+    save.set_byte(0x22, 1)            # tatl flag
+    save.set_bits(0xF33, 0x04)        # first time outside clock town
+    save.set_switch_flag(99, 0x00)    # meet Happy Mask Shop Salesman
+    save.write_table_to_rom(rom)
 
-    # will set the bits of value to the offset in the save (or'ing them with what is already there)
-    def write_bits_to_save(offset, value, filter=None):
-        nonlocal initial_save_table
-
-        if filter and not filter(value):
-            return
-        
-        print("| {:08x} {:04x} {:02x}".format(0x801EF670 + offset, offset, value))
-        initial_save_table += [(offset & 0xFF00) >> 8, offset & 0xFF, 0x00, value]
-
-    # will overwrite the byte at offset with the given value
-    def write_byte_to_save(offset, value, filter=None):
-        nonlocal initial_save_table
-
-        if filter and not filter(value):
-            return
-        
-        print("W {:08x} {:04x} {:02x}".format(0x801EF670 + offset, offset, value))
-        initial_save_table += [(offset & 0xFF00) >> 8, offset & 0xFF, 0x01, value]
-
-    # will overwrite the byte at offset with the given value
-    def write_bytes_to_save(offset, bytes, filter=None):
-        for i, value in enumerate(bytes):
-            write_byte_to_save(offset + i, value, filter)
-
-    def flag_to_offset(flag):
-        offset = (flag // 0x20) * 4
-        w = (flag & 0x18) >> 3
-        return offset + 3 - w
-
-    def write_switch_flag(scene, flag, filter=None):
-        offset = 0xF8 + (scene * 0x1C) + 4 + flag_to_offset(flag)
-        bit = flag & 0x7
-        value = 1 << bit
-        write_bits_to_save(offset, value, filter)
-
-
-    # will overwrite the byte at offset with the given value
-    def write_save_table(rom):
-        nonlocal initial_save_table
-        initial_save_table += [0, 0, 0, 0] #terminator
-        table_len = len(initial_save_table)
-
-        start = rom.sym("INITIAL_SAVE_DATA")
-        end = rom.sym("INITIAL_SAVE_DATA_END")
-        size = end - start
-        print("Initial save table capacity: 0x{:03X}/0x{:03X}".format(table_len, size))
-        if table_len > size:
-            raise Exception("The initial save table has exceeded it's maximum capacity: 0x{:03X}/0x{:03X}".format(table_len, size))
-        rom.write_bytes(start, initial_save_table)
-
-    # set initial save data
-
-    write_byte_to_save(0x22, 1)     # tatl flag
-    write_bits_to_save(0xF33, 4)    # first time outside clock town
-    write_switch_flag(99, 0x00)     # meet Happy Mask Shop Salesman
+    del save 
 
     # Load Message and Shop Data
     messages = read_messages(rom)
@@ -256,8 +206,6 @@ def patch_rom(world, rom):
     if world.ocarina_songs:
         pass # replace_songs(rom, scarecrow_song)
 
-    # actually write the save table to rom
-    write_save_table(rom)
 
     # re-seed for aesthetic effects. They shouldn't be affected by the generation seed
     random.seed()
