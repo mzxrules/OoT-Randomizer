@@ -1,6 +1,6 @@
 class InitialSave(object):
     def __init__(self, log = True):
-        self.table = []
+        self.table = {}
         self.log = log
         
 
@@ -9,9 +9,11 @@ class InitialSave(object):
 
         if filter and not filter(value):
             return
-        if self.log:
-            print("| {:08x} {:04x} {:02x}".format(0x801EF670 + offset, offset, value))
-        self.table += [(offset & 0xFF00) >> 8, offset & 0xFF, 0x00, value]
+
+        if offset in self.table:
+            self.table[offset][1] |= value
+        else:
+            self.table[offset] = [0x00, value]
 
         
     # will overwrite the byte at offset with the given value
@@ -19,16 +21,22 @@ class InitialSave(object):
 
         if filter and not filter(value):
             return
-        
-        if self.log:
-            print("W {:08x} {:04x} {:02x}".format(0x801EF670 + offset, offset, value))
-        self.table += [(offset & 0xFF00) >> 8, offset & 0xFF, 0x01, value]
+
+        if offset in self.table:
+            v = self.table[offset]
+            if v[0] == 1:
+                print("duplicate byte write error at offset {:04x}".format(offset));
+            else:
+                self.table[offset][0] = 1
+                self.table[offset][1] = value | v[1]
+        else:
+            self.table[offset] = [0x01, value]
 
         
     # will overwrite the byte at offset with the given value
     def set_bytes(self, offset, bytes, filter=None):
         for i, value in enumerate(bytes):
-            write_byte_to_save(offset + i, value, filter)
+            self.set_byte(offset + i, value, filter)
 
 
     def set_switch_flag(self, scene, flag, filter=None):
@@ -40,8 +48,17 @@ class InitialSave(object):
         
     # will overwrite the byte at offset with the given value
     def write_table_to_rom(self, rom):
-        self.table += [0, 0, 0, 0] #terminator
-        table_len = len(self.table)
+        t = []
+        for offset, v in self.table.items():
+            type = v[0]
+            value = v[1];
+            t += [(offset & 0xFF00) >> 8, offset & 0xFF, type, value]
+            if self.log:
+                print("{} {:08x} {:04x} {:02x}".format(type, 0x801EF670 + offset, offset, value))
+
+
+        t += [0, 0, 0, 0] #terminator
+        table_len = len(t)
 
         start = rom.sym("INITIAL_SAVE_DATA")
         end = rom.sym("INITIAL_SAVE_DATA_END")
@@ -50,7 +67,7 @@ class InitialSave(object):
             print("Initial save table capacity: 0x{:03X}/0x{:03X}".format(table_len, size))
         if table_len > size:
             raise Exception("The initial save table has exceeded it's maximum capacity: 0x{:03X}/0x{:03X}".format(table_len, size))
-        rom.write_bytes(start, self.table)
+        rom.write_bytes(start, t)
         
 
 def flag_to_offset(flag):
