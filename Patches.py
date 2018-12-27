@@ -106,9 +106,39 @@ def patch_rom(world, rom):
 
     # Set Initial Save Data
     save = InitialSave()
-    save.set_byte(0x22, 1)            # tatl flag
-    save.set_bits(0xF33, 0x04)        # first time outside clock town
-    save.set_switch_flag(99, 0x00)    # meet Happy Mask Shop Salesman
+    save.set_byte(0x22, 1)          # tatl flag
+    save.set_bits(0xF33, 0x04)      # first time outside clock town
+
+    # Cutscenes
+    save.set_switch_flag(99, 0x00)  # meet Happy Mask Shop Salesman
+    save.set_switch_flag(45, 0x04)  # Tatl remembering Skull Kid Cs
+    save.set_switch_flag(59, 0x0A)  # Pirate's Fortress boat area mini Cs
+    save.set_switch_flag(73, 0x05)  # Great Bay Temple Huge Water Wheel
+
+    # Location Cutscenes
+    save.set_bits(0xEF8, 0x80)      # Snowhead
+    save.set_bits(0xEF8, 0x20)      # Mountain Village
+    save.set_bits(0xEF8, 0x10)      # Gorman Track
+    save.set_bits(0xEF8, 0x08)      # Romani Ranch
+    save.set_bits(0xEF8, 0x04)      # Ikana Graveyard
+    save.set_bits(0xEF8, 0x02)      # Termina Field
+    save.set_bits(0xEF9, 0x80)      # Ikana Canyon
+    save.set_bits(0xEF9, 0x40)      # Waterfall Rapids
+    save.set_bits(0xEF9, 0x20)      # Zora Hall
+    save.set_bits(0xEF9, 0x10)      # Pirate's Fortress
+    save.set_bits(0xEF9, 0x08)      # Great Bay Coast
+    save.set_bits(0xEF9, 0x04)      # Deku Palace
+    save.set_bits(0xEF9, 0x02)      # Woodfall
+    save.set_bits(0xEF9, 0x01)      # Southern Swamp
+    save.set_bits(0xEFA, 0x80)      # Snowhead Temple
+    save.set_bits(0xEFA, 0x40)      # Woodfall Temple
+    save.set_bits(0xEFA, 0x20)      # North Clocktown
+    save.set_bits(0xEFA, 0x10)      # West Clocktown
+    save.set_bits(0xEFA, 0x08)      # East Clocktown
+    save.set_bits(0xEFA, 0x04)      # Stone Tower Inverted
+    save.set_bits(0xEFA, 0x02)      # Stone Tower
+    save.set_bits(0xEFB, 0x04)      # Stone Tower Temple Inverted
+    save.set_bits(0xEFB, 0x02)      # Stone Tower Temple
     save.write_table_to_rom(rom)
 
     del save 
