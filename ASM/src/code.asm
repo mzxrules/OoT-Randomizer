@@ -41,6 +41,9 @@
 .org 0x801448A4
     addiu   t6, r0, 0x0003 ; Set Default form (Deku). Originally set to 4 (Human)
 
+.org 0x80146AEC
+    b   0x80146AFC ; Skip setting the first save file's cutscene number to 0xFFF0
+
     
 ;==================================================================================================
 ; Initial save
