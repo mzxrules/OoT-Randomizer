@@ -1,11 +1,7 @@
-#ifndef Z64_H
-#define Z64_H
+#ifndef Z2_H
+#define Z2_H
 #include <stdint.h>
 #include <n64.h>
-
-#define Z64_OOT10             0x00
-#define Z64_OOT11             0x01
-#define Z64_OOT12             0x02
 
 #define Z64_SCREEN_WIDTH      320
 #define Z64_SCREEN_HEIGHT     240
@@ -603,6 +599,159 @@ typedef struct
                                             /* 0x1450 */
 } z64_file_t;
 
+
+
+typedef struct
+{
+    int32_t         entrance_index;           /* 0x0000 */
+    int8_t          player_mask;              /* 0x0004 */
+    int8_t          opening_flag;             /* 0x0005 */
+    int8_t          button_mash_timer;        /* 0x0006 */
+    char            unk_0x0007;               /* 0x0007 */
+    int32_t         cutscene_index;           /* 0x0008 */
+    uint16_t        day_time;                 /* 0x000C */
+    uint16_t        owl_statue;               /* 0x000E */
+    int32_t         night_flag;               /* 0x0010 */
+    int32_t         time_passage_rate;        /* 0x0014 */
+    int32_t         current_day;              /* 0x0018 */
+    int32_t         total_day;                /* 0x001C */
+    int8_t          player_character;         /* 0x0020 */
+    int8_t          spring_flag;              /* 0x0021 */
+    int8_t          tatl_flag;                /* 0x0022 */
+    int8_t          owl_save_flag;            /* 0x0023 */
+    char            id[6];                    /* 0x0024 */
+    int16_t         savect;                   /* 0x002A */
+    char            file_name[0x08];          /* 0x002C */
+    int16_t         life_max;                 /* 0x0034 */
+    int16_t         life;                     /* 0x0036 */
+    uint8_t         magic_max;                /* 0x0038 */
+    uint8_t         magic;                    /* 0x0039 */
+    uint16_t        rupees;                   /* 0x003A */
+    uint16_t        unk_0x003C;               /* 0x003C */
+    uint16_t        navi_timer;               /* 0x003E */
+    uint8_t         magic_acquired;           /* 0x0040 */
+    uint8_t         magic_ability;            /* 0x0041 */
+    int16_t         life_ability;             /* 0x0042 */
+    int16_t         razor_sword_durability;   /* 0x0044 */
+    int16_t         owl_hit_flags;            /* 0x0046 */
+    int16_t         unk_0x0048;               /* 0x0048 */
+    int16_t         unk_0x004A;               /* 0x004A */
+    struct 
+    {
+        int8_t      b;
+        int8_t      c_left;
+        int8_t      c_down;
+        int8_t      c_right;
+    } form_button_items[4];                   /* 0x004C */ //human, goron, zora, deku
+    struct
+    {
+        int8_t      b;
+        int8_t      c_left;
+        int8_t      c_down;
+        int8_t      c_right;
+    } form_button_slot[4];                    /* 0x005C */
+    union
+    {
+        uint16_t    equips;                   /* 0x006C */
+        struct
+        {
+            uint16_t    equip_boots : 4;
+            uint16_t    equip_tunic : 4;
+            uint16_t    equip_shield : 4;
+            uint16_t    equip_sword : 4;
+        };
+    };
+    char            unk_0x006E_[0x0002];      /* 0x006E */
+    union
+    {
+        int8_t      items_all[48];
+        struct 
+        {
+            int8_t          items[24];                /* 0x0070 */
+            int8_t          masks[24];                /* 0x0088 */
+        };
+    };
+    int8_t          ammo[24];                 /* 0x00A0 */
+    union
+    {
+        uint32_t    equipment_items;          /* 0x00B8 */
+        struct
+        {
+            uint32_t : 9;
+                       uint32_t    nut_upgrade : 3;
+                       uint32_t    stick_upgrade : 3;
+                       uint32_t    bullet_bag : 3;
+                       uint32_t    wallet : 2;
+                       uint32_t    diving_upgrade : 3;
+                       uint32_t    strength_upgrade : 3;
+                       uint32_t    bomb_bag : 3;
+                       uint32_t    quiver : 3;
+        }; //FIXME
+    };
+    union
+    {
+        uint32_t      quest_items;              /* 0x00BC */
+        struct
+        {
+            uint32_t    heart_pieces : 8;
+            uint32_t    gold_skulltula : 1;
+            uint32_t    gerudos_card : 1;
+            uint32_t    stone_of_agony : 1;
+            uint32_t    zoras_sapphire : 1;
+            uint32_t    gorons_ruby : 1;
+            uint32_t    kokiris_emerald : 1;
+            uint32_t    song_of_storms : 1;
+            uint32_t    song_of_time : 1;
+            uint32_t    suns_song : 1;
+            uint32_t    sarias_song : 1;
+            uint32_t    eponas_song : 1;
+            uint32_t    zeldas_lullaby : 1;
+            uint32_t    prelude_of_light : 1;
+            uint32_t    nocturne_of_shadow : 1;
+            uint32_t    requiem_of_spirit : 1;
+            uint32_t    serenade_of_water : 1;
+            uint32_t    bolero_of_fire : 1;
+            uint32_t    minuet_of_forest : 1;
+            uint32_t    light_medallion : 1;
+            uint32_t    shadow_medallion : 1;
+            uint32_t    spirit_medallion : 1;
+            uint32_t    water_medallion : 1;
+            uint32_t    fire_medallion : 1;
+            uint32_t    forest_medallion : 1;
+        };
+    };
+    union
+    {
+        uint8_t       items;
+        struct
+        {
+            uint8_t : 5;
+                      uint8_t     map : 1;
+                      uint8_t     compass : 1;
+                      uint8_t     boss_key : 1;
+        };
+    }               dungeon_items[10];        /* 0x00C0 */
+    int8_t          dungeon_keys[9];          /* 0x00CA */
+    uint8_t         defense_hearts;           /* 0x00D3 */
+    uint8_t         stray_fairies[10];        /* 0x00D4 */
+    char            form_name[6][3];          /* 0x00DE */
+    int16_t         unk_0x00F6;               /* 0x00F6 */
+    struct
+    {
+        uint32_t      chest;
+        uint32_t      switch_1;
+        uint32_t      switch_2;
+        uint32_t      clear;
+        uint32_t      collect;
+        uint32_t      unk_0x14;
+        uint32_t      unk_0x18;
+    }               scene_flags[0x78];        /* 0x00F8 */
+    char            unk_0x0E18[0x62];         /* 0x0E18*/
+} z2_file_t;
+
+extern z2_file_t z2_file;
+asm(".equ z2_file, 0x801EF670");
+
 typedef struct
 {
   uint32_t seg[16];
@@ -654,19 +803,19 @@ typedef struct
   char            unk_01_[0x00A4];      /* 0x0014 */
   Gfx            *work_c;               /* 0x00B8 */
   uint32_t        work_c_size;          /* 0x00BC */
-  char            unk_02_[0x00F0];      /* 0x00C0 */
-  Gfx            *work_w;               /* 0x01B0 */
-  z64_disp_buf_t  work;                 /* 0x01B4 */
-  char            unk_03_[0x00E4];      /* 0x01C4 */
-  z64_disp_buf_t  overlay;              /* 0x02A8 */
-  z64_disp_buf_t  poly_opa;             /* 0x02B8 */
-  z64_disp_buf_t  poly_xlu;             /* 0x02C8 */
-  uint32_t        frame_count_1;        /* 0x02D8 */
-  void           *frame_buffer;         /* 0x02DC */
-  char            unk_04_[0x0008];      /* 0x02E0 */
-  uint32_t        frame_count_2;        /* 0x02E8 */
-                                        /* 0x02EC */
-} z64_gfx_t;
+  char            unk_02_[0x00E0];      /* 0x00C0 */
+  Gfx            *work_w;               /* 0x01A0 */
+  z64_disp_buf_t  work;                 /* 0x01A4 */
+  char            unk_03_[0x00E4];      /* 0x01B4 */
+  z64_disp_buf_t  overlay;              /* 0x0298 */
+  z64_disp_buf_t  poly_opa;             /* 0x02A8 */
+  z64_disp_buf_t  poly_xlu;             /* 0x02B8 */
+  uint32_t        frame_count_1;        /* 0x02C8 */
+  void           *frame_buffer;         /* 0x02CC */
+  char            unk_04_[0x0008];      /* 0x02D0 */
+  uint32_t        frame_count_2;        /* 0x02D8 */
+                                        /* 0x02DC */
+} z2_gfx_t;
 
 typedef struct
 {
@@ -800,7 +949,7 @@ typedef struct
 /* context base */
 typedef struct
 {
-  z64_gfx_t      *gfx;                    /* 0x0000 */
+  z2_gfx_t       *gfx;                    /* 0x0000 */
   void           *state_main;             /* 0x0004 */
   void           *state_dtor;             /* 0x0008 */
   void           *next_ctor;              /* 0x000C */
@@ -960,6 +1109,21 @@ typedef struct
 typedef void (*z64_light_handler_t)(z64_gbi_lights_t*, z64_lightn_t*,
                                     z64_actor_t*);
 
+typedef struct
+{
+    char            view_magic[4];      /* 0x0000 */
+    void*           unk_0x0004;         /* 0x0004 */
+    uint32_t        screen_top;         /* 0x0008 */
+    uint32_t        screen_bottom;      /* 0x000C */
+    uint32_t        screen_left;        /* 0x0010 */
+    uint32_t        screen_right;       /* 0x0014 */
+    float           camera_distance;    /* 0x0018 */
+    float           fog_distance;       /* 0x001C */
+    float           z_distance;         /* 0x0020 */
+    char            unk_0x0024[0x144];  /* 0x0024 */
+                                        /* 0x0168 */
+} z2_view_t;
+
 /* game context */
 typedef struct
 {
@@ -1078,6 +1242,16 @@ typedef struct
   uint8_t          fadeout_transition;     /* 0x11E5E */
                                            /* 0x11E5F */
 } z64_game_t;
+
+/* mm game context */
+typedef struct {
+    z64_ctxt_t      common;                 /* 0x00000 */
+    uint16_t        scene_index;            /* 0x000A4 */
+    uint8_t         scene_draw_id;          /* 0x000A6 */
+    char            unk_0x000A7[9];         /* 0x000A7 */
+    void*           scene_addr;             /* 0x000B0 */
+    z2_view_t       view;                   /* 0x000B8 */
+} z2_game_t;
 
 typedef struct
 {

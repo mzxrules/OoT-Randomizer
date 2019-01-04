@@ -50,7 +50,7 @@ void handle_dpad() {
 void draw_dpad() {
     z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
     if (DISPLAY_DPAD && display_active) {
-        gSPDisplayList(db->p++, setup_db.buf);
+        gSPDisplayList(db->p++, &initial_display_list);
         gDPPipeSync(db->p++);
         gDPSetCombineMode(db->p++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         uint16_t alpha = z64_game.hud_alpha_channels.minimap;
@@ -60,29 +60,29 @@ void draw_dpad() {
         sprite_load(db, &dpad_sprite, 0, 1);
         sprite_draw(db, &dpad_sprite, 0, 271, 64, 16, 16);
 
-        if (z64_file.iron_boots && z64_file.link_age==0) {
-            sprite_load(db, &items_sprite, 69, 1);
-            if (z64_file.equip_boots == 2) {
-                sprite_draw(db, &items_sprite, 0, 258, 64, 16, 16);
-            }
-            else {
-                sprite_draw(db, &items_sprite, 0, 260, 66, 12, 12);
-            }
-        }
+        //if (z64_file.iron_boots && z64_file.link_age==0) {
+        //    sprite_load(db, &items_sprite, 69, 1);
+        //    if (z64_file.equip_boots == 2) {
+        //        sprite_draw(db, &items_sprite, 0, 258, 64, 16, 16);
+        //    }
+        //    else {
+        //        sprite_draw(db, &items_sprite, 0, 260, 66, 12, 12);
+        //    }
+        //}
 
-        if (z64_file.hover_boots && z64_file.link_age == 0) {
-            sprite_load(db, &items_sprite, 70, 1);
-            if (z64_file.equip_boots == 3) {
-                sprite_draw(db, &items_sprite, 0, 283, 64, 16, 16);
-            }
-            else {
-                sprite_draw(db, &items_sprite, 0, 285, 66, 12, 12);
-            }
-        }
-        if (z64_file.items[0x07] == 0x07 || z64_file.items[0x07] == 0x08){
-            sprite_load(db, &items_sprite, z64_file.items[0x07], 1);
-            sprite_draw(db, &items_sprite, 0, 273, 77, 12,12);
-        }
+        //if (z64_file.hover_boots && z64_file.link_age == 0) {
+        //    sprite_load(db, &items_sprite, 70, 1);
+        //    if (z64_file.equip_boots == 3) {
+        //        sprite_draw(db, &items_sprite, 0, 283, 64, 16, 16);
+        //    }
+        //    else {
+        //        sprite_draw(db, &items_sprite, 0, 285, 66, 12, 12);
+        //    }
+        //}
+        //if (z64_file.items[0x07] == 0x07 || z64_file.items[0x07] == 0x08){
+        //    sprite_load(db, &items_sprite, z64_file.items[0x07], 1);
+        //    sprite_draw(db, &items_sprite, 0, 273, 77, 12,12);
+        //}
 
         gDPPipeSync(db->p++);
     }

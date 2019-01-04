@@ -1,39 +1,60 @@
 #include "gfx.h"
 
-#include "util.h"
-#include "z64.h"
+//#include "util.h"
+#include "z2.h"
 
-void disp_buf_init(z64_disp_buf_t *db, Gfx *buf, int size) {
-    db->size = size;
-    db->buf = buf;
-    db->p = buf;
-    db->d = (Gfx *)((char *)buf + size);
-}
+Gfx initial_display_list[] =
+{
+	gsDPPipeSync(),
 
-sprite_t stones_sprite = {
-    NULL, 16, 16, 3,
-    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
+	gsSPLoadGeometryMode(0),
+	gsDPSetScissor(G_SC_NON_INTERLACE,
+				  0, 0, Z64_SCREEN_WIDTH, Z64_SCREEN_HEIGHT),
+
+	gsDPSetOtherMode(G_AD_DISABLE | G_CD_DISABLE |
+		G_CK_NONE | G_TC_FILT |
+		G_TD_CLAMP | G_TP_NONE |
+		G_TL_TILE | G_TT_NONE |
+		G_PM_NPRIMITIVE | G_CYC_1CYCLE |
+		G_TF_BILERP, // HI
+		G_AC_NONE | G_ZS_PRIM |
+		G_RM_XLU_SURF | G_RM_XLU_SURF2), // LO
+
+	gsSPEndDisplayList()
 };
 
-sprite_t medals_sprite = {
-    NULL, 16, 16, 6,
-    G_IM_FMT_IA, G_IM_SIZ_8b, 1
-};
 
-sprite_t items_sprite = {
-    NULL, 32, 32, 90,
-    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
-};
+//void disp_buf_init(z64_disp_buf_t *db, Gfx *buf, int size) {
+//    db->size = size;
+//    db->buf = buf;
+//    db->p = buf;
+//    db->d = (Gfx *)((char *)buf + size);
+//}
 
-sprite_t quest_items_sprite = {
-    NULL, 24, 24, 20,
-    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
-};
-
-sprite_t font_sprite = {
-    NULL, 8, 14, 95,
-    G_IM_FMT_IA, G_IM_SIZ_8b, 1
-};
+//sprite_t stones_sprite = {
+//    NULL, 16, 16, 3,
+//    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
+//};
+//
+//sprite_t medals_sprite = {
+//    NULL, 16, 16, 6,
+//    G_IM_FMT_IA, G_IM_SIZ_8b, 1
+//};
+//
+//sprite_t items_sprite = {
+//    NULL, 32, 32, 90,
+//    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
+//};
+//
+//sprite_t quest_items_sprite = {
+//    NULL, 24, 24, 20,
+//    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
+//};
+//
+//sprite_t font_sprite = {
+//    NULL, 8, 14, 95,
+//    G_IM_FMT_IA, G_IM_SIZ_8b, 1
+//};
 
 sprite_t dpad_sprite = {
     NULL, 32, 32, 1,
@@ -77,63 +98,25 @@ void sprite_draw(z64_disp_buf_t *db, sprite_t *sprite, int tile_index,
             width_factor, height_factor);
 }
 
-z64_disp_buf_t setup_db = {};
-
-void draw_setup(z64_disp_buf_t *db) {
-    gDPPipeSync(db->p++);
-
-    gSPLoadGeometryMode(db->p++, 0);
-    gDPSetScissor(db->p++, G_SC_NON_INTERLACE,
-                  0, 0, Z64_SCREEN_WIDTH, Z64_SCREEN_HEIGHT);
-
-    gDPSetOtherMode(db->p++, G_AD_DISABLE | G_CD_DISABLE |
-        G_CK_NONE       | G_TC_FILT    |
-        G_TD_CLAMP      | G_TP_NONE    |
-        G_TL_TILE       | G_TT_NONE    |
-        G_PM_NPRIMITIVE | G_CYC_1CYCLE |
-        G_TF_BILERP, // HI
-        G_AC_NONE       | G_ZS_PRIM    |
-        G_RM_XLU_SURF   | G_RM_XLU_SURF2); // LO
-
-    gSPEndDisplayList(db->p++);
-}
-
 extern char FONT_TEXTURE;
 extern char DPAD_TEXTURE;
 #define font_texture_raw ((uint8_t *)&FONT_TEXTURE)
 #define dpad_texture_raw ((uint8_t *)&DPAD_TEXTURE)
 
 void gfx_init() {
-    file_t title_static = {
-        NULL, z64_file_select_static_vaddr, z64_file_select_static_vsize
-    };
-    file_init(&title_static);
 
-    file_t icon_item_24_static = {
-        NULL, z64_icon_item_24_static_vaddr, z64_icon_item_24_static_vsize
-    };
-    file_init(&icon_item_24_static);
+    //file_t icon_item_static = {
+    //    NULL, z64_icon_item_static_vaddr, z64_icon_item_static_vsize
+    //};
+    //file_init(&icon_item_static);
 
-    file_t icon_item_static = {
-        NULL, z64_icon_item_static_vaddr, z64_icon_item_static_vsize
-    };
-    file_init(&icon_item_static);
-
-    stones_sprite.buf = title_static.buf + 0x2A300;
-    medals_sprite.buf = title_static.buf + 0x2980;
-    items_sprite.buf = icon_item_static.buf;
-    quest_items_sprite.buf = icon_item_24_static.buf;
     dpad_sprite.buf = dpad_texture_raw;
 
-    int font_bytes = sprite_bytes(&font_sprite);
-    font_sprite.buf = heap_alloc(font_bytes);
-    for (int i = 0; i < font_bytes / 2; i++) {
-        font_sprite.buf[2*i] = (font_texture_raw[i] >> 4) | 0xF0;
-        font_sprite.buf[2*i + 1] = font_texture_raw[i] | 0xF0;
-    }
+    //int font_bytes = sprite_bytes(&font_sprite);
+    //font_sprite.buf = heap_alloc(font_bytes);
+    //for (int i = 0; i < font_bytes / 2; i++) {
+    //    font_sprite.buf[2*i] = (font_texture_raw[i] >> 4) | 0xF0;
+    //    font_sprite.buf[2*i + 1] = font_texture_raw[i] | 0xF0;
+    //}
 
-    int setup_size = 32 * sizeof(Gfx);
-    Gfx *setup_buf = heap_alloc(setup_size);
-    disp_buf_init(&setup_db, setup_buf, setup_size);
-    draw_setup(&setup_db);
 }

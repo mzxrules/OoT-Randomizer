@@ -1,7 +1,7 @@
-#ifndef QUICKBOOTS_H
-#define QUICKBOOTS_H
+#ifndef DPAD_H
+#define DPAD_H
 
-#include "z64.h"
+#include "z2.h"
 
 #define BLOCK_DPAD (0x00000001 | \
 	0x00000002 | \
@@ -10,7 +10,8 @@
     0x10000000 | \
     0x20000000)
 
-#define DISPLAY_DPAD       (z64_file.iron_boots || z64_file.hover_boots || z64_file.items[0x07] == 0x07 || z64_file.items[0x08] == 0x08)
+//#define DISPLAY_DPAD       (z64_file.iron_boots || z64_file.hover_boots || z64_file.items[0x07] == 0x07 || z64_file.items[0x08] == 0x08)
+#define DISPLAY_DPAD 1
 
 #define CAN_USE_DPAD       (((z64_link.state_flags_1 & BLOCK_DPAD) == 0) && \
                            ((uint32_t)z64_ctxt.state_dtor==z64_state_ovl_tab[3].vram_dtor) && \

@@ -1,9 +1,12 @@
 #ifndef GFX_H
 #define GFX_H
 
-#include "z64.h"
+#include <n64.h>
+#include "z2.h"
 
-z64_disp_buf_t setup_db;
+//z64_disp_buf_t setup_db;
+
+extern Gfx initial_display_list[]; 
 
 typedef struct {
     uint8_t *buf;
