@@ -667,8 +667,8 @@ typedef struct
         int8_t      items_all[48];
         struct 
         {
-            int8_t          items[24];                /* 0x0070 */
-            int8_t          masks[24];                /* 0x0088 */
+            int8_t          items[24];        /* 0x0070 */
+            int8_t          masks[24];        /* 0x0088 */
         };
     };
     int8_t          ammo[24];                 /* 0x00A0 */
@@ -690,7 +690,7 @@ typedef struct
     };
     union
     {
-        uint32_t      quest_items;              /* 0x00BC */
+        uint32_t      quest_items;            /* 0x00BC */
         struct
         {
             uint32_t    heart_pieces : 8;
@@ -745,8 +745,11 @@ typedef struct
         uint32_t      collect;
         uint32_t      unk_0x14;
         uint32_t      unk_0x18;
-    }               scene_flags[0x78];        /* 0x00F8 */
-    char            unk_0x0E18[0x62];         /* 0x0E18*/
+    }               scene_flags[120];         /* 0x00F8 */
+    char            unk_0x0E18[0x62];         /* 0x0E18 */
+    char            unk_0x0E7A[0x2E26];       /* 0x0E7A */
+    
+    int32_t         file_index;               /* 0x3CA0 */ 
 } z2_file_t;
 
 extern z2_file_t z2_file;
@@ -1252,6 +1255,9 @@ typedef struct {
     void*           scene_addr;             /* 0x000B0 */
     z2_view_t       view;                   /* 0x000B8 */
 } z2_game_t;
+
+extern z2_game_t z2_game;
+asm(".equ z2_game, 0x803E6B20");
 
 typedef struct
 {

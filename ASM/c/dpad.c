@@ -48,12 +48,12 @@ void handle_dpad() {
 }
 
 void draw_dpad() {
-    z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
+    z64_disp_buf_t *db = &(z2_game.common.gfx->overlay);
     if (DISPLAY_DPAD && display_active) {
         gSPDisplayList(db->p++, &initial_display_list);
         gDPPipeSync(db->p++);
         gDPSetCombineMode(db->p++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        uint16_t alpha = z64_game.hud_alpha_channels.minimap;
+        uint16_t alpha = 0xFF; //z64_game.hud_alpha_channels.minimap;
         if (alpha == 0xAA) alpha = 0xFF;
         gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, alpha);
 

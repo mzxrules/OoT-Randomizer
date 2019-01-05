@@ -26,13 +26,17 @@
 .org G_PAYLOAD_ADDR
 .include "config.asm"
 .include "init.asm"
-.include "every_frame.asm"
+;.include "every_frame.asm"
 .include "initial_save.asm"
+.include "dpad.asm"
 
 
-;.importobj "../build/bundle.o"
+.importobj "../build/bundle.o"
+.align 8
 ;FONT_TEXTURE:
 ;.incbin("../resources/font.bin")
 ;.endarea
+DPAD_TEXTURE:
+.incbin("../resources/dpad.bin")
 
 .close
