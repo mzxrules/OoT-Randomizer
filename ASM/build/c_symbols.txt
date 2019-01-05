@@ -15,33 +15,33 @@ SYMBOL TABLE:
 00000000 l    df *ABS*	00000000 dpad.c
 801ef670 l       *ABS*	00000000 z2_file
 803e6b20 l       *ABS*	00000000 z2_game
-00000004 l     O .sbss	00000002 pad
-00000002 l     O .sbss	00000002 pad_pressed
-00000000 l     O .sbss	00000001 display_active
+80178e3c l       *ABS*	00000000 load_icon_item_texture
+00000002 l     O .sbss	00000002 pad
+00000000 l     O .sbss	00000002 pad_pressed
+00000000 l     O .data	00000001 display_active
 00000000 l    df *ABS*	00000000 gfx.c
 801ef670 l       *ABS*	00000000 z2_file
 803e6b20 l       *ABS*	00000000 z2_game
+80178e3c l       *ABS*	00000000 load_icon_item_texture
 00000000 l    df *ABS*	00000000 main.c
 801ef670 l       *ABS*	00000000 z2_file
 803e6b20 l       *ABS*	00000000 z2_game
-00000010       O *COM*	00000004 items_sprite
-00000028 g     O .data	00000010 dpad_sprite
-000001f8 g     F .text	00000120 draw_dpad
-00000010       O *COM*	00000004 medals_sprite
-00000658 g     F .text	0000001c game_state_update_custom
+80178e3c l       *ABS*	00000000 load_icon_item_texture
+00000008 g     O .data	00003000 dpad_mask_icons
+00003030 g     O .data	00000010 dpad_item_sprites
+00003040 g     O .data	00000010 dpad_sprite
+000001f8 g     F .text	000001dc draw_dpad
+00000778 g     F .text	0000001c game_state_update_custom
 00000000         *UND*	00000000 game_update_start
-00000010       O *COM*	00000004 quest_items_sprite
 00000000         *UND*	00000000 DPAD_TEXTURE
 00000000 g     F .text	000001f8 handle_dpad
-00000530 g     F .text	000000f0 sprite_draw
-00000390 g     F .text	000001a0 sprite_load
-00000010       O *COM*	00000004 stones_sprite
-00000010       O *COM*	00000004 font_sprite
-00000360 g     F .text	00000030 sprite_bytes
-00000620 g     F .text	00000014 gfx_init
-00000634 g     F .text	00000024 c_init
-00000318 g     F .text	00000020 dpad_init
-00000000 g     O .data	00000028 initial_display_list
-00000338 g     F .text	00000028 sprite_bytes_per_tile
+000005ec g     F .text	000000f0 sprite_draw
+0000044c g     F .text	000001a0 sprite_load
+0000041c g     F .text	00000030 sprite_bytes
+000006dc g     F .text	00000078 gfx_init
+00000754 g     F .text	00000024 c_init
+000003d4 g     F .text	00000020 dpad_init
+00003008 g     O .data	00000028 initial_display_list
+000003f4 g     F .text	00000028 sprite_bytes_per_tile
 
 

@@ -5,7 +5,7 @@ static uint16_t pad_pressed_raw,
 pad,
 pad_pressed;
 
-static _Bool display_active;
+static _Bool display_active = 1;
 
 //unknown 00 is a pointer to some vector transformation when the sound is tied to an actor. actor + 0x3E, when not tied to an actor (map), always 80104394
 //unknown 01 is always 4 in my testing
@@ -47,6 +47,8 @@ void handle_dpad() {
     }
 }
 
+static uint32_t sprite_off = 0;
+
 void draw_dpad() {
     z64_disp_buf_t *db = &(z2_game.common.gfx->overlay);
     if (DISPLAY_DPAD && display_active) {
@@ -60,29 +62,14 @@ void draw_dpad() {
         sprite_load(db, &dpad_sprite, 0, 1);
         sprite_draw(db, &dpad_sprite, 0, 271, 64, 16, 16);
 
-        //if (z64_file.iron_boots && z64_file.link_age==0) {
-        //    sprite_load(db, &items_sprite, 69, 1);
-        //    if (z64_file.equip_boots == 2) {
-        //        sprite_draw(db, &items_sprite, 0, 258, 64, 16, 16);
-        //    }
-        //    else {
-        //        sprite_draw(db, &items_sprite, 0, 260, 66, 12, 12);
-        //    }
-        //}
+        sprite_load(db, &dpad_item_sprites, sprite_off, 1);
+        sprite_draw(db, &dpad_item_sprites, 0, 260, 66, 12, 12);
 
-        //if (z64_file.hover_boots && z64_file.link_age == 0) {
-        //    sprite_load(db, &items_sprite, 70, 1);
-        //    if (z64_file.equip_boots == 3) {
-        //        sprite_draw(db, &items_sprite, 0, 283, 64, 16, 16);
-        //    }
-        //    else {
-        //        sprite_draw(db, &items_sprite, 0, 285, 66, 12, 12);
-        //    }
-        //}
-        //if (z64_file.items[0x07] == 0x07 || z64_file.items[0x07] == 0x08){
-        //    sprite_load(db, &items_sprite, z64_file.items[0x07], 1);
-        //    sprite_draw(db, &items_sprite, 0, 273, 77, 12,12);
-        //}
+        sprite_load(db, &dpad_item_sprites, 1, 1);
+        sprite_draw(db, &dpad_item_sprites, 1, 273, 77, 12, 12);
+
+        sprite_load(db, &dpad_item_sprites, 2, 1);
+        sprite_draw(db, &dpad_item_sprites, 2, 285, 66, 12, 12);
 
         gDPPipeSync(db->p++);
     }

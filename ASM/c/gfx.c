@@ -1,6 +1,4 @@
 #include "gfx.h"
-
-//#include "util.h"
 #include "z2.h"
 
 Gfx initial_display_list[] =
@@ -41,11 +39,6 @@ Gfx initial_display_list[] =
 //    G_IM_FMT_IA, G_IM_SIZ_8b, 1
 //};
 //
-//sprite_t items_sprite = {
-//    NULL, 32, 32, 90,
-//    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
-//};
-//
 //sprite_t quest_items_sprite = {
 //    NULL, 24, 24, 20,
 //    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
@@ -56,10 +49,18 @@ Gfx initial_display_list[] =
 //    G_IM_FMT_IA, G_IM_SIZ_8b, 1
 //};
 
+uint8_t dpad_mask_icons[3][0x1000] __attribute__((aligned(0x8))) = { 0xAB };
+
 sprite_t dpad_sprite = {
     NULL, 32, 32, 1,
     G_IM_FMT_IA, G_IM_SIZ_16b, 2
-};  
+};
+
+sprite_t dpad_item_sprites = {
+    (uint8_t*)dpad_mask_icons, 32, 32, 3,
+    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
+};
+
 
 int sprite_bytes_per_tile(sprite_t *sprite) {
     return sprite->tile_w * sprite->tile_h * sprite->bytes_per_texel;
@@ -103,14 +104,21 @@ extern char DPAD_TEXTURE;
 #define font_texture_raw ((uint8_t *)&FONT_TEXTURE)
 #define dpad_texture_raw ((uint8_t *)&DPAD_TEXTURE)
 
+#define z2_icon_item_vaddr (void*)0xA36C10
+
 void gfx_init() {
+
+    dpad_sprite.buf = dpad_texture_raw;
+
+    load_icon_item_texture(z2_icon_item_vaddr, 0x32, &dpad_mask_icons[0], 0x1000);
+    load_icon_item_texture(z2_icon_item_vaddr, 0x33, &dpad_mask_icons[1], 0x1000);
+    load_icon_item_texture(z2_icon_item_vaddr, 0x34, &dpad_mask_icons[2], 0x1000);
 
     //file_t icon_item_static = {
     //    NULL, z64_icon_item_static_vaddr, z64_icon_item_static_vsize
     //};
     //file_init(&icon_item_static);
 
-    dpad_sprite.buf = dpad_texture_raw;
 
     //int font_bytes = sprite_bytes(&font_sprite);
     //font_sprite.buf = heap_alloc(font_bytes);

@@ -6,6 +6,9 @@
 
 .include "constants.asm"
 
+.orga 0x10
+    .word 0xDDF7E3E7, 0x4774416C
+
 ; Add dmatable entry for the payload code
 .orga 0x205F0
     .word G_PAYLOAD_VROM, (G_PAYLOAD_VROM + G_PAYLOAD_SIZE), G_PAYLOAD_VROM, 0
@@ -22,7 +25,6 @@
 ;==================================================================================================
 
 .headersize (G_PAYLOAD_ADDR - G_PAYLOAD_VROM)
-
 .org G_PAYLOAD_ADDR
 .include "config.asm"
 .include "init.asm"
