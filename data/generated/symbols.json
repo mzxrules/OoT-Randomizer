@@ -1,6 +1,6 @@
 {
     "COOP_GET_ITEM": "02EE8A01",
-    "DPAD_TEXTURE": "02EEC398",
+    "DPAD_TEXTURE": "02EEC3C8",
     "G_PAYLOAD_ADDR": "02EE8000",
     "INITIAL_SAVE_DATA": "02EE8800",
     "INITIAL_SAVE_DATA_END": "02EE8A00",
@@ -8,8 +8,10 @@
     "PLAYER_ID": "02EE8A00",
     "PLAYER_NAMES": "02EE8A03",
     "PLAYER_NAME_ID": "02EE8A02",
-    "dpad_item_sprites": "02EEC370",
-    "dpad_mask_icons": "02EE9348",
-    "dpad_sprite": "02EEC380",
-    "initial_display_list": "02EEC348"
+    "dpad_item_sprites": "02EEC3A0",
+    "dpad_mask_icons": "02EE9378",
+    "dpad_sprite": "02EEC3B0",
+    "initial_display_list": "02EEC378",
+    "spr_sc": "02EEC3C0",
+    "spr_xy": "02EE9358"
 }

@@ -47,7 +47,14 @@ void handle_dpad() {
     }
 }
 
-static uint32_t sprite_off = 0;
+//allows tweaking scale and position with a memory viewer
+uint32_t spr_sc = 16;
+uint32_t spr_xy[3][2] = 
+{
+    {260, 63},
+    {270, 77},
+    {285, 64}
+};
 
 void draw_dpad() {
     z64_disp_buf_t *db = &(z2_game.common.gfx->overlay);
@@ -62,14 +69,14 @@ void draw_dpad() {
         sprite_load(db, &dpad_sprite, 0, 1);
         sprite_draw(db, &dpad_sprite, 0, 271, 64, 16, 16);
 
-        sprite_load(db, &dpad_item_sprites, sprite_off, 1);
-        sprite_draw(db, &dpad_item_sprites, 0, 260, 66, 12, 12);
+        sprite_load(db, &dpad_item_sprites, 0, 1);
+        sprite_draw(db, &dpad_item_sprites, 0, spr_xy[0][0], spr_xy[0][1], spr_sc, spr_sc);
 
         sprite_load(db, &dpad_item_sprites, 1, 1);
-        sprite_draw(db, &dpad_item_sprites, 1, 273, 77, 12, 12);
+        sprite_draw(db, &dpad_item_sprites, 0, spr_xy[1][0], spr_xy[1][1], spr_sc, spr_sc);
 
         sprite_load(db, &dpad_item_sprites, 2, 1);
-        sprite_draw(db, &dpad_item_sprites, 2, 285, 66, 12, 12);
+        sprite_draw(db, &dpad_item_sprites, 0, spr_xy[2][0], spr_xy[2][1], spr_sc, spr_sc);
 
         gDPPipeSync(db->p++);
     }
