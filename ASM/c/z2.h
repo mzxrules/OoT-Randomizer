@@ -909,6 +909,19 @@ struct z64_actor_s
                                     /* 0x013C */
 };
 
+typedef struct z2_actor_s z2_actor_t;
+struct z2_actor_s
+{
+    int16_t         actor_id;         /* 0x0000 */
+    uint8_t         actor_type;       /* 0x0002 */
+    int8_t          room_index;       /* 0x0003 */
+    uint32_t        flags;            /* 0x0004 */
+    z64_xyzf_t      pos_1;            /* 0x0008 */
+    z64_rot_t       rot_init;         /* 0x0014 */
+    char            unk_01_[0x0002];  /* 0x001A */
+    uint16_t        variable;         /* 0x001C */
+};
+
 typedef struct
 {
   z64_actor_t  common;               /* 0x0000 */
@@ -932,6 +945,11 @@ typedef struct
   int16_t      drop_distance;        /* 0x0886 */
                                      /* 0x0888 */
 } z64_link_t;
+
+typedef struct 
+{
+    z2_actor_t      common;           /* 0x0000 */
+} z2_link_t;
 
 typedef struct
 {
@@ -1388,7 +1406,7 @@ typedef void(*z64_LinkInvincibility_proc) (z64_link_t *link, uint8_t frames);
 #define z64_gameinfo            (*                    z64_file.gameinfo)
 #define z64_ctxt                (*(z64_ctxt_t*)       z64_ctxt_addr)
 #define z64_game                (*(z64_game_t*)      &z64_ctxt)
-#define z64_link                (*(z64_link_t*)       z64_link_addr)
+//#define z64_link                (*(z64_link_t*)       z64_link_addr)
 #define z64_state_ovl_tab       (*(z64_state_ovl_t(*)[6])                     \
                                                       z64_state_ovl_tab_addr)
 #define z64_event_state_1       (*(uint32_t*)         z64_event_state_1_addr)
