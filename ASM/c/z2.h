@@ -2,6 +2,7 @@
 #define Z2_H
 #include <stdint.h>
 #include <n64.h>
+#include "gu.h"
 
 #define Z64_SCREEN_WIDTH      320
 #define Z64_SCREEN_HEIGHT     240
@@ -1031,7 +1032,8 @@ typedef struct
     uint16_t          unk_0x08;                 /* 0x0008 */
     uint16_t          unk_0x0A;                 /* 0x000A */
     uint16_t          unk_0x0C;                 /* 0x000C */
-    uint16_t          unk_0x0E;                 /* 0x000E */ //number of polys?
+    int16_t           unk_0x0E;                 /* 0x000E */ //number of polys?
+    int16_t           unk_0x10;                 /* 0x0010 */
     z64_xyzf_t        scale_1;                  /* 0x0014 */
     z64_rot_t         rot_1;                    /* 0x0020 */
     z64_xyzf_t        pos_1;                    /* 0x0028 */
@@ -1084,7 +1086,8 @@ typedef struct /* z64_col_ctxt_t */
     uint32_t            dyn_poly_max;             /* 0x1460 */
     uint32_t            dyn_vtx_max;              /* 0x1464 */
     uint32_t            mem_size;                 /* 0x1468 */
-                                                  /* 0x146C */
+    uint32_t            unk_0x146C;               /* 0x146C */
+                                                  /* 0x1470 */
 } z2_col_ctxt_t;
 
 
@@ -1252,6 +1255,85 @@ typedef struct /* z2_camera_t */
                                             /* 0x0178 */
 } z2_camera_t;
 
+typedef struct /* z2_actor_ctxt_t */
+{
+    /* game_t 0x1CA0 */
+    uint8_t         unk_0x0000;             /* 0x0000 */
+    uint8_t         unk_0x0001;             /* 0x0001 */
+    uint8_t         unk_0x0002;             /* 0x0002 */
+    uint8_t         unk_0x0003;             /* 0x0003 */
+    int8_t          unk_0x0004;             /* 0x0004 */
+    uint8_t         unk_0x0005;             /* 0x0005 */
+    char            unk_0x0006[5];          /* 0x0006 */
+    int8_t          unk_0x000B;             /* 0x000B */
+    char            unk_0x000C[2];          /* 0x000C */
+    uint8_t         n_actors_loaded;        /* 0x000E */
+    uint8_t         unk_0x000F;             /* 0x000F */
+    struct
+    {
+        int32_t     count;                  /* 0x0000 */
+        z2_actor_t *first;                  /* 0x0004 */
+        int32_t     unk;                    /* 0x0008 */
+                                            /* 0x000C */
+
+    }               actor_list[16];         /* 0x0010 */
+    char            unk_0x00D0[0x50];       /* 0x00D0 */
+    struct
+    {
+        MtxF            unk_0x0120;             /* 0x0120 */
+        float           unk_0x0160;             /* 0x0160 */
+        float           unk_0x0164;             /* 0x0164 */
+        int16_t         unk_0x0168;             /* 0x0168 */
+        uint8_t         unk_0x016A;             /* 0x016A */
+        uint8_t         unk_0x016B;             /* 0x016B */
+        int8_t          unk_0x016C;             /* 0x016C */
+        struct
+        {
+            float           unk_0x00;             
+            float           unk_0x04;
+            float           unk_0x08;
+            float           unk_0x0C;
+            int32_t         unk_0x10;
+                                            /* 0x0014 */
+
+        }               unk_0x0170[3];      /* 0x0170 */
+        int32_t         unk_0x01AC;         /* 0x01AC */
+        int32_t         unk_0x01B0;         /* 0x01B0 */
+        int32_t         unk_0x01B4;         /* 0x01B4 */
+    };
+    int32_t         switch_1;           /* 0x01B8 */ //perm
+    int32_t         switch_2;           /* 0x01BC */ //perm
+    int32_t         switch_3;           /* 0x01C0 */
+    int32_t         switch_4;           /* 0x01C4 */
+    int32_t         chest;              /* 0x01C8 */
+    int32_t         clear;              /* 0x01CC */
+    int32_t         unk_0x01D0;         /* 0x01D0 */
+    int32_t         collectible_1;      /* 0x01D4 */ //Perm
+    int32_t         collectible_2;      /* 0x01D8 */
+    int32_t         collectible_3;      /* 0x01DC */
+    int32_t         collectible_4;      /* 0x01E0 */
+    struct
+    {
+        char        unk_0x00[0x0A];
+        int8_t      unk_0x0A;
+        int8_t      unk_0x0B;
+        int16_t     unk_0x0C;
+        int16_t     unk_0x0E;
+    }   unk_0x01E4;                     /* 0x01E4 */
+    int8_t          unk_0x01F4;
+    uint8_t         unk_0x01F5;
+    float           unk_0x01F8;
+    char            unk_0x01FC[0x54];
+
+    int32_t         unk_0x0250;
+    char            unk_0x0254[0x14];
+    uint8_t         unk_0x0268;         /* 0x0268 */
+    char            unk_0x0269[3];
+    char            unk_0x026C[0x18];   /* 0x026C */
+                                        /* 0x0284 */
+
+} z2_actor_ctxt_t;
+
 /* game context */
 typedef struct
 {
@@ -1379,6 +1461,7 @@ typedef struct /* z2_game_t */
     uint8_t         scene_draw_id;          /* 0x000A6 */
     char            unk_0x000A7[9];         /* 0x000A7 */
     void*           scene_addr;             /* 0x000B0 */
+    char            unk_0x00B4[4];          /* 0x000B4 */
     z2_view_t       view_scene;             /* 0x000B8 */
     z2_camera_t     cameras[4];             /* 0x00220 */
     z2_camera_t    *active_cameras[4];      /* 0x00800 */
@@ -1386,6 +1469,8 @@ typedef struct /* z2_game_t */
     int16_t         camera_next;            /* 0x00812 */
     char            unk_0x814[0x1C];        /* 0x00814 */
     z2_col_ctxt_t   col_ctxt;               /* 0x00830 */
+    z2_actor_ctxt_t actor_ctxt;             /* 0x01CA0 */
+    //uint16_t       *test;                   /* 0x01F24 */
 } z2_game_t;
 
 extern z2_game_t z2_game;
