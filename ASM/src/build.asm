@@ -27,19 +27,19 @@
 
 .headersize (G_PAYLOAD_ADDR - G_PAYLOAD_VROM)
 .org G_PAYLOAD_ADDR
+.area G_PAYLOAD_SIZE
+
 .include "config.asm"
 .include "init.asm"
 ;.include "every_frame.asm"
 .include "initial_save.asm"
 .include "dpad.asm"
 
-
 .importobj "../build/bundle.o"
-.align 8
-;FONT_TEXTURE:
-;.incbin("../resources/font.bin")
-;.endarea
+
+.align 0x08
 DPAD_TEXTURE:
 .incbin("../resources/dpad.bin")
 
+.endarea  //payload size
 .close
