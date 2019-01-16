@@ -27,4 +27,6 @@ void draw_dpad();
 extern uint8_t get_item_button_press(z2_game_t* game, z2_link_t* link, uint8_t buttonIndex);
 asm(".equ get_item_button_press, 0x8012364C");
 
+extern uint8_t extern_mask_usability;
+
 #endif

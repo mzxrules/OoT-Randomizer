@@ -1334,6 +1334,27 @@ typedef struct /* z2_actor_ctxt_t */
 
 } z2_actor_ctxt_t;
 
+typedef struct /* z2_dialog_t */
+{
+    z2_view_t       view;                   /* 0x00000 */ //168
+    char            unk_0x00168[0x10000];   /* 0x00168*/
+    struct
+    {
+        char        unk_0x0000[0x1D80];
+        //uint8_t   unk_0x1880;
+        int32_t     offset;                 /* 0x1D80 */
+        int32_t     length;                 /* 0x1D84 */
+        uint16_t    id;                     /* 0x1D9C */
+        char        unk_0x1D9E[0x0E];       /* 0x1D9E */
+
+    } z2_message_t message;                 /* 0x10168 */
+    char            dialog[3];              /* 0x11F24 */ //todo length
+    int16_t         unk_0x11FEC;
+    int16_t         unk_0x11FEE;
+    int16_t         unk_0x11FF0;
+
+} z2_dialog_t;
+
 /* game context */
 typedef struct
 {
@@ -1471,6 +1492,7 @@ typedef struct /* z2_game_t */
     z2_col_ctxt_t   col_ctxt;               /* 0x00830 */
     z2_actor_ctxt_t actor_ctxt;             /* 0x01CA0 */
     //uint16_t       *test;                   /* 0x01F24 */
+
 } z2_game_t;
 
 extern z2_game_t z2_game;

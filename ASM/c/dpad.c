@@ -21,6 +21,12 @@ uint8_t handle_dpad(z2_game_t* game, z2_link_t* link, uint8_t buttonIndex)
     alpha_level += 0x80;
     if (buttonIndex < 4)
         return get_item_button_press(game, link, buttonIndex);
+    if (extern_mask_usability)
+    {
+        alpha_level -= 0x80;
+        return 0xFF;
+    }
+
     uint16_t pad_pressed = game->common.input[0].pad_pressed;
     if (pad_pressed & DPAD_L && z2_file.masks[5] == 0x32)
         return 0x32;
@@ -42,7 +48,8 @@ static uint32_t spr_xy[3][2] =
 
 void draw_dpad() {
     z64_disp_buf_t *db = &(z2_game.common.gfx->overlay);
-    alpha_level -= 0x4F;
+    if (extern_mask_usability)
+        alpha_level -= 0x4F;
     if (alpha_level < 0)
         alpha_level = 0;
     if (alpha_level > 0xFF)
@@ -62,7 +69,7 @@ void draw_dpad() {
             sprite_load(db, &dpad_item_sprites, 0, 1);
             sprite_draw(db, &dpad_item_sprites, 0, spr_xy[0][0], spr_xy[0][1], spr_sc, spr_sc);
         }
-
+        
         if (z2_file.masks[11] == 0x33)
         {
             sprite_load(db, &dpad_item_sprites, 1, 1);
