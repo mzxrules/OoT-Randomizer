@@ -1237,15 +1237,40 @@ typedef void (*z64_light_handler_t)(z64_gbi_lights_t*, z64_lightn_t*,
 typedef struct /* z2_view_t */
 {
     char            view_magic[4];          /* 0x0000 */
-    void*           unk_0x0004;             /* 0x0004 */
+    z2_gfx_t       *gfx;                    /* 0x0004 */
+    //struct
     uint32_t        screen_top;             /* 0x0008 */
     uint32_t        screen_bottom;          /* 0x000C */
     uint32_t        screen_left;            /* 0x0010 */
     uint32_t        screen_right;           /* 0x0014 */
+    //struct end?
     float           camera_distance;        /* 0x0018 */
     float           fog_distance;           /* 0x001C */
     float           z_distance;             /* 0x0020 */
-    char            unk_0x0024[0x144];      /* 0x0024 */
+    char            unk_0x24[0x004];        /* 0x0024 */
+    z64_xyzf_t      unk_0x28;               /* 0x0028 */
+    z64_xyzf_t      unk_0x34;
+    z64_xyzf_t      unk_0x40;
+    Vp              viewport_movemem;       /* 0x0050 */
+    Mtx             unk_mtx_0x60;
+    Mtx             unk_mtx_0xA0;
+    char            unk_0x00E0[0x40];       /* 0x00E0 */
+    Mtx            *unk_mtx_0x60_task;      /* 0x0120 */
+    Mtx            *unk_mtx_0xA0_task;      /* 0x0124 */
+    float           unk_0x128;          
+    float           unk_0x12C;          
+    float           unk_0x130;          
+    float           unk_0x134;          
+    float           unk_0x138;          
+    float           unk_0x13C;          
+    float           unk_0x140;      
+    float           unk_0x144;
+    float           unk_0x148;
+    char            unk_0x14C[0x10];
+
+    uint16_t        perspnorm_scale;        /* 0x015C */
+    uint32_t        unk_0x160;
+    uint32_t        unk_0x164;
                                             /* 0x0168 */
 } z2_view_t;
 
@@ -1347,7 +1372,7 @@ typedef struct /* z2_dialog_t */
         uint16_t    id;                     /* 0x1D9C */
         char        unk_0x1D9E[0x0E];       /* 0x1D9E */
 
-    } z2_message_t message;                 /* 0x10168 */
+    }  message;                             /* 0x10168 */
     char            dialog[3];              /* 0x11F24 */ //todo length
     int16_t         unk_0x11FEC;
     int16_t         unk_0x11FEE;
