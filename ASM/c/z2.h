@@ -1238,12 +1238,13 @@ typedef struct /* z2_view_t */
 {
     char            view_magic[4];          /* 0x0000 */
     z2_gfx_t       *gfx;                    /* 0x0004 */
-    //struct
-    uint32_t        screen_top;             /* 0x0008 */
-    uint32_t        screen_bottom;          /* 0x000C */
-    uint32_t        screen_left;            /* 0x0010 */
-    uint32_t        screen_right;           /* 0x0014 */
-    //struct end?
+    struct
+    {
+        uint32_t        top;                /* 0x0008 */
+        uint32_t        bottom;             /* 0x000C */
+        uint32_t        left;               /* 0x0010 */
+        uint32_t        right;              /* 0x0014 */
+    } screen;
     float           camera_distance;        /* 0x0018 */
     float           fog_distance;           /* 0x001C */
     float           z_distance;             /* 0x0020 */
