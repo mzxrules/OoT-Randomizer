@@ -1277,7 +1277,44 @@ typedef struct /* z2_view_t */
 
 typedef struct /* z2_camera_t */
 {
-    char            unk_0x0000[0x178];      /* 0x0000 */
+    union
+    {
+        struct 
+        {
+            z64_xyzf_t unk_0x00;
+            struct /* 0x24 */
+            {
+                float       unk_0x00;
+                float       unk_0x04; 
+                int16_t     unk_0x08;
+                int16_t     unk_0x0A; 
+                int16_t     unk_0x0C;
+                float       unk_0x10;
+            };
+
+        } t1;
+        struct
+        {
+            uint16_t unk_0x00;
+        } t2;
+        char    unk_0x00[0x50];
+    };
+        /* 0x0000 */
+
+    z64_xyzf_t      unk_0x50;
+    z64_xyzf_t      unk_0x5C;
+    z64_xyzf_t      unk_0x68;
+
+    char            unk_0x74[0x0C];
+
+    z64_xyzf_t      unk_0x80;
+    z64_ctxt_t     *game;                   /* 0x008C */
+    z2_actor_t     *focus;                  /* 0x0090 */
+    z64_xyzf_t      focus_pos;              /* 0x0094 */
+    uint32_t        unk_0xA0;
+    uint32_t        unk_0xA4;
+    uint32_t        unk_0xA8;
+    char            unk_0xAC[0xCC];
                                             /* 0x0178 */
 } z2_camera_t;
 
