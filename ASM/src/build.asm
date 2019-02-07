@@ -52,7 +52,6 @@
 .include "jabu_elevator.asm"
 .include "dampe.asm"
 .include "dpad.asm"
-.include "chests.asm"
 .include "debug.asm"
 .importobj "../build/bundle.o"
 .align 8
@@ -60,6 +59,10 @@ FONT_TEXTURE:
 .incbin("../resources/font.bin")
 DPAD_TEXTURE:
 .incbin("../resources/dpad.bin")
+CHEST_FRONT_TEXTURE:
+.incbin("../resources/chest_front.bin")
+CHEST_BASE_TEXTURE:
+.incbin("../resources/chest_base.bin")
 .endarea
 
 .close

@@ -969,27 +969,36 @@ skip_GS_BGS_text:
 	nop
 
 ;==================================================================================================
-; Correct Chest Sizes
+; Draw Chest Base and Lid
 ;==================================================================================================
-; Replaces lbu   v0,0x01E9(s0)
-.org 0xC064BC
-    jal     GET_CHEST_OVERRIDE_SIZE_WRAPPER
-.org 0xC06E5C
-    jal     GET_CHEST_OVERRIDE_SIZE_WRAPPER
-.org 0xC07494
-    jal     GET_CHEST_OVERRIDE_SIZE_WRAPPER
 
-; Replaces sw    t8,8(t6)
-;          lbu   v0,489(s0)
-.org 0xC0722C
-    jal     GET_CHEST_OVERRIDE_SIZE_WRAPPER
-    sw      t8,8(t6)
+.org 0xC0754C
+    j   draw_chest
+    nop
 
-; Replaces lbu   t9,0x01E9(s0)
-.org 0xC075A8
-    jal     GET_CHEST_OVERRIDE_COLOR_WRAPPER
-.org 0xC07648
-    jal     GET_CHEST_OVERRIDE_COLOR_WRAPPER
+; set chest_base front texture
+.org 0xFEB000 + 0x6F0 - 0x3296C0 + 0x3296D8
+.word   0xDE000000, 0x09000000
+
+.org 0xFEB000 + 0x6F0 - 0x3296C0 + 0x3297B8
+.word   0xDE000000, 0x09000000
+
+; set chest_base base texture
+.org 0xFEB000 + 0x6F0 - 0x3296C0 + 0x329758
+.word   0xDE000000, 0x09000010
+
+.org 0xFEB000 + 0x6F0 - 0x3296C0 + 0x329810
+.word   0xDE000000, 0x09000010
+
+; set chest_lid front texture
+.org 0xFEB000 + 0x10C0 - 0x32A090 + 0x32A0A8
+.word   0xDE000000, 0x09000000
+.org 0xFEB000 + 0x10C0 - 0x32A090 + 0x32A1C8
+.word   0xDE000000, 0x09000000
+
+; set chest_lid base texture
+.org 0xFEB000 + 0x10C0 - 0x32A090 + 0x32A158
+.word   0xDE000000, 0x09000010
 
 ;==================================================================================================
 ; Cast Fishing Rod without B Item
