@@ -7,6 +7,7 @@ import subprocess
 import random
 
 from Hints import buildGossipHints, buildBossRewardHints
+from Messages import read_messages, remove_unused_messages, update_item_messages, repack_messages, shuffle_messages
 from Utils import local_path, output_path, random_choices
 from Items import ItemFactory, item_data
 
@@ -89,6 +90,10 @@ def patch_rom(world, rom):
                 address, value = [int(x, 16) for x in line.split(',')]
                 rom.write_byte(address, value)
 
+    # Open the door into the back of the Clock Tower
+    rom.write_int16(0x2CD60CE, 0xFFBA)
+    rom.write_int16(0x2CD60DE, 0x0046)
+
     # Write Randomizer title screen logo
     #with open(local_path('data/title.bin'), 'rb') as stream:
     #    titleBytes = stream.read()
@@ -134,8 +139,8 @@ def patch_rom(world, rom):
         rom.write_bytes(0x3481800, initial_save_table)
 
     # Load Message and Shop Data
-    # messages = read_messages(rom)
-     # remove_unused_messages(messages)
+    messages = read_messages(rom)
+    remove_unused_messages(messages)
 
     # Sets hooks for gossip stone changes
     if world.hints != 'none':
@@ -155,7 +160,8 @@ def patch_rom(world, rom):
     # Patch songs and boss rewards
     for location in world.get_locations():
         item = location.item
-        itemid = copy.copy(item.code)
+        # itemid = copy.copy(item.code)
+        itemid = None
         locationaddress = location.address
         secondaryaddress = location.address2
 
@@ -211,10 +217,8 @@ def patch_rom(world, rom):
     # write_shop_items(rom, shop_item_file.start + 0x1DEC, shop_items)
 
     # text shuffle
-    if world.text_shuffle == 'except_hints':
-        pass # shuffle_messages(rom, except_hints=True)
-    elif world.text_shuffle == 'complete':
-        pass # shuffle_messages(rom, except_hints=False)
+    if world.text_shuffle == 'complete':
+        shuffle_messages(rom, except_hints=False)
 
     # output a text dump, for testing...
     #with open('keysanity_' + str(world.seed) + '_dump.txt', 'w', encoding='utf-16') as f:
@@ -273,7 +277,9 @@ def patch_rom(world, rom):
 
     for tatl_option, tatl_addresses in Tatl:
         # choose a random choice for the whole group
-        if tatl_option == 'Random Choice':
+        if tatl_option == 'Default':
+            continue
+        elif tatl_option == 'Random Choice':
             tatl_option = random.choice(tatlList)
         for address in tatl_addresses:
             # completely random is random for every subgroup

@@ -14,7 +14,7 @@ from Regions import create_dungeons
 from EntranceShuffle import link_entrances
 from Rom import LocalRom
 from Patches import patch_rom
-from Regions import create_regions
+from Regions import create_regions, create_dungeons
 from Rules import set_rules
 from Fill import distribute_items_restrictive
 from ItemList import generate_itempool
@@ -69,36 +69,36 @@ def main(settings, window=dummy_window()):
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 1))
         logger.info('Creating Overworld')
-        # create_regions(world)
+        create_regions(world)
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 2))
         logger.info('Creating Dungeons')
-        # create_dungeons(world)
+        create_dungeons(world)
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 3))
         logger.info('Linking Entrances')
-        # link_entrances(world)
+        link_entrances(world)
 
         # if settings.shopsanity != 'off':
         #    world.random_shop_prices()
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 4))
         logger.info('Calculating Access Rules.')
-        # set_rules(world)
+        set_rules(world)
 
         window.update_progress(0 + (((id + 1) / settings.world_count) * 5))
         logger.info('Generating Item Pool.')
-        # generate_itempool(world)
+        generate_itempool(world)
 
     window.update_status('Placing the Items')
     logger.info('Fill the world.')
-    # distribute_items_restrictive(window, worlds)
+    distribute_items_restrictive(worlds[0])
     window.update_progress(35)
 
     if settings.create_spoiler:
         window.update_status('Calculating Spoiler Data')
         logger.info('Calculating playthrough.')
-        # create_playthrough(worlds)
+        create_playthrough(worlds)
         window.update_progress(50)
     if settings.hints != 'none':
         window.update_status('Calculating Hint Data')

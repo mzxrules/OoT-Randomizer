@@ -1,5 +1,6 @@
 *.sublime-project
 *.sublime-workspace
+.vscode/settings.json
 __pycache__
 .*.sw*
 .sw*
@@ -10,3 +11,5 @@ ARCHIVE.bin
 output/*
 *.z64
 *.z64.bak
+
+\.vscode/
