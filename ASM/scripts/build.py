@@ -101,9 +101,7 @@ if pj64_sym_path:
         for sym_name, sym in sorted(symbols.items(), key=key):
             f.write('{0},{1},{2}\n'.format(sym['address'], sym['type'], sym_name))
 
+# TODO: This should change when it works with a Majora's Mask ROM.
+# create_diff('roms/mm/base.z64', 'roms/mm/patched.z64', '../data/rom_patch.txt')
 # Diff ROMs
-<<<<<<< HEAD
-create_diff('roms/mm/base.z64', 'roms/mm/patched.z64', '../data/rom_patch.txt')
-=======
 create_diff('roms/base.z64', 'roms/patched.z64', '../data/generated/rom_patch.txt')
->>>>>>> v4.0
