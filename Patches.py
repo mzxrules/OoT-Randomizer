@@ -1,16 +1,21 @@
-import io
-import logging
-import os
-import platform
-import struct
-import subprocess
 import random
+import struct
+import itertools
+import re
 
-from Hints import buildGossipHints, buildBossRewardHints
-from Messages import read_messages, remove_unused_messages, update_item_messages, repack_messages, shuffle_messages
-from Utils import local_path, output_path, random_choices
-from Items import ItemFactory, item_data
-from InitialSave import InitialSave
+from World import World
+from Rom import LocalRom
+from Spoiler import Spoiler
+from LocationList import business_scrubs
+from Hints import writeGossipStoneHints, buildBossRewardHints, \
+        buildGanonText, getSimpleHintNoPrefix
+from Utils import data_path
+from Messages import read_messages, update_message_by_id, read_shop_items, \
+        write_shop_items, remove_unused_messages, make_player_message, \
+        add_item_messages, repack_messages, shuffle_messages, \
+        get_message_by_id
+from OcarinaSongs import replace_songs
+from MQ import patch_files, File, update_dmadata, insert_space, add_relocations
 
 TunicColors = {
     "Custom Color": [0, 0, 0],
@@ -163,22 +168,17 @@ def patch_rom(world, rom):
         pass # rom.write_byte(0xB71E6D, 0x01)
 
     # Patch songs and boss rewards
-    for location in world.get_locations():
+    for location in world.get_filled_locations():
         item = location.item
-        # itemid = copy.copy(item.code)
-        itemid = None
+        special = item.special
         locationaddress = location.address
         secondaryaddress = location.address2
 
         if itemid is None or location.address is None:
             pass
 
-        if location.type == 'Song' and not world.shuffle_song_items:
-            # DOOT: find out what things we need to patch for this to work
-            pass
-        elif location.type == 'Boss':
-                rom.write_byte(locationaddress, itemid)
-                rom.write_byte(secondaryaddress, item_data[item.name][2])
+    # Update grotto id data
+    set_grotto_id_data(rom)
 
     if world.shuffle_smallkeys == 'remove' or world.shuffle_bosskeys == 'remove':
         locked_doors = get_locked_doors(rom, world)
@@ -189,7 +189,6 @@ def patch_rom(world, rom):
     if world.correct_chest_sizes:
         update_chest_sizes(rom, override_table)
 
-    # DOOT: Update these messages to reflect MM
     # give dungeon items the correct messages
     # message_patch_for_dungeon_items(messages, shop_items, world)
     if world.shuffle_mapcompass == 'keysanity' and world.enhance_map_compass:
@@ -222,7 +221,9 @@ def patch_rom(world, rom):
     # write_shop_items(rom, shop_item_file.start + 0x1DEC, shop_items)
 
     # text shuffle
-    if world.text_shuffle == 'complete':
+    if world.text_shuffle == 'except_hints':
+        shuffle_messages(rom, except_hints=True)
+    elif world.text_shuffle == 'complete':
         shuffle_messages(rom, except_hints=False)
 
     # output a text dump, for testing...
@@ -237,13 +238,6 @@ def patch_rom(world, rom):
         pass # replace_songs(rom, scarecrow_song)
 
 
-    # re-seed for aesthetic effects. They shouldn't be affected by the generation seed
-    random.seed()
-    # patch music
-    if world.background_music == 'random':
-        randomize_music(rom)
-    elif world.background_music == 'off':
-        disable_music(rom)
 
     # Human Link Colors
     # set_color(world, rom, [0x0116639C, 0x011668C4, 0x01166DCC, 0x01166FA4, 0x01167064, 0x0116766C, 0x01167AE4, 0x01167D1C, 0x011681EC], world.tunic_colors[0])
@@ -304,43 +298,53 @@ def patch_rom(world, rom):
     return rom
 
 def get_override_table(world):
-    override_entries = []
-    for location in world.get_locations():
-        override_entries.append(get_override_entry(location))
-    override_entries.sort()
-    return override_entries
+    return list(filter(lambda val: val != None, map(get_override_entry, world.get_filled_locations())))
+
+
+override_struct = struct.Struct('>xBBBHBB') # match override_t in get_items.c
+def get_override_table_bytes(override_table):
+    return b''.join(sorted(itertools.starmap(override_struct.pack, override_table)))
+
 
 def get_override_entry(location):
     scene = location.scene
     default = location.default
     item_id = location.item.index
     if None in [scene, default, item_id]:
-        return []
+        return None
 
-    player_id = (location.item.world.id + 1) << 3
-
-    if location.type in ['NPC', 'BossHeart', 'Song']:
-        return [scene, player_id | 0x00, default, item_id]
-    elif location.type == 'Chest':
-        flag = default & 0x1F
-        return [scene, player_id | 0x01, flag, item_id]
-    elif location.type == 'Collectable':
-        return [scene, player_id | 0x02, default, item_id]
-    elif location.type == 'GS Token':
-        return [scene, player_id | 0x03, default, item_id]
-    elif location.type == 'Shop' and location.item.type != 'Shop':
-        return [scene, player_id | 0x00, default, item_id]
-    elif location.type == 'GrottoNPC' and location.item.type != 'Shop':
-        return [scene, player_id | 0x04, default, item_id]
+    player_id = location.item.world.id + 1
+    if location.item.looks_like_item is not None:
+        looks_like_item_id = location.item.looks_like_item.index
     else:
-        return []
+        looks_like_item_id = 0
+
+    if location.type in ['NPC', 'BossHeart']:
+        type = 0
+    elif location.type == 'Chest':
+        type = 1
+        default &= 0x1F
+    elif location.type == 'Collectable':
+        type = 2
+    elif location.type == 'GS Token':
+        type = 3
+    elif location.type == 'Shop' and location.item.type != 'Shop':
+        type = 0
+    elif location.type == 'GrottoNPC' and location.item.type != 'Shop':
+        type = 4
+    elif location.type in ['Song', 'Cutscene']:
+        type = 5
+    else:
+        return None
+
+    return (scene, type, default, item_id, player_id, looks_like_item_id)
 
 
 chestTypeMap = {
         #    small   big     boss
     0x0000: [0x5000, 0x0000, 0x2000], #Large
     0x1000: [0x7000, 0x1000, 0x1000], #Large, Appears, Clear Flag
-    0x2000: [0x5000, 0x0000, 0x2000], #Boss Key's Chest
+    0x2000: [0x5000, 0x0000, 0x2000], #Boss Key’s Chest
     0x3000: [0x8000, 0x3000, 0x3000], #Large, Falling, Switch Flag
     0x4000: [0x6000, 0x4000, 0x4000], #Large, Invisible
     0x5000: [0x5000, 0x0000, 0x2000], #Small
@@ -355,42 +359,6 @@ chestTypeMap = {
     0xE000: [0x5000, 0x0000, 0x2000], #Large
     0xF000: [0x5000, 0x0000, 0x2000], #Large
 }
-
-chestAnimationExtendedFast = [
-    0x87, # Progressive Nut Capacity
-    0x88, # Progressive Stick Capacity
-    0x98, # Deku Tree Compass
-    0x99, # Dodongo's Cavern Compass
-    0x9A, # Jabu Jabu Compass
-    0x9B, # Forest Temple Compass
-    0x9C, # Fire Temple Compass
-    0x9D, # Water Temple Compass
-    0x9E, # Spirit Temple Compass
-    0x9F, # Shadow Temple Compass
-    0xA0, # Bottom of the Well Compass
-    0xA1, # Ice Cavern Compass
-    0xA2, # Deku Tree Map
-    0xA3, # Dodongo's Cavern Map
-    0xA4, # Jabu Jabu Map
-    0xA5, # Forest Temple Map
-    0xA6, # Fire Temple Map
-    0xA7, # Water Temple Map
-    0xA8, # Spirit Temple Map
-    0xA9, # Shadow Temple Map
-    0xAA, # Bottom of the Well Map
-    0xAB, # Ice Cavern Map
-    0xB6, # Recovery Heart
-    0xB7, # Arrows (5)
-    0xB8, # Arrows (10)
-    0xB9, # Arrows (30)
-    0xBA, # Bombs (5)
-    0xBB, # Bombs (10)
-    0xBC, # Bombs (20)
-    0xBD, # Deku Nuts (5)
-    0xBE, # Deku Nuts (10)
-    0xD0, # Deku Stick (1)
-    0xD1, # Deky Seeds (30)
-]
 
 
 def room_get_actors(rom, actor_func, room_data, scene, alternate=None):
@@ -457,6 +425,7 @@ def scene_get_actors(rom, actor_func, scene_data, scene, alternate=None, process
         scene_data = scene_data + 8
     return actors
 
+
 def get_actor_list(rom, actor_func):
     actors = {}
     scene_table = 0x00B71440
@@ -465,43 +434,13 @@ def get_actor_list(rom, actor_func):
         actors.update(scene_get_actors(rom, actor_func, scene_data, scene))
     return actors
 
+
 def get_override_itemid(override_table, scene, type, flags):
     for entry in override_table:
-        if len(entry) == 4 and entry[0] == scene and (entry[1] & 0x07) == type and entry[2] == flags:
-            return entry[3]
+        if entry[0] == scene and (entry[1] & 0x07) == type and entry[2] == flags:
+            return entry[4]
     return None
 
-def update_chest_sizes(rom, override_table):
-    def get_chest(rom, actor_id, actor, scene):
-        if actor_id == 0x0006: #Chest Actor
-            actor_var = rom.read_int16(actor + 14)
-            return [scene, actor_var & 0x001F]
-
-    chest_list = get_actor_list(rom, get_chest)
-    for actor, [scene, flags] in chest_list.items():
-        item_id = get_override_itemid(override_table, scene, 1, flags)
-
-        if None in [actor, scene, flags, item_id]:
-            continue
-        # Do not change the size of the chest under the grave in Dodongo's Cavern MQ.
-        if scene == 1 and flags == 1:
-            continue
-
-        itemType = 0  # Item animation
-
-        if item_id >= 0x80: # if extended item, always big except from exception list
-            itemType = 0 if item_id in chestAnimationExtendedFast else 1
-        elif rom.read_byte(0xBEEE8E + (item_id * 6) + 2) & 0x80: # get animation from rom, ice trap is big
-            itemType = 0 # No animation, small chest
-        else:
-            itemType = 1 # Long animation, big chest
-        # Don't use boss chests
-
-        default = rom.read_int16(actor + 14)
-        chestType = default & 0xF000
-        newChestType = chestTypeMap[chestType][itemType]
-        default = (default & 0x0FFF) | newChestType
-        rom.write_int16(actor + 14, default)
 
 def set_grotto_id_data(rom):
     def set_grotto_id(rom, actor_id, actor, scene):
@@ -520,6 +459,7 @@ def set_grotto_id_data(rom):
 
     get_actor_list(rom, set_grotto_id)
 
+
 def set_deku_salesman_data(rom):
     def set_deku_salesman(rom, actor_id, actor, scene):
         if actor_id == 0x0195: #Salesman
@@ -528,6 +468,7 @@ def set_deku_salesman_data(rom):
                 rom.write_int16(actor + 14, 0x0003)
 
     get_actor_list(rom, set_deku_salesman)
+
 
 def get_locked_doors(rom, world):
     def locked_door(rom, actor_id, actor, scene):
@@ -553,23 +494,54 @@ def get_locked_doors(rom, world):
 
     return get_actor_list(rom, locked_door)
 
+
+def create_fake_name(name):
+    vowels = 'aeiou'
+    list_name = list(name)
+    vowel_indexes = [i for i,c in enumerate(list_name) if c in vowels]
+    for i in random.sample(vowel_indexes, min(2, len(vowel_indexes))):
+        c = list_name[i]
+        list_name[i] = random.choice([v for v in vowels if v != c])
+
+    # keeping the game E...
+    new_name = ''.join(list_name)
+    censor = ['cum', 'cunt', 'dike', 'penis', 'puss', 'shit']
+    new_name_az = re.sub(r'[^a-zA-Z]', '', new_name.lower(), re.UNICODE)
+    for cuss in censor:
+        if cuss in new_name_az:
+            return create_fake_name(name)
+    return new_name
+
+
 def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=False):
     if init_shop_id:
         place_shop_items.shop_id = 0x32
 
-    shop_objs = { 0x0148 } # Sold Out
-    messages
+    shop_objs = { 0x0148 } # "Sold Out" object
     for location in locations:
-        shop_objs.add(location.item.object)
         if location.item.type == 'Shop':
+            shop_objs.add(location.item.special['object'])
             rom.write_int16(location.address, location.item.index)
         else:
+            if location.item.looks_like_item is not None:
+                item_display = location.item.looks_like_item
+            else:
+                item_display = location.item
+
+            # bottles in shops should look like empty bottles
+            # so that that are different than normal shop refils
+            if 'shop_object' in item_display.special:
+                rom_item = read_rom_item(rom, item_display.special['shop_object'])
+            else:
+                rom_item = read_rom_item(rom, item_display.index)
+
+            shop_objs.add(rom_item['object_id'])
             shop_id = place_shop_items.shop_id
             rom.write_int16(location.address, shop_id)
             shop_item = shop_items[shop_id]
 
-            shop_item.object = location.item.object
-            shop_item.model = location.item.model - 1
+            shop_item.object = rom_item['object_id']
+            shop_item.model = rom_item['graphic_id'] - 1
             shop_item.price = location.price
             shop_item.pieces = 1
             shop_item.get_item_id = location.default
@@ -585,16 +557,22 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             shuffle_messages.shop_item_messages.extend(
                 [shop_item.description_message, shop_item.purchase_message])
 
-            if location.item.dungeonitem:
-                split_item_name = location.item.name.split('(')
+            if item_display.dungeonitem:
+                split_item_name = item_display.name.split('(')
                 split_item_name[1] = '(' + split_item_name[1]
+
+                if location.item.name == 'Ice Trap':
+                    split_item_name[0] = create_fake_name(split_item_name[0])
+
                 if world.world_count > 1:
                     description_text = '\x08\x05\x41%s  %d Rupees\x01%s\x01\x05\x42Player %d\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (split_item_name[0], location.price, split_item_name[1], location.item.world.id + 1)
                 else:
                     description_text = '\x08\x05\x41%s  %d Rupees\x01%s\x01\x05\x40Special deal! ONE LEFT!\x01Get it while it lasts!\x09\x0A\x02' % (split_item_name[0], location.price, split_item_name[1])
                 purchase_text = '\x08%s  %d Rupees\x09\x01%s\x01\x1B\x05\x42Buy\x01Don\'t buy\x05\x40\x02' % (split_item_name[0], location.price, split_item_name[1])
             else:
-                shop_item_name = getSimpleHintNoPrefix(location.item)
+                shop_item_name = getSimpleHintNoPrefix(item_display)
+                if location.item.name == 'Ice Trap':
+                    shop_item_name = create_fake_name(shop_item_name)
 
                 if world.world_count > 1:
                     description_text = '\x08\x05\x41%s  %d Rupees\x01\x05\x42Player %d\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (shop_item_name, location.price, location.item.world.id + 1)
@@ -773,7 +751,7 @@ def disable_music(rom):
         rom.write_bytes(0xC77B80 + (bgm[0] * 0x10), blank_track)
 
 def boss_reward_index(world, boss_name):
-    code = world.get_location(boss_name).item.code
+    code = world.get_location(boss_name).item.special['item_id']
     if code >= 0x6C:
         return code - 0x6C
     else:

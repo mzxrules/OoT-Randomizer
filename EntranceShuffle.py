@@ -1,3 +1,5 @@
+# TODO: This file was completely removed from the OoT fork
+# I'm keeping it in for legacy purposes.
 import random
 
 def link_entrances(world):
@@ -176,7 +178,7 @@ default_connections = [
     ('North Gate To Clock Town', 'North Clock Town'),
     ('West Gate To Clock Town', 'West Clock Town'),
     ('East Gate To Clock Town', 'East Clock Town'),
-    
+
     ('TF To Observatory Over Fence', 'Astral Observatory Deck'),
 
     ('TF To Swamp', 'Swamp Path'),

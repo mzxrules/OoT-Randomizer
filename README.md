@@ -1,16 +1,47 @@
 # MMRandomizer
 
-This is a randomizer for _The Legend of Zelda: Majora's Mask_ for the Nintendo 64. This program is currently not functional. I'm hoping that it will at least be able to generate spoiler logs by the end of the month. If you'd like to help out in any way, feel free to join the discord where we are coordinating things: https://discord.gg/2xpZYQq or submit a pull request, and somebody will probably merge it soon TM
+This is a randomizer for _The Legend of Zelda: Majora's Mask_ for the Nintendo 64.
+
+## This program is currently __*not functional*__.
+
+If you'd like to help out in any way, feel free to join the discord where we are coordinating things: https://discord.gg/2xpZYQq or submit a pull request, and somebody will take a look at it.
+
+The rest of this README is a direct copy from the OoT Randomizer (v4.0) on which the majority of this code is based. Everything in this file is subject to change at any time, and makes no promises or commitments. Again, this is just a direct copy which will be adjusted when we get closer to a first release.
+
+---
+
+* [Installation](#installation)
+* [General Description](#general-description)
+  * [Plans for the future](#future-plans)
+  * [Getting Stuck](#getting-stuck)
+* [Quirks to Know](#quirks-to-know)
+* [Settings](#settings)
+* [Known Issues](#known-issues)
+* [Changelog](#changelog)
+
+# Installation
+
+Clone this repository and then run ```MMRandomizer.py``` as a command line tool. Or, alternatively, run ```Gui.py``` for a simple graphical user interface. Both require Python 3.6+.
+
+ <!-- For releases, a Windows standalone executable is available for users without Python 3. -->
+
+This randomizer requires The Legend of Zelda: Majora's Mask version 1.0. This will first support the NTSC-U version before eventually maybe supporting NTSC-J and NTSC-E. Upon first being run, the randomizer will automatically create a decompressed version of this ROM that can be used for input for slightly faster seed generation times. Please be sure your input ROM filename is either a .n64 or .z64 file. For users playing via any means other than on real N64 hardware, the use of the "Compress patched ROM" flag is strongly encouraged as uncompressed ROMs are impossible to inject for the Virtual Console and have random crashing problems on all emulators.
+
+For general use, the recommended emulators are Bizhawk and Mupen64plus. If you want to play on Project 64 for whatever reason, you can but you will need to set the rando to use 8 MB of RAM. For the eventual release, there will probably still be suspected crashing issues specifically with Project 64. I cannot emphasize enough that it is a discouraged emulator to use.
 
 # General Description
 
-This program takes _The Legend of Zelda: Majora's Mask_ and randomizes the locations of the items for a more dynamic play experience.
+This program takes _The Legend of Zelda: Majora's Mask_ and randomizes the locations of the items for a new, more dynamic play experience.
 Proper logic is used to ensure every seed is possible to complete without the use of glitches and will be safe from the possibility of softlocks
 with any possible usage of keys in dungeons.
 
-The items that randomize currently are all items within chests, items given as rewards by NPCs. All dungeons will always have the same number of Maps, Compasses, Small Keys, and Boss Keys they had in the original game, but which chests within those dungeons have those things is random. The item pool will contain all Stray Fairies that are placed in chests. Stray Fairies not found within a chest will be shuffled among themselves.
+The randomizer will ensure a glitchless path through the seed will exist, but the randomizer will not prevent the use of glitches for those players who enjoy that sort of thing though we offer no guarantees that all glitches will have identical behavior to the original game. Glitchless can still mean that clever or unintuitive strategies may be required.
 
-Certain types of items are now "progressive", meaning that no matter what order the player encounters these items they will function as a series of upgrades.
+The items that randomize firstly are all items within chests, and maybe items given as rewards by NPCs. All dungeons will always have the same number of Maps, Compasses, Small Keys, and Boss Keys they had in the original game, but which chests within those dungeons have those things is random. The item pool will contain all Stray Fairies that are placed in chests, eventually/hopefully. Stray Fairies not found within a chest will be shuffled among themselves, if possible.
+
+## Plans for the future
+
+Certain types of items will be "progressive", meaning that no matter what order the player encounters these items they will function as a series of upgrades.
 The following item types will be progressive chains:
 
 -Bomb Bag to Big Bomb Bag to Biggest Bomb Bag
@@ -18,14 +49,23 @@ The following item types will be progressive chains:
 -Adult Wallet to Giant's Wallet
 -Magic Meter to Double Magic
 
-The Ocarina songs are shuffled in a pool amongst themselves, and each learn spot will still have the original conditions it has always had. These conditions may not have all been obvious, but here are some high points (later).
+The Ocarina songs will be shuffled in a pool amongst themselves, and each learn spot will still have the original conditions it has always had. These conditions may not have all been obvious, but here are some high points (later).
 
 Freestanding Pieces of Heart (those not in chests or given directly by NPCs) are not randomized yet, but the logic will pretend they are until any part of this actually hacks the ROM.
 
-As this randomizer progresses, the aim will be to add an option to remove the most time wasting of cutscenes.
+As this randomizer progresses, the aim will be to add options to remove the most time wasting of cutscenes.
 
-The randomizer will ensure a glitchless path through the seed will exist, but the randomizer will not prevent the use of glitches for those players who enjoy that sort of thing though we offer no guarantees that all glitches will have identical behavior to the original game. Glitchless can still mean that clever or unintuitive strategies may be required.
+## Getting Stuck
 
+With a game the size of _Majora's Mask_, it's quite easy for new Randomizer players to get stuck in certain situations with no apparent path to progressing. Before reporting an issue, please make sure to check out *our Logic wiki page* (__UNDER CONSTRUCTION__).
+
+---
+
+# Quirks to Know
+
+This will expand as this develops (obviously)
+
+- In the randomizer, possessing the Bomb Bag is the requirement to get bomb drops, buy bombs or Bombchus.
 
 # Settings
 
@@ -45,9 +85,13 @@ The moon meadows are reached under the same conditions they were in the original
 
 Entering the moon meadows requires all 20 non transformation masks to be in the player's possession.
 
+---
+
 ## Give Ocarina of Time
 
-Skip needing to do the entire first part of the game up until obtaining the Ocarina of Time.
+Skip the entire first cycle of the game up until obtaining the Ocarina of Time.
+
+---
 
 ## Initial Form
 
@@ -77,6 +121,7 @@ Similarly, we could have Zora Link start in Great Bay, but we'll stick with spaw
 
 Game will start as any of the four Links inside the Clock Tower.
 
+---
 
 ## Stray Fairy Shuffle
 
@@ -85,8 +130,6 @@ There are five Great Fairy Fountains scattered across Termina. These five founta
 Stray Fairies can be found floating around in each of the four main dungeons. There are 15 found in each of these dungeons which can be returned to the nearby Great Fairy Fountain for a prize. Which prize is awarded at a given fountain is randomized, but stray fairies must be returned to their appropriate fountain to claim the reward.
 
 There are two different types of stray fairies, which can each be randomized differently. Freestanding Stray Fairies will always stay in the location they were found in their dungeon, but which fountain they belong to can be different. Chest Stray Fairies however can be placed in any chest in the game (I hope. No part of this theory has been tested, but Stone Tower will get a whole lot more interesting if this works). There's going to tweaking since with this system, I've already run into corner cases that break the system
-
-## Stray Fairy Shuffle
 
 ### Home Dungeon
 
@@ -99,6 +142,8 @@ All Stray Fairies within a particular dungeon will belong to the same fairy foun
 ### Random
 
 Any Freestanding Stray Fairy can be found in any dungeon.
+
+---
 
 ## Chest Stray Fairy Locations
 
@@ -118,6 +163,7 @@ Can be found in any chest in the game (barring technical limitations)
 
 It might be possible to change which type of Stray Fairy is found in Clock Town. This could add a Freestanding Stray Fairy to the pool (Possibly two).
 
+---
 
 ## Owl Statue Shuffle
 
@@ -127,6 +173,7 @@ If set, the warp points opened up by activating an owl statue will be randomized
 
 If set along with Owl Statue Shuffle, this will make one of the warp locations hidden behind the aesthetic owl statue in West Clock Town. This means that one owl statue will not add a warp point to the list. Be careful, if this happens and you see no warp points on your map after playing the Song of Soaring, press A to select whatever the game selected for you. This is called Index Warping and if this feature ever gets off the ground, I might put the table in here. This wording is not optimal or accurate, and I'll fix it later.
 
+---
 
 ## Gossip Stone Hints with Mask of Truth
 
@@ -135,25 +182,6 @@ If set, the Gossip Stones scattered across Termina will have various hints infor
 The locations we regarded as the most generally inconvenient for all medallions play will always have hints, those hints will appear in two places, and the logic will guarantee access to the Mask of Truth before those places must be checked.
 
 There will be other hints that only exist once for other somewhat inconvenient places for which there is no guarantee of Mask of Truth access, and there will be other sorts of remarks from the Gossip Stones in the hint pool that may bring a smile to your face but will not provide you with unique information for your quest.
-
-
-# Installation
-
-Clone this repository and then run ```MMRandomizer.py``` (requires Python 3).
-
-Alternatively, run ```Gui.py``` for a simple graphical user interface.
-
-For releases, a Windows standalone executable is available for users without Python 3.
-
-This randomizer requires The Legend of Zelda: Majora's Mask version 1.0. This will first support the NTSC-U version before eventually supporting NTSC-J and NTSC-E. Upon first being run, the randomizer will automatically create a decompressed version of this ROM that can be used for input for slightly faster seed generation times. Please be sure your input ROM filename is either a .n64 or .z64 file. For users playing via any means other than on real N64 hardware, the use of the "Compress patched ROM" flag is strongly encouraged as uncompressed ROMs are impossible to inject for the Virtual Console and have random crashing problems on all emulators.
-
-For general use, the recommended emulators are Bizhawk and Mupen64plus. If you want to play on Project 64 for whatever reason, you can but you will need to set the rando to use 8 MB of RAM and will want to play with the cheat code 8109C58A 0000 to partially fix Project 64's tragically poor handling of OoT's pause menu. For the eventual release, there will probably still be0 suspected crashing issues specifically with Project 64. I cannot emphasize enough that it is a discouraged emulator to use.
-
-# Quirks to Know
-
-This will expand as this develops (obviously)
-
--In the randomizer, possessing the Bomb Bag is the requirement to get bomb drops, buy bombs or Bombchus.  
 
 # Boring Settings
 
@@ -171,42 +199,30 @@ If set, the randomizer will additionally output a compressed ROM using Grant Man
 
 ## Place Dungeon Items
 
-Dungeons will have the same internal layout as they did in the original The Legend of Zelda: Ocarina of Time.
-
+Dungeons will have the same internal layout as they did in the original The Legend of Zelda: Majora's Mask.
 
 ## Only Ensure Seed Beatable
 
 If set, will only ensure that Majora's Mask can be defeated, but not necessarily that all locations are reachable.
 
+# Known Issues
 
-## Seed
+Sadly for this 0.0.1 README design draft, we have plenty of ideas, so problems have yet to be identified. We do have a grievance list:
 
-This flag adds the Kokiri Sword to the shuffle. With it off, the Kokiri Sword will always be found in its original chest in the Kokiri Forest.
-
-
-## Count
-
-This flag adds the Weird Egg given by child Malon to the shuffle. With this flag on, child Malon will give a random item and the Weird Egg must be located
-to do the events at Hyrule Castle with Zelda and Impa. These events block interacting with Talon and Malon at Lon Lon Ranch as a child as well as Saria in
-Sacred Forest Meadow.
-
-
-# Known issues
-
-Sadly for this 0.0 readme design draft, I have plenty of ideas, so problems have yet to be identified. Have a grievance list.
--I don't know much N64 assembly level stuff, so making this playable is waaaaaaay further down the line. I intend to do most of this by testing spoiler logs until all the logic is in place. Once that monster is taken care of, then we'll get to the juicy payload. That said, if anybody wants to help out, let me know. I can be found around Twitch and Discord pretty frequently under this name.
--The Title Deeds and Kafei fetch quest items are bad, and unless I find a way to hack the menu, they may not get randomized even though they have some of the best potential. The fact that these items will overwrite each other is a problem.
--I'll go more into the Kafei subtleties later
--Thief Bird worst bird
--Gossip Stones will be counted, and the hints will be rewritten to make sense to Majora's Mask. Couples Mask and the Skulltula Houses are definite hints.
+* We don't know much N64 assembly level stuff, so making this playable is waaaaaaay further down the line. We intend to do most of this by testing spoiler logs until all the logic is in place. Once that monster is taken care of, then we'll get to the juicy payload. That said, if anybody wants to help out, let me (epicYoshi64) know. I can be found around Twitch and Discord pretty frequently under this name.
+* The Title Deeds and Kafei fetch quest items are bad, and unless we find a way to hack the menu, they may not get randomized even though they have some of the best potential. The fact that these items will overwrite each other is a problem which will be tackled further down the line.
+* Thief Bird worst bird
+* Gossip Stones will be counted, and the hints will be rewritten to make sense to Majora's Mask. Couple's Mask and the Skulltula Houses will probably be definite hints.
 
 
 # Command Line Options
 
+## __*These are all bogus and will definitely change in the future*__
+
 There will be more of these, but this fork is nowhere near prepared enough to figure out how to line up command args.
 
 ```
--h, --help            
+-h, --help
 ```
 
 Show the help message and exit.
@@ -230,13 +246,13 @@ Path to a The Legend of Zelda: Majora's Mask NTSC-US v1.0 ROM. (default: ZELOOTR
 Path to output directory for rom generation.
 
 ```
---seed SEED           
+--seed SEED
 ```
 
 Define seed number to generate. (default: None)
 
 ```
---count COUNT         
+--count COUNT
 ```
 
 Set the count option (default: None)
@@ -684,3 +700,12 @@ Select level of logging for output. (default: info)
 ```
 
 Enter a settings string that will encode and override most individual settings.
+
+
+# Changelog
+
+## 0.0.1
+
+* _TestRunner_'s OoT-Randomizer fork has been merged into the partially worked on fork of _epicYoshi64_.
+* Most files are still OoT-specific and will have to be adjusted.
+* All changes for Majora's Mask in the existing _epicYoshi65_ fork have been preserved as much as possible. In case of major changes, the old file has been appended with _.backup_ to indicate it still needs processing into the new structure. Minor changes are already integrated as much as possible. Search for `TODO` in the code to find spots that still need adjusting/integrating.

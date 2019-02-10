@@ -3,6 +3,8 @@ from BaseClasses import Region, Location, Entrance, RegionType, Dungeon
 from Items import ItemFactory
 
 
+# TODO: This is now defined in DungeonList.py.
+# Please integrate as appropriate.
 def create_dungeons(world):
     def make_dungeon(name, dungeon_regions_names, boss_key, small_keys, dungeon_items):
         dungeon_regions = [world.get_region(region) for region in dungeon_regions_names]
@@ -42,20 +44,21 @@ def create_dungeons(world):
 
     world.dungeons = [WF, SH, GB, ST]
 
-
+# TODO: This has all been factored out of the python code
+# and is now defined in .json files in data/World/*.json
 def create_regions(world):
     # TODO: finish out this whole thing (what I'm currently working on)
     world.regions = [
-        create_ow_region('Beginning', 
-            [], 
+        create_ow_region('Beginning',
+            [],
             ['Cursed Underground']),
-        create_interior_region('Deku Flower Tutorial Area', 
-            ['First Nut'], 
+        create_interior_region('Deku Flower Tutorial Area',
+            ['First Nut'],
             ['Clock Tower Twisted Hallway']),
         create_interior_region('Clock Tower Basement',
             ['Item From HMS',
             'Song From HMS'],
-            ['Clock Tower Exit', 
+            ['Clock Tower Exit',
             'Clock Tower Twisted Hallway Backwards']),
 
         create_ow_region('South Clock Town',
@@ -163,7 +166,7 @@ def create_regions(world):
             ['TF To Swamp', 'South Gate To Clock Town',
             'TF Mountain Icicles', 'North Gate To Clock Town',
             'TF Great Bay Gate', 'West Gate To Clock Town',
-            'TF To Ikana', 'East Gate To Clock Town', 
+            'TF To Ikana', 'East Gate To Clock Town',
             'TF To Observatory Over Fence',
             'To TF Peahat Grotto', 'To TF Beehive Grotto', 'To East Pillar Grotto',
             'To TF Deku Salesman Grotto', 'To TF Deku Baba Pit', 'TF To Milk Road',
@@ -301,14 +304,14 @@ def create_regions(world):
 
         create_dungeon_region('WF Lobby',
             ['WF Lobby SF', 'WF Lobby SF Chest'],
-            ['WF Front Exit', 
-            'WF Lobby To Central Room', 
+            ['WF Front Exit',
+            'WF Lobby To Central Room',
             'WF Boss Warp']),
         create_dungeon_region('WF Central Room SW Region',
             ['WF Central Deku Baba SF'],
-            ['WF Central Flower Torch', 
+            ['WF Central Flower Torch',
             'WF Central Room Gate Torch',
-            'WF Small Key Door', 
+            'WF Small Key Door',
             'WF Central Room To Fairy Platform',
             'WF Central Room Lower To Upper']),
         create_dungeon_region('WF Central Room Fairy Platform',
@@ -330,24 +333,24 @@ def create_regions(world):
             'WF Elevator Room West Lower To East Lower',
             'WF Elevator To Key Chest',
             'WF xPoisoned Elevator Room West Lower To Central Room']),
-        create_dungeon_region('WF Elevator Room East Lower', 
+        create_dungeon_region('WF Elevator Room East Lower',
             [],
             ['WF Poisoned Elevator Room East Lower To Map Room',
             'WF Poisoned Elevator Room East Lower To West Lower']),
-        create_dungeon_region('WF Elevator Room Chest Region', 
+        create_dungeon_region('WF Elevator Room Chest Region',
             ['WF Small Key Chest']),
-        create_dungeon_region('WF Elevator Room Fairy Region', 
-            ['WF Elevator Room SF'], 
+        create_dungeon_region('WF Elevator Room Fairy Region',
+            ['WF Elevator Room SF'],
             []),
 
         create_dungeon_region('WF Map Room',
             ['WF Map Chest']),
         create_dungeon_region('WF Push Block Room Lower',
-            ['WF Push Block Room Hive SF', 
+            ['WF Push Block Room Hive SF',
             'WF Push Block Room Skulltula SF'],
-            ['WF Push Block Room To Central Room', 
+            ['WF Push Block Room To Central Room',
             'WF Push Block Room To Compass Room',
-            'WF Push Block Room Staircase', 
+            'WF Push Block Room Staircase',
             'WF Push Block Room Lower To Fairy Region']),
         create_dungeon_region('WF Compass Room',
             ['WF Compass Chest']),
@@ -357,47 +360,47 @@ def create_regions(world):
             'WF Push Block Room Upper To Lower']),
         create_dungeon_region('WF Dark Puff Gauntlet',
             ['WF Dark Puff Gauntlet SF Chest'],
-            ['WF Dark Puff Gauntlet To Push Block Room', 
+            ['WF Dark Puff Gauntlet To Push Block Room',
             'WF Dark Puff Gauntlet To Dragonfly Room']),
         # It's only useful to consider falling to the Upper portion of Central Room
         create_dungeon_region('WF Dragonfly Room',
             [],
-            ['WF Dragonfly Room To Dark Puffs', 
+            ['WF Dragonfly Room To Dark Puffs',
             'WF Dragonfly Room To Staircase',
             'WF Dragonfly Room Pit To Central Room']),
         create_dungeon_region('WF Upper Central Room',
             ['WF Central Room Upper Bubble SF'],
             ['WF Central Room Spiral Staircase',
-            'WF Central Flower Switch By Torch', 
+            'WF Central Flower Switch By Torch',
             'WF Wooden Flower Torch Shot',
-            'WF Central Room Upper To Elevator Room', 
+            'WF Central Room Upper To Elevator Room',
             'WF Central Room Upper To Fairy Platform']),
         create_dungeon_region('WF Spinning Flower',
             ['WF Clean Water'],
-            ['WF Light Torch Through Spinning Torch', 
+            ['WF Light Torch Through Spinning Torch',
             'WF Jump Across Flower']),
         create_dungeon_region('WF Central Room Fairy Chest Region',
             ['WF Central Room SF Chest']),
-        create_dungeon_region('WF Upper Elevator Room', 
-            [], 
+        create_dungeon_region('WF Upper Elevator Room',
+            [],
             ['WF Upper Elevator Room To Central Room',
-            'WF Upper Elevator Room To Bow Room', 
+            'WF Upper Elevator Room To Bow Room',
             'WF Upper Elevator Room To Elevator']),
         create_dungeon_region('WF Raised Elevator Room',
             [],
-            ['WF Raised Elevator To Top Floor', 
+            ['WF Raised Elevator To Top Floor',
             'WF Raised Elevator To Gecko Fight']),
         create_dungeon_region('WF Bow Room',
             ['WF Bow Chest']),
-        create_dungeon_region('WF Upper Floor North Elevator Room', 
-            [], 
+        create_dungeon_region('WF Upper Floor North Elevator Room',
+            [],
             ['WF Upper Floor North Elevator Room To Fairy Region',
             'WF Elevator Room To Gecko Room']),
-        create_dungeon_region('WF Gecko Room', 
-            ['WF Boss Key Chest', 
+        create_dungeon_region('WF Gecko Room',
+            ['WF Boss Key Chest',
             'Woodfall Temple Frog']),
         create_dungeon_region('WF Pre Boss Room',
-            ['WF Pre Boss Room Alcoves SF 1', 
+            ['WF Pre Boss Room Alcoves SF 1',
             'WF Pre Boss Room Alcoves SF 2',
             'WF Pre Boss Room Alcoves SF 3',
             'WF Pre Boss Room Bubble SF'],
@@ -428,9 +431,9 @@ def create_regions(world):
             ['Item From Darmani', 'Goron Grave Hot Spring Water'],
             ['Goron Grave Frozen Exit', 'Goron Grave Thawed Exit']),
         create_interior_region('Smithy',
-            ['Razor Sword Upgrade', 
+            ['Razor Sword Upgrade',
             'Gilded Sword Upgrade'],
-            ['Smithy Frozen Exit', 
+            ['Smithy Frozen Exit',
             'Smithy Thawed Exit']),
         create_grotto_region('Mountain Lake Grotto',
             ['Mountain Lake Grotto Chest'],
@@ -464,20 +467,20 @@ def create_regions(world):
 
         create_ow_region('Mountain Village Lower (Frozen)',
             ['Gift From Hungry Goron', 'Mountain Village Owl Statue', 'Lullaby Intro Final Day'],
-            ['Frozen MV To MV Path North', 
-            'Frozen MV Lower To Top', 
+            ['Frozen MV To MV Path North',
+            'Frozen MV Lower To Top',
             'Frozen MV Lower To Lake',
-            'Frozen MV Lower To Snowhead Path', 
+            'Frozen MV Lower To Snowhead Path',
             'Frozen MV To Smithy']),
         create_ow_region('Mountain Village Lower (Spring)',
-            ['Frog Choir HP', 
+            ['Frog Choir HP',
             'Mountain Village Keaton Quiz',
             'Mountain Village Spring Owl Statue',
             'Mountain Village Waterfall Chest'],
-            ['Spring MV To MV Path North', 
-            'Spring MV Lower To Top', 
+            ['Spring MV To MV Path North',
+            'Spring MV Lower To Top',
             'Spring MV Lower To Lake',
-            'Spring MV Lower To Snowhead Path', 
+            'Spring MV Lower To Snowhead Path',
             'Spring MV To Smithy',
             'Melted MV Path From Village To Grotto']),
         create_ow_region('Mountain Village Melted Path',
@@ -494,18 +497,18 @@ def create_regions(world):
             'Melted MV Path From Grotto To Village']),
         create_ow_region('Mountain Village Top (Frozen)',
             [],
-            ['Frozen MV Top To Lower', 
+            ['Frozen MV Top To Lower',
             'Frozen MV Top To Goron Grave']),
 
         create_ow_region('Mountain Lake Main (Frozen)',
-            ['Mountain Tingle Snowhead Map', 
+            ['Mountain Tingle Snowhead Map',
             'Mountain Tingle Romani Ranch Map',
-            'Mountain Tingle Pic', 
-            'Lullaby Intro First Day', 
+            'Mountain Tingle Pic',
+            'Lullaby Intro First Day',
             'Lullaby Intro Second Day'],
-            ['Mountain Lake To MV', 
+            ['Mountain Lake To MV',
             'Mountain Lake To Goron Village Outside',
-            'Mountain Lake To Hot Spring', 
+            'Mountain Lake To Hot Spring',
             'Mountain Lake To Grotto Platform']),
         create_ow_region('Mountain Lake Grotto Platform (Frozen)',
             [],
@@ -517,14 +520,14 @@ def create_regions(world):
             ['Mountain Lake Goron Race Platform To Goron Race',
             'Mountain Lake Goron Race Platform To Grotto Platform']),
         create_ow_region('Mountain Lake Main (Frozen)',
-            ['Spring Tingle Snowhead Map', 
+            ['Spring Tingle Snowhead Map',
             'Spring Tingle Romani Ranch Map',
-            'Spring Tingle Pic', 
-            'Mountain Lake HP Chest', 
+            'Spring Tingle Pic',
+            'Mountain Lake HP Chest',
             'Mountain Lake Red Rupee Chest'],
-            ['Frozen Lake To MV', 
+            ['Frozen Lake To MV',
             'Frozen Lake To Goron Village Outside',
-            'Frozen Lake To Hot Spring', 
+            'Frozen Lake To Hot Spring',
             'Frozen Lake To Grotto Platform']),
         create_ow_region('Mountain Lake Grotto Platform (Frozen)',
             [],
@@ -537,7 +540,7 @@ def create_regions(world):
             'Frozen Lake Goron Race Platform To Grotto Platform']),
 
         create_ow_region('Goron Village Outer Main (Frozen)',
-            ['Mountain Deku Salesman HP', 
+            ['Mountain Deku Salesman HP',
             'Mountain Deku Salesman',
             'Biggest Bomb Bag'],
             ['Frozen Goron Village Outer To Lake',
@@ -586,12 +589,12 @@ def create_regions(world):
             ['Defeat Goht', 'Goht HC', "Remains From Goht"],
             ['Goht Boss Exit', 'SH Giant Meeting']),
 
-        create_ow_region('Beyond Great Bay Gate', 
-            [], 
-            ['TF To Great Bay Coast', 
+        create_ow_region('Beyond Great Bay Gate',
+            [],
+            ['TF To Great Bay Coast',
             'TF Great Bay Gate Backwards']),
-        create_ow_region('Great Bay Coast', 
-            [], 
+        create_ow_region('Great Bay Coast',
+            [],
             ['TF From Great Bay Coast']),
         create_interior_region('Fisherman Hut'),
         create_interior_region('Oceanside Spider House'),
@@ -607,14 +610,14 @@ def create_regions(world):
             ['Lulu Room Exit']),
         create_interior_region('Zora Hall Bassist Room'),
         create_interior_region('Zora Hall Pianist Room'),
-        create_interior_region('Waterfall Rapids', 
-            ['Beaver Bottle', 
+        create_interior_region('Waterfall Rapids',
+            ['Beaver Bottle',
             'Beaver HP']),
-        create_ow_region('Great Bay Fairy Ledge', 
-            [], 
+        create_ow_region('Great Bay Fairy Ledge',
+            [],
             ['GF Great Bay']),
-        create_interior_region('Great Bay Fairy Shrine', 
-            ['Great Bay GF Reward'], 
+        create_interior_region('Great Bay Fairy Shrine',
+            ['Great Bay GF Reward'],
             ['Great Bay Fairy Exit']),
 
         create_dungeon_region('Great Bay Temple Boss Room',
@@ -625,19 +628,19 @@ def create_regions(world):
             ['Gyorg Boss Exit', 'GB Giant Meeting']),
 
         create_ow_region('Path To Ikana'),
-        create_ow_region('Ikana Graveyard', 
+        create_ow_region('Ikana Graveyard',
             ['Captains Chest'],
-            ['SoS Grave Grotto', 
-            'HP Grave Grotto', 
-            'Dampe Grave Grotto', 
+            ['SoS Grave Grotto',
+            'HP Grave Grotto',
+            'Dampe Grave Grotto',
             'Dampe Door']),
         create_interior_region('Dampe Grave'),
         create_grotto_region('Storms Grave'),
         create_grotto_region('Heart Piece Grave'),
         create_ow_region('Ikana Canyon Lower',
             ['Canyon Deku Salesman']),
-        create_ow_region('Ikana Canyon', 
-            [], 
+        create_ow_region('Ikana Canyon',
+            [],
             ['GF Stone Tower']),
         create_interior_region('Sakon Hideout'),
         create_interior_region('Secret Shrine'),
@@ -646,8 +649,8 @@ def create_regions(world):
         create_interior_region('Music Box House'),
         create_interior_region('Bottom of the Well'),
         create_ow_region('Ikana Castle'),
-        create_interior_region('Stone Tower Fairy Shrine', 
-            ['Stone Tower GF Reward'], 
+        create_interior_region('Stone Tower Fairy Shrine',
+            ['Stone Tower GF Reward'],
             ['Ikana Canyon']),
         create_ow_region('Stone Tower'),
         create_dungeon_region('Stone Tower Temple Boss Room',
@@ -655,42 +658,17 @@ def create_regions(world):
             ['Stone Tower Temple Boss Fight']),
         create_dungeon_region('Stone Tower Boss Defeated',
             ['Defeat Twinmold',
-            'Twinmold HC', 
+            'Twinmold HC',
             "Remains From Twinmold"],
-            ['Twinmold Boss Exit', 
+            ['Twinmold Boss Exit',
             'ST Giant Meeting']),
     ]
     # world.regions.extend([])
     world.initialize_regions()
 
-def create_ow_region(name, locations=None, exits=None):
-    return _create_region(name, RegionType.Overworld, locations, exits)
 
-def create_interior_region(name, locations=None, exits=None):
-    return _create_region(name, RegionType.Interior, locations, exits)
-
-def create_dungeon_region(name, locations=None, exits=None):
-    return _create_region(name, RegionType.Dungeon, locations, exits)
-
-def create_grotto_region(name, locations=None, exits=None):
-    return _create_region(name, RegionType.Grotto, locations, exits)
-
-def _create_region(name, type, locations=None, exits=None, scene_listing=0x0, scene_name='Grottos'):
-    ret = Region(name, type)
-    if locations is None:
-        locations = []
-    if exits is None:
-        exits = []
-
-    for exit in exits:
-        ret.exits.append(Entrance(exit, ret))
-    for location in locations:
-        # address, address2, default, type, scene_listing, scene_name = location_table[location]
-        location_lookup = location_table[location]
-        address, address2, default, type = location_lookup[:4]
-        ret.locations.append(Location(location, address, address2, default, type, None, 'Termina', ret))
-    return ret
-
+# TODO: This has been moved to LocationList.py
+# Please integrate as appropriate.
 location_table = {'Hidden Owl Statue': (0x221224E, None, 0x0F, 'Statue'),
                     'Great Bay Coast Owl Statue': (0x26DE42E, None, 0x00, 'Statue'),
                     'Great Bay Coast Warp Opened': (None, None, None, 'Event'),
