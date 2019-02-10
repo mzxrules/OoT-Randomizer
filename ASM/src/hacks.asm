@@ -5,7 +5,7 @@
 .org 0xBDAB84
     sw      r0, 0x0004(v0)
     li      t7, 1
-    sb      t7, 0x0005(v0) ; Skip Prologue 
+    sb      t7, 0x0005(v0) ; Skip Prologue
     nop
 
 .org 0xBDADE4

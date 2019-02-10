@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .n64
 .relativeinclude on
 
@@ -5,11 +6,19 @@
 .incbin "../roms/mm/base.z64"
 
 ;==================================================================================================
+; Constants
+;==================================================================================================
+
+;.include "constants.asm"
+;.include "addresses.asm"
+
+;==================================================================================================
 ; Base game editing region
 ;==================================================================================================
 
 ;.include "boot.asm"
 .include "hacks.asm"
+.include "malon.asm"
 
 ;==================================================================================================
 ; New code region
@@ -17,10 +26,10 @@
 
 ;.headersize (0x80400000 - 0x03480000)
 
-;.include "constants.asm"
 
 ;.org 0x80400000
 ;.area 0x1000
+;.include "coop_state.asm" ; This should always come first
 ;.include "init.asm"
 ;DebugOutput:
 ;.include "debug.asm"
@@ -58,6 +67,26 @@
 ;.importobj "../build/bundle.o"
 ;FONT_TEXTURE:
 ;.incbin("../resources/font.bin")
+;.endarea
+
+;==================================================================================================
+; ADDED IN v4.0
+;==================================================================================================
+
+;.include "empty_bomb_fix.asm"
+;.include "fishing.asm"
+;.include "bgs_fix.asm"
+;.include "chus_in_logic.asm"
+;.include "rainbow_bridge.asm"
+;.include "gossip_hints.asm"
+;.include "potion_shop.asm"
+;.include "jabu_elevator.asm"
+;.include "dampe.asm"
+;.include "dpad.asm"
+;.include "chests.asm"
+;.align 8
+;DPAD_TEXTURE:
+;.incbin("../resources/dpad.bin")
 ;.endarea
 
 .close

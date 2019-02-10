@@ -2,23 +2,21 @@
 ; Settings and tables which the front-end may write
 ;==================================================================================================
 
-; 0x03481000: Item override table:
-;
-; This table changes the meaning of a given item ID within a given scene. It must be terminated with
-; four 0x00 bytes (which will happen by default as long as you don't fill the allotted space).
-;
-; Row format (4 bytes):
-; SSTTIINN
-; SS = Scene
-; TT = Override Type (0x00 = base item, 0x01 = chest, 0x02 = collectable)
-; II = Override ID (base item or flag)
-; NN = New item ID
+; This is used to determine if and how the cosmetics can be patched
+; It this moves then the version will no longer be valid, so it is important that this does not move
+COSMETIC_FORMAT_VERSION:
+.word 0x1F05D3F9
+CFG_DISPLAY_DPAD:
+.byte 0x01
+CFG_RAINBOW_SWORD_INNER_ENABLED:
+.byte 0x00
+CFG_RAINBOW_SWORD_OUTER_ENABLED:
+.byte 0x00
 
-.area 0x800, 0
-ITEM_OVERRIDES:
-.endarea
+.align 4
 
-; 0x03481800: Initial Save Data table:
+
+; Initial Save Data table:
 ;
 ; This table describes what extra data should be written when a new save file is created. It must be terminated with
 ; four 0x00 bytes (which will happen by default as long as you don't fill the allotted space).
@@ -33,28 +31,31 @@ ITEM_OVERRIDES:
 INITIAL_SAVE_DATA:
 .endarea
 
-PLAYER_ID:
-.byte 0x00
-COOP_GET_ITEM:
-.byte 0x00
-PLAYER_NAME_ID:
-.byte 0x00
+BOMBCHUS_IN_LOGIC:
+.word 0x00
 
-.area 8*32, 0xDF
-PLAYER_NAMES:
-.endarea
+RAINBOW_BRIDGE_CONDITION:
+.word 0x00
+; 0 = Open
+; 1 = Medallions
+; 2 = Dungeons
+; 3 = Stones
+; 4 = Vanilla
+; 5 = Tokens
 
-; 0x03481C00: Special items
+GOSSIP_HINT_CONDITION:
+.word 0x00
+; 0 = Mask of Truth
+; 1 = Stone of Agony
+; 2 = No Requirements
 
-LIGHT_ARROW_ITEM:
-.byte 0x5A
-FAIRY_OCARINA_ITEM:
-.byte 0x3B
-FAIRY_ITEMS:
-.byte 0x5D ; Zora's Domain
-.byte 0x5C ; Hyrule Castle
-.byte 0x5E ; Desert Colossus
-.byte 0x51 ; Mountain Summit
-.byte 0x52 ; Crater
-.byte 0x53 ; Ganon's Castle
+FREE_SCARECROW_ENABLED:
+.word 0x00
+
+JABU_ELEVATOR_ENABLE:
+.byte 0x00
+OCARINAS_SHUFFLED:
+.byte 0x00
+FAST_CHESTS:
+.byte 0x01
 .align 4
