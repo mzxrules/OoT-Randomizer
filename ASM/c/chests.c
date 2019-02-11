@@ -8,13 +8,13 @@
 #define GOLD_BASE_TEXTURE 0x06003798
 
 #define BROWN_CHEST 0
-#define GUILDED_CHEST 1
+#define GILDED_CHEST 1
 #define GOLD_CHEST 2
 
 #define CHEST_BASE 1
 #define CHEST_LID 3
 
-uint32_t CHEST_SIZE_MATCH_CONTENTS = 0;
+uint32_t CHEST_TEXTURE_MATCH_CONTENTS = 0;
 
 extern void* CHEST_FRONT_TEXTURE;
 extern void* CHEST_BASE_TEXTURE;
@@ -29,7 +29,7 @@ int get_chest_type(z64_actor_t* actor)
     uint8_t item_id = (actor->variable & 0x0FE0) >> 5;
     override_t override = lookup_override(actor, scene, item_id);
 
-    if (!CHEST_SIZE_MATCH_CONTENTS || override.value.item_id == 0)
+    if (!CHEST_TEXTURE_MATCH_CONTENTS || override.value.item_id == 0)
     {
         // If no override, return either Gold or Brown
         uint8_t type = ((uint8_t*)actor)[0x01E9];
@@ -79,7 +79,7 @@ void draw_chest(z64_game_t* game, int part, void* unk, void* unk2,
         void* frontTexture;
         void* baseTexture;
 
-        if (chest_type == GUILDED_CHEST)
+        if (chest_type == GILDED_CHEST)
         {
             frontTexture = &CHEST_FRONT_TEXTURE;
             baseTexture = &CHEST_BASE_TEXTURE;

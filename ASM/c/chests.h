@@ -6,6 +6,6 @@
 #include "z64.h"
 
 
-extern uint32_t CHEST_SIZE_MATCH_CONTENTS;
+extern uint32_t CHEST_TEXTURE_MATCH_CONTENTS;
 
 #endif

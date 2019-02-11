@@ -1288,7 +1288,7 @@ def patch_rom(spoiler:Spoiler, world:World, rom:LocalRom):
         bombchu_ids = [0x6A, 0x03, 0x6B]
         for i in bombchu_ids:
             item = read_rom_item(rom, i)
-            item['chest_type'] = 0
+            item['chest_type'] = 1
             write_rom_item(rom, i, item)
     if world.bridge == 'tokens':
         item = read_rom_item(rom, 0x5B)
@@ -1297,7 +1297,7 @@ def patch_rom(spoiler:Spoiler, world:World, rom:LocalRom):
 
     # Update chest type sizes
     if world.correct_chest_sizes:
-        symbol = rom.sym('CHEST_SIZE_MATCH_CONTENTS')
+        symbol = rom.sym('CHEST_TEXTURE_MATCH_CONTENTS')
         rom.write_int32(symbol, 0x00000001)
 
     # give dungeon items the correct messages
