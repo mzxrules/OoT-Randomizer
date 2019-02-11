@@ -1,16 +1,55 @@
+.headersize (0x800A5AC0-0xB3C000)
+
+;==================================================================================================
+; Set the size of the main heap
+;==================================================================================================
+
+.org 0x80174C4C
+    lui     t8, hi(G_PAYLOAD_ADDR)
+    addiu   t8, lo(G_PAYLOAD_ADDR)
+.org 0x80174C5C
+    sw      a1, 0x1528(v1)
+
+    
+;==================================================================================================
+; Custom Code Payload
+;==================================================================================================
+
+
+.org 0x801748A0
+    lui     a0, hi(G_PAYLOAD_ADDR)
+    addiu   a0, lo(G_PAYLOAD_ADDR)
+    lui     a1, hi(G_PAYLOAD_VROM)
+    addiu   a1, lo(G_PAYLOAD_VROM)
+    lui     a2, hi(G_PAYLOAD_SIZE)
+    jal     0x80080C90
+    addiu   a2, lo(G_PAYLOAD_SIZE)
+    jal     init
+    nop
+
+
 ;==================================================================================================
 ; Prologue Skip
 ;==================================================================================================
 
-.org 0xBDAB84
+.org 0x80144644
     sw      r0, 0x0004(v0)
     li      t7, 1
-    sb      t7, 0x0005(v0) ; Skip Prologue
+    sb      t7, 0x0005(v0) ; Skip Prologue 
     nop
 
-.org 0xBDADE4
+.org 0x801448A4
     addiu   t6, r0, 0x0003 ; Set Default form (Deku). Originally set to 4 (Human)
 
+.org 0x80146AEC
+    b   0x80146AFC ; Skip setting the first save file's cutscene number to 0xFFF0
+
+    
+;==================================================================================================
+; Initial save
+;==================================================================================================
+.org 0x8014494C
+    jal     write_initial_save
 
 ;==================================================================================================
 ; Item Overrides
@@ -18,71 +57,41 @@
 
 
 ;==================================================================================================
-; Every frame hooks
+; Game Class Frame Start Hook
 ;==================================================================================================
 
+.org 0x80168F64
+    game_update_start:
+
+; 80168F64
+.org 0x8016A8A8
+    lui     t4, hi(game_state_update_custom)
+.org 0x8016A8B0
+    addiu   t4, lo(game_state_update_custom)
 
 ;==================================================================================================
 ; Special item sources
 ;==================================================================================================
 
 
-; Make all Great Fairies give an item
-; Replaces:
-;   jal     0x8002049C
-;   addiu   a1, r0, 0x0038
-;.org 0xC89744 ; In memory: 0x801E3884
-;    jal     override_great_fairy_cutscene
-;    addiu   a1, r0, 0x0038
-
-; Upgrade fairies check scene chest flags instead of magic/defense
-; Mountain Summit Fairy
-; Replaces:
-;   lbu     t6, 0x3A (a1)
-;.org 0xC89868 ; In memory: 0x801E39A8
-;    lbu    t6, 0x1D28 (s0)
-; Crater Fairy
-; Replaces:
-;   lbu     t9, 0x3C (a1)
-;.org 0xC898A4 ; In memory: 0x801E39E4
-;    lbu    t9, 0x1D29 (s0)
-; Ganon's Castle Fairy
-; Replaces:
-;   lbu     t2, 0x3D (a1)
-;.org 0xC898C8 ; In memory: 0x801E3A08
-;    lbu    t2, 0x1D2A (s0)
-
-; Upgrade fairies never check for magic meter
-; Replaces:
-;   lbu     t6, 0xA60A (t6)
-;.org 0xC892DC ; In memory: 0x801E341C
-;    li     t6, 1
-
-; Item fairies never check for magic meter
-; Replaces:
-;   lbu     t2, 0xA60A (t2)
-;.org 0xC8931C ; In memory: 0x801E345C
-;    li      t2, 1
-
 ;==================================================================================================
-; Menu hacks
+; Draw Dpad
 ;==================================================================================================
 
+.org 0x8011F0F0
+    jal     dpad_draw
+    nop
+
+; check mask usability hack
+.org 0x80112984
+    j     test_mask_usability_hack
+.org 0x8011298C
+    return_test_mask_usability_hack:
 
 ;==================================================================================================
 ; Song Fixes
 ;==================================================================================================
 
-;==================================================================================================
-; Initial save
-;==================================================================================================
-
-; Replaces:
-;   sb      t0, 32(s1)
-;   sb      a1, 33(s1)
-;.org 0xB06C2C ; In memory: ???
-;    jal     write_initial_save
-;    sb      t0, 32(s1)
 
 ;==================================================================================================
 ; Enemy Hacks
@@ -99,8 +108,6 @@
 ; Epona Check Override
 ;==================================================================================================
 
-;.org 0xA9E838
-;    j       Check_Has_Epona_Song
 
 ;==================================================================================================
 ; Shop Injections

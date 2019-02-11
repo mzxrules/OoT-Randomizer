@@ -7,38 +7,35 @@ import struct
 import subprocess
 import random
 import copy
+from ntype import BigStream
 from Utils import is_bundled, subprocess_args
 
 from Utils import local_path, data_path, default_output_path
 
-DMADATA_START = 0x0
+DMADATA_START = 0x1A500
 
-class LocalRom(object):
+class LocalRom(BigStream):
     def __init__(self, settings, patch=True):
-        self.__last_address = None
+        super().__init__([])
 
         file = settings.rom
-        decomp_file = 'ZMMDEC.z64'
+        decomp_file = 'MMDEC.z64'
 
         os.chdir(local_path())
-
-        with open(data_path('generated/symbols.json'), 'r') as stream:
+        
+        with open(local_path('data/generated/symbols.json'), 'r') as stream:
             symbols = json.load(stream)
             self.symbols = { name: int(addr, 16) for name, addr in symbols.items() }
-
-        if file == '':
-            # if not specified, try to read from the previously decompressed rom
-            file = decomp_file
-            try:
-                self.read_rom(file)
-            except FileNotFoundError:
-                # could not find the decompressed rom either
-                raise FileNotFoundError('Must specify path to base ROM')
-        else:
+        
+        try:
+            # Read decompressed file if it exists
+            self.read_rom(decomp_file)
+            # This is mainly for validation testing, but just in case...
+            self.decompress_rom_file(decomp_file, decomp_file)
+        except Exception as ex:
+            # No decompressed file, instead read Input ROM
             self.read_rom(file)
-
-        # decompress rom, or check if it's already decompressed
-        self.decompress_rom_file(file, decomp_file)
+            self.decompress_rom_file(file, decomp_file)
 
         # Add file to maximum size
         self.buffer.extend(bytearray([0x00] * (0x4000000 - len(self.buffer))))
@@ -104,94 +101,6 @@ class LocalRom(object):
 
     def sym(self, symbol_name):
         return self.symbols.get(symbol_name)
-
-    def seek_address(self, address):
-        self.__last_address = address
-
-    def read_byte(self, address):
-        if address == None:
-            address = self.__last_address
-        self.__last_address = address + 1
-        return self.buffer[address]
-
-    def read_bytes(self, address, len):
-        if address == None:
-            address = self.__last_address
-        self.__last_address = address + len
-        return self.buffer[address : address + len]
-
-    def read_int16(self, address):
-        if address == None:
-            address = self.__last_address
-        self.__last_address = address + 2
-        return int16.unpack_from(self.buffer, address)[0]
-
-    def read_int24(self, address):
-        if address == None:
-            address = self.__last_address
-        return bytes_as_int24(self.read_bytes(address, 3))
-
-    def read_int32(self, address):
-        if address == None:
-            address = self.__last_address
-        self.__last_address = address + 4
-        return int32.unpack_from(self.buffer, address)[0]
-
-    def write_byte(self, address, value):
-        if address == None:
-            address = self.__last_address
-        self.buffer[address] = value
-        self.changed_address[address] = value
-        self.__last_address = address + 1
-
-    def write_sbyte(self, address, value):
-        if address == None:
-            address = self.__last_address
-        self.write_bytes(address, struct.pack('b', value))
-
-    def write_int16(self, address, value):
-        if address == None:
-            address = self.__last_address
-        self.write_bytes(address, int16_as_bytes(value))
-
-    def write_int24(self, address, value):
-        if address == None:
-            address = self.__last_address
-        self.write_bytes(address, int24_as_bytes(value))
-
-    def write_int32(self, address, value):
-        if address == None:
-            address = self.__last_address
-        self.write_bytes(address, int32_as_bytes(value))
-
-    def write_f32(self, address, value:float):
-        if address == None:
-            address = self.__last_address
-        self.write_bytes(address, struct.pack('>f', value))
-
-    def write_bytes(self, startaddress, values):
-        if startaddress == None:
-            startaddress = self.__last_address
-        for i, value in enumerate(values):
-            self.write_byte(startaddress + i, value)
-
-    def write_int16s(self, startaddress, values):
-        if startaddress == None:
-            startaddress = self.__last_address
-        for i, value in enumerate(values):
-            self.write_int16(startaddress + (i * 2), value)
-
-    def write_int24s(self, startaddress, values):
-        if startaddress == None:
-            startaddress = self.__last_address
-        for i, value in enumerate(values):
-            self.write_int24(startaddress + (i * 3), value)
-
-    def write_int32s(self, startaddress, values):
-        if startaddress == None:
-            startaddress = self.__last_address
-        for i, value in enumerate(values):
-            self.write_int32(startaddress + (i * 4), value)
 
     def write_to_file(self, file):
         # self.verify_dmadata()
@@ -391,27 +300,5 @@ class LocalRom(object):
             cur += 0x10
         return max_end
 
-
-int16 = struct.Struct('>H')
-int32 = struct.Struct('>I')
-
-def int16_as_bytes(value):
-    value = value & 0xFFFF
-    return [(value >> 8) & 0xFF, value & 0xFF]
-
-def int24_as_bytes(value):
-    value = value & 0xFFFFFF
-    return [(value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF]
-
-def int32_as_bytes(value):
-    value = value & 0xFFFFFFFF
-    return [(value >> 24) & 0xFF, (value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF]
-
-def bytes_as_int16(values):
-    return (values[0] << 8) | values[1]
-
-def bytes_as_int24(values):
-    return (values[0] << 16) | (values[1] << 8) | values[2]
-
-def bytes_as_int32(values):
-    return (values[0] << 24) | (values[1] << 16) | (values[2] << 8) | values[3]
+        else:
+            rom.write_int32s(cur, [start, end, start, 0])

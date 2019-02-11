@@ -62,12 +62,21 @@ if os.path.isfile('build/c_symbols.txt'):
 
 symbols = {}
 
+g_payload_addr_sym = 0x80800000;
+g_payload_vrom_sym = 0x00000000;
+
 with open('build/asm_symbols.txt', 'r') as f:
     for line in f:
         parts = line.strip().split(' ')
         if len(parts) < 2:
             continue
         address, sym_name = parts
+        
+        if sym_name == 'G_PAYLOAD_ADDR':
+            g_payload_addr_sym = int(address, 16)
+        if sym_name == 'G_PAYLOAD_VROM':
+            g_payload_vrom_sym = int(address, 16)
+
         if address[0] != '8':
             continue
         if sym_name[0] in ['.', '@']:
@@ -86,8 +95,8 @@ data_symbols = {}
 for (name, sym) in symbols.items():
     if sym['type'] == 'data':
         addr = int(sym['address'], 16)
-        if 0x80400000 <= addr < 0x80410000:
-            addr = addr - 0x80400000 + 0x03480000
+        if g_payload_addr_sym <= addr < 0x80788000:
+            addr = addr - g_payload_addr_sym + g_payload_vrom_sym
         else:
             continue
         data_symbols[name] = '{0:08X}'.format(addr)
@@ -101,7 +110,5 @@ if pj64_sym_path:
         for sym_name, sym in sorted(symbols.items(), key=key):
             f.write('{0},{1},{2}\n'.format(sym['address'], sym['type'], sym_name))
 
-# TODO: This should change when it works with a Majora's Mask ROM.
-# create_diff('roms/mm/base.z64', 'roms/mm/patched.z64', '../data/rom_patch.txt')
 # Diff ROMs
-create_diff('roms/base.z64', 'roms/patched.z64', '../data/generated/rom_patch.txt')
+create_diff('roms/mm/base.z64', 'roms/mm/patched.z64', '../data/generated/rom_patch.txt')

@@ -1,14 +1,12 @@
-before_game_state_update_hook:
+game_state_update_custom:
     addiu   sp, sp, -0x18
-    sw      ra, 0x10 (sp)
+    sw      a0, 0x0018(sp) //Global Context
+    sw      ra, 0x0010(sp)
 
-    jal     before_game_state_update
-    nop
+    jal     game_update_start
+    lw      a0, 0x0018(sp) //Global Context
 
-    lw      ra, 0x10 (sp)
-    addiu   sp, sp, 0x18
-
-    ; Displaced code
-    lw      t6, 0x0018 (sp)
+    ;after_game_state_update:
+    lw      ra, 0x0010 (sp)
     jr      ra
-    lui     at, 0x8010
+    addiu   sp, sp, 0x18

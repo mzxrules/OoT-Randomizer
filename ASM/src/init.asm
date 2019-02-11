@@ -1,17 +1,9 @@
 init:
-    addiu   sp, sp, -0x18
-    sw      ra, 0x10 (sp)
-
     jal     c_init
     nop
 
-    ; Displaced code
-    lui     v0, 0x8012
-    addiu   v0, v0, 0xD2A0
-    addiu   t6, r0, 0x0140
-    lui     at, 0x8010
-    sw      t6, 0xE500 (at)
-
-    lw      ra, 0x10 (sp)
-    jr      ra
-    addiu   sp, sp, 0x18
+    ; Restore displaced code. 9 ops
+    addiu   sp, sp, -0x340
+    li      s0, 0x801BD910
+    j       0x801748C4
+    nop
