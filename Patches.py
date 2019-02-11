@@ -91,6 +91,10 @@ def patch_rom(world, rom):
 
     rom_patch_path = 'data/generated/rom_patch.txt'
     if os.path.isfile(rom_patch_path):
+        # TODO: OoT fork used 'data_path' over 'local_path' when pointing
+        # to the 'data' folder. Might be significant?
+        # Don't change, though, unless we receive bug reports that might
+        # be related to this.
         with open(local_path(rom_patch_path), 'r') as stream:
             for line in stream:
                 address, value = [int(x, 16) for x in line.split(',')]
@@ -101,7 +105,7 @@ def patch_rom(world, rom):
     rom.write_int16(0x2CD60DE, 0x0046)
 
     # Write Randomizer title screen logo
-    #with open(local_path('data/title.bin'), 'rb') as stream:
+    #with open(data_path('title.bin'), 'rb') as stream:
     #    titleBytes = stream.read()
     #    rom.write_bytes(0x01795300, titleBytes)
 
@@ -146,7 +150,7 @@ def patch_rom(world, rom):
     save.set_bits(0xEFB, 0x02)      # Stone Tower Temple
     save.write_table_to_rom(rom)
 
-    del save 
+    del save
 
     # Load Message and Shop Data
     messages = read_messages(rom)
