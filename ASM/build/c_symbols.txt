@@ -1,0 +1,47 @@
+
+../build/bundle.o:     file format elf32-bigmips
+
+SYMBOL TABLE:
+00000000 l    d  .MIPS.abiflags	00000000 .MIPS.abiflags
+00000000 l    d  .reginfo	00000000 .reginfo
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .sbss	00000000 .sbss
+00000000 l    d  .bss	00000000 .bss
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .pdr	00000000 .pdr
+00000000 l    d  .gnu.attributes	00000000 .gnu.attributes
+00000000 l    d  .mdebug.abi32	00000000 .mdebug.abi32
+00000000 l    df *ABS*	00000000 dpad.c
+801ef670 l       *ABS*	00000000 z2_file
+803e6b20 l       *ABS*	00000000 z2_game
+80178e3c l       *ABS*	00000000 load_icon_item_texture
+8012364c l       *ABS*	00000000 get_item_button_press
+00000000 l     O .sbss	00000002 alpha_level
+00000000 l    df *ABS*	00000000 gfx.c
+801ef670 l       *ABS*	00000000 z2_file
+803e6b20 l       *ABS*	00000000 z2_game
+80178e3c l       *ABS*	00000000 load_icon_item_texture
+00000000 l    df *ABS*	00000000 main.c
+801ef670 l       *ABS*	00000000 z2_file
+803e6b20 l       *ABS*	00000000 z2_game
+80178e3c l       *ABS*	00000000 load_icon_item_texture
+8012364c l       *ABS*	00000000 get_item_button_press
+00000000 g     O .data	00003000 dpad_mask_icons
+00003028 g     O .data	00000010 dpad_item_sprites
+00003038 g     O .data	00000010 dpad_sprite
+000000fc g     F .text	00000258 draw_dpad
+000006d0 g     F .text	0000001c game_state_update_custom
+00000000         *UND*	00000000 game_update_start
+00000000         *UND*	00000000 DPAD_TEXTURE
+00000000 g     F .text	000000fc handle_dpad
+0000054c g     F .text	000000f0 sprite_draw
+000003ac g     F .text	000001a0 sprite_load
+00000000         *UND*	00000000 extern_mask_usability
+0000037c g     F .text	00000030 sprite_bytes
+0000063c g     F .text	00000078 gfx_init
+000006b4 g     F .text	0000001c c_init
+00003000 g     O .data	00000028 initial_display_list
+00000354 g     F .text	00000028 sprite_bytes_per_tile
+
+
