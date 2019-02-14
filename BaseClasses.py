@@ -61,7 +61,6 @@ class World(object):
     def copy(self):
         ret = World(self.settings)
         # ret.skipped_trials = copy.copy(self.skipped_trials)
-        # ret.dungeon_mq = copy.copy(self.dungeon_mq)
         # ret.big_poe_count = copy.copy(self.big_poe_count)
         ret.can_take_damage = self.can_take_damage
         # ret.shop_prices = copy.copy(self.shop_prices)

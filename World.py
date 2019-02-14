@@ -62,22 +62,6 @@ class World(object):
             'Light': False
         }
 
-        # dungeon forms will be decided later
-        self.dungeon_mq = {
-            'Deku Tree': False,
-            'Dodongos Cavern': False,
-            'Jabu Jabus Belly': False,
-            'Bottom of the Well': False,
-            'Ice Cavern': False,
-            'Gerudo Training Grounds': False,
-            'Forest Temple': False,
-            'Fire Temple': False,
-            'Water Temple': False,
-            'Spirit Temple': False,
-            'Shadow Temple': False,
-            'Ganons Castle': False
-        }
-
         self.can_take_damage = True
 
         # TODO: This was copied from the MM World object.
@@ -104,7 +88,6 @@ class World(object):
     def copy(self):
         new_world = World(self.settings)
         new_world.skipped_trials = copy.copy(self.skipped_trials)
-        new_world.dungeon_mq = copy.copy(self.dungeon_mq)
         new_world.big_poe_count = copy.copy(self.big_poe_count)
         new_world.can_take_damage = self.can_take_damage
         new_world.shop_prices = copy.copy(self.shop_prices)
