@@ -85,16 +85,6 @@ def main(settings, window=dummy_window()):
         window.update_progress(0 + 1*(id + 1)/settings.world_count)
         logger.info('Creating Overworld')
 
-        # Determine MQ Dungeons
-        td_count = len(world.dungeon_mq)
-        if world.mq_dungeons_random:
-            world.mq_dungeons = random.randint(0, td_count)
-        mqd_count = world.mq_dungeons
-        mqd_picks = random.sample(list(world.dungeon_mq), mqd_count)
-        for dung in mqd_picks:
-            world.dungeon_mq[dung] = True
-
-
         overworld_data = os.path.join(data_path('World'), 'Overworld.json')
         world.load_regions_from_json(overworld_data)
 

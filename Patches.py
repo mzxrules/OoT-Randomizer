@@ -15,7 +15,6 @@ from Messages import read_messages, update_message_by_id, read_shop_items, \
         add_item_messages, repack_messages, shuffle_messages, \
         get_message_by_id
 from OcarinaSongs import replace_songs
-from MQ import patch_files, File, update_dmadata, insert_space, add_relocations
 
 TunicColors = {
     "Custom Color": [0, 0, 0],

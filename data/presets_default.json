@@ -36,8 +36,6 @@
         "enhance_map_compass": false,
         "unlocked_ganondorf": true,
         "tokensanity": "off",
-        "mq_dungeons_random": false,
-        "mq_dungeons": 0,
         "logic_no_night_tokens_without_suns_song": false,
         "logic_earliest_adult_trade": "prescription",
         "disabled_locations": [
@@ -45,7 +43,7 @@
         ],
         "allowed_tricks": [
             "logic_fewer_tunic_requirements"
-        ],        
+        ],
         "logic_latest_adult_trade": "claim_check",
         "logic_lens": "all",
         "ocarina_songs": false,
@@ -96,8 +94,6 @@
         "shuffle_bosskeys": "dungeon",
         "enhance_map_compass": false,
         "unlocked_ganondorf": true,
-        "mq_dungeons_random": false,
-        "mq_dungeons": 0,
         "disabled_locations": [
             "Deku Theater Mask of Truth"
         ],

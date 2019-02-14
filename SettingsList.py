@@ -259,12 +259,6 @@ logic_tricks = {
                     strength by doing a jump slash with a lit
                     stick to access the bomb flowers.
                     '''},
-    'Skip Forest Temple MQ Block Puzzle with Bombchu': {
-        'name'    : 'logic_forest_mq_block_puzzle',
-        'tooltip' : '''\
-                    Send the Bombchu straight up the center of the
-                    wall directly to the left upon entering the room.
-                    '''},
     'Spirit Temple Child Side Bridge with Bombchu': {
         'name'    : 'logic_spirit_child_bombchu',
         'tooltip' : '''\
@@ -283,28 +277,12 @@ logic_tricks = {
                     near Goron City and walk up the
                     very steep slope.
                     '''},
-    'Gerudo Training Grounds MQ Left Side Silver Rupees with Hookshot': {
-        'name'    : 'logic_gtg_mq_with_hookshot',
-        'tooltip' : '''\
-                    The highest silver rupee can be obtained by
-                    hookshotting the target and then immediately jump
-                    slashing toward the rupee.
-                    '''},
     'Forest Temple East Courtyard Vines with Hookshot': {
         'name'    : 'logic_forest_vines',
         'tooltip' : '''\
                     The vines in Forest Temple leading to where the well
                     drain switch is in the standard form can be barely
                     reached with just the Hookshot.
-                    '''},
-    'Swim Through Forest Temple MQ Well with Hookshot': {
-        'name'    : 'logic_forest_well_swim',
-        'tooltip' : '''\
-                    Shoot the vines in the well as low and as far to
-                    the right as possible, and then immediately swim
-                    under the ceiling to the right. This can only be
-                    required if Forest Temple is in its Master Quest
-                    form.
                     '''},
     'Death Mountain Trail Bombable Chest with Strength': {
         'name'    : 'logic_dmt_bombable',
@@ -329,22 +307,6 @@ logic_tricks = {
         'tooltip' : '''\
                     Can be obtained without Hookshot by using the Hover
                     Boots off of one of the roots.
-                    '''},
-    'Spirit Temple MQ Frozen Eye Switch without Fire': {
-        'name'    : 'logic_spirit_mq_frozen_eye',
-        'tooltip' : '''\
-                    You can melt the ice by shooting an arrow through a
-                    torch. The only way to find a line of sight for this
-                    shot is to first spawn a Song of Time block, and then
-                    stand on the very edge of it.
-                    '''},
-    'Fire Temple MQ Boss Key Chest without Bow': {
-        'name'    : 'logic_fire_mq_bk_chest',
-        'tooltip' : '''\
-                    Din\'s alone can be used to unbar the door to
-                    the boss key chest's room thanks to an
-                    oversight in the way the game counts how many
-                    torches have been lit.
                     '''},
     'Zora\'s Domain Entry with Cucco': {
         'name'    : 'logic_zora_with_cucco',
@@ -387,7 +349,7 @@ setting_infos = [
     Setting_Info('patch_file', str, 0, False, {
             'default': '',
             'help': 'Path to a patch file.'}),
-    Setting_Info('cosmetics_only', bool, 0, False, 
+    Setting_Info('cosmetics_only', bool, 0, False,
     {
             'help': 'Patched file will only have cosmetics applied.',
             'action': 'store_true',
@@ -409,7 +371,7 @@ setting_infos = [
                     the world count will drastically increase generation time.
                     ''',
             'type': int}, {}),
-    Setting_Info('player_num', int, 0, False, 
+    Setting_Info('player_num', int, 0, False,
         {
             'default': 1,
             'help': '''\
@@ -563,7 +525,7 @@ setting_infos = [
             gui_tooltip    = '''\
                              'Rescue One Carpenter': Only the bottom left
                              carpenter must be rescued.
-                             
+
                              'Start with Gerudo Card': The carpenters are rescued from
                              the start of the game, and the player starts with the Gerudo
                              Card in the inventory allowing access to Gerudo Training Grounds.
@@ -619,11 +581,11 @@ setting_infos = [
             gui_tooltip    = '''\
                              Sets the rules the logic uses
                              to determine accessibility.
-        
+
                              'Glitchless': No glitches are
                              required, but may require some
                              minor tricks
-        
+
                              'No Logic': All locations are
                              considered available. May not
                              be beatable.
@@ -642,10 +604,10 @@ setting_infos = [
                              When this option is enabled, the randomizer will
                              guarantee that every item is obtainable and every
                              location is reachable.
-        
+
                              When disabled, only required items and locations
                              to beat the game will be guaranteed reachable.
-        
+
                              Even when enabled, some locations may still be able
                              to hold the keys needed to reach them.
                              ''',
@@ -664,14 +626,14 @@ setting_infos = [
             gui_group      = 'world',
             gui_tooltip    = '''\
                              Bombchus are properly considered in logic.
-        
+
                              The first Bombchu pack will always be 20.
                              Subsequent packs will be 5 or 10 based on
                              how many you have.
-        
+
                              Bombchus can be purchased for 60/99/180
                              rupees once they have been found.
-        
+
                              Bombchu Bowling opens with Bombchus.
                              Bombchus are available at Kokiri Shop
                              and the Bazaar. Bombchu refills cannot
@@ -694,12 +656,12 @@ setting_infos = [
                              item. This naturally makes each
                              dungeon similar in value instead
                              of valued based on chest count.
-        
+
                              Spirit Temple Colossus hands count
                              as part of the dungeon. Spirit
                              Temple has TWO items to match
                              vanilla distribution.
-        
+
                              Dungeon items and GS Tokens do
                              not count as major items.
                              ''',
@@ -830,12 +792,12 @@ setting_infos = [
             gui_tooltip    = '''\
                              Start the game with Prelude of Light,
                              Serenade of Water, and Farore's Wind.
-                             
+
                              Two song locations will give items,
                              instead of Prelude and Serenade.
                              ''',
             shared         = True,
-            ),            
+            ),
     Checkbutton(
             name           = 'start_with_rupees',
             args_help      = '''\
@@ -847,7 +809,7 @@ setting_infos = [
                              Start the game with 99 rupees.
                              ''',
             shared         = True,
-            ),         
+            ),
     Checkbutton(
             name           = 'start_with_wallet',
             args_help      = '''\
@@ -912,7 +874,7 @@ setting_infos = [
             gui_group      = 'shuffle',
             gui_tooltip    = '''\
                              Enabling this shuffles the Kokiri Sword into the pool.
-                             
+
                              This will require extensive use of sticks until the
                              sword is found.
                              ''',
@@ -929,7 +891,7 @@ setting_infos = [
             gui_tooltip    = '''\
                              Enabling this shuffles the Fairy Ocarina and the Ocarina
                              of Time into the pool.
-                             
+
                              This will require finding an Ocarina before being able
                              to play songs.
                              ''',
@@ -945,8 +907,8 @@ setting_infos = [
             gui_group      = 'shuffle',
             gui_tooltip    = '''\
                              Enabling this shuffles the Weird Egg from Malon into the pool.
-                             
-                             This will require finding the Weird Egg to talk to Zelda in 
+
+                             This will require finding the Weird Egg to talk to Zelda in
                              Hyrule Castle, which in turn locks rewards from Impa, Saria,
                              Malon, and Talon, as well as the Happy Mask sidequest.
                              If Open Kakariko Gate is disabled, the Weird Egg will also
@@ -964,7 +926,7 @@ setting_infos = [
             gui_group      = 'shuffle',
             gui_tooltip    = '''\
                              Enabling this shuffles the Gerudo Card into the item pool.
-                             
+
                              The Gerudo Card is required to enter the Gerudo Training Grounds,
                              however it does not prevent the guards throwing you in jail.
                              This has no effect if the option to Start with Gerudo Card is set.
@@ -983,7 +945,7 @@ setting_infos = [
             gui_tooltip    = '''\
                              Enabling this shuffles the songs into the rest of the
                              item pool.
-                             
+
                              This means that song locations can contain other items,
                              and any location can contain a song. Otherwise, songs
                              are only shuffled among themselves.
@@ -1018,14 +980,14 @@ setting_infos = [
                              items in the vanilla game (PoH, Deku Nut
                              capacity, and Deku Stick capacity) will
                              have random items.
-        
+
                              'Affordable': All Scrub prices will be
                              reduced to 10 rupees each.
-        
+
                              'Expensive': All Scrub prices will be
                              their vanilla prices. This will require
                              spending over 1000 rupees on Scrubs.
-        
+
                              'Random Prices': All Scrub prices will be
                              between 0-99 rupees. This will on average
                              be very, very expensive overall.
@@ -1064,17 +1026,17 @@ setting_infos = [
                              Deal!) items. They will always be on the left
                              side, and some of the lower value shop items
                              will be replaced to make room for these.
-        
+
                              (Random): Each shop will have a random number
                              of non-shop items up to a maximum of 4.
-        
+
                              The non-shop items have no requirements except
                              money, while the normal shop items (such as
                              200/300 rupee tunics) have normal vanilla
                              requirements. This means that, for example,
                              as a child you cannot buy 200/300 rupee
                              tunics, but you can buy non-shop tunics.
-        
+
                              Non-shop Bombchus will unlock the chu slot
                              in your inventory, which, if Bombchus are in
                              logic, is needed to buy Bombchu refills.
@@ -1102,13 +1064,13 @@ setting_infos = [
             gui_tooltip    = '''\
                              Token reward from Gold Skulltulas are
                              shuffled into the pool.
-        
+
                              'Dungeons Only': This only shuffles
                              the GS locations that are within
                              dungeons, increasing the value of
                              most dungeons and making internal
                              dungeon exploration more diverse.
-        
+
                              'All Tokens': Effectively adds 100
                              new locations for items to appear.
                              ''',
@@ -1136,17 +1098,17 @@ setting_infos = [
                              'Remove': Maps and Compasses are removed.
                              This will add a small amount of money and
                              refill items to the pool.
-        
+
                              'Start With': Maps and Compasses are given to
                              you from the start. This will add a small
                              amount of money and refill items to the pool.
-        
+
                              'Dungeon': Maps and Compasses can only appear
                              in their respective dungeon.
-        
+
                              'Anywhere': Maps and Compasses can appear
                              anywhere in the world.
-        
+
                              Setting 'Remove', 'Start With, or 'Anywhere' will
                              add 2 more possible locations to each Dungeons.
                              This makes dungeons more profitable, especially
@@ -1173,17 +1135,17 @@ setting_infos = [
                              'Remove': Small Keys are removed. All locked
                              doors in dungeons will be unlocked. An easier
                              mode.
-        
+
                              'Dungeon': Small Keys can only appear in their
                              respective dungeon. If Fire Temple is not a
                              Master Quest dungeon, the door to the Boss Key
                              chest will be unlocked
-        
+
                              'Anywhere': Small Keys can appear
                              anywhere in the world. A difficult mode since
                              it is more likely to need to enter a dungeon
                              multiple times.
-        
+
                              Try different combination out, such as:
                              'Small Keys: Dungeon' + 'Boss Keys: Anywhere'
                              for a milder Keysanity experience.
@@ -1209,15 +1171,15 @@ setting_infos = [
                              'Remove': Boss Keys are removed. All locked
                              doors in dungeons will be unlocked. An easier
                              mode.
-        
+
                              'Dungeon': Boss Keys can only appear in their
                              respective dungeon.
-        
+
                              'Anywhere': Boss Keys can appear
                              anywhere in the world. A difficult mode since
                              it is more likely to need to enter a dungeon
                              multiple times.
-        
+
                              Try different combination out, such as:
                              'Small Keys: Dungeon' + 'Boss Keys: Anywhere'
                              for a milder Keysanity experience.
@@ -1242,10 +1204,10 @@ setting_infos = [
                            Compass will tell what medallion or stone is within.
                            The Temple of Time Altar will no longer provide any
                            information.
-        
+
                            'Maps/Compasses: Remove': The dungeon information is
                            not available anywhere in the game.
-        
+
                            'Maps/Compasses: Start With': The dungeon information
                            is available immediately from the dungeon menu.
                              ''',
@@ -1268,49 +1230,6 @@ setting_infos = [
                              ''',
             shared         = True,
             ),
-    Checkbutton(
-            name           = 'mq_dungeons_random',
-            args_help      = '''\
-                             If set, a uniformly random number of dungeons will have Master Quest designs.
-                             ''',
-            gui_text       = 'Random Number of MQ Dungeons',
-            gui_group      = 'world',
-            gui_tooltip    = '''\
-                             If set, a random number of dungeons
-                             will have Master Quest designs.
-                             ''',
-            shared         = True,
-            ),
-    Scale(
-            name           = 'mq_dungeons',
-            default        = 0,
-            min            = 0,
-            max            = 12,
-            args_help      = '''\
-                             Select a number (0-12) of Master Quest dungeons to appear in the game.
-                             0:  (default) All dungeon will have their original designs.
-                             ...
-                             6:  50/50 split; Half of all dungeons will be from Master Quest.
-                             ...
-                             12: All dungeons will have Master Quest redesigns.
-                             ''',
-            gui_group      = 'world',
-            gui_tooltip    = '''\
-                             Select a number of Master Quest
-                             dungeons to appear in the game.
-
-                             0: All dungeon will have their
-                             original designs. (default)
-
-                             6: Half of all dungeons will
-                             be from Master Quest.
-
-                             12: All dungeons will have
-                             Master Quest redesigns.
-                             ''',
-            gui_dependency = lambda settings: 0 if settings.mq_dungeons_random else None,
-            shared         = True,
-            ),
     Setting_Info('disabled_locations', list, math.ceil(math.log(len(location_table) + 2, 2)), True,
         {
             'default': [],
@@ -1324,14 +1243,9 @@ setting_infos = [
             'group': 'logic_tab',
             'options': list(location_table.keys()),
             'tooltip':'''
-                    Prevent locations from being required. Major 
-                    items can still appear there, however they 
+                    Prevent locations from being required. Major
+                    items can still appear there, however they
                     will never be required to beat the game.
-
-                    Most dungeon locations have a MQ alternative.
-                    If the location does not exist because of MQ
-                    then it will be ignored. So make sure to
-                    disable both versions if that is the intent.
                 '''
         }),
     Setting_Info('allowed_tricks', list, math.ceil(math.log(len(logic_tricks) + 2, 2)), True,
@@ -1382,7 +1296,7 @@ setting_infos = [
                              Select the earliest item that can appear in the adult trade sequence.
                              ''',
             shared         = True,
-            ),    
+            ),
     Combobox(
             name           = 'logic_latest_adult_trade',
             default        = 'claim_check',
@@ -1438,7 +1352,7 @@ setting_infos = [
                              Lens of Truth and Magic. The exception is
                              passing through the first wall in Bottom of
                              the Well, since that is required in vanilla.
-        
+
                              'Wasteland': The lens is needed to follow
                              the ghost guide across the Haunted Wasteland.
                              ''',
@@ -1513,14 +1427,14 @@ setting_infos = [
             gui_tooltip    = '''\
                              Gossip Stones can be made to give hints
                              about where items can be found.
-        
+
                              Different settings can be chosen to
                              decide which item is needed to
                              speak to Gossip Stones. Choosing to
                              stick with the Mask of Truth will
                              make the hints very difficult to
                              obtain.
-        
+
                              Hints for 'on the way of the hero' are
                              locations that contain items that are
                              required to beat the game.
@@ -1579,7 +1493,7 @@ setting_infos = [
             gui_group      = 'other',
             gui_tooltip    = '''\
                              Will make things confusing for comedic value.
-        
+
                              'Shuffled except Hints and Keys': Key texts
                              are not shuffled because in keysanity it is
                              inconvenient to figure out which keys are which
@@ -1646,14 +1560,14 @@ setting_infos = [
             gui_tooltip    = '''\
                              Changes the amount of bonus items that
                              are available in the game.
-        
+
                              'Plentiful': Extra major items are added.
-        
+
                              'Balanced': Original item pool.
-        
+
                              'Scarce': Some excess items are removed,
                              including health upgrades.
-        
+
                              'Minimal': Most excess items are removed.
                              ''',
             shared         = True,
@@ -1680,7 +1594,7 @@ setting_infos = [
             gui_group      = 'other',
             gui_tooltip    = '''\
                              Changes the amount of damage taken.
-        
+
                              'OHKO': Link dies in one hit.
                              ''',
             shared         = True,
@@ -1754,7 +1668,7 @@ setting_infos = [
             gui_tooltip    = '''\
                               'No Music': No background music.
                               is played.
-        
+
                               'Random': Area background music is
                               randomized.
                              ''',

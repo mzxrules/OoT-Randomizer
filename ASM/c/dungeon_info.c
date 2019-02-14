@@ -265,6 +265,7 @@ void draw_dungeon_info(z64_disp_buf_t *db) {
 
     // Draw master quest dungeons
 
+    // TODO: Can this if statement be removed because MQ is not (yet) a thing in MM?
     if (show_mq) {
         for (int i = 0; i < dungeon_count; i++) {
             dungeon_entry_t *d = &(dungeons[i]);
