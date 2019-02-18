@@ -454,6 +454,8 @@ junk_pool_base = [
     ('Rupees (50)',     1),
 ]
 junk_pool = []
+
+
 def get_junk_item(count=1):
     junk_items, junk_weights = zip(*junk_pool)
     return random_choices(junk_items, weights=junk_weights, k=count)
@@ -461,11 +463,12 @@ def get_junk_item(count=1):
 
 def replace_max_item(items, item, max):
     count = 0
-    for i,val in enumerate(items):
+    for i, val in enumerate(items):
         if val == item:
             if count >= max:
                 items[i] = get_junk_item()[0]
             count += 1
+
 
 # TODO: not sure there are ice traps in MM?
 def generate_itempool(world):
@@ -583,7 +586,6 @@ def get_pool_core(world):
                 pool.append('Gold Skulltula Token')
     else:
         pool.extend(['Gold Skulltula Token'] * 100)
-
 
     if world.bombchus_in_logic:
         pool.extend(['Bombchus'] * 5)
@@ -745,6 +747,9 @@ def get_pool_core(world):
     return (pool, placed_items)
 
 
+# TODO: I think the MM equivalent would be the masked kids
+# on the moon? This'd be used when they are required, or not, or partially?
+# > This should be adjusted together with the 'skipped_trials' in World.py.
 def choose_trials(world):
     if world.trials_random:
         world.trials = random.randint(0, 6)
