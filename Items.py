@@ -1,32 +1,11 @@
 import logging
 
-from BaseClasses import Item
-
-
-def ItemFactory(items):
-    ret = []
-    singleton = False
-    if isinstance(items, str):
-        items = [items]
-        singleton = True
-    for item in items:
-        if item in item_table:
-            advancement, priority, type, code, index = item_table[item]
-            ret.append(Item(item, advancement, priority, type, code, index))
-        else:
-            logging.getLogger('').warning('Unknown Item: %s', item)
-            return None
-
-    if singleton:
-        return ret[0]
-    return ret
-
-
-class ShopData(object):
-    def __init__(self, model, gid, price):
-        self.model = model
-        self.gid = gid
-        self.price = price
+# TODO: Can't see this being used anywhere?
+# class ShopData(object):
+#     def __init__(self, model, gid, price):
+#         self.model = model
+#         self.gid = gid
+#         self.price = price
 
 # TODO: Verify these or make up a different data structure for our chest shuffle type item
 # Format: Name: (Advancement, Priority, Type, ItemCode, Index)
