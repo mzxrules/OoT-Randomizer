@@ -1,8 +1,16 @@
 from ItemList import item_table
 
+
 class Item(object):
 
-    def __init__(self, name='', advancement=False, priority=False, type=None, index=None, special=None, world=None):
+    def __init__(self,
+                 name='',
+                 advancement=False,
+                 priority=False,
+                 type=None,
+                 index=None,
+                 special=None,
+                 world=None):
         self.name = name
         self.advancement = advancement
         self.priority = priority
@@ -14,14 +22,20 @@ class Item(object):
         self.world = world
         self.looks_like_item = None
 
-
     item_worlds_to_fix = {}
 
     def copy(self, new_world=None):
-        if new_world is not None and self.world is not None and new_world.id != self.world.id:
+        if new_world is not None
+        and self.world is not None
+        and new_world.id != self.world.id:
             new_world = None
 
-        new_item = Item(self.name, self.advancement, self.priority, self.type, self.index, self.special)
+        new_item = Item(self.name,
+                        self.advancement,
+                        self.priority,
+                        self.type,
+                        self.index,
+                        self.special)
         new_item.world = new_world
         new_item.price = self.price
 
@@ -43,26 +57,21 @@ class Item(object):
     def key(self):
         return self.smallkey or self.bosskey
 
-
     @property
     def smallkey(self):
         return self.type == 'SmallKey'
-
 
     @property
     def bosskey(self):
         return self.type == 'BossKey'
 
-
     @property
     def map(self):
         return self.type == 'Map'
 
-
     @property
     def compass(self):
         return self.type == 'Compass'
-
 
     @property
     def dungeonitem(self):
@@ -71,28 +80,21 @@ class Item(object):
     # TODO: This is still OoT-specific, should be adjusted for MM
     @property
     def majoritem(self):
-        if self.type == 'Token':
-            return self.world.bridge == 'tokens'
-
-        if self.type == 'Event' or self.type == 'Shop' or not self.advancement:
-            return False
-
-        if self.name.startswith('Bombchus') and not self.world.bombchus_in_logic:
-            return False
-
-        if self.map or self.compass:
-            return False
-        if self.smallkey and self.world.shuffle_smallkeys == 'dungeon':
-            return False
-        if self.bosskey and self.world.shuffle_bosskeys == 'dungeon':
+        if self.type == 'Event'
+        or self.type == 'Shop'
+        or (not self.advancement)
+        or (self.name.startswith('Bombchus')
+            and not self.world.bombchus_in_logic)
+        or self.map
+        or self.compass
+        or (self.smallkey and self.world.shuffle_smallkeys == 'dungeon')
+        or (self.bosskey and self.world.shuffle_bosskeys == 'dungeon'):
             return False
 
         return True
 
-
     def __str__(self):
         return str(self.__unicode__())
-
 
     def __unicode__(self):
         return '%s' % self.name
