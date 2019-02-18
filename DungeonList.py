@@ -1,4 +1,3 @@
-import random
 import os
 
 from Dungeon import Dungeon
@@ -8,77 +7,29 @@ from Utils import data_path
 
 dungeon_table = [
     {
-        'name': 'Deku Tree',
-        'boss_key':     0,
-        'small_key':    0,
-        'dungeon_item': 1,
-    },
-    {
-        'name': 'Dodongos Cavern',
-        'boss_key':     0,
-        'small_key':    0,
-        'dungeon_item': 1,
-    },
-    {
-        'name': 'Jabu Jabus Belly',
-        'boss_key':     0,
-        'small_key':    0,
-        'dungeon_item': 1,
-    },
-    {
-        'name': 'Forest Temple',
+        'name': 'Woodfall Temple',
         'boss_key':     1,
-        'small_key':    5,
+        'small_key':    1,
         'dungeon_item': 1,
     },
     {
-        'name': 'Bottom of the Well',
-        'boss_key':     0,
+        'name': 'Snowhead Temple',
+        'boss_key':     1,
         'small_key':    3,
         'dungeon_item': 1,
     },
     {
-        'name': 'Fire Temple',
+        'name': 'Great Bay Temple',
         'boss_key':     1,
-        'small_key':    8,
+        'small_key':    1,
         'dungeon_item': 1,
     },
     {
-        'name': 'Ice Cavern',
-        'boss_key':     0,
-        'small_key':    0,
-        'dungeon_item': 1,
-    },
-    {
-        'name': 'Water Temple',
+        'name': 'Stone Tower Temple',
         'boss_key':     1,
-        'small_key':    6,
+        'small_key':    4,
         'dungeon_item': 1,
-    },
-    {
-        'name': 'Shadow Temple',
-        'boss_key':     1,
-        'small_key':    5,
-        'dungeon_item': 1,
-    },
-    {
-        'name': 'Gerudo Training Grounds',
-        'boss_key':     0,
-        'small_key':    9,
-        'dungeon_item': 0,
-    },
-    {
-        'name': 'Spirit Temple',
-        'boss_key':     1,
-        'small_key':    5,
-        'dungeon_item': 1,
-    },
-    {
-        'name': 'Ganons Castle',
-        'boss_key':     1,
-        'small_key':    2,
-        'dungeon_item': 0,
-    },
+    }
 ]
 
 
@@ -94,4 +45,3 @@ def create_dungeons(world):
                                      'Compass (%s)' % name] * dungeon_info['dungeon_item'])
 
         world.dungeons.append(Dungeon(world, name, boss_keys, small_keys, dungeon_items))
-
