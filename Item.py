@@ -25,9 +25,10 @@ class Item(object):
     item_worlds_to_fix = {}
 
     def copy(self, new_world=None):
-        if new_world is not None
-        and self.world is not None
-        and new_world.id != self.world.id:
+        if new_world is not None and \
+           self.world is not None and \
+           new_world.id != self.world.id:
+
             new_world = None
 
         new_item = Item(self.name,
@@ -80,15 +81,13 @@ class Item(object):
     # TODO: This is still OoT-specific, should be adjusted for MM
     @property
     def majoritem(self):
-        if self.type == 'Event'
-        or self.type == 'Shop'
-        or (not self.advancement)
-        or (self.name.startswith('Bombchus')
-            and not self.world.bombchus_in_logic)
-        or self.map
-        or self.compass
-        or (self.smallkey and self.world.shuffle_smallkeys == 'dungeon')
-        or (self.bosskey and self.world.shuffle_bosskeys == 'dungeon'):
+        if self.type == 'Event' or self.type == 'Shop' \
+           or (not self.advancement) \
+           or (self.name.startswith('Bombchus') and
+               not self.world.bombchus_in_logic) \
+           or self.map or self.compass \
+           or (self.smallkey and self.world.shuffle_smallkeys == 'dungeon') \
+           or (self.bosskey and self.world.shuffle_bosskeys == 'dungeon'):
             return False
 
         return True
