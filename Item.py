@@ -3,14 +3,8 @@ from ItemList import item_table
 
 class Item(object):
 
-    def __init__(self,
-                 name='',
-                 advancement=False,
-                 priority=False,
-                 type=None,
-                 index=None,
-                 special=None,
-                 world=None):
+    def __init__(self, name='', advancement=False, priority=False,
+                 type=None, index=None, special=None, world=None):
         self.name = name
         self.advancement = advancement
         self.priority = priority

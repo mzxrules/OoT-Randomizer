@@ -2,7 +2,7 @@ from collections import namedtuple
 import logging
 import random
 
-from Items import ItemFactory
+from Item import ItemFactory
 
 # TODO/FIXME: All these lists should be transfered over to ItemPool.py
 # This file should be used as the commented part at the bottom shows.
@@ -38,10 +38,18 @@ extra_masks = [
     "Garo Mask",
     "Captain's Hat",
     "Gibdo Mask",
-    "Giant Mask"]
+    "Giant Mask"
+]
 
 notmapcompass = ["Ice Trap"] * 8
-rewardlist = ["Odolwa's Remains", "Goht's Remains", "Gyorg's Remains", "Twinmold's Remains"]
+
+rewardlist = [
+    "Odolwa's Remains",
+    "Goht's Remains",
+    "Gyorg's Remains",
+    "Twinmold's Remains"
+]
+
 songlist = [
     "Song of Time",
     "Song of Healing",
@@ -52,15 +60,16 @@ songlist = [
     "Goron Lullaby",
     "New Wave Bossa Nova",
     "Elegy of Emptiness",
-    "Oath to Order"]
+    "Oath to Order"
+]
 
 # TODO: this could need to be aligned with the location_table
 
 stray_fairy_locations = (
-    ["WF-SF{0}".format(i) for i in range(1,16)] +
-    ["SH-SF{0}".format(i) for i in range(1,16)] +
-    ["GB-SF{0}".format(i) for i in range(1,16)] +
-    ["ST-SF{0}".format(i) for i in range(1,16)])
+    ["WF-SF{0}".format(i) for i in range(1, 16)] +
+    ["SH-SF{0}".format(i) for i in range(1, 16)] +
+    ["GB-SF{0}".format(i) for i in range(1, 16)] +
+    ["ST-SF{0}".format(i) for i in range(1, 16)])
 
 tradeitems = [
     "Moon's Tear",
@@ -68,7 +77,7 @@ tradeitems = [
     'Swamp Title Deed',
     'Mountain Title Deed',
     'Ocean Title Deed'
-    ]
+]
 
 extraitems = [
     "Kokiri Sword",
@@ -107,7 +116,8 @@ normal_bottles = [
     "Bottle with Fish",
     "Bottle with Bugs",
     "Bottle with Poe",
-    "Bottle with Big Poe"]
+    "Bottle with Big Poe"
+]
 
 normal_bottle_count = 6
 
