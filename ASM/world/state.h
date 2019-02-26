@@ -1,0 +1,102 @@
+#include <stdint.h>
+#ifndef STATE_H
+#define STATE_H
+
+typedef enum 
+{
+    MASTER_SWORD,
+    BOOMERANG,
+    KOKIRI_SWORD,
+    DINS_FIRE,
+    MAGIC_METER,
+    BUY_DEKU_SHIELD,
+    BUY_DEKU_NUT_5,
+    BUY_DEKU_NUT_10,
+    DEKU_NUT_DROP,
+    BUY_DEKU_STICK_1,
+    DEKU_STICK_DROP,
+    BOW,
+    SLINGSHOT,
+    BOMB_BAG,
+    BUY_BLUE_FIRE,
+    OCARINA,
+    FAIRY_OCARINA,
+    OCARINA_OF_TIME,
+    FARORES_WIND,
+    NAYRUS_LOVE,
+    LENS_OF_TRUTH,
+    HAMMER,
+    IRON_BOOTS,
+    HOVER_BOOTS,
+    MAGIC_BEAN,
+    PROGRESSIVE_HOOKSHOT,
+    PROGRESSIVE_STRENGTH_UPGRADE,
+    BUY_BOMBCHU_5,
+    BUY_BOMBCHU_10,
+    BUY_BOMBCHU_20,
+    BOMBCHUS,
+    PROGRESSIVE_WALLET,
+    PROGRESSIVE_SCALE,
+    GORON_TUNIC,
+    BUY_GORON_TUNIC,
+    ZORA_TUNIC,
+    BUY_ZORA_TUNIC,
+    ZELDAS_LULLABY,
+    EPONA,
+    CLAIM_CHECK,
+    EYEDROPS,
+    EYEBALL_FROG,
+    PRESCRIPTION,
+    BROKEN_SWORD,
+    POACHERS_SAW,
+    ODD_MUSHROOM,
+    COJIRO,
+    POCKET_CUCCO,
+    POCKET_EGG,
+    HEART_CONTAINER,
+    PIECE_OF_HEART,
+    FIRE_ARROWS,
+    ICE_ARROWS,
+    LIGHT_ARROWS,
+    ZELDAS_LETTER,
+    SARIAS_SONG,
+    KOKIRI_EMERALD,
+    GORON_RUBY,
+    ZORA_SAPPHIRE,
+    STONE_OF_AGONY,
+    SUNS_SONG,
+    SMALL_KEY_GERUDO_FORTRESS,
+
+
+    ANCHOR,
+
+    //Bottles need to be tracked special as well?
+    BOTTLE_WITH_LETTER,
+    BOTTLE_WITH_BIG_POE,
+
+    //Items tracked by other means, or are special
+    HOOKSHOT,
+    LONGSHOT,
+    SILVER_GAUNTLETS,
+    GOLDEN_GAUNTLETS,
+    SCARECROW,
+    DISTANT_SCARECROW,
+    GANON
+
+} state_items_e;
+
+typedef enum
+{
+    AGE_EITHER = 0,
+    AGE_ADULT = 1,
+    AGE_CHILD = 2,
+    AGE_BOTH = 3
+} state_age_e;
+
+typedef struct
+{
+    uint8_t prog_items[ANCHOR];
+} state_t;
+
+
+#endif // !STATE_H

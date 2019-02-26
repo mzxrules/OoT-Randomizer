@@ -1,0 +1,52 @@
+
+../build/world.o:     file format elf32-bigmips
+
+SYMBOL TABLE:
+00000000 l    d  .MIPS.abiflags	00000000 .MIPS.abiflags
+00000000 l    d  .reginfo	00000000 .reginfo
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .sdata	00000000 .sdata
+00000000 l    d  .sbss	00000000 .sbss
+00000000 l    d  .bss	00000000 .bss
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .pdr	00000000 .pdr
+00000000 l    d  .gnu.attributes	00000000 .gnu.attributes
+00000000 l    d  .mdebug.abi32	00000000 .mdebug.abi32
+00000000 l    df *ABS*	00000000 dungeonlist.c
+00000000 l    df *ABS*	00000000 locationlist.c
+00000000 l    df *ABS*	00000000 state.c
+00000000 l    df *ABS*	00000000 world.c
+00000504 g     F .text	00000008 had_night_start
+00000320 g     F .text	00000008 has_bombchus_item
+00000330 g     F .text	0000001c can_see_with_lens
+00000370 g     F .text	0000001c has_zora_tunic
+0000038c g     F .text	00000008 can_leave_forest
+00000354 g     F .text	0000001c has_goron_tunic
+00000394 g     F .text	000000dc can_finish_adult_trades
+00000000 g     F .text	00000018 can_reach
+00000048 g     F .text	0000005c can_stun_deku
+000000d4 g     F .text	00000048 can_play
+000004e8 g     F .text	0000001c nighttime
+00000328 g     F .text	00000008 can_blast_or_smash
+0000034c g     F .text	00000008 has_projectile
+00000008 g     O .sdata	00000001 big_poe_count
+0000005c g     O .data	00000010 magic_items
+00000048 g     O .data	00000014 adult_items
+0000011c g     F .text	000001dc can_use
+00000000 g     O .sdata	00000008 magic_arrows
+00000470 g     F .text	00000008 has_bottle
+000000ac g     F .text	00000028 has_ocarina
+00000480 g     F .text	00000024 has_hearts
+000002f8 g     F .text	00000028 can_buy_bombchus
+00000018 g     F .text	00000008 can_child_attack
+00000478 g     F .text	00000008 bottle_count
+00000006 g     O .scommon	00000004 skipped_trials
+0000050c g     F .text	0000000c can_finish_gerudo_fortress
+000000a4 g     F .text	00000008 has_blue_fire
+000004a4 g     F .text	00000044 has_fire_source
+00000006 g     O .scommon	00000004 dungeon_mq
+00000000 g     O .data	00000046 dungeon_table
+00000020 g     F .text	00000028 has_nuts
+
+
