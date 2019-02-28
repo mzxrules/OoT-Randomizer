@@ -8,9 +8,6 @@
                 ((Small_Key_Fire_Temple, 8) or not keysanity) and can_use(Hammer)",
             "Fire Temple Boss Key Chest": "
                 ((Small_Key_Fire_Temple, 8) or not keysanity) and can_use(Hammer)",
-            "Fire Temple Big Lava Room Bombable Chest": "
-                (Small_Key_Fire_Temple, 2) and has_explosives",
-            "Fire Temple Big Lava Room Open Chest": "(Small_Key_Fire_Temple, 2)",
             "Volvagia Heart": "
                 has_GoronTunic and can_use(Hammer) and Boss_Key_Fire_Temple and 
                 (Hover_Boots or (can_reach(Fire_Temple_Upper) and 
@@ -19,8 +16,6 @@
                 has_GoronTunic and can_use(Hammer) and Boss_Key_Fire_Temple and 
                 (Hover_Boots or (can_reach(Fire_Temple_Upper) and 
                     (can_play(Song_of_Time) or has_explosives)))",
-            "GS Fire Temple Song of Time Room": "
-                (Small_Key_Fire_Temple, 2) and can_play(Song_of_Time)",
             "GS Fire Temple Basement": "
                 ((Small_Key_Fire_Temple, 8) or not keysanity) and can_use(Hammer)"
         },
