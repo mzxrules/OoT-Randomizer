@@ -340,10 +340,10 @@ class State(object):
 
 
     def __getattr__(self, item):
-        if item.startswith('can_reach_'):
-            return self.can_reach(item[10])
-        elif item.startswith('has_'):
-            return self.has(item[4])
+        #if item.startswith('can_reach_'):
+        #    return self.can_reach(item[10])
+        #elif item.startswith('has_'):
+        #    return self.has(item[4])
 
         raise RuntimeError('Cannot parse %s.' % item)
 

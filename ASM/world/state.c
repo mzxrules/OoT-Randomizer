@@ -4,60 +4,9 @@
 #include <stdbool.h>
 
 
-bool can_reach(state_t self)
+bool can_reach(state_t *self, void *location)
 {
     return true;
-}
-
-inline bool has(state_t *self, state_items_e item)
-{
-    return self->prog_items[item] >= 1;
-}
-
-inline bool has_c(state_t *self, state_items_e item, int count)
-{
-    return self->prog_items[item] >= count;
-}
-
-inline uint8_t item_count(state_t *self, state_items_e item)
-{
-    return self->prog_items[item];
-}
-
-inline bool is_adult(state_t *self)
-{
-    return has(self, MASTER_SWORD);
-}
-
-inline bool has_bow(state_t *self)
-{
-    return has(self, BOW);
-}
-
-inline bool has_slingshot(state_t *self)
-{
-    return has(self, SLINGSHOT);
-}
-
-inline bool has_bombs(state_t *self)
-{
-    return has(self, BOMB_BAG);
-}
-
-inline bool has_sticks(state_t *self)
-{
-    return has(self, BUY_DEKU_STICK_1)
-        || has(self, DEKU_STICK_DROP);
-}
-
-inline bool has_bombchus(state_t *self)
-{
-    return has(self, BOMBCHUS); //fix
-}
-
-inline bool has_explosives(state_t *self)
-{
-    return true; //fix
 }
 
 bool can_child_attack(state_t *self)
@@ -197,11 +146,6 @@ bool can_blast_or_smash(state_t *self)
         || (is_adult(self) && has(self, HAMMER));
 }
 
-inline bool can_dive(state_t *self)
-{
-    return has(self, PROGRESSIVE_SCALE);
-}
-
 bool can_see_with_lens(state_t *self)
 {
     return has(self, MAGIC_METER) && has(self, LENS_OF_TRUTH);
@@ -226,13 +170,13 @@ bool has_projectile(state_t *self, state_age_e age)
         || ((age & AGE_ADULT) && adult_r);
 }
 
-bool has_goron_tunic(state_t *self)
+bool has_GoronTunic(state_t *self)
 {
     return has(self, GORON_TUNIC)
         || has(self, BUY_GORON_TUNIC);
 }
 
-bool has_zora_tunic(state_t *self)
+bool has_ZoraTunic(state_t *self)
 {
     return has(self, ZORA_TUNIC)
         || has(self, BUY_ZORA_TUNIC);
@@ -291,7 +235,7 @@ uint8_t bottle_count(state_t *self)
     return 4; //fixme
 }
 
-inline uint8_t heart_count(state_t *self)
+uint8_t heart_count(state_t *self)
 {
     return item_count(self, HEART_CONTAINER)
         + (item_count(self, PIECE_OF_HEART) / 4)
@@ -319,7 +263,7 @@ bool had_night_start(state_t *self)
     return false;
 }
 
-bool can_finish_gerudo_fortress(state_t *self)
+bool can_finish_GerudoFortress(state_t *self)
 {
     //fixme
     //world.gerudo_fortress == normal
@@ -327,19 +271,7 @@ bool can_finish_gerudo_fortress(state_t *self)
     return is_adult(self); 
 }
 
-inline void collect(state_t *self, state_items_e item)
+bool guarantee_hint(state_t *self) 
 {
-    if (item < ANCHOR)
-    {
-        self->prog_items[item]++;
-        //clear_cached_unreachable()
-    }
-}
-
-inline void remove(state_t *self, state_items_e item)
-{
-    if (self->prog_items[item] > 0)
-        self->prog_items[item]--;
-
-    //recursion count = 0
+    return true; //fixme
 }
