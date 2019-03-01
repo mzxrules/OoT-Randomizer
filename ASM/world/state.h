@@ -1,137 +1,8 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include "ItemList.h"
 #ifndef STATE_H
 #define STATE_H
-
-typedef enum 
-{
-    MASTER_SWORD,
-    BOOMERANG,
-    KOKIRI_SWORD,
-    DINS_FIRE,
-    MAGIC_METER,
-    BUY_DEKU_SHIELD,
-    BUY_DEKU_NUT_5,
-    BUY_DEKU_NUT_10,
-    DEKU_NUT_DROP,
-    BUY_DEKU_STICK_1,
-    DEKU_STICK_DROP,
-    BOW,
-    SLINGSHOT,
-    BOMB_BAG,
-    BUY_BLUE_FIRE,
-    OCARINA,
-    FAIRY_OCARINA,
-    OCARINA_OF_TIME,
-    FARORES_WIND,
-    NAYRUS_LOVE,
-    LENS_OF_TRUTH,
-    HAMMER,
-    MIRROR_SHIELD,
-    IRON_BOOTS,
-    HOVER_BOOTS,
-    MAGIC_BEAN,
-    PROGRESSIVE_HOOKSHOT,
-    PROGRESSIVE_STRENGTH_UPGRADE,
-    BUY_BOMBCHU_5,
-    BUY_BOMBCHU_10,
-    BUY_BOMBCHU_20,
-    BOMBCHUS,
-    PROGRESSIVE_WALLET,
-    PROGRESSIVE_SCALE,
-    GORON_TUNIC,
-    BUY_GORON_TUNIC,
-    ZORA_TUNIC,
-    BUY_ZORA_TUNIC,
-    BUY_BOTTLE_BUG,
-    EPONA,
-    CLAIM_CHECK,
-    EYEDROPS,
-    EYEBALL_FROG,
-    PRESCRIPTION,
-    BROKEN_SWORD,
-    POACHERS_SAW,
-    ODD_MUSHROOM,
-    COJIRO,
-    POCKET_CUCCO,
-    POCKET_EGG,
-    HEART_CONTAINER,
-    PIECE_OF_HEART,
-    FIRE_ARROWS,
-    ICE_ARROWS,
-    LIGHT_ARROWS,
-    ZELDAS_LETTER,
-
-    WEIRD_EGG,
-    GERUDO_MEMBERSHIP_CARD,
-    CARPENTER_RESCUE,
-
-    KOKIRI_EMERALD,
-    GORON_RUBY,
-    ZORA_SAPPHIRE,
-    FOREST_MEDALLION,
-    FIRE_MEDALLION,
-    WATER_MEDALLION,
-    SHADOW_MEDALLION,
-    SPIRIT_MEDALLION,
-    LIGHT_MEDALLION,
-
-    GOLD_SKULLTULA_TOKEN,
-    STONE_OF_AGONY,
-
-    ZELDAS_LULLABY,
-    SARIAS_SONG,
-    SUNS_SONG,
-    EPONAS_SONG,
-    SONG_OF_STORMS,
-    SONG_OF_TIME,
-    MINUET_OF_FOREST, 
-    BOLERO_OF_FIRE,
-    SERENADE_OF_WATER,
-    NOCTURNE_OF_SHADOW,
-    REQUIEM_OF_SPIRIT,
-    PRELUDE_OF_LIGHT,
-
-    SMALL_KEY_FOREST_TEMPLE,
-    BOSS_KEY_FOREST_TEMPLE,
-    SMALL_KEY_FIRE_TEMPLE,
-    BOSS_KEY_FIRE_TEMPLE,
-    SMALL_KEY_WATER_TEMPLE,
-    BOSS_KEY_WATER_TEMPLE,
-    SMALL_KEY_SHADOW_TEMPLE, 
-    BOSS_KEY_SHADOW_TEMPLE,
-    SMALL_KEY_SPIRIT_TEMPLE,
-    BOSS_KEY_SPIRIT_TEMPLE,
-    SMALL_KEY_BOTTOM_OF_THE_WELL,
-    SMALL_KEY_GERUDO_FORTRESS,
-    SMALL_KEY_GERUDO_TRAINING_GROUNDS,
-    SMALL_KEY_GANONS_CASTLE,
-    BOSS_KEY_GANONS_CASTLE,
-
-    FOREST_TRIAL_CLEAR,
-    FIRE_TRIAL_CLEAR,
-    WATER_TRIAL_CLEAR,
-    SHADOW_TRIAL_CLEAR,
-    SPIRIT_TRIAL_CLEAR,
-    LIGHT_TRIAL_CLEAR,
-
-    //Elements past this point aren't collectible
-    ANCHOR,
-
-    //Bottles need to be tracked special as well?
-    BOTTLE_WITH_LETTER,
-    BOTTLE_WITH_BIG_POE,
-
-    //Items tracked by other means, or are special
-    HOOKSHOT,
-    LONGSHOT,
-    SILVER_GAUNTLETS,
-    GOLDEN_GAUNTLETS,
-    SCARECROW,
-    DISTANT_SCARECROW,
-    GANON
-
-} state_items_e;
 
 typedef enum
 {
@@ -153,7 +24,7 @@ typedef enum
 
 typedef struct
 {
-    uint8_t prog_items[ANCHOR];
+    uint8_t prog_items[ITEM_E_ANCHOR];
 } state_t;
 
 typedef struct
@@ -210,8 +81,8 @@ bool has_nuts(state_t *self);
 bool can_stun_deku(state_t *self);
 bool has_blue_fire(state_t *self);
 bool has_ocarina(state_t *self);
-bool can_play(state_t *self, state_items_e song);
-bool can_use(state_t *self, state_items_e item);
+bool can_play(state_t *self, item_e song);
+bool can_use(state_t *self, item_e item);
 bool can_buy_bombchus(state_t *self);
 bool has_bombchus_item(state_t *self);
 bool can_blast_or_smash(state_t *self);
@@ -234,17 +105,17 @@ bool guarantee_hint(state_t *self);
 
 /* Functions we want to inline aggressively */
 
-inline bool has(state_t *self, state_items_e item)
+inline bool has(state_t *self, item_e item)
 {
     return self->prog_items[item] >= 1;
 }
 
-inline bool has_c(state_t *self, state_items_e item, int count)
+inline bool has_c(state_t *self, item_e item, int count)
 {
     return self->prog_items[item] >= count;
 }
 
-inline uint8_t item_count(state_t *self, state_items_e item)
+inline uint8_t item_count(state_t *self, item_e item)
 {
     return self->prog_items[item];
 }
@@ -291,16 +162,16 @@ inline bool has_explosives(state_t *self)
     return true; //fix
 }
 
-inline void collect(state_t *self, state_items_e item)
+inline void collect(state_t *self, item_e item)
 {
-    if (item < ANCHOR)
+    if (item < ITEM_E_ANCHOR)
     {
         self->prog_items[item]++;
         //clear_cached_unreachable()
     }
 }
 
-inline void remove(state_t *self, state_items_e item)
+inline void remove(state_t *self, item_e item)
 {
     if (self->prog_items[item] > 0)
         self->prog_items[item]--;

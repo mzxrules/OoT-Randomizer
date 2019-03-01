@@ -50,7 +50,7 @@ bool has_ocarina(state_t *self)
         || has(self, OCARINA_OF_TIME);
 }
 
-bool can_play(state_t *self, state_items_e song)
+bool can_play(state_t *self, item_e song)
 {
     return
         has_ocarina(self)
@@ -58,14 +58,14 @@ bool can_play(state_t *self, state_items_e song)
 }
 
 
-state_items_e magic_items[] =
+item_e magic_items[] =
 { DINS_FIRE, FARORES_WIND, NAYRUS_LOVE, LENS_OF_TRUTH };
-state_items_e adult_items[] =
+item_e adult_items[] =
 { BOW, HAMMER, IRON_BOOTS, HOVER_BOOTS, MAGIC_BEAN };
-state_items_e magic_arrows[] =
+item_e magic_arrows[] =
 { FIRE_ARROWS, LIGHT_ARROWS };
 
-bool can_use(state_t *self, state_items_e item)
+bool can_use(state_t *self, item_e item)
 {
     for (int i = 0; i < array_size(magic_items); i++)
     {
