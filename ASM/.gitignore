@@ -1,5 +1,6 @@
 /inject
 /roms/*
 /c/*.o
+/world/*.o
 armips*
 !.gitkeep
