@@ -30,17 +30,22 @@ class int32:
         return (values[0] << 8) | values[1]
         
 class uint24:
-    w = None ## lambda b,a,v: struct.pack_into('>i', b,a,v)
-    r = None ## lambda b,a: int32._struct.unpack_from(b,a)[0]
-    _ = None ## lambda b: r(b, 0)
     def bytes(value):
         value = value & 0xFFFFFF
         return [(value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF]
     def value(values):
         return (values[0] << 16) | (values[1] << 8) | values[2]
+    def __write_to_array(b, a, v):
+        byte_arr = bytes(v)
+        b[a:a + 3] = byte_arr[0:3]
+    def __read_from_array(b, a = 0):
+        return (b[a+0] << 16) | (b[a+1] << 8) | b[a+2]
+    w = __write_to_array
+    r = __read_from_array
+
 
 class BigStream(object):
-    def __init__(self, buffer):
+    def __init__(self, buffer:bytearray):
         self.__last_address = 0
         self.buffer = buffer
 
