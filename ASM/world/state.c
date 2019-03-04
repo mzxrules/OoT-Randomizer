@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 
-bool can_reach(state_t *self, void *location)
+bool can_reach(state_t *self, int location, can_reach_e reach_type)
 {
     return true;
 }

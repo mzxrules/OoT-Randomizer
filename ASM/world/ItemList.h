@@ -211,7 +211,8 @@ typedef enum {
     GOLDEN_GAUNTLETS,
     SCARECROW,
     DISTANT_SCARECROW,
-    GANON
+    GANON,
+    ITEM_E_NONE
 } item_e;
 
 typedef enum

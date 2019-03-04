@@ -1,6 +1,10 @@
 #include <stdint.h>
 #include <stdbool.h>
-#include "ItemList.h"
+#include "itemlist.h"
+#include "locationlist.h"
+#include "regionlist.h"
+#include "region.h"
+
 #ifndef STATE_H
 #define STATE_H
 
@@ -22,10 +26,36 @@ typedef enum
     AGE_BOTH = 3
 } state_age_e;
 
+typedef enum
+{
+    CAN_REACH_REGION,
+    CAN_REACH_LOCATION
+} can_reach_e;
+
 typedef struct
 {
     uint8_t prog_items[ITEM_E_ANCHOR];
 } state_t;
+
+typedef enum
+{
+    OPTION_OFF,
+    OPTION_ON,
+
+    OPTION_CHEST,
+
+    OPTION_OPEN,
+    OPTION_VANILLA,
+    OPTION_STONES,
+    OPTION_TOKENS,
+    OPTION_DUNGEONS,
+    OPTION_MEDALLIONS,
+
+    OPTION_MASK,
+
+    OPTION_QUADRUPLE,
+    OPTION_OHKO,
+} option_e;
 
 typedef struct
 {
@@ -36,12 +66,12 @@ typedef struct
     bool open_door_of_time;
 
     bool shuffle_weird_egg;
-    char* shuffle_scrubs;
+    option_e shuffle_scrubs;
 
     bool bombchus_in_logic;
     bool logic_man_on_roof;
     bool logic_windmill_poh;
-    bool logic_lens;
+    option_e logic_lens;
     bool logic_deku_basement_gs;
     bool logic_dmt_bombable;
     bool logic_dc_jump;
@@ -65,17 +95,17 @@ typedef struct
     bool logic_gtg_mq_with_hookshot;
     bool logic_botw_basement;
     bool unlocked_ganondorf;
-    char* hints;
-    char* damage_multiplier;
-    char* bridge;
-    char* gerudo_fortress;
+    option_e hints;
+    option_e damage_multiplier;
+    option_e bridge;
+    option_e gerudo_fortress;
     uint8_t skipped_trials[6];
     uint8_t big_poe_count;
 } options_t;
 
-extern options_t option;
+options_t option;
 
-bool can_reach(state_t *self, void *location);
+bool can_reach(state_t *self, int location, can_reach_e reach_type);
 bool can_child_attack(state_t *self);
 bool has_nuts(state_t *self);
 bool can_stun_deku(state_t *self);

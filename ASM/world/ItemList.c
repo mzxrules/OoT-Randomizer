@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#include "ItemList.h"
+#include "itemlist.h"
 
 item_info_t item_table[] =
 /*

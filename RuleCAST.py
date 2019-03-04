@@ -84,6 +84,28 @@ class RuleCAST(ast.NodeTransformer):
                     ast.Name(id= to_c_sym(item.id), ctx=ast.Load()), count],
             keywords=[])
 
+    def can_reach(self, node, args):
+        reach_dest =  to_c_sym(node.args[0].id)
+        loc_type = "REGION"
+        if len(node.args) == 2:
+            loc_type = to_c_sym(node.args[1].id)
+
+        if len(node.args) == 1:
+            reach_dest = "{}_{}".format(loc_type, reach_dest)
+            args.append(ast.Name(id=reach_dest, ctx=ast.Load()))
+            args.append(ast.Name(id='CAN_REACH_{}'.format(loc_type), ctx=ast.Load()))
+            return ast.Call(
+                func=ast.Name(id=node.func.id, ctx=ast.Load()),
+                args=args,
+                keywords=node.keywords)
+
+    def has_projectile(self, node, args):
+        age = "AGE_" + to_c_sym(node.args[0].id)
+        args.append(ast.Name(id=age, ctx=ast.Load()))
+        return ast.Call(
+            func=ast.Name(id=node.func.id, ctx=ast.Load()),
+            args=args,
+            keywords=node.keywords)
 
     def visit_Call(self, node):
         
@@ -91,9 +113,12 @@ class RuleCAST(ast.NodeTransformer):
             return node
 
         _func = node.func.id
-        print(_func)
-
         new_args = [ast.Name(id='state', ctx=ast.Load())]
+        if _func == "can_reach":
+            return self.can_reach(node, new_args)
+        if _func == "has_projectile":
+            return self.has_projectile(node, new_args)
+
         for child in node.args:
             if isinstance(child, ast.Name):
                 if child.id in self.world.__dict__:

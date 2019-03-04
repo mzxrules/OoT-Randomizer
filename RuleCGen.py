@@ -51,7 +51,7 @@ class RuleCGen(ast.NodeVisitor):
         return node.id
 
     def visit_Str(self, node):
-        return '"{}"'.format(node.s)
+        return 'OPTION_{}'.format(to_c_sym(node.s))
 
     def visit_Call(self, node):
         call = self.visit(node.func)
@@ -142,23 +142,61 @@ class RuleCGenFile(object):
         /* Generated C Code */
 
         #include "state.h"
+        #include "region.h"
+        #include "regionlist.h"
         #include <stdbool.h>''') +'\n\n'
+
+
+        region_names = {}
+
+        gen_functions = ""
+
 
         for filename, ismq in RuleCGenFile.get_rule_file_list():
             rules = RuleCGenFile.load_rule_json(filename)
             mq_txt = "MQ_" if ismq else ""
             for region in rules:
+                region_name = region['region_name']
+                region_names[to_c_sym(region_name)] = (region_name, ismq)
+                location_list = []
+                exit_list = []
                 if 'locations' in region:
                     for loc, rule in region['locations'].items():
-                        output += self.new_rule("location_rule_{}{}".format(mq_txt, to_c_sym(loc)), rule)
+                        loc_sym = to_c_sym(loc)
+                        func = "rule_{}_loc_{}{}".format(func_count, mq_txt, loc_sym)
+                        gen_functions += self.new_rule(func, rule)
                         func_count += 1
                 if 'exits' in region:
                     for exit, rule in region['exits'].items():
-                        output += self.new_rule("exit_rule_{}_{}".format(func_count,to_c_sym(exit)), rule)
+                        reg_sym = to_c_sym(exit)
+                        func = "rule_{}_exit_{}".format(func_count,reg_sym)
+                        gen_functions += self.new_rule(func, rule)
                         func_count += 1
+
+        regionlist_h = self.dump_region_list(region_names)
+        output += gen_functions
 
         with open(os.path.join("ASM","world", "gen_rule.c"), 'w') as outfile:
             outfile.write(output)
+        with open(os.path.join("ASM", "world", "regionlist.h"), 'w') as outfile:
+            outfile.write(regionlist_h)
+
+    def dump_region_list(self, regions):
+        region_e = ""
+        for k in regions:
+            region_e += "    REGION_{},\n".format(to_c_sym(k))
+            ## region_struct += "    {{ .k = {} .name = {} }},\n".format(k, v[0])
+        region_e = cleandoc('''
+        #ifndef REGIONLIST_H
+        #define REGIONLIST_H
+        typedef enum
+        {
+        ''') + '\n' + region_e + '\n' + cleandoc('''
+        } region_e;
+        #endif
+        ''')
+
+        return region_e
 
     def new_rule(self, name, rule):
         parser = self.parser
