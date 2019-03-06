@@ -2,51 +2,12 @@ from collections import namedtuple
 import logging
 import random
 
-from Item import ItemFactory
-
 # TODO/FIXME: All these lists should be transfered over to ItemPool.py
 # This file should be used as the commented part at the bottom shows.
 # The commented part on the bottom also had the record from Items.py,
 # which is now deleted and unused.
 
 
-# TODO: I kept this in, because the 'fill_songs' function
-# is now in Fill.py, so this should be integrated over there.
-def fill_songs(world, attempts=15):
-    songs = ItemFactory(songlist)
-    song_locations = [
-        world.get_location('Song from Skull Kid'),
-        world.get_location('Song from HMS'),
-        world.get_location('Song from Owl Tablet'),
-        world.get_location('Song from Romani'),
-        world.get_location('Song at Grave'),
-        world.get_location('Song from Monkey'),
-        world.get_location('Song from Baby Goron'),
-        world.get_location('Song from Goron Elder'),
-        world.get_location('Song from Zora Eggs'),
-        world.get_location('Song from Igos'),
-        world.get_location('Song from the Giants')]
-    placed_prizes = [loc.item.name for loc in song_locations if loc.item is not None]
-    unplaced_prizes = [song for song in songs if song.name not in placed_prizes]
-    empty_song_locations = [loc for loc in song_locations if loc.item is None]
-
-    while attempts:
-        attempts -= 1
-        try:
-            prizepool = list(unplaced_prizes)
-            prize_locs = list(empty_song_locations)
-            random.shuffle(prizepool)
-            random.shuffle(prize_locs)
-            # TODO: Set keys to true once keys are properly implemented
-            fill_restrictive(world, world.get_all_state(keys=True), prize_locs, prizepool)
-        except FillError:
-            logging.getLogger('').info("Failed to place songs. Will retry %s more times", attempts)
-            for location in empty_song_locations:
-                location.item = None
-            continue
-        break
-    else:
-        raise FillError('Unable to place songs')
 
 # TODO: This was the format of the OoT fork.
 # The MM items should use this format to be able to be processed.

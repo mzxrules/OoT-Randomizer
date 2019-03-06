@@ -142,7 +142,8 @@ item_difficulty_max = {
     },
 }
 
-
+# TODO: Still have to change these to the MM dungeons
+# and add all non-primary items (Recovery Heart/Rupees/Arrows/Bombs/etc)
 DT_vanilla = (
     ['Recovery Heart'] * 2)
 
@@ -302,7 +303,8 @@ rewardlist = [
     "Gyorg's Remains",
     "Twinmold's Remains"]
 
-
+# TODO: Might need to add first half of Goron Lullaby
+# in case the two-part song is kept in the randomizer
 songlist = [
     "Song of Time",
     "Song of Healing",
