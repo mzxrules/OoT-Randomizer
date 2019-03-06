@@ -5,46 +5,63 @@ from Utils import random_choices
 from Item import ItemFactory
 
 
-alwaysitems = ([
-    'Biggoron Sword',
-    'Boomerang',
-    'Lens of Truth',
-    'Hammer',
-    'Iron Boots',
-    'Goron Tunic',
-    'Zora Tunic',
-    'Hover Boots',
-    'Mirror Shield',
-    'Stone of Agony',
-    'Fire Arrows',
-    'Ice Arrows',
-    'Light Arrows',
-    'Dins Fire',
-    'Farores Wind',
-    'Nayrus Love',
-    'Rupee (1)']
-    + ['Progressive Hookshot'] * 2
-    + ['Deku Shield']
-    + ['Hylian Shield']
-    + ['Progressive Strength Upgrade'] * 3
-    + ['Progressive Scale'] * 2
-    + ['Recovery Heart'] * 6
-    + ['Bow'] * 3
-    + ['Slingshot'] * 3
-    + ['Bomb Bag'] * 3
-    + ['Bombs (5)'] * 2
-    + ['Bombs (10)']
-    + ['Bombs (20)']
-    + ['Arrows (5)']
-    + ['Arrows (10)'] * 5
-    + ['Progressive Wallet'] * 2
-    + ['Magic Meter'] * 2
-    + ['Double Defense']
-    + ['Deku Stick Capacity'] * 2
-    + ['Deku Nut Capacity'] * 2
-    + ['Piece of Heart (Treasure Chest Game)'])
+# TODO: This needs to include all the items that will always
+# be included in the item pool, no matter which options are set.
+alwaysitems = [
+    "Mirror Shield",
+    "Deku Mask",
+    "Goron Mask",
+    "Zora Mask",
+    "Light Arrows",
+    "Hookshot"]
 
+extraitems = [
+    "Kokiri Sword",
+    "Gilded Sword",
+    "Great Fairy Sword",
+    "Hylian Shield",
+    "Fierce Deity Mask",
+    "Bow",
+    "Large Quiver",
+    "Largest Quiver",
+    "Fire Arrows",
+    "Ice Arrows",
+    "Powder Keg",
+    "Pictograph Box",
+    "Lens of Truth",
+    "Bomb Bag",
+    "Big Bomb Bag",
+    "Biggest Bomb Bag",
+    "Adult Wallet",
+    "Giant Wallet"
+]
 
+extra_masks = [
+    "Postman's Hat",
+    "All Night Mask",
+    "Blast Mask",
+    "Stone Mask",
+    "Great Fairy Mask",
+    "Keaton Mask",
+    "Bremen Mask",
+    "Bunny Hood",
+    "Don Gero's Mask",
+    "Mask of Scents",
+    "Romani Mask",
+    "Circus Leader Mask",
+    "Kafei Mask",
+    "Couple's Mask",
+    "Mask of Truth",
+    "Kamaro's Mask",
+    "Gibdo Mask",
+    "Garo Mask",
+    "Captain's Hat",
+    "Giant Mask"
+]
+
+# TODO: This contains most useful items so that
+# the player has a higher chance finding them.
+# I'm guessing finding the duplicate results in a bluepee or something?
 easy_items = ([
     'Biggoron Sword',
     'Kokiri Sword',
@@ -70,13 +87,25 @@ easy_items = ([
     'Slingshot',
     'Bomb Bag',
     'Double Defense'] +
+    # The heart containers/pieces of heart should
+    # be added so that the result is 13 full hearts
+    # AND that the amount of items of 'easy_items' is
+    # equal to that of 'normal_items'
     ['Heart Container'] * 16 +
     ['Piece of Heart'] * 3)
 
+# TODO: Together with always_items, these should
+# complete the regular set of items found in the game.
 normal_items = (
-    ['Heart Container'] * 8 +
-    ['Piece of Heart'] * 35)
+    ['Heart Container'] * 4 +
+    ['Piece of Heart'] * 52)
 
+
+stray_fairy_locations = (
+    ["WF-SF{0}".format(i) for i in range(1, 15)] +
+    ["SH-SF{0}".format(i) for i in range(1, 15)] +
+    ["GB-SF{0}".format(i) for i in range(1, 15)] +
+    ["ST-SF{0}".format(i) for i in range(1, 15)])
 
 item_difficulty_max = {
     'plentiful': {},
@@ -164,10 +193,9 @@ normal_bottles = [
     'Bottle with Fish',
     'Bottle with Bugs',
     'Bottle with Poe',
-    'Bottle with Big Poe',
-    'Bottle with Blue Fire']
+    'Bottle with Big Poe']
 
-normal_bottle_count = 3
+normal_bottle_count = 6
 
 
 normal_rupees = (
@@ -183,72 +211,33 @@ shopsanity_rupees = (
     ['Rupees (200)'] * 5 +
     ['Progressive Wallet'])
 
-
 vanilla_shop_items = {
-    'Kokiri Shop Item 1': 'Buy Deku Shield',
-    'Kokiri Shop Item 2': 'Buy Deku Nut (5)',
-    'Kokiri Shop Item 3': 'Buy Deku Nut (10)',
-    'Kokiri Shop Item 4': 'Buy Deku Stick (1)',
-    'Kokiri Shop Item 5': 'Buy Deku Seeds (30)',
-    'Kokiri Shop Item 6': 'Buy Arrows (10)',
-    'Kokiri Shop Item 7': 'Buy Arrows (30)',
-    'Kokiri Shop Item 8': 'Buy Heart',
-    'Kakariko Potion Shop Item 1': 'Buy Deku Nut (5)',
-    'Kakariko Potion Shop Item 2': 'Buy Fish',
-    'Kakariko Potion Shop Item 3': 'Buy Red Potion [30]',
-    'Kakariko Potion Shop Item 4': 'Buy Green Potion',
-    'Kakariko Potion Shop Item 5': 'Buy Blue Fire',
-    'Kakariko Potion Shop Item 6': 'Buy Bottle Bug',
-    'Kakariko Potion Shop Item 7': 'Buy Poe',
-    'Kakariko Potion Shop Item 8': 'Buy Fairy\'s Spirit',
-    'Bombchu Shop Item 1': 'Buy Bombchu (5)',
-    'Bombchu Shop Item 2': 'Buy Bombchu (10)',
-    'Bombchu Shop Item 3': 'Buy Bombchu (10)',
-    'Bombchu Shop Item 4': 'Buy Bombchu (10)',
-    'Bombchu Shop Item 5': 'Buy Bombchu (20)',
-    'Bombchu Shop Item 6': 'Buy Bombchu (20)',
-    'Bombchu Shop Item 7': 'Buy Bombchu (20)',
-    'Bombchu Shop Item 8': 'Buy Bombchu (20)',
-    'Castle Town Potion Shop Item 1': 'Buy Green Potion',
-    'Castle Town Potion Shop Item 2': 'Buy Blue Fire',
-    'Castle Town Potion Shop Item 3': 'Buy Red Potion [30]',
-    'Castle Town Potion Shop Item 4': 'Buy Fairy\'s Spirit',
-    'Castle Town Potion Shop Item 5': 'Buy Deku Nut (5)',
-    'Castle Town Potion Shop Item 6': 'Buy Bottle Bug',
-    'Castle Town Potion Shop Item 7': 'Buy Poe',
-    'Castle Town Potion Shop Item 8': 'Buy Fish',
-    'Castle Town Bazaar Item 1': 'Buy Hylian Shield',
-    'Castle Town Bazaar Item 2': 'Buy Bombs (5) [35]',
-    'Castle Town Bazaar Item 3': 'Buy Deku Nut (5)',
-    'Castle Town Bazaar Item 4': 'Buy Heart',
-    'Castle Town Bazaar Item 5': 'Buy Arrows (10)',
-    'Castle Town Bazaar Item 6': 'Buy Arrows (50)',
-    'Castle Town Bazaar Item 7': 'Buy Deku Stick (1)',
-    'Castle Town Bazaar Item 8': 'Buy Arrows (30)',
-    'Kakariko Bazaar Item 1': 'Buy Hylian Shield',
-    'Kakariko Bazaar Item 2': 'Buy Bombs (5) [35]',
-    'Kakariko Bazaar Item 3': 'Buy Deku Nut (5)',
-    'Kakariko Bazaar Item 4': 'Buy Heart',
-    'Kakariko Bazaar Item 5': 'Buy Arrows (10)',
-    'Kakariko Bazaar Item 6': 'Buy Arrows (50)',
-    'Kakariko Bazaar Item 7': 'Buy Deku Stick (1)',
-    'Kakariko Bazaar Item 8': 'Buy Arrows (30)',
-    'Zora Shop Item 1': 'Buy Zora Tunic',
-    'Zora Shop Item 2': 'Buy Arrows (10)',
-    'Zora Shop Item 3': 'Buy Heart',
-    'Zora Shop Item 4': 'Buy Arrows (30)',
-    'Zora Shop Item 5': 'Buy Deku Nut (5)',
-    'Zora Shop Item 6': 'Buy Arrows (50)',
-    'Zora Shop Item 7': 'Buy Fish',
-    'Zora Shop Item 8': 'Buy Red Potion [50]',
-    'Goron Shop Item 1': 'Buy Bombs (5) [25]',
-    'Goron Shop Item 2': 'Buy Bombs (10)',
-    'Goron Shop Item 3': 'Buy Bombs (20)',
-    'Goron Shop Item 4': 'Buy Bombs (30)',
-    'Goron Shop Item 5': 'Buy Goron Tunic',
-    'Goron Shop Item 6': 'Buy Heart',
-    'Goron Shop Item 7': 'Buy Red Potion [40]',
-    'Goron Shop Item 8': 'Buy Heart',
+    'Trading Post Item 1': 'Buy Red Potion [30]',  # Price: 30
+    'Trading Post Item 2': 'Buy Green Potion [30]',  # Price: 30
+    'Trading Post Item 3': 'Buy Hylian Shield [80]',  # Price: 80
+    'Trading Post Item 4': 'Buy Fairy\'s Spirit',  # Price: 50
+    'Trading Post Item 5': 'Buy Deku Stick',  # Price: 10
+    'Trading Post Item 6': 'Buy Arrows (30)',  # Price: 30
+    'Trading Post Item 7': 'Buy Deku Nut (10)',  # Price: 30
+    'Trading Post Item 8': 'Buy Arrows (50)',  # Price: 40
+    'Bomb Shop Item 1': 'Buy Bombs (10) [30]',  # Price: 30
+    'Bomb Shop Item 2': 'Buy Bombchus (10)',  # Price: 40
+    'Bomb Shop Item 3': 'Buy Bomb Bag',  # Price: 50
+    # Not sure how to signify the Big Bomb Bag, opted for 0
+    'Bomb Shop Item 0': 'Buy Big Bomb Bag',  # Price: 90
+    'Magic Hag\'s Potion Shop Item 1': 'Buy Blue Potion',  # Price: 60
+    'Magic Hag\'s Potion Shop Item 2': 'Buy Green Potion [10]',  # Price: 10
+    'Magic Hag\'s Potion Shop Item 3': 'Buy Red Potion [20]',  # Price: 20
+    'Goron Shop (Winter) Item 1': 'Buy Bombs (10) [40]',  # Price: 40
+    'Goron Shop (Winter) Item 2': 'Buy Arrows (10) [40]',  # Price: 40
+    'Goron Shop (Winter) Item 3': 'Buy Red Potion [80]',  # Price: 80
+    'Goron Shop (Spring) Item 1': 'Buy Bombs (10) [20]',  # Price: 20
+    'Goron Shop (Spring) Item 2': 'Buy Arrows (10) [20]',  # Price: 20
+    'Goron Shop (Spring) Item 3': 'Buy Red Potion [50]',  # Price: 50
+    'Zora Shop Item 1': 'Buy Hylian Shield [90]',  # Price: 90
+    'Zora Shop Item 2': 'Buy Arrows (10) [20]',  # Price: 20
+    'Zora Shop Item 3': 'Buy Red Potion [60]'  # Price: 60
+    # TODO: Fill out the rest
 }
 
 
@@ -308,116 +297,68 @@ deku_scrubs_items = (
 
 
 rewardlist = [
-    'Kokiri Emerald',
-    'Goron Ruby',
-    'Zora Sapphire',
-    'Forest Medallion',
-    'Fire Medallion',
-    'Water Medallion',
-    'Spirit Medallion',
-    'Shadow Medallion',
-    'Light Medallion']
+    "Odolwa's Remains",
+    "Goht's Remains",
+    "Gyorg's Remains",
+    "Twinmold's Remains"]
 
 
 songlist = [
-    'Zeldas Lullaby',
-    'Eponas Song',
-    'Suns Song',
-    'Sarias Song',
-    'Song of Time',
-    'Song of Storms',
-    'Minuet of Forest',
-    'Prelude of Light',
-    'Bolero of Fire',
-    'Serenade of Water',
-    'Nocturne of Shadow',
-    'Requiem of Spirit']
+    "Song of Time",
+    "Song of Healing",
+    "Song of Soaring",
+    "Epona's Song",
+    "Song of Storms",
+    "Sonata of Awakening",
+    "Goron Lullaby",
+    "New Wave Bossa Nova",
+    "Elegy of Emptiness",
+    "Oath to Order"]
 
 
-skulltula_locations = ([
-    'GS Kokiri Know It All House',
-    'GS Kokiri Bean Patch',
-    'GS Kokiri House of Twins',
-    'GS Lost Woods Bean Patch Near Bridge',
-    'GS Lost Woods Bean Patch Near Stage',
-    'GS Lost Woods Above Stage',
-    'GS Sacred Forest Meadow',
-    'GS Hyrule Field near Kakariko',
-    'GS Hyrule Field Near Gerudo Valley',
-    'GS Castle Market Guard House',
-    'GS Hyrule Castle Tree',
-    'GS Hyrule Castle Grotto',
-    'GS Outside Ganon\'s Castle',
-    'GS Lon Lon Ranch Tree',
-    'GS Lon Lon Ranch Rain Shed',
-    'GS Lon Lon Ranch House Window',
-    'GS Lon Lon Ranch Back Wall',
-    'GS Kakariko House Under Construction',
-    'GS Kakariko Skulltula House',
-    'GS Kakariko Guard\'s House',
-    'GS Kakariko Tree',
-    'GS Kakariko Watchtower',
-    'GS Kakariko Above Impa\'s House',
-    'GS Graveyard Wall',
-    'GS Graveyard Bean Patch',
-    'GS Mountain Trail Bean Patch',
-    'GS Mountain Trail Bomb Alcove',
-    'GS Mountain Trail Path to Crater',
-    'GS Mountain Trail Above Dodongo\'s Cavern',
-    'GS Goron City Boulder Maze',
-    'GS Goron City Center Platform',
-    'GS Death Mountain Crater Crate',
-    'GS Mountain Crater Bean Patch',
-    'GS Zora River Ladder',
-    'GS Zora River Tree',
-    'GS Zora River Near Raised Grottos',
-    'GS Zora River Above Bridge',
-    'GS Zora\'s Domain Frozen Waterfall',
-    'GS Zora\'s Fountain Tree',
-    'GS Zora\'s Fountain Above the Log',
-    'GS Zora\'s Fountain Hidden Cave',
-    'GS Lake Hylia Bean Patch',
-    'GS Lake Hylia Lab Wall',
-    'GS Lake Hylia Small Island',
-    'GS Lake Hylia Giant Tree',
-    'GS Lab Underwater Crate',
-    'GS Gerudo Valley Small Bridge',
-    'GS Gerudo Valley Bean Patch',
-    'GS Gerudo Valley Behind Tent',
-    'GS Gerudo Valley Pillar',
-    'GS Gerudo Fortress Archery Range',
-    'GS Gerudo Fortress Top Floor',
-    'GS Wasteland Ruins',
-    'GS Desert Colossus Bean Patch',
-    'GS Desert Colossus Tree',
-    'GS Desert Colossus Hill'])
+tradeitems = [
+    "Moon's Tear",
+    'Town Title Deed',
+    'Swamp Title Deed',
+    'Mountain Title Deed',
+    'Ocean Title Deed',
+    'Room Key',
+    'Letter to Kafei',
+    'Pendant of Memories'
+    'Special Delivery to Mama'
+]
 
 
-tradeitems = (
-    'Pocket Egg',
-    'Pocket Cucco',
-    'Cojiro',
-    'Odd Mushroom',
-    'Poachers Saw',
-    'Broken Sword',
-    'Prescription',
-    'Eyeball Frog',
-    'Eyedrops',
-    'Claim Check')
+trade_items = {
+    'Moon Tear Crater': "Moon's Tear",
+    'Clock Town Deku Salesman': 'Land Title Deed',
+    'Swamp Deku Salesman': 'Swamp Title Deed',
+    'Mountain Deku Salesman': 'Mountain Title Deed',
+    'Ocean Deku Salesman': 'Ocean Title Deed',
+    'Canyon Deku Salesman': 'Rupees (200)',
+    'Have you seen this man?': 'Letter To Kafei',
+    'Item From Kafei': 'Pendant of Memories',
+    'Keaton Mask From Kafei': 'Kafei Mask',  # Why is this a Kafei Mask? Shouldn't this be the Keaton Mask?
+    'Letter From Kafei': 'Letter To Mama',
+    'We Shall Greet The Morning Together': "Couple's Mask"
+}
 
-tradeitemoptions = (
-    'pocket_egg',
-    'pocket_cucco',
-    'cojiro',
-    'odd_mushroom',
-    'poachers_saw',
-    'broken_sword',
-    'prescription',
-    'eyeball_frog',
-    'eyedrops',
-    'claim_check')
+# TODO: This is copied from the old MM list.
+# Not sure what the idea was of this list.
+npc_items = {
+    # TODO: List all locations which give items by NPC,
+    # and set them to give that specific item
+    'Gift From Hungry Goron': "Don Gero's Mask",
 
+}
 
+# TODO: Copied from the old MM list.
+# eventlocations = {
+#     'Majora': "Majora's Mask"
+# }
+
+# TODO: This is a list of events that result in an item or event trigger
+# It seems these are hardlocked into place when generating the item pool.
 eventlocations = {
     'Ganon': 'Triforce',
     'Zeldas Letter': 'Zeldas Letter',
@@ -520,72 +461,6 @@ def get_pool_core(world):
     else:
         placed_items['Gift from Saria'] = 'Ocarina'
         placed_items['Ocarina of Time'] = 'Ocarina'
-
-    skulltula_locations_final = skulltula_locations + [
-            'GS Deku Tree Compass Room',
-            'GS Deku Tree Basement Vines',
-            'GS Deku Tree Basement Gate',
-            'GS Deku Tree Basement Back Room']
-    skulltula_locations_final.extend([
-            'GS Dodongo\'s Cavern East Side Room',
-            'GS Dodongo\'s Cavern Vines Above Stairs',
-            'GS Dodongo\'s Cavern Back Room',
-            'GS Dodongo\'s Cavern Alcove Above Stairs',
-            'GS Dodongo\'s Cavern Scarecrow'])
-    skulltula_locations_final.extend([
-            'GS Jabu Jabu Water Switch Room',
-            'GS Jabu Jabu Lobby Basement Lower',
-            'GS Jabu Jabu Lobby Basement Upper',
-            'GS Jabu Jabu Near Boss'])
-    skulltula_locations_final.extend([
-            'GS Forest Temple First Room',
-            'GS Forest Temple Lobby',
-            'GS Forest Temple Outdoor East',
-            'GS Forest Temple Outdoor West',
-            'GS Forest Temple Basement'])
-    skulltula_locations_final.extend([
-            'GS Fire Temple Song of Time Room',
-            'GS Fire Temple Unmarked Bomb Wall',
-            'GS Fire Temple East Tower Climb',
-            'GS Fire Temple East Tower Top',
-            'GS Fire Temple Basement'])
-    skulltula_locations_final.extend([
-            'GS Water Temple South Basement',
-            'GS Water Temple Serpent River',
-            'GS Water Temple Falling Platform Room',
-            'GS Water Temple Central Room',
-            'GS Water Temple Near Boss Key Chest'])
-    skulltula_locations_final.extend([
-            'GS Spirit Temple Metal Fence',
-            'GS Spirit Temple Bomb for Light Room',
-            'GS Spirit Temple Hall to West Iron Knuckle',
-            'GS Spirit Temple Boulder Room',
-            'GS Spirit Temple Lobby'])
-    skulltula_locations_final.extend([
-            'GS Shadow Temple Like Like Room',
-            'GS Shadow Temple Crusher Room',
-            'GS Shadow Temple Single Giant Pot',
-            'GS Shadow Temple Near Ship',
-            'GS Shadow Temple Triple Giant Pot'])
-    skulltula_locations_final.extend([
-            'GS Well West Inner Room',
-            'GS Well East Inner Room',
-            'GS Well Like Like Cage'])
-    skulltula_locations_final.extend([
-            'GS Ice Cavern Spinning Scythe Room',
-            'GS Ice Cavern Heart Piece Room',
-            'GS Ice Cavern Push Block Room'])
-    if world.tokensanity == 'off':
-        for location in skulltula_locations_final:
-            placed_items[location] = 'Gold Skulltula Token'
-    elif world.tokensanity == 'dungeons':
-        for location in skulltula_locations_final:
-            if world.get_location(location).scene >= 0x0A:
-                placed_items[location] = 'Gold Skulltula Token'
-            else:
-                pool.append('Gold Skulltula Token')
-    else:
-        pool.extend(['Gold Skulltula Token'] * 100)
 
     if world.bombchus_in_logic:
         pool.extend(['Bombchus'] * 5)
@@ -760,6 +635,8 @@ def choose_trials(world):
             world.skipped_trials[trial] = True
 
 
+# TODO: Randomizing these would create a teleporter to the boss room of the
+# remains received? Might break? Might not? Might be redundant? Needs more attention.
 def fill_bosses(world, bossCount=4):
     boss_rewards = ItemFactory(rewardlist, world)
     boss_locations = [
