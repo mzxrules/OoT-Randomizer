@@ -1,6 +1,6 @@
 #include "region.h"
 #include "state.h"
-#include "ItemList.h"
+#include "itemlist.h"
 
 bool TRUE_F(state_t *state)
 {

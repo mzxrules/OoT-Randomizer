@@ -6,6 +6,7 @@ from inspect import cleandoc
 from DungeonList import dungeon_table
 from Utils import data_path
 from RuleCAST import RuleCAST
+from LocationList import location_table
 
 
 
@@ -111,7 +112,7 @@ class RuleCGen(ast.NodeVisitor):
         return self.visit(node.value)
 
 
-class RuleCGenFile(object):
+class CGen(object):
 
     def __init__(self):
         self.world = DummyWorld()
@@ -152,8 +153,8 @@ class RuleCGenFile(object):
         gen_functions = ""
 
 
-        for filename, ismq in RuleCGenFile.get_rule_file_list():
-            rules = RuleCGenFile.load_rule_json(filename)
+        for filename, ismq in CGen.get_rule_file_list():
+            rules = CGen.load_rule_json(filename)
             mq_txt = "MQ_" if ismq else ""
             for region in rules:
                 region_name = region['region_name']
@@ -173,15 +174,17 @@ class RuleCGenFile(object):
                         gen_functions += self.new_rule(func, rule)
                         func_count += 1
 
-        regionlist_h = self.dump_region_list(region_names)
         output += gen_functions
 
-        with open(os.path.join("ASM","world", "gen_rule.c"), 'w') as outfile:
+        with open(os.path.join("ASM","world", "rules.c"), 'w') as outfile:
             outfile.write(output)
         with open(os.path.join("ASM", "world", "regionlist.h"), 'w') as outfile:
+            regionlist_h = self.create_regionlist_h(region_names)
             outfile.write(regionlist_h)
 
-    def dump_region_list(self, regions):
+        self.create_locationlist_files()
+
+    def create_regionlist_h(self, regions):
         region_e = ""
         for k in regions:
             region_e += "    REGION_{},\n".format(to_c_sym(k))
@@ -200,7 +203,7 @@ class RuleCGenFile(object):
 
     def new_rule(self, name, rule):
         parser = self.parser
-        output = "bool {}(state_t *state){}\n    return ".format(name, '{');
+        output = "bool {}(state_t *state){{\n    return ".format(name);
 
         if rule is None:
             rule = "True"
@@ -213,3 +216,77 @@ class RuleCGenFile(object):
         output += parser.visit(ast_rule)
         output += ";\n}\n\n"
         return output
+
+    def create_named_enum(self, name, list):
+        c = "typedef enum{\n"
+        for item in list:
+            c += "    {},\n".format(item)
+        return c + "}} {};\n\n".format(name)
+
+    def create_locationlist_files(self):
+        location_e = []
+        location_type_e = set()
+        location_hint_e = set()
+
+        
+        _c = cleandoc('''
+            /* Generated C Code */
+
+            #include "location.h"
+            #include <stdbool.h>
+
+            location_t location_table [] = {''') +'\n'
+
+
+        for k, v in location_table.items():
+            loc_k = "LOCATION_" + to_c_sym(k)
+            loc_name = k
+            loc_mq = loc_name.find("MQ") >= 0
+            loc_mq = str(loc_mq).lower()
+            loc_type = "LOCATION_TYPE_" + to_c_sym(v[0])
+            location_type_e.add(loc_type)
+            loc_hint = v[3]
+            if loc_hint is not None:
+                loc_hint = "LOCATION_HINT_" + to_c_sym(loc_hint)
+                location_hint_e.add(loc_hint)
+            else:
+                loc_hint = "LOCATION_HINT_NONE"
+
+            loc_scene = v[1]
+            loc_default = v[2]
+
+            if loc_scene is None:
+                loc_scene = 255
+
+            if loc_default is None:
+                loc_default = 0
+
+            location_e.append(loc_k)
+            _c += '    {{ .k = {}, .name = "{}", .mq = {},\n    .type = {}, .scene = 0x{:02X}, .var = 0x{:02X}, .hint = {} }},\n'.format(loc_k, loc_name, loc_mq, loc_type, loc_scene, loc_default, loc_hint)
+
+        _c += "};\n"
+
+        _h = cleandoc('''
+        /* Generated C Code */
+
+        #ifndef LOCATIONLIST_H
+        #define LOCATIONLIST_H
+        ''')+"\n\n"
+        temp = list(location_type_e)
+        temp.sort()
+        _h += self.create_named_enum("location_type_e", ["LOCATION_TYPE_INVALID"] + temp)
+        temp = list(location_hint_e)
+        temp.sort()
+        _h += self.create_named_enum("location_hint_e", ["LOCATION_HINT_NONE"] + temp)
+        _h += self.create_named_enum("location_e", location_e)
+        _h += "#endif // !LOCATIONLIST_H"
+
+        
+        with open(os.path.join("ASM","world", "locationlist.h"), 'w') as outfile:
+            outfile.write(_h)
+
+        with open(os.path.join("ASM","world", "locationlist.c"), 'w') as outfile:
+            outfile.write(_c)
+
+test = CGen()
+test.Go()

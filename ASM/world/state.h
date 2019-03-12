@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "itemlist.h"
-#include "locationlist.h"
+#include "location.h"
 #include "regionlist.h"
 #include "region.h"
 
@@ -186,10 +186,9 @@ inline bool can_dive(state_t *self)
     return has(self, PROGRESSIVE_SCALE);
 }
 
-
 inline bool has_explosives(state_t *self)
 {
-    return true; //fix
+    return has_bombs(self) || has_bombchus(self);
 }
 
 inline void collect(state_t *self, item_e item)

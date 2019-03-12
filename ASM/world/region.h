@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "state.h"
-#include "locationlist.h"
+#include "location.h"
 #include "regionlist.h"
 
 typedef int exit_e;
