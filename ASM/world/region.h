@@ -8,6 +8,7 @@
 #include "location.h"
 #include "regionlist.h"
 
+
 typedef int region_group_e;
 
 typedef struct {

@@ -1,9 +1,9 @@
+#ifndef LOCATION_H
+#define LOCATION_H
+
 #include <stdint.h>
 #include <stdbool.h> 
 #include "locationlist.h"
-
-#ifndef LOCATION_H
-#define LOCATION_H
 
 
 typedef struct

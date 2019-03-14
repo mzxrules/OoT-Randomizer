@@ -1,12 +1,11 @@
+#ifndef STATE_H
+#define STATE_H
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "itemlist.h"
 #include "location.h"
-#include "regionlist.h"
-#include "region.h"
 
-#ifndef STATE_H
-#define STATE_H
 
 typedef enum
 {

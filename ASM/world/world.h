@@ -2,7 +2,6 @@
 #define WORLD_H
 
 
-
 #define TRIALS_FOREST 0
 #define TRIALS_FIRE 1
 #define TRIALS_WATER 2

@@ -220,10 +220,8 @@ class CGen(object):
 
 
     def Go(self):
-        func_count = 0
-
         worldmodel = WorldModel()
-
+        func_count = 0
 
         for filename, ismq, is_overworld in CGen.get_rule_file_list():
 

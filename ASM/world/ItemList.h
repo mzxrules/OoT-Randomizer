@@ -1,6 +1,8 @@
-#include <stdint.h>
 #ifndef ITEM_LIST_H
 #define ITEM_LIST_H
+
+#include <stdint.h>
+
 
 typedef enum {
     BOMBS_5,

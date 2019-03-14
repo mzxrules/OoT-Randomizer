@@ -1,7 +1,8 @@
-#include <stdint.h>
-
 #ifndef DUNGEONLIST_H
 #define DUNGEONLIST_H
+
+#include <stdint.h>
+
 
 typedef struct
 {
