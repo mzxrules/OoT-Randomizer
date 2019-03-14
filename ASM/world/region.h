@@ -3,13 +3,12 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "rules.h"
 #include "state.h"
 #include "location.h"
 #include "regionlist.h"
 
-typedef int exit_e;
 typedef int region_group_e;
-typedef bool (*rule_f)(state_t*);
 
 typedef struct {
     location_e          location;
@@ -19,7 +18,8 @@ typedef struct {
 } location_rule_t;
 
 typedef struct {
-    region_e            location;
+    region_e            start;
+    region_e            dest;
     rule_f              rule;
 } exit_rule_t;
 
@@ -32,7 +32,6 @@ typedef struct
     int32_t             loc_count;
     exit_rule_t        *exits;
     int32_t             exit_count;
-
 
 } world_region_t;
 

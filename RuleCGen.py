@@ -2,13 +2,12 @@ import ast
 import os
 import io
 import json
+import textwrap
 from inspect import cleandoc
 from DungeonList import dungeon_table
 from Utils import data_path
 from RuleCAST import RuleCAST
 from LocationList import location_table
-
-
 
 def to_c_sym(item:str):
     return item.replace("(","").replace(")","").replace(" ","_").replace("'", "").replace("-","_").upper()
@@ -111,8 +110,89 @@ class RuleCGen(ast.NodeVisitor):
     def visit_Index(self, node):
         return self.visit(node.value)
 
+class RuleModel(object):
+    def __init__(self, world, parser, name, rule):
+
+        proto = "bool {}(state_t *state)".format(name)
+
+        if rule is None:
+            rule = "True"
+        else:
+            rule = rule.strip()
+        rule = rule.split('#')[0]
+
+        ast_rule = ast.parse(rule, mode='eval')
+        ast_rule = RuleCAST(world).visit(ast_rule)
+        rule = parser.visit(ast_rule)
+
+        self.proto = proto
+        self.rule = rule
+        self.c = proto + '{\n    return ' + rule +  ";\n}\n\n"
+
+class LocationModel(object):
+    def __init__(self, name):
+        self.name = name
+        self.symbol = to_c_sym(name)
+        self.rule = None
+
+            
+class ExitModel(object):
+    def __init__(self, start, dest):
+        self.start = to_c_sym(start)
+        self.dest = to_c_sym(dest)
+        self.rule = None
+
+class RegionModel(object):
+    def __init__(self, name, is_mq):
+        self.name = name
+        self.mq = is_mq
+        self.symbol = to_c_sym(name)
+        self.locations = []
+        self.exits = []
+
+    def set_name(self, name):
+        self.name = name
+        self.symbol = to_c_sym(name)
+
+    def set_world(self, world):
+        self.world = world
+
+    def add_location(self, location):
+        location.world = self.world
+        self.locations.append(location)
+
+    def add_exit(self, exit):
+        exit.world = self.world
+        self.exits.append(exit)
+
+
+
+class WorldModel(object):
+    def __init__(self):
+        self.regions = []
+        self.dungeon_regions = []
+        self.rules = {}
+
+    def add_region(self, region, is_overworld):
+        if is_overworld:
+            self.regions.append(region)
+        else:
+            if not any(r.symbol == region.symbol for r in self.regions):
+                self.regions.append(RegionModel(region.name, False))
+            region_ver = "VA_" if region.mq else "MQ_"
+
+            region.set_name(region_ver + region.symbol)
+            self.dungeon_regions.append(region)
+
+    def bind_rule(self, entity, rule : RuleModel):
+        if rule.rule in self.rules:
+            entity.rule = self.rules[rule.rule]
+        else:
+            entity.rule = rule
+            self.rules[rule.rule] = rule
 
 class CGen(object):
+
 
     def __init__(self):
         self.world = DummyWorld()
@@ -121,11 +201,11 @@ class CGen(object):
     @staticmethod
     def get_rule_file_list():
         result = []
-        result.append((os.path.join(data_path('World'), 'Overworld.json'), False))
+        result.append((os.path.join(data_path('World'), 'Overworld.json'), False, True))
         for item in dungeon_table:
             name = item['name']
-            result.append((os.path.join(data_path('World'), name + '.json'), False))
-            result.append((os.path.join(data_path('World'), name + ' MQ.json'), True))
+            result.append((os.path.join(data_path('World'), name + '.json'), False, False))
+            result.append((os.path.join(data_path('World'), name + ' MQ.json'), True, False))
         return result
     
     @staticmethod
@@ -137,9 +217,58 @@ class CGen(object):
         return json.loads(json_string)
 
 
+
+
     def Go(self):
         func_count = 0
-        output = cleandoc('''
+
+        worldmodel = WorldModel()
+
+
+        for filename, ismq, is_overworld in CGen.get_rule_file_list():
+
+            rules = CGen.load_rule_json(filename)
+            mq_txt = "MQ_" if ismq else ""
+            for region in rules:
+                
+                region_name = region['region_name']
+                regionmodel = RegionModel(region_name, ismq)
+                worldmodel.add_region(regionmodel, is_overworld)
+
+                if 'locations' in region:
+                    for loc, rule in region['locations'].items():
+                        loc_sym = to_c_sym(loc)
+                        func = "rule_{}_location_{}".format(func_count, loc_sym)
+                        rule = RuleModel(self.world, self.parser, func, rule)
+
+                        location_model = LocationModel(loc)
+                        worldmodel.bind_rule(location_model, rule)
+
+                        regionmodel.locations.append(location_model)
+                        func_count += 1
+
+                if 'exits' in region:
+                    for exit, rule in region['exits'].items():
+                        reg_sym = to_c_sym(exit)
+                        func = "rule_{}_exit_{}".format(func_count, reg_sym)
+                        rule = RuleModel(self.world, self.parser, func, rule)
+                        exit_model = ExitModel(region_name, reg_sym)
+                        worldmodel.bind_rule(exit_model, rule)
+                        regionmodel.exits.append(exit_model)
+                        func_count += 1
+
+
+        with open(os.path.join("ASM", "world", "regionlist.h"), 'w') as outfile:
+            regionlist_h = self.create_regionlist_h(worldmodel)
+            outfile.write(regionlist_h)
+
+        self.create_locationlist_files()
+        self.create_rule_files(worldmodel)
+
+
+    def create_rule_files(self, world_model):
+        
+        rules_c = cleandoc('''
         /* Generated C Code */
 
         #include "state.h"
@@ -147,81 +276,49 @@ class CGen(object):
         #include "regionlist.h"
         #include <stdbool.h>''') +'\n\n'
 
+        rules_h = cleandoc('''
+        /* Generated C Code */
 
-        region_names = {}
+        #include "state.h"
+        #ifndef RULES_H
+        #define RULES_H
 
-        gen_functions = ""
+        typedef bool (*rule_f)(state_t*);
+        ''') +'\n\n'
 
+        for k, rule in world_model.rules.items():
+            rules_c += rule.c
+            rules_h += 'extern ' + rule.proto + ';\n'
 
-        for filename, ismq in CGen.get_rule_file_list():
-            rules = CGen.load_rule_json(filename)
-            mq_txt = "MQ_" if ismq else ""
-            for region in rules:
-                region_name = region['region_name']
-                region_names[to_c_sym(region_name)] = (region_name, ismq)
-                location_list = []
-                exit_list = []
-                if 'locations' in region:
-                    for loc, rule in region['locations'].items():
-                        loc_sym = to_c_sym(loc)
-                        func = "rule_{}_loc_{}{}".format(func_count, mq_txt, loc_sym)
-                        gen_functions += self.new_rule(func, rule)
-                        func_count += 1
-                if 'exits' in region:
-                    for exit, rule in region['exits'].items():
-                        reg_sym = to_c_sym(exit)
-                        func = "rule_{}_exit_{}".format(func_count,reg_sym)
-                        gen_functions += self.new_rule(func, rule)
-                        func_count += 1
-
-        output += gen_functions
+        rules_h += "#endif // !RULES_H"
 
         with open(os.path.join("ASM","world", "rules.c"), 'w') as outfile:
-            outfile.write(output)
-        with open(os.path.join("ASM", "world", "regionlist.h"), 'w') as outfile:
-            regionlist_h = self.create_regionlist_h(region_names)
-            outfile.write(regionlist_h)
+            outfile.write(rules_c)
 
-        self.create_locationlist_files()
+        with open(os.path.join("ASM","world", "rules.h"), 'w') as outfile:
+            outfile.write(rules_h)
 
-    def create_regionlist_h(self, regions):
-        region_e = ""
-        for k in regions:
-            region_e += "    REGION_{},\n".format(to_c_sym(k))
+
+    def create_regionlist_h(self, world_model):
+        regions = [region.symbol for region in world_model.regions + world_model.dungeon_regions]
             ## region_struct += "    {{ .k = {} .name = {} }},\n".format(k, v[0])
         region_e = cleandoc('''
+        /* Generated C Code */
+
         #ifndef REGIONLIST_H
         #define REGIONLIST_H
-        typedef enum
-        {
-        ''') + '\n' + region_e + '\n' + cleandoc('''
-        } region_e;
+        ''') + '\n' + self.create_named_enum("region_e", regions, "REGION_") + cleandoc('''
         #endif
         ''')
 
         return region_e
 
-    def new_rule(self, name, rule):
-        parser = self.parser
-        output = "bool {}(state_t *state){{\n    return ".format(name);
 
-        if rule is None:
-            rule = "True"
-        else:
-            rule = rule.strip()
-        rule = rule.split('#')[0]
-
-        ast_rule = ast.parse(rule, mode='eval')
-        ast_rule = RuleCAST(self.world).visit(ast_rule)
-        output += parser.visit(ast_rule)
-        output += ";\n}\n\n"
-        return output
-
-    def create_named_enum(self, name, list):
+    def create_named_enum(self, typedef_name, items, prefix = ""):
         c = "typedef enum{\n"
-        for item in list:
-            c += "    {},\n".format(item)
-        return c + "}} {};\n\n".format(name)
+        for item in items:
+            c += "    {}{},\n".format(prefix, item)
+        return c + "}} {};\n\n".format(typedef_name)
 
     def create_locationlist_files(self):
         location_e = []
@@ -241,8 +338,6 @@ class CGen(object):
         for k, v in location_table.items():
             loc_k = "LOCATION_" + to_c_sym(k)
             loc_name = k
-            loc_mq = loc_name.find("MQ") >= 0
-            loc_mq = str(loc_mq).lower()
             loc_type = "LOCATION_TYPE_" + to_c_sym(v[0])
             location_type_e.add(loc_type)
             loc_hint = v[3]
@@ -262,7 +357,18 @@ class CGen(object):
                 loc_default = 0
 
             location_e.append(loc_k)
-            _c += '    {{ .k = {}, .name = "{}", .mq = {},\n    .type = {}, .scene = 0x{:02X}, .var = 0x{:02X}, .hint = {} }},\n'.format(loc_k, loc_name, loc_mq, loc_type, loc_scene, loc_default, loc_hint)
+            line ="""\
+                {{
+                    .k = {},
+                    .name = "{}",
+                    .type = {},
+                    .scene = 0x{:02X},
+                    .var = 0x{:02X},
+                    .hint = {}
+                }},\n""".format(loc_k, loc_name, loc_type, loc_scene, loc_default, loc_hint)
+            line = textwrap.dedent(line)
+            line = textwrap.indent(line, '    ')
+            _c += line
 
         _c += "};\n"
 
