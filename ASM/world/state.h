@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "itemlist.h"
-#include "location.h"
 
 
 typedef enum
