@@ -226,9 +226,6 @@ def guiMain(settings=None):
             if info.name in widgets:
                 toggle_widget(widgets[info.name], dep_met)
 
-            if info.name in guivars and guivars[info.name].get() == 'Custom Color':
-                color = askcolor()
-
             if info.type == list:
                 widgets[info.name].delete(0, END)
                 widgets[info.name].insert(0, *guivars[info.name])
