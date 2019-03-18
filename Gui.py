@@ -449,8 +449,8 @@ def guiMain(settings=None):
     frames['world'].pack(  fill=BOTH,  expand=True, anchor=W, side=BOTTOM, pady=(5,1))
 
     # Logic tab
-    frames['checks'].pack(fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1))
-    frames['tricks'].pack(fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1))
+    # frames['checks'].pack(fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1))
+    # frames['tricks'].pack(fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1))
 
     # Other Tab
     frames['convenience'].pack(fill=BOTH, expand=True, anchor=N, side=LEFT, pady=(5,1))
