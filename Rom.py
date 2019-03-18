@@ -14,6 +14,7 @@ from Utils import local_path, data_path, default_output_path
 
 DMADATA_START = 0x1A500
 
+
 class LocalRom(BigStream):
     def __init__(self, settings, patch=True):
         super().__init__([])
@@ -22,11 +23,11 @@ class LocalRom(BigStream):
         decomp_file = 'MMDEC.z64'
 
         os.chdir(local_path())
-        
+
         with open(local_path('data/generated/symbols.json'), 'r') as stream:
             symbols = json.load(stream)
-            self.symbols = { name: int(addr, 16) for name, addr in symbols.items() }
-        
+            self.symbols = {name: int(addr, 16) for name, addr in symbols.items()}
+
         try:
             # Read decompressed file if it exists
             self.read_rom(decomp_file)
@@ -47,9 +48,9 @@ class LocalRom(BigStream):
     def decompress_rom_file(self, file, decomp_file):
         # TODO: Figure out the appropriate CRCs for MM ROMs
         validCRC = [
-            [0xE9, 0x79, 0x55, 0xC6, 0xBC, 0x33, 0x8D, 0x38], # Compressed MM?
-            [ ], # Byteswap compressed
-            [0xDA, 0x69, 0x83, 0xE7, 0x50, 0x67, 0x44, 0x58], # Decompressed MM?
+            [0xE9, 0x79, 0x55, 0xC6, 0xBC, 0x33, 0x8D, 0x38],  # Compressed MM?
+            [ ],  # Byteswap compressed
+            [0xDA, 0x69, 0x83, 0xE7, 0x50, 0x67, 0x44, 0x58],  # Decompressed MM?
         ]
 
         # Validate ROM file
@@ -58,7 +59,9 @@ class LocalRom(BigStream):
         if romCRC not in validCRC:
             # Bad CRC validation
             raise RuntimeError('ROM file %s is not a valid MM 1.0 US ROM.' % file)
-        elif len(self.buffer) < 0x2000000 or len(self.buffer) > (0x4000000) or file_name[1] not in ['.z64', '.n64']:
+        elif len(self.buffer) < 0x2000000 or \
+             len(self.buffer) > 0x4000000 or \
+             file_name[1] not in ['.z64', '.n64']:
             # ROM is too big, or too small, or not a bad type
             raise RuntimeError('ROM file %s is not a valid MM 1.0 US ROM.' % file)
         elif len(self.buffer) == 0x2000000:
@@ -90,7 +93,6 @@ class LocalRom(BigStream):
         else:
             # ROM file is a valid and already uncompressed
             pass
-
 
     def restore(self):
         self.buffer = copy.copy(self.original)
@@ -142,7 +144,6 @@ class LocalRom(BigStream):
         # Finally write the crc back to the rom
         self.write_int32s(0x10, [crc0, crc1])
 
-
     def read_rom(self, file):
         # "Reads rom into bytearray"
         try:
@@ -159,13 +160,11 @@ class LocalRom(BigStream):
         size = end-start
         return start, end, size
 
-
     def _get_old_dmadata_record(self, cur):
         old_dma_start = int32.unpack_from(self.original, cur)[0]
         old_dma_end = int32.unpack_from(self.original, cur + 0x04)[0]
         old_size = old_dma_end-old_dma_start
         return old_dma_start, old_dma_end, old_size
-
 
     def get_dmadata_record_by_key(self, key):
         cur = DMADATA_START
@@ -178,7 +177,6 @@ class LocalRom(BigStream):
             cur += 0x10
             dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
 
-
     def get_old_dmadata_record_by_key(self, key):
         cur = DMADATA_START
         dma_start, dma_end, dma_size = self._get_old_dmadata_record(cur)
@@ -189,7 +187,6 @@ class LocalRom(BigStream):
                 return dma_start, dma_end, dma_size
             cur += 0x10
             dma_start, dma_end, dma_size = self._get_old_dmadata_record(cur)
-
 
     def verify_dmadata(self):
         cur = DMADATA_START
@@ -219,8 +216,7 @@ class LocalRom(BigStream):
 
         if len(overlapping_records) > 0:
             raise Exception("Overlapping DMA Data Records!\n%s" % \
-                '\n-------------------------------------\n'.join(overlapping_records))
-
+                            '\n-------------------------------------\n'.join(overlapping_records))
 
     # if key is not found, then add an entry
     def update_dmadata_record(self, key, start, end, from_file=None):
@@ -239,8 +235,8 @@ class LocalRom(BigStream):
             raise Exception('dmadata update failed: key {0:x} not found in dmadata and dma table is full.'.format(key))
         else:
             self.write_int32s(cur, [start, end, start, 0])
-            if from_file == None:
-                if key == None:
+            if from_file is None:
+                if key is None:
                     from_file = -1
                 else:
                     from_file = key
@@ -259,7 +255,6 @@ class LocalRom(BigStream):
             cur += 0x10
             dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
 
-
     # This will scan for any changes that have been made to the DMA table
     # This assumes any changes here are new files, so this should only be called
     # after patching in the new files, but before vanilla files are repointed
@@ -271,8 +266,8 @@ class LocalRom(BigStream):
         old_dma_start, old_dma_end, old_dma_size = self._get_old_dmadata_record(cur)
 
         while True:
-            if (dma_start == 0 and dma_end == 0) and \
-            (old_dma_start == 0 and old_dma_end == 0):
+            if (dma_start     == 0 and dma_end     == 0) and \
+               (old_dma_start == 0 and old_dma_end == 0):
                 break
 
             # If the entries do not match, the flag the changed entry
@@ -283,7 +278,6 @@ class LocalRom(BigStream):
             dma_index += 1
             dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
             old_dma_start, old_dma_end, old_dma_size = self._get_old_dmadata_record(cur)
-
 
     # gets the last used byte of rom defined in the DMA table
     def free_space(self):
@@ -300,5 +294,39 @@ class LocalRom(BigStream):
             cur += 0x10
         return max_end
 
-        else:
-            rom.write_int32s(cur, [start, end, start, 0])
+        # Remnant of the merge? Can't find where this is from,
+        # but is definitely not part of 'free_space'
+        #
+        # else:
+        #     rom.write_int32s(cur, [start, end, start, 0])
+
+
+int16 = struct.Struct('>H')
+int32 = struct.Struct('>I')
+
+def int16_as_bytes(value):
+    value = value & 0xFFFF
+    return [(value >> 8) & 0xFF,
+            value & 0xFF]
+
+def int24_as_bytes(value):
+    value = value & 0xFFFFFF
+    return [(value >> 16) & 0xFF,
+            (value >> 8) & 0xFF,
+            value & 0xFF]
+
+def int32_as_bytes(value):
+    value = value & 0xFFFFFFFF
+    return [(value >> 24) & 0xFF,
+            (value >> 16) & 0xFF,
+            (value >> 8) & 0xFF,
+            value & 0xFF]
+
+def bytes_as_int16(values):
+    return (values[0] << 8) | values[1]
+
+def bytes_as_int24(values):
+    return (values[0] << 16) | (values[1] << 8) | values[2]
+
+def bytes_as_int32(values):
+    return (values[0] << 24) | (values[1] << 16) | (values[2] << 8) | values[3]
