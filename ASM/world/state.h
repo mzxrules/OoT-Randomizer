@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "itemlist.h"
+#include "item.h"
 
 
 typedef enum
@@ -49,6 +49,8 @@ typedef enum
     OPTION_DUNGEONS,
     OPTION_MEDALLIONS,
 
+    OPTION_DUNGEON,
+
     OPTION_MASK,
 
     OPTION_QUADRUPLE,
@@ -63,6 +65,8 @@ typedef struct
     bool open_kakariko;
     bool open_door_of_time;
 
+    option_e shuffle_smallkeys;
+    option_e shuffle_bosskeys;
     bool shuffle_weird_egg;
     bool shuffle_song_items;
     option_e shuffle_scrubs;

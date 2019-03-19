@@ -2,6 +2,7 @@
 #define ITEM_LIST_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 
 typedef enum {
@@ -272,5 +273,19 @@ typedef struct
     uint16_t object;
     int16_t price;
 } item_shop_t;
+
+extern item_info_t item_table[];
+
+bool item_is_progressive_item(item_e item);
+bool display_as_bottle_item(item_e item);
+bool item_is_bombchu(item_e item);
+bool item_is_bottle(item_e item);
+bool item_is_key(item_e item);
+bool item_is_smallkey(item_e item);
+bool item_is_bosskey(item_e item);
+bool item_is_map(item_e item);
+bool item_is_compass(item_e item);
+bool item_is_dungeonitem(item_e item);
+bool item_is_majoritem(item_e item);
 
 #endif // !ITEM_LIST_H

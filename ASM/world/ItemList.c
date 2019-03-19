@@ -1,7 +1,7 @@
 /* Generated C code */
 
 #include <stdbool.h>
-#include "itemlist.h"
+#include "item.h"
 
 item_info_t item_table[] = {
     [BOMBS_5] = {

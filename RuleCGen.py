@@ -314,7 +314,7 @@ class CGen(object):
         /* Generated C code */
 
         #include <stdbool.h>
-        #include "itemlist.h"
+        #include "item.h"
 
         item_info_t item_table[] = {''')
 
@@ -403,7 +403,7 @@ class CGen(object):
 
         #ifndef ITEMPOOL_H
         #define ITEMPOOL_H
-        #include "itemlist.h"
+        #include "item.h"
         
         item_e itempool_test [] = { 
         ''') +'\n'
