@@ -1,5 +1,5 @@
-#ifndef ITEM_LIST_H
-#define ITEM_LIST_H
+#ifndef ITEM_H
+#define ITEM_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -288,4 +288,4 @@ bool item_is_compass(item_e item);
 bool item_is_dungeonitem(item_e item);
 bool item_is_majoritem(item_e item);
 
-#endif // !ITEM_LIST_H
+#endif // !ITEM_H
