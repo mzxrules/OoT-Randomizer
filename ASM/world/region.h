@@ -8,9 +8,6 @@
 #include "locationlist.h"
 
 
-typedef int region_group_e;
-
-
 typedef struct
 {
     location_e          k;
@@ -26,6 +23,7 @@ typedef struct
     bool                active;
 
 } location_t;
+
 
 typedef struct
 {
@@ -51,12 +49,15 @@ typedef struct
     region_e            k;
     char               *name;
     bool                mq;
-    //region_group_e      group;
     location_e         *locations;
     int32_t             loc_count;
     exit_rule_t        *exits;
     int32_t             exit_count;
 
 } world_region_t;
+
+
+extern location_t location_table[];
+extern world_region_t world_regions[];
 
 #endif // !REGION_H

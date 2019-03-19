@@ -275,3 +275,8 @@ bool guarantee_hint(state_t *self)
 {
     return true; //fixme
 }
+
+void collect_locations(state_t *state /* state_list */) 
+{
+
+}

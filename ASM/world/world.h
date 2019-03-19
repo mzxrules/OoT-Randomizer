@@ -1,6 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include "state.h"
 
 #define TRIALS_FOREST 0
 #define TRIALS_FIRE 1
@@ -24,5 +25,11 @@
 #define DUNGEON_GERUDO_TRAINING_GROUNDS 11
 #define DUNGEON_THIEVES_HIDEOUT 12
 #define DUNGEON_GANONS_CASTLE 13
+
+
+typedef struct {
+    int shuffle;
+    state_t state;
+} world_t;
 
 #endif

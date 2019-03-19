@@ -848,6 +848,7 @@ def get_pool_core(world):
         pool.extend(DC_vanilla)
     if world.dungeon_mq['Jabu Jabus Belly']:
         pool.extend(JB_MQ)
+
     if world.dungeon_mq['Forest Temple']:
         pool.extend(FoT_MQ)
     else:

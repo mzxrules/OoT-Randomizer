@@ -64,12 +64,15 @@ typedef struct
     bool open_door_of_time;
 
     bool shuffle_weird_egg;
+    bool shuffle_song_items;
     option_e shuffle_scrubs;
 
     bool bombchus_in_logic;
     bool logic_man_on_roof;
     bool logic_windmill_poh;
     option_e logic_lens;
+    item_e logic_earliest_adult_trade;
+    item_e logic_latest_adult_trade;
     bool logic_deku_basement_gs;
     bool logic_dmt_bombable;
     bool logic_dc_jump;

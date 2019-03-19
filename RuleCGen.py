@@ -8,6 +8,8 @@ from DungeonList import dungeon_table
 from Utils import data_path
 from RuleCAST import RuleCAST
 from LocationList import location_table
+from ItemList import item_table
+import ItemPool
 
 def to_c_sym(item:str):
     return item.replace("(","").replace(")","").replace("[","").replace("]","").replace(" ","_").replace("'", "").replace("-","_").upper()
@@ -304,9 +306,118 @@ class CGen(object):
         self.create_locationlist_files(world_model)
         self.create_rule_files(world_model)
         self.create_itempool_files(world_model)
+        self.create_itemlist_file()
+
+    def create_itemlist_file(self):
+        
+        itemlist_c = cleandoc('''
+        /* Generated C code */
+
+        #include <stdbool.h>
+        #include "itemlist.h"
+
+        item_info_t item_table[] = {''')
+
+        for item in item_table:
+            v = item_table[item]
+            gi = v[2]
+            if gi is None:
+                gi = 0
+            g = v[1]
+            if g is None:
+                g = "ITEM_FILL_NORMAL"
+            elif g == True:
+                g = "ITEM_FILL_ADVANCEMENT"
+            elif g == False:
+                g = "ITEM_FILL_PRIORITY"
+
+            item_sym = to_c_sym(item)
+            item_type_sym = "ITEM_TYPE_" + to_c_sym(v[0])
+            if item_type_sym == 'ITEM_TYPE_FORTRESSSMALLKEY':
+                item_type_sym = 'ITEM_TYPE_FORTRESS_SMALLKEY'
+            element = cleandoc('''
+            [{}] = {{
+                .k = {},
+                .name = "{}",
+                .type = {},
+                .fill = {},
+                .gi = 0x{:02X}
+            }},
+            ''').format(item_sym, item_sym, item, item_type_sym, g, gi)
+            element = textwrap.indent(element, '    ')
+            itemlist_c += '\n' + element
+        itemlist_c += '\n};\n\n'
+
+
+        for t in ['Song', 'Event', 'Shop']:
+            itemlist_c += "item_{}_t {}_items[] = {{".format(t.lower(), t.lower())
+            for item in item_table:
+                v = item_table[item]
+                if v[0] == t and v[3] is not None:
+                    element = cleandoc('''
+                    {{
+                        .k = {},
+                    ''').format(to_c_sym(item))
+                    s = v[3]
+                    for k in s:
+                        f = '0x{:02X}' 
+                        if k == 'bit_mask':
+                            f = '0x{:08X}' 
+                        elif k == 'object':
+                            f = '0x{:04X}' 
+                        elif k == 'price':
+                            f = '{}'
+                        line = "\n    .{{}} = {},".format(f)
+                        element += line.format(k,s[k])
+                    element +="\n},"
+                    element = textwrap.indent(element, '    ')
+                    itemlist_c += '\n' + element
+            itemlist_c += "\n};\n\n"
+
+        with open(os.path.join("ASM", "world", "itemlist.c"), 'w') as outfile:
+            outfile.write(itemlist_c)
+
 
     def create_itempool_files(self, world_model):
-        return
+        pool = \
+            ItemPool.alwaysitems + \
+            ItemPool.normal_items + \
+            ItemPool.songlist + \
+            ItemPool.rewardlist + \
+            ['Bottle'] * 3 + \
+            ['Bottle with Letter'] + \
+            ['Ocarina'] * 2 + \
+            ['Weird Egg'] + \
+            ['POCKET_EGG']
+            #shuffle_ocarinas = true 
+            #shuffle_weird_egg = true
+
+
+        for dungeon_info in dungeon_table:
+            name = dungeon_info['name']
+            pool += ['Boss Key (%s)' % name] * dungeon_info['boss_key']
+            pool += ['Small Key (%s)' % name] * dungeon_info['small_key']
+        
+        itempool_h = cleandoc('''
+        /* Generated C Code */
+
+        #ifndef ITEMPOOL_H
+        #define ITEMPOOL_H
+        #include "itemlist.h"
+        
+        item_e itempool_test [] = { 
+        ''') +'\n'
+
+        for item in pool:
+            item = to_c_sym(item)
+            itempool_h += "    {},\n".format(item)
+
+        itempool_h += '};\n#endif'
+
+        
+        with open(os.path.join("ASM", "world", "itempool.h"), 'w') as outfile:
+            outfile.write(itempool_h)
+
 
     def create_rule_files(self, world_model):
         
@@ -361,7 +472,7 @@ class CGen(object):
         #include <stddef.h>
         #include "region.h"
 
-        world_region_t world [] = {
+        world_region_t world_regions [] = {
         ''') + '\n'
 
 
@@ -499,6 +610,7 @@ class CGen(object):
 
         #ifndef LOCATIONLIST_H
         #define LOCATIONLIST_H
+
         ''')+"\n\n"
         temp = list(location_type_e)
         temp.sort()
@@ -506,7 +618,7 @@ class CGen(object):
         temp = list(location_hint_e)
         temp.sort()
         _h += self.create_named_enum("location_hint_e", ["LOCATION_HINT_NONE"] + temp)
-        _h += self.create_named_enum("location_e", location_e)
+        _h += self.create_named_enum("location_e", location_e + ["LOCATION_MAX"])
         _h += "#endif // !LOCATIONLIST_H"
 
         
@@ -515,6 +627,7 @@ class CGen(object):
 
         with open(os.path.join("ASM","world", "locationlist.c"), 'w') as outfile:
             outfile.write(_c)
+
 
 test = CGen()
 test.Go()

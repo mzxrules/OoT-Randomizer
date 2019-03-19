@@ -10,8 +10,12 @@ uint8_t big_poe_count = 10;
 //self.check_beatable_only = not self.all_reachable
 
 uint8_t skipped_trials[6];
-
-
 uint8_t dungeon_mq[6];
 
 //         self.can_take_damage = True
+void initialize()
+{
+    option.keysanity = true;
+    option.shuffle_weird_egg = true;
+    option.shuffle_song_items = true;
+}
