@@ -1,13 +1,9 @@
 #include "state.h"
+#include "region.h"
 #include "util.h"
 #include <stdint.h>
 #include <stdbool.h>
 
-
-bool can_reach(state_t *self, int location, can_reach_e reach_type)
-{
-    return true;
-}
 
 bool can_child_attack(state_t *self)
 {
@@ -276,7 +272,34 @@ bool guarantee_hint(state_t *self)
     return true; //fixme
 }
 
+
+/* State.py functions */
+
+
+bool can_reach_location(state_t *state, location_e location)
+{
+
+}
+
+
+bool can_reach(state_t *self, int spot, can_reach_e spot_type)
+{
+    if (spot_type = CAN_REACH_REGION)
+    {
+
+    }
+    else if (spot_type = CAN_REACH_LOCATION)
+    {
+        can_reach_location(self, spot);
+    }
+}
+
 void collect_locations(state_t *state /* state_list */) 
 {
 
+}
+
+bool can_beat_game(state_t *state /* state_list, bool scan_for_items = true */)
+{
+    return has(state, TRIFORCE);
 }

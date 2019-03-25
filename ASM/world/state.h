@@ -108,7 +108,7 @@ typedef struct
     uint8_t big_poe_count;
 } options_t;
 
-options_t option;
+options_t options;
 
 bool can_reach(state_t *self, int location, can_reach_e reach_type);
 bool can_child_attack(state_t *self);

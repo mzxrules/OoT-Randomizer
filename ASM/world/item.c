@@ -73,24 +73,24 @@ bool item_is_majoritem(item_e item)
 {
     item_info_t i = item_table[item];
     if (i.type == ITEM_TYPE_TOKEN)
-        return option.bridge == OPTION_TOKENS;
+        return options.bridge == OPTION_TOKENS;
 
     if (i.type == ITEM_TYPE_EVENT
         || i.type == ITEM_TYPE_SHOP
         || i.fill != ITEM_FILL_ADVANCEMENT)
         return false;
 
-    if (!option.bombchus_in_logic && item_is_bombchu(item))
+    if (!options.bombchus_in_logic && item_is_bombchu(item))
         return false;
 
     if (item_is_map(item) || item_is_compass(item))
         return false;
 
-    if (option.shuffle_smallkeys == OPTION_DUNGEON
+    if (options.shuffle_smallkeys == OPTION_DUNGEON
         && item_is_smallkey(item))
         return false;
 
-    if (option.shuffle_bosskeys == OPTION_DUNGEON
+    if (options.shuffle_bosskeys == OPTION_DUNGEON
         && item_is_bosskey(item))
         return false;
 

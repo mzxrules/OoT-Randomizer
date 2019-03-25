@@ -15,7 +15,7 @@ uint8_t dungeon_mq[6];
 //         self.can_take_damage = True
 void initialize()
 {
-    option.keysanity = true;
-    option.shuffle_weird_egg = true;
-    option.shuffle_song_items = true;
+    options.keysanity = true;
+    options.shuffle_weird_egg = true;
+    options.shuffle_song_items = true;
 }

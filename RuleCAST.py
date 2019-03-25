@@ -37,7 +37,7 @@ class RuleCAST(ast.NodeTransformer):
         elif node.id in self.world.__dict__:
             ## gen world option
             return ast.Attribute(
-                value=ast.Name(id='option', ctx=ast.Load()),
+                value=ast.Name(id='options', ctx=ast.Load()),
                 attr=node.id,
                 ctx=ast.Load())
         elif node.id in State.__dict__:
@@ -68,7 +68,7 @@ class RuleCAST(ast.NodeTransformer):
 
         if isinstance(count, ast.Name):
             count = ast.Attribute(
-                value=ast.Name(id='option', ctx=ast.Load()),
+                value=ast.Name(id='options', ctx=ast.Load()),
                 attr=count.id,
                 ctx=ast.Load())
 
@@ -123,7 +123,7 @@ class RuleCAST(ast.NodeTransformer):
             if isinstance(child, ast.Name):
                 if child.id in self.world.__dict__:
                     child = ast.Attribute(
-                        value=ast.Name(id='option', ctx=ast.Load()),
+                        value=ast.Name(id='options', ctx=ast.Load()),
                         attr=child.id,
                         ctx=ast.Load())
                 elif child.id in escaped_items:
@@ -144,7 +144,7 @@ class RuleCAST(ast.NodeTransformer):
             slice_val = "TRIAL_" + to_c_sym(node.slice.value.id)
             return ast.Subscript(
                 value=ast.Attribute(
-                    value=ast.Name(id='option', ctx=ast.Load()),
+                    value=ast.Name(id='options', ctx=ast.Load()),
                     attr=node.value.id,
                     ctx=ast.Load()),
                 slice=ast.Index(value=ast.Name(id=slice_val, ctx=ast.Load())),
