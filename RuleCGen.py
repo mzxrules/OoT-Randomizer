@@ -150,29 +150,30 @@ class ExitModel(object):
         self.rule = None
 
 class RegionModel(object):
-    def __init__(self, name, is_mq):
+    def __init__(self, name, is_mq, scene_id):
         self.name = name
         self.mq = is_mq
+        self.scene = scene_id
         self.symbol = 'REGION_' + to_c_sym(name)
         self.locations = []
         self.exits = []
         self.core_region = None
 
-    def set_name(self, name):
-        self.name = name
-        self.symbol = to_c_sym(name)
 
     def get_core_symbol(self):
         if self.core_region is not None:
             return self.core_region.symbol
         return self.symbol
 
+
     def set_world(self, world):
         self.world = world
+
 
     def add_location(self, location):
         location.world = self.world
         self.locations.append(location)
+
 
     def add_exit(self, exit):
         exit.world = self.world
@@ -188,19 +189,20 @@ class WorldModel(object):
         self.locations = {}
         self.location_conflicts = []
 
+
     def add_region(self, region, is_overworld):
         if is_overworld:
             self.regions[region.symbol] = region
         else:
             if region.symbol not in self.regions:
-                self.regions[region.symbol] = RegionModel(region.name, False)
+                self.regions[region.symbol] = RegionModel(region.name, False, region.scene)
 
             core_region = self.regions[region.symbol]
             region.core_region = core_region
 
             region_ver = "VA_" if region.mq else "MQ_"
 
-            region.set_name(region_ver + region.symbol)
+            region.symbol = region_ver + region.symbol
             self.dungeon_regions.append(region)
 
     def bind_rule(self, entity, rule:RuleModel):
@@ -279,7 +281,7 @@ class CGen(object):
             for region in rules:
                 
                 region_name = region['region_name']
-                region_model = RegionModel(region_name, ismq)
+                region_model = RegionModel(region_name, ismq, scene_id)
                 world_model.add_region(region_model, is_overworld)
 
                 if 'locations' in region:
@@ -455,14 +457,16 @@ class CGen(object):
 
 
     def create_regionlist_files(self, world_model:WorldModel):
-        regions = [region.symbol for region in list(world_model.regions.values()) + world_model.dungeon_regions]
+        base_regions = list(world_model.regions.values())
+        dungeon_regions = world_model.dungeon_regions
+        regions = base_regions + dungeon_regions
 
         regionlist_h = cleandoc('''
         /* Generated C Code */
 
         #ifndef REGIONLIST_H
         #define REGIONLIST_H
-        ''') + '\n' + self.create_named_enum("region_e", regions) + cleandoc('''
+        ''') + '\n' + self.create_named_enum("region_e", [region.symbol for region in regions]) + cleandoc('''
         #endif
         ''')
         
@@ -472,12 +476,49 @@ class CGen(object):
         #include <stddef.h>
         #include "region.h"
 
-        world_region_t world_regions [] = {
-        ''') + '\n'
+        world_region_t world_regions[] = ''')
 
+        regionlist_c += self.generate_region_array(base_regions, '', lambda r: r.symbol) + ';'
 
-        for region in list(world_model.regions.values()) + world_model.dungeon_regions:
-            _c = '    [{}] = {{\n'.format(region.symbol)
+        for var_name, is_mq in [('va_only_regions', False), ('mq_only_regions', True)]:
+            
+            regionlist_c += '\n\n' + cleandoc('''
+            world_region_list_t {}[] = {{
+            ''').format(var_name)
+            for scene in range(0, 14):
+                scene_regions = [r for r in dungeon_regions if r.scene == scene and r.mq == is_mq]
+                count = len(scene_regions)
+
+                _c = '\n[{}] = {{\n'.format(scene)
+                
+                _c_scene_regions = ""
+                if count == 0:
+                    _c_scene_regions = "NULL";
+                else:
+                    _c_scene_regions = self.generate_region_array(scene_regions, '    ', None)
+                    _c_scene_regions = "(world_region_t[]) " + _c_scene_regions
+                _c += cleandoc('''
+                    .count = {},
+                    .values = {}
+                }},\n''').format(count, _c_scene_regions)
+                regionlist_c += textwrap.indent(_c, '    ')
+            regionlist_c += "\n};"
+
+        with open(os.path.join("ASM", "world", "regionlist.h"), 'w') as outfile:
+            outfile.write(regionlist_h)
+            
+        with open(os.path.join("ASM", "world", "regionlist.c"), 'w') as outfile:
+            outfile.write(regionlist_c)
+    
+
+    def generate_region_array(self, regions, indent, key_lambda):
+        regionlist_c = ""
+        for region in regions:
+            _c = ""
+            if key_lambda is None:
+                _c = '{\n'
+            else:
+                _c = '[{}] = {{\n'.format(key_lambda(region))
             _c_loc = textwrap.indent(",\n".join([x.symbol for x in region.locations]), '        ').rstrip()
             loc_count = len(region.locations)
             if loc_count > 0:
@@ -486,40 +527,36 @@ class CGen(object):
             else:
                 _c_loc = 'NULL'
             _c_exits = ""
+            
             exit_count = len(region.exits)
-            for exit in region.exits:
-                _c_exit = '\n' + cleandoc('''
-                {{
-                    .start = {},
-                    .dest = {},
-                    .rule = {}
-                }},
-                ''').format(exit.start, exit.dest, exit.rule.name)
-                _c_exits += _c_exit
-                
-            _c_exits = textwrap.indent(_c_exits, '        ') + '\n    }'
-            _c_exits = '(exit_rule_t[]) {' + _c_exits
             if exit_count == 0:
                 _c_exits = "NULL"
-            _c += textwrap.indent(cleandoc('''
+            else:
+                for exit in region.exits:
+                    _c_exit = '\n' + cleandoc('''
+                    {{
+                        .start = {},
+                        .dest = {},
+                        .rule = {}
+                    }},
+                    ''').format(exit.start, exit.dest, exit.rule.name)
+                    _c_exits += _c_exit
+                
+                _c_exits = textwrap.indent(_c_exits, '        ') + '\n    }'
+                _c_exits = '(exit_rule_t[]) {' + _c_exits
+            _c += cleandoc('''
                 .k = {},
                 .name = "{}",
-                .mq = false,
                 .loc_count = {},
                 .locations = {},
                 .exit_count = {},
                 .exits = {},
             }},
-            ''').format(region.symbol, region.name, loc_count, _c_loc, exit_count, _c_exits), '    ')
+            ''').format(region.get_core_symbol(), region.name, loc_count, _c_loc, exit_count, _c_exits)
+            _c = textwrap.indent(_c, '    ')
             regionlist_c += _c + '\n'
 
-        regionlist_c += "}; "
-
-        with open(os.path.join("ASM", "world", "regionlist.h"), 'w') as outfile:
-            outfile.write(regionlist_h)
-            
-        with open(os.path.join("ASM", "world", "regionlist.c"), 'w') as outfile:
-            outfile.write(regionlist_c)
+        return "{\n" + textwrap.indent(regionlist_c + "}", indent)
 
 
     def create_named_enum(self, typedef_name, items, prefix = ""):
@@ -538,6 +575,7 @@ class CGen(object):
             /* Generated C Code */
 
             #include <stdbool.h>
+            #include <stddef.h>
             #include "region.h"
 
             location_t location_table [] = {''') +'\n'
@@ -585,23 +623,38 @@ class CGen(object):
             _c += line
 
         _c += "};\n\n"
-        _c += "location_conflict_t conflicts [] = {\n"
+        _c += "location_conflict_list_t location_conflicts [] = {\n"
+
+        conflicts = [[] for i in range(14)]
+
         for locA, locB in world_model.location_conflicts:
             mq_rule = locA.rule.name if locA.mq else locB.rule.name
             va_rule = locB.rule.name if locA.mq else locA.rule.name
 
-            line = """\
-                {{
-                    .k = {},
-                    .scene = 0x{:02X},
-                    .va_rule = {},
-                    .mq_rule = {}
-                }},\n""".format(locA.symbol, locA.scene, va_rule, mq_rule)
-                
-            line = textwrap.dedent(line)
-            line = textwrap.indent(line, '    ')
-            _c += line
-            
+            conflicts[locA.scene].append((locA.symbol, va_rule, mq_rule))
+
+        for scene_id in range(14):
+            scene_conflicts = conflicts[scene_id]
+            count = len(scene_conflicts)
+            _c_values = ""
+            if count == 0:
+                _c_values = "NULL"
+            else:
+                for k, va_rule, mq_rule in scene_conflicts:
+                    _c_values += cleandoc('''
+                        {{
+                            .k = {},
+                            .va_rule = {},
+                            .mq_rule = {}
+                        }},''').format(k, va_rule, mq_rule) +'\n'
+                _c_values = "(location_conflict_t[]) {\n" + textwrap.indent(_c_values, '        ') \
+                    + "    }"
+            line = cleandoc('''
+            [{}] = {{
+                .count = {},
+                .values = {}
+            }},''').format(scene_id, count, _c_values)+'\n'
+            _c += textwrap.indent(line, '    ')
         _c += "};\n"
 
 

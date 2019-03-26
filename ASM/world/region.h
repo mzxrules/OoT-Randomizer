@@ -28,27 +28,36 @@ typedef struct
 typedef struct
 {
     location_e k;
-    uint8_t scene;
     rule_f va_rule;
     rule_f mq_rule;
 
 } location_conflict_t;
 
-typedef struct {
+typedef struct
+{
+    int32_t             count;
+    location_conflict_t *values;
+
+} location_conflict_list_t;
+
+typedef struct 
+{
     location_e          location;
+
 } location_rule_t;
 
-typedef struct {
+typedef struct 
+{
     region_e            start;
     region_e            dest;
     rule_f              rule;
+
 } exit_rule_t;
 
 typedef struct
 {
     region_e            k;
     char               *name;
-    bool                mq;
     location_e         *locations;
     int32_t             loc_count;
     exit_rule_t        *exits;
@@ -56,8 +65,19 @@ typedef struct
 
 } world_region_t;
 
+typedef struct
+{
+    int32_t             count;
+    world_region_t     *values;
+
+} world_region_list_t;
+
 
 extern location_t location_table[];
+extern location_conflict_list_t location_conflicts[];
 extern world_region_t world_regions[];
+extern world_region_list_t va_only_regions[];
+extern world_region_list_t mq_only_regions[];
+
 
 #endif // !REGION_H

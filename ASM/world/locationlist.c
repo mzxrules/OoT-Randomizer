@@ -1,6 +1,7 @@
 /* Generated C Code */
 
 #include <stdbool.h>
+#include <stddef.h>
 #include "region.h"
 
 location_t location_table [] = {
@@ -8538,95 +8539,141 @@ location_t location_table [] = {
     },
 };
 
-location_conflict_t conflicts [] = {
-    {
-        .k = LOCATION_VOLVAGIA_HEART,
-        .scene = 0x04,
-        .va_rule = rule_728_LOCATION_VOLVAGIA_HEART,
-        .mq_rule = rule_true
+location_conflict_list_t location_conflicts [] = {
+    [0] = {
+        .count = 0,
+        .values = NULL
     },
-    {
-        .k = LOCATION_VOLVAGIA,
-        .scene = 0x04,
-        .va_rule = rule_728_LOCATION_VOLVAGIA_HEART,
-        .mq_rule = rule_true
+    [1] = {
+        .count = 0,
+        .values = NULL
     },
-    {
-        .k = LOCATION_SHEIK_IN_ICE_CAVERN,
-        .scene = 0x09,
-        .va_rule = rule_781_LOCATION_SHEIK_IN_ICE_CAVERN,
-        .mq_rule = rule_true
+    [2] = {
+        .count = 0,
+        .values = NULL
     },
-    {
-        .k = LOCATION_BONGO_BONGO_HEART,
-        .scene = 0x07,
-        .va_rule = rule_859_LOCATION_BONGO_BONGO_HEART,
-        .mq_rule = rule_887_LOCATION_BONGO_BONGO_HEART
+    [3] = {
+        .count = 0,
+        .values = NULL
     },
-    {
-        .k = LOCATION_BONGO_BONGO,
-        .scene = 0x07,
-        .va_rule = rule_859_LOCATION_BONGO_BONGO_HEART,
-        .mq_rule = rule_887_LOCATION_BONGO_BONGO_HEART
+    [4] = {
+        .count = 2,
+        .values = (location_conflict_t[]) {
+            {
+                .k = LOCATION_VOLVAGIA_HEART,
+                .va_rule = rule_728_LOCATION_VOLVAGIA_HEART,
+                .mq_rule = rule_true
+            },
+            {
+                .k = LOCATION_VOLVAGIA,
+                .va_rule = rule_728_LOCATION_VOLVAGIA_HEART,
+                .mq_rule = rule_true
+            },
+        }
     },
-    {
-        .k = LOCATION_TWINROVA_HEART,
-        .scene = 0x06,
-        .va_rule = rule_991_LOCATION_TWINROVA_HEART,
-        .mq_rule = rule_1027_LOCATION_TWINROVA_HEART
+    [5] = {
+        .count = 0,
+        .values = NULL
     },
-    {
-        .k = LOCATION_TWINROVA,
-        .scene = 0x06,
-        .va_rule = rule_991_LOCATION_TWINROVA_HEART,
-        .mq_rule = rule_1027_LOCATION_TWINROVA_HEART
+    [6] = {
+        .count = 4,
+        .values = (location_conflict_t[]) {
+            {
+                .k = LOCATION_TWINROVA_HEART,
+                .va_rule = rule_991_LOCATION_TWINROVA_HEART,
+                .mq_rule = rule_1027_LOCATION_TWINROVA_HEART
+            },
+            {
+                .k = LOCATION_TWINROVA,
+                .va_rule = rule_991_LOCATION_TWINROVA_HEART,
+                .mq_rule = rule_1027_LOCATION_TWINROVA_HEART
+            },
+            {
+                .k = LOCATION_MIRROR_SHIELD_CHEST,
+                .va_rule = rule_984_LOCATION_MIRROR_SHIELD_CHEST,
+                .mq_rule = rule_true
+            },
+            {
+                .k = LOCATION_SILVER_GAUNTLETS_CHEST,
+                .va_rule = rule_983_LOCATION_SILVER_GAUNTLETS_CHEST,
+                .mq_rule = rule_true
+            },
+        }
     },
-    {
-        .k = LOCATION_MIRROR_SHIELD_CHEST,
-        .scene = 0x06,
-        .va_rule = rule_984_LOCATION_MIRROR_SHIELD_CHEST,
-        .mq_rule = rule_true
+    [7] = {
+        .count = 2,
+        .values = (location_conflict_t[]) {
+            {
+                .k = LOCATION_BONGO_BONGO_HEART,
+                .va_rule = rule_859_LOCATION_BONGO_BONGO_HEART,
+                .mq_rule = rule_887_LOCATION_BONGO_BONGO_HEART
+            },
+            {
+                .k = LOCATION_BONGO_BONGO,
+                .va_rule = rule_859_LOCATION_BONGO_BONGO_HEART,
+                .mq_rule = rule_887_LOCATION_BONGO_BONGO_HEART
+            },
+        }
     },
-    {
-        .k = LOCATION_SILVER_GAUNTLETS_CHEST,
-        .scene = 0x06,
-        .va_rule = rule_983_LOCATION_SILVER_GAUNTLETS_CHEST,
-        .mq_rule = rule_true
+    [8] = {
+        .count = 0,
+        .values = NULL
     },
-    {
-        .k = LOCATION_GANONS_CASTLE_FOREST_TRIAL_CLEAR,
-        .scene = 0x0D,
-        .va_rule = rule_1045_LOCATION_GANONS_CASTLE_FOREST_TRIAL_CLEAR,
-        .mq_rule = rule_1082_LOCATION_GANONS_CASTLE_FOREST_TRIAL_CLEAR
+    [9] = {
+        .count = 1,
+        .values = (location_conflict_t[]) {
+            {
+                .k = LOCATION_SHEIK_IN_ICE_CAVERN,
+                .va_rule = rule_781_LOCATION_SHEIK_IN_ICE_CAVERN,
+                .mq_rule = rule_true
+            },
+        }
     },
-    {
-        .k = LOCATION_GANONS_CASTLE_FIRE_TRIAL_CLEAR,
-        .scene = 0x0D,
-        .va_rule = rule_1046_LOCATION_GANONS_CASTLE_FIRE_TRIAL_CLEAR,
-        .mq_rule = rule_1083_LOCATION_GANONS_CASTLE_FIRE_TRIAL_CLEAR
+    [10] = {
+        .count = 0,
+        .values = NULL
     },
-    {
-        .k = LOCATION_GANONS_CASTLE_WATER_TRIAL_CLEAR,
-        .scene = 0x0D,
-        .va_rule = rule_1049_LOCATION_GANONS_CASTLE_WATER_TRIAL_CLEAR,
-        .mq_rule = rule_1085_LOCATION_GANONS_CASTLE_WATER_TRIAL_CLEAR
+    [11] = {
+        .count = 0,
+        .values = NULL
     },
-    {
-        .k = LOCATION_GANONS_CASTLE_SHADOW_TRIAL_CLEAR,
-        .scene = 0x0D,
-        .va_rule = rule_1052_LOCATION_GANONS_CASTLE_SHADOW_TRIAL_CLEAR,
-        .mq_rule = rule_1088_LOCATION_GANONS_CASTLE_SHADOW_TRIAL_CLEAR
+    [12] = {
+        .count = 0,
+        .values = NULL
     },
-    {
-        .k = LOCATION_GANONS_CASTLE_SPIRIT_TRIAL_CLEAR,
-        .scene = 0x0D,
-        .va_rule = rule_1055_LOCATION_GANONS_CASTLE_SPIRIT_TRIAL_CLEAR,
-        .mq_rule = rule_1095_LOCATION_GANONS_CASTLE_SPIRIT_TRIAL_CLEAR
-    },
-    {
-        .k = LOCATION_GANONS_CASTLE_LIGHT_TRIAL_CLEAR,
-        .scene = 0x0D,
-        .va_rule = rule_1064_LOCATION_GANONS_CASTLE_LIGHT_TRIAL_CLEAR,
-        .mq_rule = rule_1097_LOCATION_GANONS_CASTLE_LIGHT_TRIAL_CLEAR
+    [13] = {
+        .count = 6,
+        .values = (location_conflict_t[]) {
+            {
+                .k = LOCATION_GANONS_CASTLE_FOREST_TRIAL_CLEAR,
+                .va_rule = rule_1045_LOCATION_GANONS_CASTLE_FOREST_TRIAL_CLEAR,
+                .mq_rule = rule_1082_LOCATION_GANONS_CASTLE_FOREST_TRIAL_CLEAR
+            },
+            {
+                .k = LOCATION_GANONS_CASTLE_FIRE_TRIAL_CLEAR,
+                .va_rule = rule_1046_LOCATION_GANONS_CASTLE_FIRE_TRIAL_CLEAR,
+                .mq_rule = rule_1083_LOCATION_GANONS_CASTLE_FIRE_TRIAL_CLEAR
+            },
+            {
+                .k = LOCATION_GANONS_CASTLE_WATER_TRIAL_CLEAR,
+                .va_rule = rule_1049_LOCATION_GANONS_CASTLE_WATER_TRIAL_CLEAR,
+                .mq_rule = rule_1085_LOCATION_GANONS_CASTLE_WATER_TRIAL_CLEAR
+            },
+            {
+                .k = LOCATION_GANONS_CASTLE_SHADOW_TRIAL_CLEAR,
+                .va_rule = rule_1052_LOCATION_GANONS_CASTLE_SHADOW_TRIAL_CLEAR,
+                .mq_rule = rule_1088_LOCATION_GANONS_CASTLE_SHADOW_TRIAL_CLEAR
+            },
+            {
+                .k = LOCATION_GANONS_CASTLE_SPIRIT_TRIAL_CLEAR,
+                .va_rule = rule_1055_LOCATION_GANONS_CASTLE_SPIRIT_TRIAL_CLEAR,
+                .mq_rule = rule_1095_LOCATION_GANONS_CASTLE_SPIRIT_TRIAL_CLEAR
+            },
+            {
+                .k = LOCATION_GANONS_CASTLE_LIGHT_TRIAL_CLEAR,
+                .va_rule = rule_1064_LOCATION_GANONS_CASTLE_LIGHT_TRIAL_CLEAR,
+                .mq_rule = rule_1097_LOCATION_GANONS_CASTLE_LIGHT_TRIAL_CLEAR
+            },
+        }
     },
 };
