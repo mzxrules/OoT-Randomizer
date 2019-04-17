@@ -105,7 +105,9 @@ typedef struct
     option_e bridge;
     option_e gerudo_fortress;
     uint8_t skipped_trials[6];
+    bool dungeon_mq[14];
     uint8_t big_poe_count;
+    bool check_beatable_only;
 } options_t;
 
 options_t options;
@@ -136,6 +138,9 @@ bool nighttime(state_t *self);
 bool had_night_start(state_t *self);
 bool can_finish_GerudoFortress(state_t *self);
 bool guarantee_hint(state_t *self);
+bool can_beat_game(state_t *state /* state_list, bool scan_for_items = true */);
+void state_get_states_with_items(state_t *result, state_t *base,
+    item_e *itempool, int32_t *itempool_count);
 
 
 /* Functions we want to inline aggressively */
@@ -196,14 +201,14 @@ inline bool has_explosives(state_t *self)
     return has_bombs(self) || has_bombchus(self);
 }
 
-inline void collect(state_t *self, item_e item)
-{
-    if (item < ITEM_E_ANCHOR)
-    {
-        self->prog_items[item]++;
-        //clear_cached_unreachable()
-    }
-}
+//inline void collect(state_t *self, item_e item)
+//{
+//    if (item < ITEM_E_ANCHOR)
+//    {
+//        self->prog_items[item]++;
+//        //clear_cached_unreachable()
+//    }
+//}
 
 inline void remove(state_t *self, item_e item)
 {

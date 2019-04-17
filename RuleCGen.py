@@ -476,14 +476,14 @@ class CGen(object):
         #include <stddef.h>
         #include "region.h"
 
-        world_region_t world_regions[] = ''')
+        region_t world_regions[] = ''')
 
         regionlist_c += self.generate_region_array(base_regions, '', lambda r: r.symbol) + ';'
 
         for var_name, is_mq in [('va_only_regions', False), ('mq_only_regions', True)]:
             
             regionlist_c += '\n\n' + cleandoc('''
-            world_region_list_t {}[] = {{
+            region_list_t {}[] = {{
             ''').format(var_name)
             for scene in range(0, 14):
                 scene_regions = [r for r in dungeon_regions if r.scene == scene and r.mq == is_mq]
@@ -496,7 +496,7 @@ class CGen(object):
                     _c_scene_regions = "NULL";
                 else:
                     _c_scene_regions = self.generate_region_array(scene_regions, '    ', None)
-                    _c_scene_regions = "(world_region_t[]) " + _c_scene_regions
+                    _c_scene_regions = "(region_t[]) " + _c_scene_regions
                 _c += cleandoc('''
                     .count = {},
                     .values = {}
@@ -671,7 +671,7 @@ class CGen(object):
         temp = list(location_hint_e)
         temp.sort()
         _h += self.create_named_enum("location_hint_e", ["LOCATION_HINT_NONE"] + temp)
-        _h += self.create_named_enum("location_e", location_e + ["LOCATION_MAX"])
+        _h += self.create_named_enum("location_e", location_e + ["LOCATION_MAX"] + ["LOCATION_NONE"])
         _h += "#endif // !LOCATIONLIST_H"
 
         

@@ -294,7 +294,7 @@ bool can_reach(state_t *self, int spot, can_reach_e spot_type)
     }
 }
 
-void collect_locations(state_t *state /* state_list */) 
+void state_collect_locations(state_t *state /* state_list */) 
 {
 
 }
@@ -302,4 +302,28 @@ void collect_locations(state_t *state /* state_list */)
 bool can_beat_game(state_t *state /* state_list, bool scan_for_items = true */)
 {
     return has(state, TRIFORCE);
+}
+
+static void state_copy(state_t *base, state_t *copy)
+{
+    *copy = *base;
+}
+
+static void state_collect(state_t *state, item_e item)
+{
+    if (item_table[item].fill == ITEM_FILL_ADVANCEMENT)
+    {
+        state->prog_items[item]++;
+    }
+}
+
+void state_get_states_with_items(state_t *result, state_t *base,
+    item_e *itempool, int32_t *itempool_count)
+{
+    state_copy(result, base);
+    for (int i = 0; i < *itempool_count; i++)
+    {
+        state_collect(result, itempool[i]);
+    }
+    state_collect_locations(result);
 }

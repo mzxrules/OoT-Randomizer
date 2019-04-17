@@ -63,21 +63,21 @@ typedef struct
     exit_rule_t        *exits;
     int32_t             exit_count;
 
-} world_region_t;
+} region_t;
 
 typedef struct
 {
     int32_t             count;
-    world_region_t     *values;
+    region_t           *values;
 
-} world_region_list_t;
+} region_list_t;
 
 
 extern location_t location_table[];
 extern location_conflict_list_t location_conflicts[];
-extern world_region_t world_regions[];
-extern world_region_list_t va_only_regions[];
-extern world_region_list_t mq_only_regions[];
+extern region_t world_regions[];
+extern region_list_t va_only_regions[];
+extern region_list_t mq_only_regions[];
 
 
 #endif // !REGION_H
